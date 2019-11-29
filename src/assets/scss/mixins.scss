@@ -1,0 +1,22 @@
+@mixin primary-btn {
+  .primary-btn {
+    height: 60px;
+    width: 226px;
+    border-radius: 30px;
+    background-color: #4FC4F9;
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+  }
+}
+
+@mixin ant-input {
+  .ant-input {
+    background: transparent;
+    border: 1px solid #FAFAFA;
+    opacity: 0.5;
+    color: #FAFAFA;
+  }
+}
