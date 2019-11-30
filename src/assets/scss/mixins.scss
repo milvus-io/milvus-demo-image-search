@@ -13,7 +13,9 @@
 }
 
 @mixin ant-input {
-  .ant-input {
+
+  .ant-input,
+  .ant-select-selection {
     background: transparent;
     border: 1px solid #FAFAFA;
     opacity: 0.5;

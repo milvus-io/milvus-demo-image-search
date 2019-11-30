@@ -1,6 +1,10 @@
+@import "~assets/scss/mixins.scss";
+
 .install-wrapper {
   display: flex;
   height: 100vh;
+  @include primary-btn;
+  @include ant-input;
 
   .step-wrapper {
     display: flex;
@@ -38,7 +42,93 @@
         font-family: Roboto;
         font-size: 18px;
         text-align: right;
+
+        &.active {
+          color: #4FC4F9;
+        }
+
+        &.dark {
+          color: rgb(128, 128, 128);
+        }
       }
+    }
+
+
+  }
+
+  .form-wrapper {
+    padding: 130px 0 0 40px;
+
+    .ant-select-selection {
+      svg {
+        fill: #FFFFFF;
+      }
+    }
+  }
+
+  .primary-path {
+    color: #FFFFFF;
+  }
+
+  h2 {
+    font-size: 20px;
+    color: #FFFFFF;
+    font-weight: bold;
+  }
+
+  .data-storage {
+    color: #fff;
+
+    p {
+      max-width: 600px;
+    }
+  }
+
+  .hardware {
+    display: flex;
+
+    .search {
+      margin-right: 210px;
+    }
+
+    li {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #FFFFFF;
+
+      .ant-switch {
+        background: #60606F;
+      }
+
+      .ant-switch-checked {
+        background: #4FC4F9;
+      }
+
+      span {
+        margin-left: 20px;
+      }
+    }
+  }
+
+  .confirm {
+    h3 {
+      font-size: 18px;
+      color: #fff;
+    }
+
+    p {
+      margin-bottom: 30px;
+      color: #3F9CD1;
+    }
+  }
+
+  .btn-wrapper {
+    margin-top: 200px;
+    min-width: 400px;
+
+    .primary-btn {
+      width: 40%;
+      margin-right: 20px;
     }
   }
 }
