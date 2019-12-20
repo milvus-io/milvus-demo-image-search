@@ -4,6 +4,7 @@
   color: #fff;
   @include primary-btn;
   @include disable-btn;
+  @include ant-input;
 
   .header {
     display: flex;
@@ -26,6 +27,10 @@
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
+
+    .ant-input-search-icon {
+      color: #fff;
+    }
   }
 
   .ant-table-thead>tr>th {
@@ -79,6 +84,23 @@
     font-weight: bold;
   }
 
+  .ant-form-item-label>label,
+  .ant-modal-close {
+    color: #fff;
+  }
+
+
+  .ant-slider-rail {
+    background-color: rgba(250, 250, 250, 0.3);
+  }
+
   @include primary-btn;
   @include disable-btn;
+  @include ant-input;
+
+  .primary-btn,
+  .disable-btn {
+    width: 150px;
+  }
+
 }

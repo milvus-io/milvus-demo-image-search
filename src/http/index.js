@@ -1,7 +1,7 @@
 import axios from "axios";
 import { message } from "antd";
 const http = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL || "http://127.0.0.1:3000",
+  baseURL: process.env.REACT_APP_BASE_URL || "http://192.168.1.57:19121",
   timeout: 5000
 });
 http.interceptors.request.use(
@@ -31,11 +31,14 @@ http.interceptors.response.use(
     return res;
   },
   function(error) {
-    const code = error.response.data.code;
-    if (code === 401) {
-      window.location.href = "/login";
-      return Promise.reject(error);
+    if (error.response && error.response.data) {
+      const code = error.response.data.code;
+      if (code === 401) {
+        window.location.href = "/login";
+        return Promise.reject(error);
+      }
     }
+
     // Do something with response error
     return Promise.reject(error);
   }
