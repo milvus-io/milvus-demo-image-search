@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Button, Table, Divider, Icon, Modal, Form, Input, Radio } from "antd";
+import {
+  Button,
+  Table,
+  Divider,
+  Icon,
+  Modal,
+  Form,
+  Input,
+  Popconfirm
+} from "antd";
 import TableForm from "./table-form";
 import IndexForm from "./index-form";
 import { getTables } from "@/http/table";
@@ -50,6 +59,9 @@ const TableManage = props => {
     setVisible(true);
     setSelectedTable(record.name);
   };
+  const handleDelete = record => {
+    console.log(record);
+  };
 
   useEffect(() => {
     getTables("/tables", { offset, page_size: 10 });
@@ -85,7 +97,17 @@ const TableManage = props => {
               }}
             ></Icon>
             <Divider type="vertical" />
-            <Icon type="delete"></Icon>
+            <Popconfirm
+              placement="top"
+              title={`Are you sure to delete ${record.name} table?`}
+              onConfirm={() => {
+                handleDelete(record);
+              }}
+              okText="Delete"
+              cancelText="Cancel"
+            >
+              <Icon type="delete"></Icon>
+            </Popconfirm>
           </span>
         );
       }
