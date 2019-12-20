@@ -1,14 +1,26 @@
 @mixin primary-btn {
   .primary-btn {
-    height: 60px;
-    width: 226px;
+    box-sizing: border-box;
+    height: 26px;
+    width: 80px;
+    border: 2px solid #3F9CD1;
     border-radius: 30px;
-    background-color: #4FC4F9;
-    font-size: 18px;
-    letter-spacing: 2px;
-    font-weight: bold;
-    color: #fff;
-    border: none;
+    background-color: rgba(79, 196, 249, 0.2);
+    color: #96DBFB;
+    font-size: 14px;
+  }
+}
+
+@mixin disable-btn {
+  .disable-btn {
+    box-sizing: border-box;
+    height: 26px;
+    width: 80px;
+    border: 2px solid #B0B0B9;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #B0B0B9;
+    font-size: 14px;
   }
 }
 
