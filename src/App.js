@@ -2,7 +2,7 @@ import React from "react";
 import Layout from "components/layout";
 import Login from "pages/Login";
 import TablePage from "pages/table";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
 export default function App() {
   return (

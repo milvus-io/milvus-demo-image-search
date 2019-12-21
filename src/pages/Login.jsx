@@ -15,7 +15,7 @@ const Login = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      history.push("/install");
+      history.push("/manage/table");
     }, 1000);
   };
   return (
