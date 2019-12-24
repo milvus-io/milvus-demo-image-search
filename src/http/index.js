@@ -18,7 +18,7 @@ http.interceptors.request.use(
 // Add a response interceptor
 http.interceptors.response.use(
   function(res) {
-    console.log("response");
+    console.log("response", res);
     // Do something with res data
     if (res.data && res.data.code === 400) {
       message.error(res.data.data.msg);
@@ -31,12 +31,10 @@ http.interceptors.response.use(
     return res;
   },
   function(error) {
+    console.dir(error.response);
     if (error.response && error.response.data) {
-      const code = error.response.data.code;
-      if (code === 401) {
-        window.location.href = "/login";
-        return Promise.reject(error);
-      }
+      const { message: errMsg } = error.response.data;
+      errMsg && message.warning(errMsg);
     }
 
     // Do something with response error

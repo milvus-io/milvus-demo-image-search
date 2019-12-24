@@ -9,26 +9,28 @@ import {
   Slider,
   InputNumber
 } from "antd";
+import { createIndex } from "@/http/table";
 
 const { Option } = Select;
-const INDEX_TYPES = ["FLAT"];
+const INDEX_TYPES = ["FLAT","IVFFLAT","IVFSQ8","IVFSQ8H"];
 
 const TableForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   function(props) {
     const [nlist, setNlist] = useState(16384);
-
+    const { tableName } = props;
     const handleSubmit = e => {
       e.preventDefault();
-      props.form.validateFields((err, values) => {
-        if (!err) {
-          console.log("Received values of form: ", values);
+      props.form.validateFields(async (err, values) => {
+        if (err) {
+          return;
         }
-        const data = {
+        const params = {
           ...values,
           nlist
         };
-        console.log(data);
+        const res = await createIndex(tableName, params);
+        console.log(params, res);
       });
     };
 

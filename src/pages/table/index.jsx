@@ -7,45 +7,29 @@ import {
   Modal,
   Form,
   Input,
-  Popconfirm
+  Popconfirm,
+  message
 } from "antd";
+import { useTranslation } from "react-i18next";
 import TableForm from "./table-form";
 import IndexForm from "./index-form";
-import { getTables } from "@/http/table";
+import { getTables, deleteTable, searchTable } from "@/http/table";
 import "./index.scss";
 
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"]
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"]
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"]
-  }
-];
 const { Search } = Input;
-
+const PAGE_SIZE = 10;
 const TableManage = props => {
+  const { t } = useTranslation();
+
   const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [offset, setOffset] = useState(0);
+  const [data, setData] = useState([]);
   const [selectedTable, setSelectedTable] = useState("");
   const [type, setType] = useState("table");
-  //   const { getFieldDecorator } = form;
+
+  const [offset, setOffset] = useState(0);
+  const [count, setCount] = useState(0);
+  const [current, setCurrent] = useState(1);
+
   const createTable = () => {
     setType("table");
     setVisible(true);
@@ -57,32 +41,65 @@ const TableManage = props => {
   const handleAddIndex = record => {
     setType("index");
     setVisible(true);
-    setSelectedTable(record.name);
+    setSelectedTable(record.table_name);
   };
-  const handleDelete = record => {
-    console.log(record);
+  const handleDelete = async record => {
+    await deleteTable(record.table_name);
+    setOffset(0);
+    setCurrent(1);
+    message.success("Delete Table Success!");
+  };
+  const fetchData = async () => {
+    const res = await getTables({ offset, page_size: PAGE_SIZE });
+    if (res) {
+      setData(
+        res.tables.map(v => ({
+          ...v,
+          key: v.table_name
+        }))
+      );
+      setCount(res.count);
+    }
+  };
+
+  const saveSuccess = () => {
+    setVisible(false);
+    setOffset(0);
+    setCurrent(1);
+    message.success("Create Table Success!");
   };
 
   useEffect(() => {
-    getTables("/tables", { offset, page_size: 10 });
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset]);
 
   const columns = [
     {
       title: "Name",
-      dataIndex: "name",
-      key: "name",
-      render: text => <div>{text}</div>
+      dataIndex: "table_name",
+      key: "table_name"
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age"
+      title: "Dimension",
+      dataIndex: "dimension",
+      key: "dimension"
+    },
+
+    {
+      title: "Metric Type",
+      dataIndex: "metric_type",
+      key: "metric_type"
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address"
+      title: "Index",
+      dataIndex: "index",
+      key: "index"
+    },
+    {
+      title: "nlist",
+      dataIndex: "nlist",
+      key: "nlist"
     },
     {
       title: "Action",
@@ -99,7 +116,7 @@ const TableManage = props => {
             <Divider type="vertical" />
             <Popconfirm
               placement="top"
-              title={`Are you sure to delete ${record.name} table?`}
+              title={`Are you sure to delete ${record.table_name} table?`}
               onConfirm={() => {
                 handleDelete(record);
               }}
@@ -114,15 +131,28 @@ const TableManage = props => {
     }
   ];
 
-  const handleSearch = val => {
-    console.log(val);
+  const handleSearch = async name => {
+    setCurrent(1);
+    if (!name) {
+      setOffset(0);
+      return;
+    }
+    const res = (await searchTable(name)) || {};
+
+    setData([{ ...res, key: res.table_name }]);
+    setCount(1);
+  };
+
+  const handlePageChange = async page => {
+    setOffset((page - 1) * PAGE_SIZE);
+    setCurrent(page);
   };
   return (
     <div className="table-wrapper">
       <div className="header">
-        <h2>Table and Index</h2>
-        <Button className="primary-btn">Save</Button>
-        <Button className="disable-btn">Cancel</Button>
+        <h2>Table and Index </h2>
+        {/* <Button className="primary-btn">Save</Button>
+        <Button className="disable-btn">Cancel</Button> */}
       </div>
       <div className="control">
         <div onClick={createTable} style={{ cursor: "pointer" }}>
@@ -135,7 +165,17 @@ const TableManage = props => {
           style={{ width: 200 }}
         />
       </div>
-      <Table columns={columns} className="table-wrapper" dataSource={data} />
+      <Table
+        columns={columns}
+        className="table-wrapper"
+        pagination={{
+          current,
+          total: count,
+          onChange: handlePageChange,
+          pageSize: PAGE_SIZE
+        }}
+        dataSource={data}
+      />
       <Modal
         title={
           type === "table" ? "New Table" : `New Index for ${selectedTable}`
@@ -146,9 +186,15 @@ const TableManage = props => {
         wrapClassName="my-modal"
       >
         {type === "table" ? (
-          <TableForm handleCancel={handleCancel}></TableForm>
+          <TableForm
+            handleCancel={handleCancel}
+            saveSuccess={saveSuccess}
+          ></TableForm>
         ) : (
-          <IndexForm handleCancel={handleCancel}></IndexForm>
+          <IndexForm
+            handleCancel={handleCancel}
+            tableName={selectedTable}
+          ></IndexForm>
         )}
       </Modal>
     </div>

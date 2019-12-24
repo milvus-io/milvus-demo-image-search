@@ -9,6 +9,7 @@ import {
   Slider,
   InputNumber
 } from "antd";
+import { createTable } from "@/http/table";
 
 const { Option } = Select;
 const METRIC_TYPES = [
@@ -24,16 +25,19 @@ const TableForm = Form.create({ name: "form_in_modal" })(
 
     const handleSubmit = e => {
       e.preventDefault();
-      props.form.validateFields((err, values) => {
-        if (!err) {
-          console.log("Received values of form: ", values);
+      props.form.validateFields(async (err, values) => {
+        if (err) {
+          return;
         }
         const data = {
           ...values,
           dimension,
-          index_file_sizesize: size
+          index_file_size: size
         };
-        console.log(data);
+        const res = await createTable(data);
+        if (res.code === 0) {
+          props.saveSuccess();
+        }
       });
     };
 
