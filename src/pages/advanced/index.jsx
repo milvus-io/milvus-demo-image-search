@@ -12,8 +12,6 @@ const Advanced = props => {
     <div className="advanced-wrapper">
       <div className="header">
         <h2>{configTrans.advanced}</h2>
-        <Button className="primary-btn">Save</Button>
-        <Button className="disable-btn">Cancel</Button>
       </div>
       <AdvancedForm></AdvancedForm>
     </div>
