@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Switch, InputNumber, Button, message } from "antd";
-import { getConfigs, updateConfigs } from "@/http/advanced";
+import { getAdvancedConfig, updateAdvancedConfig } from "@/http/configs";
 
 const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const { form } = props;
@@ -51,7 +51,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getConfigs();
+      const res = await getAdvancedConfig();
       setDefaultValue(res || {});
     };
     fetchData();

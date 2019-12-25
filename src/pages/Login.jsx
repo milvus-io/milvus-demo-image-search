@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { useHistory } from "react-router-dom";
 import http from "@/http/index";
 import Logo from "assets/imgs/logo.svg";
@@ -24,11 +24,16 @@ const Login = () => {
         const { host, port } = values;
         const url = `${host}:${port}`;
         window.localStorage.setItem("milvus-url", url);
-        const res = await http.get("/state");
-        if (res.data && res.data.code === 0) {
-          history.push("/manage/table");
+        try {
+          const res = await http.get("/state");
+          if (res.data && res.data.code === 0) {
+            history.push("/manage/table");
+          }
+        } catch (e) {
+          message.warning(`Connect http://${url} Fail`);
+        } finally {
+          setLoading(false);
         }
-        setLoading(false);
       });
     };
     return (
@@ -43,13 +48,15 @@ const Login = () => {
             rules: [{ required: true, message: "port is required" }]
           })(<Input placeholder=""></Input>)}
         </FormItem>
-        <Button
-          className="primary-btn"
-          onClick={handleConnect}
-          loading={loading}
-        >
-          Connect
-        </Button>
+        <div style={{ textAlign: "center" }}>
+          <Button
+            className="primary-btn"
+            onClick={handleConnect}
+            loading={loading}
+          >
+            Connect
+          </Button>
+        </div>
       </Form>
     );
   });
