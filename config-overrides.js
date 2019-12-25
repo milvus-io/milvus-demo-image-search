@@ -1,10 +1,16 @@
-const { override, fixBabelImports, addWebpackAlias } = require("customize-cra");
+const {
+  override,
+  fixBabelImports,
+  addWebpackAlias,
+  addLessLoader
+} = require("customize-cra");
 const path = require("path");
+const darkTheme = require("@ant-design/dark-theme").default;
 module.exports = override(
   fixBabelImports("import", {
     libraryName: "antd",
     libraryDirectory: "es",
-    style: "css"
+    style: true
   }),
 
   addWebpackAlias({
@@ -12,5 +18,13 @@ module.exports = override(
     components: path.resolve(__dirname, "src/components"),
     pages: path.resolve(__dirname, "src/pages"),
     assets: path.resolve(__dirname, "src/assets")
+  }),
+  addLessLoader({
+    javascriptEnabled: true,
+    modifyVars: {
+      ...darkTheme,
+      "@input-bg": "transparent"
+      // "@checkbox-check-color": "#28292E"
+    }
   })
 );

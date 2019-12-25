@@ -20,10 +20,10 @@ const { Search } = Input;
 const PAGE_SIZE = 10;
 const TableManage = props => {
   const { t } = useTranslation();
-
+  const tableTrans = t("table");
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState([]);
-  const [selectedTable, setSelectedTable] = useState("");
+  const [record, setRecord] = useState("");
   const [type, setType] = useState("table");
 
   const [offset, setOffset] = useState(0);
@@ -41,13 +41,13 @@ const TableManage = props => {
   const handleAddIndex = record => {
     setType("index");
     setVisible(true);
-    setSelectedTable(record.table_name);
+    setRecord(record);
   };
   const handleDelete = async record => {
     await deleteTable(record.table_name);
     setOffset(0);
     setCurrent(1);
-    message.success("Delete Table Success!");
+    message.success(tableTrans.delete);
   };
   const fetchData = async () => {
     const res = await getTables({ offset, page_size: PAGE_SIZE });
@@ -62,11 +62,11 @@ const TableManage = props => {
     }
   };
 
-  const saveSuccess = () => {
+  const saveSuccess = txt => {
     setVisible(false);
     setOffset(0);
     setCurrent(1);
-    message.success("Create Table Success!");
+    message.success(txt);
   };
 
   useEffect(() => {
@@ -160,7 +160,7 @@ const TableManage = props => {
           <span>Add Table</span>
         </div>
         <Search
-          placeholder="Search Table Name"
+          placeholder={tableTrans.searchTxt}
           onSearch={handleSearch}
           style={{ width: 200 }}
         />
@@ -178,7 +178,9 @@ const TableManage = props => {
       />
       <Modal
         title={
-          type === "table" ? "New Table" : `New Index for ${selectedTable}`
+          type === "table"
+            ? `${tableTrans.create}`
+            : `New Index for ${record.table_name}`
         }
         visible={visible}
         footer={null}
@@ -193,7 +195,8 @@ const TableManage = props => {
         ) : (
           <IndexForm
             handleCancel={handleCancel}
-            tableName={selectedTable}
+            record={record}
+            saveSuccess={saveSuccess}
           ></IndexForm>
         )}
       </Modal>

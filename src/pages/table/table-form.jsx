@@ -36,7 +36,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         };
         const res = await createTable(data);
         if (res.code === 0) {
-          props.saveSuccess();
+          props.saveSuccess("Create Table Success");
         }
       });
     };
@@ -74,6 +74,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
                 min={1}
                 max={4096}
                 onChange={setDimension}
+                step={1}
                 value={typeof dimension === "number" ? dimension : 0}
               />
             </Col>

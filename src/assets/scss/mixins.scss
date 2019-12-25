@@ -27,12 +27,9 @@
 @mixin ant-input {
 
   .ant-input,
+  .ant-input-number,
   .ant-select-selection {
     background: transparent;
     border: 1px solid #FAFAFA;
-    opacity: 0.5;
-    color: #FAFAFA;
-
-
   }
 }

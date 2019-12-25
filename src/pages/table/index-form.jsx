@@ -1,24 +1,19 @@
-import React, { useState } from "react";
-import {
-  Form,
-  Input,
-  Select,
-  Button,
-  Row,
-  Col,
-  Slider,
-  InputNumber
-} from "antd";
+import React, { useState, useEffect } from "react";
+import { Form, Select, Button, Row, Col, Slider, InputNumber } from "antd";
+import { useTranslation } from "react-i18next";
 import { createIndex } from "@/http/table";
 
 const { Option } = Select;
-const INDEX_TYPES = ["FLAT","IVFFLAT","IVFSQ8","IVFSQ8H"];
+const INDEX_TYPES = ["FLAT", "IVFFLAT", "IVFSQ8", "IVFSQ8H"];
 
 const TableForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   function(props) {
+    const { t } = useTranslation();
+    const indexTrans = t("index");
     const [nlist, setNlist] = useState(16384);
-    const { tableName } = props;
+    const { table_name: tableName, index: type, nlist: defaultNlist } =
+      props.record || {};
     const handleSubmit = e => {
       e.preventDefault();
       props.form.validateFields(async (err, values) => {
@@ -30,9 +25,14 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           nlist
         };
         const res = await createIndex(tableName, params);
-        console.log(params, res);
+        if (res.code === 0) {
+          props.saveSuccess(indexTrans.saveSuccess);
+        }
       });
     };
+    useEffect(() => {
+      setNlist(defaultNlist);
+    }, [defaultNlist]);
 
     const { form } = props;
     const { getFieldDecorator } = form;
@@ -40,7 +40,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
     return (
       <Form layout="vertical">
         <Form.Item label="Index Type">
-          {getFieldDecorator("type", { initialValue: "FLAT" })(
+          {getFieldDecorator("index_type", { initialValue: type })(
             <Select>
               {INDEX_TYPES.map(t => (
                 <Option key={t} value={t}>

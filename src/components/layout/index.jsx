@@ -32,6 +32,7 @@ const LayoutWrapper = props => {
   };
   useEffect(() => {
     const lang = window.localStorage.getItem("lang") || "en";
+    setLangTxt(lang === "cn" ? "En" : "中");
     i18n.changeLanguage(lang);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

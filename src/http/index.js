@@ -1,13 +1,15 @@
 import axios from "axios";
 import { message } from "antd";
 const http = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL || "http://192.168.1.57:19121",
   timeout: 5000
 });
 http.interceptors.request.use(
   function(config) {
+    const milvUrl = window.localStorage.getItem("milvus-url") || "";
+
+    console.log(config);
     // Do something before request is sent
-    return config;
+    return { ...config, url: `http://${milvUrl}${config.url}` };
   },
   function(error) {
     // Do something with request error
@@ -41,5 +43,10 @@ http.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export function changeBaseUrl(url) {
+  http.defaults.baseURL = url || "";
+  return http;
+}
 
 export default http;
