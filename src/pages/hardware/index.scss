@@ -1,15 +1,11 @@
 @import "~assets/scss/mixins.scss";
 
-.advanced-wrapper {
+.hardware-wrapper {
   color: #fff;
   @include primary-btn;
   @include disable-btn;
   @include ant-input;
 
-  .header {
-    display: flex;
-    align-items: center;
-  }
 
   h2 {
     color: #FAFAFA;
@@ -23,9 +19,7 @@
     margin-right: 10px;
   }
 
-  .ant-form-item-label>label {
-    color: #fff;
-  }
+
 
   .title {
     font-size: 20px;
@@ -38,17 +32,9 @@
     color: #B0B0B9;
   }
 
-  .ant-switch {
-    background: #60606F;
+  ol {
+    .txt {
+      margin-left: 10px;
+    }
   }
-
-  .ant-switch-checked {
-    background: #4FC4F9;
-  }
-
-  .ant-form-item {
-    margin-bottom: 10px;
-  }
-
-
 }

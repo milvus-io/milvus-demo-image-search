@@ -15,6 +15,7 @@ export default {
     delete: "Delete Table Success",
     searchTxt: "Table Name"
   },
+
   index: {
     saveSuccess: "Create Index Success"
   }

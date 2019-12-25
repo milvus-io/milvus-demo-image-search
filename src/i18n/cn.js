@@ -15,6 +15,7 @@ export default {
     delete: "删除表成功",
     searchTxt: "请输入表名"
   },
+
   index: {
     saveSuccess: "索引创建成功"
   }

@@ -3,6 +3,7 @@ import Layout from "components/layout";
 import Login from "pages/Login";
 import TablePage from "pages/table";
 import AdvancedPage from "pages/advanced";
+import HardwarePage from "pages/hardware";
 
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -18,6 +19,9 @@ export default function App() {
               </Route>
               <Route path="/manage/advanced">
                 <AdvancedPage></AdvancedPage>
+              </Route>
+              <Route path="/manage/hardware">
+                <HardwarePage></HardwarePage>
               </Route>
               <Route path="/manage/index">index</Route>
             </Layout>
