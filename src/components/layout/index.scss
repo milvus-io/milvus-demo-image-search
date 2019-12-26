@@ -25,6 +25,20 @@
       }
     }
 
+    .logout-wrapper {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 10px 0;
+      color: #fff;
+      font-size: 16px;
+
+      .logout {
+        margin-left: 20px;
+        cursor: pointer;
+      }
+    }
+
     .menu {
       padding: 20px 0 0 10%;
 
@@ -50,6 +64,12 @@
   }
 
   .list-wrapper {
+    padding-left: 10px;
+
+    li {
+      margin-bottom: 10px;
+    }
+
     a {
       color: #FAFAFA;
     }

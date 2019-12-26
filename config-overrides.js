@@ -6,6 +6,7 @@ const {
 } = require("customize-cra");
 const path = require("path");
 const darkTheme = require("@ant-design/dark-theme").default;
+console.log(darkTheme);
 module.exports = override(
   fixBabelImports("import", {
     libraryName: "antd",

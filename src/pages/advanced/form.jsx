@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Switch, InputNumber, Button, message } from "antd";
-import { getAdvancedConfig, updateAdvancedConfig } from "@/http/configs";
+import {
+  getAdvancedConfig,
+  updateAdvancedConfig,
+  getSystemConfig
+} from "@/http/configs";
+import { useTranslation } from "react-i18next";
 const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const { form } = props;
   const { getFieldDecorator } = form;
   const [defalutValue, setDefaultValue] = useState({});
+  const [systemConfig, setSystemConfig] = useState({});
+  const { t } = useTranslation();
+  const advancedTrans = t("advanced");
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -23,27 +31,28 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
       }
       const res = await updateAdvancedConfig(values);
       if (res.code === 0) {
-        message.success("Update Configs Success");
+        message.success(advancedTrans.saveSuccess);
       }
     });
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getAdvancedConfig();
-      setDefaultValue(res || {});
+      const res = await Promise.all([getAdvancedConfig(), getSystemConfig()]);
+      setDefaultValue(res[0] || {});
+      setSystemConfig(res[1] || {});
     };
     fetchData();
   }, []);
 
   return (
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
-      <h1 className="title">Caches Setting</h1>
-      <Form.Item label="CPU Cache Capacity (GB)">
+      <h1 className="title">{advancedTrans.cacheSetting}</h1>
+      <Form.Item label={`${advancedTrans.capacity} (GB)`}>
         {getFieldDecorator("cpu_cache_capacity", {
           initialValue: defalutValue.cpu_cache_capacity,
           rules: [{ required: true, message: "CPU Cache Capacity is required" }]
-        })(<InputNumber min={1} max={4096} />)}
+        })(<InputNumber min={1} max={systemConfig.cpuMemory} />)}
       </Form.Item>
       <p className="desc">
         The size of the CPU memory for caching data for faster query. The sum of

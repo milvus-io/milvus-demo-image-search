@@ -11,9 +11,18 @@ export default {
   },
   table: {
     create: "新建表",
+    index: "更新 Index 表",
     saveSuccess: "表创建成功",
     delete: "删除表成功",
     searchTxt: "请输入表名"
+  },
+  hardware: {
+    saveSuccess: "GPU配置更新成功"
+  },
+  advanced: {
+    saveSuccess: "配置更新成功",
+    cacheSetting: "缓存配置",
+    capacity: "CPU缓存容量"
   },
 
   index: {

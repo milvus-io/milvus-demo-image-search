@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
+import { URL } from "@/consts";
 import { useTranslation } from "react-i18next";
+import { Icon } from "antd";
 import "./index.scss";
 import Logo from "assets/imgs/logo.svg";
 
@@ -21,6 +23,7 @@ const MyLink = props => {
 
 const LayoutWrapper = props => {
   const { t, i18n } = useTranslation();
+  const history = useHistory();
   const configTrans = t("config");
   const dataTrans = t("dataManage");
   const [langTxt, setLangTxt] = useState("中");
@@ -30,6 +33,13 @@ const LayoutWrapper = props => {
     i18n.changeLanguage(lang);
     window.localStorage.setItem("lang", lang);
   };
+
+  const handleLogout = () => {
+    window.localStorage.removeItem(URL);
+    history.push("/login");
+  };
+
+  const url = window.localStorage.getItem(URL);
   useEffect(() => {
     const lang = window.localStorage.getItem("lang") || "en";
     setLangTxt(lang === "cn" ? "En" : "中");
@@ -42,8 +52,17 @@ const LayoutWrapper = props => {
       <div className="left">
         <div className="logo-wrapper">
           <img src={Logo} alt="Milvus Logo"></img>
-          <span onClick={changeLang}>{langTxt}</span>
+          <span onClick={changeLang} style={{ cursor: "pointer" }}>
+            {langTxt}
+          </span>
         </div>
+        <div className="logout-wrapper">
+          <div>
+            {url}
+            <Icon type="logout" className="logout" onClick={handleLogout} />
+          </div>
+        </div>
+
         <div className="menu">
           <h2 className="title">{configTrans.title}</h2>
           <ul className="list-wrapper">

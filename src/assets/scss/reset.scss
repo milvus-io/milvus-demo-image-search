@@ -163,3 +163,8 @@ table {
 .mr-10 {
   margin-right: 10px;
 }
+
+.ant-switch-loading-icon,
+.ant-switch::after {
+  background-color: #fff !important;
+}

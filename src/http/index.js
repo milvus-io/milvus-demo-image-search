@@ -1,11 +1,13 @@
 import axios from "axios";
 import { message } from "antd";
+import { URL } from "@/consts";
+
 const http = axios.create({
   timeout: 5000
 });
 http.interceptors.request.use(
   function(config) {
-    const milvUrl = window.localStorage.getItem("milvus-url") || "";
+    const milvUrl = window.localStorage.getItem(URL) || "";
 
     console.log(config);
     // Do something before request is sent

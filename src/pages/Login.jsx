@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import http from "@/http/index";
 import Logo from "assets/imgs/logo.svg";
 import "./Login.scss";
+import { URL } from "@/consts";
 
 const FormItem = Form.Item;
 const Login = () => {
@@ -23,7 +24,7 @@ const Login = () => {
         }
         const { host, port } = values;
         const url = `${host}:${port}`;
-        window.localStorage.setItem("milvus-url", url);
+        window.localStorage.setItem(URL, url);
         try {
           const res = await http.get("/state");
           if (res.data && res.data.code === 0) {
@@ -65,7 +66,6 @@ const Login = () => {
       <div className="content">
         <div>
           <img src={Logo} alt="Milvus Logo"></img>
-          <p className="desc">Installation Wilzard</p>
         </div>
         <LoginForm></LoginForm>
       </div>

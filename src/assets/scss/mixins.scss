@@ -1,4 +1,5 @@
 @mixin primary-btn {
+
   .primary-btn {
     box-sizing: border-box;
     height: 26px;
@@ -8,6 +9,16 @@
     background-color: rgba(79, 196, 249, 0.2);
     color: #96DBFB;
     font-size: 14px;
+  }
+
+
+}
+
+@mixin circle-btn {
+  .circle-btn {
+    background-color: rgba(79, 196, 249, 0.2);
+    border: 2px solid #3F9CD1;
+    color: #96DBFB;
   }
 }
 

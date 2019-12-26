@@ -11,11 +11,19 @@ export default {
   },
   table: {
     create: "New Table",
+    index: "Update Index for",
     saveSuccess: "Create Table Success",
     delete: "Delete Table Success",
     searchTxt: "Table Name"
   },
-
+  hardware: {
+    saveSuccess: "Save Gpu Configs Success"
+  },
+  advanced: {
+    saveSuccess: "Update Configs Success",
+    cacheSetting: "Caches Setting",
+    capacity: "CPU Cache Capacity"
+  },
   index: {
     saveSuccess: "Create Index Success"
   }

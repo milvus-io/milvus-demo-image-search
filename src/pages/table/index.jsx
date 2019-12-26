@@ -134,7 +134,11 @@ const TableManage = props => {
   const handleSearch = async name => {
     setCurrent(1);
     if (!name) {
-      setOffset(0);
+      if (offset === 0) {
+        fetchData();
+      } else {
+        setOffset(0);
+      }
       return;
     }
     const res = (await searchTable(name)) || {};
@@ -156,7 +160,12 @@ const TableManage = props => {
       </div>
       <div className="control">
         <div onClick={createTable} style={{ cursor: "pointer" }}>
-          <Button className="mr-10" type="primary" shape="circle" icon="plus" />
+          <Button
+            className="mr-10 circle-btn"
+            type="primary"
+            shape="circle"
+            icon="plus"
+          />
           <span>Add Table</span>
         </div>
         <Search
@@ -180,7 +189,7 @@ const TableManage = props => {
         title={
           type === "table"
             ? `${tableTrans.create}`
-            : `New Index for ${record.table_name}`
+            : `${tableTrans.index} ${record.table_name}`
         }
         visible={visible}
         footer={null}
