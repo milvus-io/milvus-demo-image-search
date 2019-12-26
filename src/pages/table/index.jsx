@@ -5,7 +5,6 @@ import {
   Divider,
   Icon,
   Modal,
-  Form,
   Input,
   Popconfirm,
   message
@@ -29,7 +28,6 @@ const TableManage = props => {
   const [offset, setOffset] = useState(0);
   const [count, setCount] = useState(0);
   const [current, setCurrent] = useState(1);
-
   const createTable = () => {
     setType("table");
     setVisible(true);
@@ -116,7 +114,7 @@ const TableManage = props => {
             <Divider type="vertical" />
             <Popconfirm
               placement="top"
-              title={`Are you sure to delete ${record.table_name} table?`}
+              title={`${tableTrans.confirmDel} ${record.table_name} ?`}
               onConfirm={() => {
                 handleDelete(record);
               }}

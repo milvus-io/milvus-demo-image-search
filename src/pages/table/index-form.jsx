@@ -12,6 +12,8 @@ const TableForm = Form.create({ name: "form_in_modal" })(
     const { t } = useTranslation();
     const indexTrans = t("index");
     const [nlist, setNlist] = useState(16384);
+    const [loading, setLoading] = useState(false);
+
     const { table_name: tableName, index: type, nlist: defaultNlist } =
       props.record || {};
     const handleSubmit = e => {
@@ -20,13 +22,19 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         if (err) {
           return;
         }
+        setLoading(true);
+
         const params = {
           ...values,
           nlist
         };
-        const res = await createIndex(tableName, params);
-        if (res.code === 0) {
-          props.saveSuccess(indexTrans.saveSuccess);
+        try {
+          const res = await createIndex(tableName, params);
+          if (res.code === 0) {
+            props.saveSuccess(indexTrans.saveSuccess);
+          }
+        } catch {
+          setLoading(false);
         }
       });
     };
@@ -76,7 +84,11 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           <Button className="disable-btn mr-10" onClick={props.handleCancel}>
             CANCEL
           </Button>
-          <Button className="primary-btn" onClick={handleSubmit}>
+          <Button
+            className="primary-btn"
+            onClick={handleSubmit}
+            loading={loading}
+          >
             CREATE
           </Button>
         </div>

@@ -11,6 +11,8 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const { getFieldDecorator } = form;
   const [defalutValue, setDefaultValue] = useState({});
   const [systemConfig, setSystemConfig] = useState({});
+  const [loading, setLoading] = useState(false);
+
   const { t } = useTranslation();
   const advancedTrans = t("advanced");
   const formItemLayout = {
@@ -29,9 +31,14 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
       if (err) {
         return;
       }
-      const res = await updateAdvancedConfig(values);
-      if (res.code === 0) {
-        message.success(advancedTrans.saveSuccess);
+      setLoading(true);
+      try {
+        const res = await updateAdvancedConfig(values);
+        if (res.code === 0) {
+          message.success(advancedTrans.saveSuccess);
+        }
+      } finally {
+        setLoading(false);
       }
     });
   };
@@ -93,7 +100,11 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
         <Button className="disable-btn mr-10" onClick={props.handleCancel}>
           Cancel
         </Button>
-        <Button className="primary-btn" onClick={handleSubmit}>
+        <Button
+          className="primary-btn"
+          onClick={handleSubmit}
+          loading={loading}
+        >
           Save
         </Button>
       </Form.Item>

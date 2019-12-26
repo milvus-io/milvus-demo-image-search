@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Switch, InputNumber, Button, message } from "antd";
+import { Form, Switch, InputNumber, Button, message } from "antd";
 import {
   getHardwareConfig,
   updateHardwareConfig,
@@ -16,6 +16,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const [systemConfig, setSystemConfig] = useState({});
   const [enable, setEnable] = useState(false);
   const [hardwareType, setHardwareType] = useState("CPU");
+  const [loading, setLoading] = useState(false);
 
   const { t } = useTranslation();
   const hardwareTrans = t("hardware");
@@ -49,14 +50,19 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
       if (err) {
         return;
       }
+      setLoading(true);
       const data = {
         ...values,
         search_resources: [...searchHardware],
         build_index_resources: [...buildHardware]
       };
-      const res = await updateHardwareConfig(data);
-      if (res.code === 0) {
-        message.success(hardwareTrans.saveSuccess);
+      try {
+        const res = await updateHardwareConfig(data);
+        if (res.code === 0) {
+          message.success(hardwareTrans.saveSuccess);
+        }
+      } finally {
+        setLoading(false);
       }
     });
   };
@@ -148,7 +154,11 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
         <Button className="disable-btn mr-10" onClick={props.handleCancel}>
           Cancel
         </Button>
-        <Button className="primary-btn" onClick={handleSubmit}>
+        <Button
+          className="primary-btn"
+          onClick={handleSubmit}
+          loading={loading}
+        >
           Save
         </Button>
       </Form.Item>

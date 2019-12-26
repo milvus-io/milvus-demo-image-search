@@ -14,6 +14,7 @@ export default {
     index: "更新 Index 表",
     saveSuccess: "表创建成功",
     delete: "删除表成功",
+    confirmDel: "是否确认删除",
     searchTxt: "请输入表名"
   },
   hardware: {

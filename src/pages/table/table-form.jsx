@@ -10,6 +10,7 @@ import {
   InputNumber
 } from "antd";
 import { createTable } from "@/http/table";
+import { useTranslation } from "react-i18next";
 
 const { Option } = Select;
 const METRIC_TYPES = [
@@ -22,21 +23,31 @@ const TableForm = Form.create({ name: "form_in_modal" })(
   function(props) {
     const [dimension, setDimension] = useState(4096);
     const [size, setSize] = useState(1024);
+    const [loading, setLoading] = useState(false);
+    const { t } = useTranslation();
+    const tableTrans = t("table");
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
       e.preventDefault();
+
       props.form.validateFields(async (err, values) => {
         if (err) {
           return;
         }
+        setLoading(true);
+
         const data = {
           ...values,
           dimension,
           index_file_size: size
         };
-        const res = await createTable(data);
-        if (res.code === 0) {
-          props.saveSuccess("Create Table Success");
+        try {
+          const res = await createTable(data);
+          if (res.code === 0) {
+            props.saveSuccess(tableTrans.saveSuccess);
+          }
+        } finally {
+          setLoading(false);
         }
       });
     };
@@ -50,11 +61,10 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           {getFieldDecorator("table_name", {
             rules: [
               {
-                required: true,
-                message: "Please input the Table Name!"
+                required: true
               }
             ]
-          })(<Input placeholder="new table name" />)}
+          })(<Input placeholder={tableTrans.create} />)}
         </Form.Item>
         <Form.Item label="Metric Type">
           {getFieldDecorator("metric_type", { initialValue: 1 })(
@@ -114,7 +124,11 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           <Button className="disable-btn mr-10" onClick={props.handleCancel}>
             CANCEL
           </Button>
-          <Button className="primary-btn" onClick={handleSubmit}>
+          <Button
+            className="primary-btn"
+            onClick={handleSubmit}
+            loading={loading}
+          >
             CREATE
           </Button>
         </div>

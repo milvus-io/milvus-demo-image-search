@@ -14,6 +14,7 @@ export default {
     index: "Update Index for",
     saveSuccess: "Create Table Success",
     delete: "Delete Table Success",
+    confirmDel: "Are you sure to delete",
     searchTxt: "Table Name"
   },
   hardware: {
