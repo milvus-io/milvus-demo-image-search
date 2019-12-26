@@ -9,7 +9,7 @@ import {
 import { useTranslation } from "react-i18next";
 const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const { form } = props;
-  const { getFieldDecorator } = form;
+  const { getFieldDecorator, resetFields } = form;
   const [defalutValue, setDefaultValue] = useState({});
   const [searchHardware, setSearchHardware] = useState([]);
   const [buildHardware, setBuildHardware] = useState([]);
@@ -20,6 +20,8 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
 
   const { t } = useTranslation();
   const hardwareTrans = t("hardware");
+  const buttonTrans = t("button");
+
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -69,27 +71,30 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const handleSwitch = val => {
     setEnable(val);
   };
+  const fetchData = async () => {
+    const res = await Promise.all([
+      getHardwareConfig(),
+      getSystemConfig(),
+      getHardwareType()
+    ]);
+    const {
+      build_index_resources: buildVal,
+      search_resources: searchVal,
+      enable
+    } = res[0] || {};
 
+    setBuildHardware(buildVal || []);
+    setSearchHardware(searchVal || []);
+    setEnable(!!enable);
+    setDefaultValue(res[0] || {});
+    setSystemConfig(res[1] || {});
+    setHardwareType(res[2]);
+  };
+  const handleCancel = () => {
+    fetchData();
+    resetFields();
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await Promise.all([
-        getHardwareConfig(),
-        getSystemConfig(),
-        getHardwareType()
-      ]);
-      const {
-        build_index_resources: buildVal,
-        search_resources: searchVal,
-        enable
-      } = res[0] || {};
-
-      setBuildHardware(buildVal || []);
-      setSearchHardware(searchVal || []);
-      setEnable(!!enable);
-      setDefaultValue(res[0] || {});
-      setSystemConfig(res[1] || {});
-      setHardwareType(res[2]);
-    };
     fetchData();
   }, []);
 
@@ -114,6 +119,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
                 { required: true, message: "GPU Cache Capacity is required" }
               ]
             })(<InputNumber min={1} max={systemConfig.gpuMemory} />)}
+            <span className="ml-10">{`(1~${systemConfig.gpuMemory} GB)`}</span>
           </Form.Item>
 
           <Form.Item label="Enabled For Searching">
@@ -151,15 +157,15 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
       ) : null}
 
       <Form.Item label=" " colon={false}>
-        <Button className="disable-btn mr-10" onClick={props.handleCancel}>
-          Cancel
+        <Button className="disable-btn mr-10" onClick={handleCancel}>
+          {buttonTrans.cancel}
         </Button>
         <Button
           className="primary-btn"
           onClick={handleSubmit}
           loading={loading}
         >
-          Save
+          {buttonTrans.save}
         </Button>
       </Form.Item>
     </Form>

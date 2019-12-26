@@ -26,6 +26,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
     const [loading, setLoading] = useState(false);
     const { t } = useTranslation();
     const tableTrans = t("table");
+    const buttonTrans = t("button");
 
     const handleSubmit = async e => {
       e.preventDefault();
@@ -82,7 +83,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
             <Col span={16}>
               <Slider
                 min={1}
-                max={4096}
+                max={16384}
                 onChange={setDimension}
                 step={1}
                 value={typeof dimension === "number" ? dimension : 0}
@@ -91,7 +92,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
             <Col span={4}>
               <InputNumber
                 min={1}
-                max={4096}
+                max={16384}
                 style={{ marginLeft: 16 }}
                 value={dimension}
                 onChange={setDimension}
@@ -104,7 +105,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
             <Col span={16}>
               <Slider
                 min={1}
-                max={20000}
+                max={4096}
                 onChange={setSize}
                 value={typeof size === "number" ? size : 0}
               />
@@ -112,7 +113,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
             <Col span={4}>
               <InputNumber
                 min={1}
-                max={20000}
+                max={4096}
                 style={{ marginLeft: 16 }}
                 value={size}
                 onChange={setSize}
@@ -122,14 +123,14 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         </Form.Item>
         <div>
           <Button className="disable-btn mr-10" onClick={props.handleCancel}>
-            CANCEL
+            {buttonTrans.cancel}
           </Button>
           <Button
             className="primary-btn"
             onClick={handleSubmit}
             loading={loading}
           >
-            CREATE
+            {buttonTrans.save}
           </Button>
         </div>
       </Form>

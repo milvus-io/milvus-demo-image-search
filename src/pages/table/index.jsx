@@ -20,6 +20,8 @@ const PAGE_SIZE = 10;
 const TableManage = props => {
   const { t } = useTranslation();
   const tableTrans = t("table");
+  const dataManageTrans = t("dataManage");
+
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState([]);
   const [record, setRecord] = useState("");
@@ -43,7 +45,7 @@ const TableManage = props => {
   };
   const handleDelete = async record => {
     await deleteTable(record.table_name);
-    setOffset(0);
+    getFirstPage();
     setCurrent(1);
     message.success(tableTrans.delete);
   };
@@ -62,7 +64,7 @@ const TableManage = props => {
 
   const saveSuccess = txt => {
     setVisible(false);
-    setOffset(0);
+    getFirstPage();
     setCurrent(1);
     message.success(txt);
   };
@@ -105,12 +107,14 @@ const TableManage = props => {
       render: (text, record) => {
         return (
           <span>
-            <Icon
-              type="plus"
+            <span
+              style={{ fontSize: "12px", color: "#FAFAFA", cursor: "pointer" }}
               onClick={() => {
                 handleAddIndex(record);
               }}
-            ></Icon>
+            >
+              Update Index
+            </span>
             <Divider type="vertical" />
             <Popconfirm
               placement="top"
@@ -121,7 +125,7 @@ const TableManage = props => {
               okText="Delete"
               cancelText="Cancel"
             >
-              <Icon type="delete"></Icon>
+              <Icon type="delete" style={{ color: "#FAFAFA" }}></Icon>
             </Popconfirm>
           </span>
         );
@@ -132,17 +136,21 @@ const TableManage = props => {
   const handleSearch = async name => {
     setCurrent(1);
     if (!name) {
-      if (offset === 0) {
-        fetchData();
-      } else {
-        setOffset(0);
-      }
+      getFirstPage();
       return;
     }
     const res = (await searchTable(name)) || {};
 
     setData([{ ...res, key: res.table_name }]);
     setCount(1);
+  };
+
+  const getFirstPage = () => {
+    if (offset === 0) {
+      fetchData();
+    } else {
+      setOffset(0);
+    }
   };
 
   const handlePageChange = async page => {
@@ -152,7 +160,7 @@ const TableManage = props => {
   return (
     <div className="table-wrapper">
       <div className="header">
-        <h2>Table and Index </h2>
+        <h2>{dataManageTrans.table}</h2>
         {/* <Button className="primary-btn">Save</Button>
         <Button className="disable-btn">Cancel</Button> */}
       </div>
@@ -164,7 +172,7 @@ const TableManage = props => {
             shape="circle"
             icon="plus"
           />
-          <span>Add Table</span>
+          <span>{tableTrans.create}</span>
         </div>
         <Search
           placeholder={tableTrans.searchTxt}

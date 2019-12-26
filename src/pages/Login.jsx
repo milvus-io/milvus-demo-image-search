@@ -28,7 +28,7 @@ const Login = () => {
         try {
           const res = await http.get("/state");
           if (res.data && res.data.code === 0) {
-            history.push("/manage/table");
+            history.push("/manage/advanced");
           }
         } catch (e) {
           message.warning(`Connect http://${url} Fail`);

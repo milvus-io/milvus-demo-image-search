@@ -8,13 +8,15 @@ import {
 import { useTranslation } from "react-i18next";
 const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const { form } = props;
-  const { getFieldDecorator } = form;
+  const { getFieldDecorator, resetFields } = form;
   const [defalutValue, setDefaultValue] = useState({});
   const [systemConfig, setSystemConfig] = useState({});
   const [loading, setLoading] = useState(false);
 
   const { t } = useTranslation();
   const advancedTrans = t("advanced");
+  const buttonTrans = t("button");
+
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -43,6 +45,10 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
     });
   };
 
+  const handleCancel = () => {
+    resetFields();
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const res = await Promise.all([getAdvancedConfig(), getSystemConfig()]);
@@ -60,24 +66,20 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
           initialValue: defalutValue.cpu_cache_capacity,
           rules: [{ required: true, message: "CPU Cache Capacity is required" }]
         })(<InputNumber min={1} max={systemConfig.cpuMemory} />)}
+        <span className="ml-10">{`(1~${systemConfig.cpuMemory}GB)`}</span>
       </Form.Item>
-      <p className="desc">
-        The size of the CPU memory for caching data for faster query. The sum of
-        cpu_cache_capacity and insert_buffer_size (in "Section db_config) must
-        be less than total CPU memory size.
-      </p>
+      <p className="desc">{advancedTrans.capacityDesc1}</p>
+      <p className="desc">{advancedTrans.capacityDesc2}</p>
 
-      <Form.Item label="Cache Insert Data">
+      <Form.Item label={advancedTrans.insert}>
         {getFieldDecorator("cache_insert_data", {
           valuePropName: "checked",
           initialValue: defalutValue.cache_insert_data
         })(<Switch />)}
       </Form.Item>
-      <p className="desc">
-        If set to true , the inserted data will be loaded into the cache
-        immediately for hot query.<br></br> If you want simultaneous inserting
-        and searching of vector, it is recommended to enable this function.
-      </p>
+      <p className="desc">{advancedTrans.insertDesc1}</p>
+      <p className="desc">{advancedTrans.insertDesc2}</p>
+
       <h1 className="title">Engine Setting</h1>
 
       <Form.Item label="Use Blas Threshold">
@@ -97,15 +99,15 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
       </Form.Item>
 
       <Form.Item label=" " colon={false}>
-        <Button className="disable-btn mr-10" onClick={props.handleCancel}>
-          Cancel
+        <Button className="disable-btn mr-10" onClick={handleCancel}>
+          {buttonTrans.cancel}
         </Button>
         <Button
           className="primary-btn"
           onClick={handleSubmit}
           loading={loading}
         >
-          Save
+          {buttonTrans.save}
         </Button>
       </Form.Item>
     </Form>

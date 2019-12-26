@@ -11,6 +11,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
   function(props) {
     const { t } = useTranslation();
     const indexTrans = t("index");
+    const buttonTrans = t("button");
     const [nlist, setNlist] = useState(16384);
     const [loading, setLoading] = useState(false);
 
@@ -30,10 +31,11 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         };
         try {
           const res = await createIndex(tableName, params);
+          console.log(res);
           if (res.code === 0) {
             props.saveSuccess(indexTrans.saveSuccess);
           }
-        } catch {
+        } finally {
           setLoading(false);
         }
       });
@@ -82,14 +84,14 @@ const TableForm = Form.create({ name: "form_in_modal" })(
 
         <div>
           <Button className="disable-btn mr-10" onClick={props.handleCancel}>
-            CANCEL
+            {buttonTrans.cancel}
           </Button>
           <Button
             className="primary-btn"
             onClick={handleSubmit}
             loading={loading}
           >
-            CREATE
+            {buttonTrans.update}
           </Button>
         </div>
       </Form>

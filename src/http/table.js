@@ -18,7 +18,7 @@ export async function deleteTable(name) {
 }
 
 export async function createIndex(tableName, data = {}) {
-  const res = await http.post(`tables/${tableName}/indexes`, data);
+  const res = await http.post(`/tables/${tableName}/indexes`, data);
   return res.data;
 }
 
