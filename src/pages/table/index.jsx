@@ -76,23 +76,23 @@ const TableManage = props => {
 
   const columns = [
     {
-      title: "Name",
+      title: tableTrans.tName,
       dataIndex: "table_name",
       key: "table_name"
     },
     {
-      title: "Dimension",
+      title: tableTrans.tDimension,
       dataIndex: "dimension",
       key: "dimension"
     },
 
     {
-      title: "Metric Type",
+      title: tableTrans.tMetric,
       dataIndex: "metric_type",
       key: "metric_type"
     },
     {
-      title: "Index",
+      title: tableTrans.tIndex,
       dataIndex: "index",
       key: "index"
     },
@@ -102,7 +102,7 @@ const TableManage = props => {
       key: "nlist"
     },
     {
-      title: "Action",
+      title: tableTrans.tAction,
       key: "action",
       render: (text, record) => {
         return (
@@ -113,7 +113,7 @@ const TableManage = props => {
                 handleAddIndex(record);
               }}
             >
-              Update Index
+              {tableTrans.updateIndex}
             </span>
             <Divider type="vertical" />
             <Popconfirm

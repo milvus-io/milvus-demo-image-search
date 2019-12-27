@@ -58,7 +58,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
 
     return (
       <Form layout="vertical">
-        <Form.Item label="Table Name">
+        <Form.Item label={tableTrans.tName}>
           {getFieldDecorator("table_name", {
             rules: [
               {
@@ -67,7 +67,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
             ]
           })(<Input placeholder={tableTrans.create} />)}
         </Form.Item>
-        <Form.Item label="Metric Type">
+        <Form.Item label={tableTrans.tMetric}>
           {getFieldDecorator("metric_type", { initialValue: 1 })(
             <Select>
               {METRIC_TYPES.map(t => (
@@ -78,7 +78,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
             </Select>
           )}
         </Form.Item>
-        <Form.Item label="Dimension">
+        <Form.Item label={tableTrans.tDimension}>
           <Row>
             <Col span={16}>
               <Slider
@@ -100,7 +100,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
             </Col>
           </Row>
         </Form.Item>
-        <Form.Item label="Index File Size">
+        <Form.Item label={tableTrans.fileSize}>
           <Row>
             <Col span={16}>
               <Slider

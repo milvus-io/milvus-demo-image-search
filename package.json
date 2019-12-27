@@ -30,7 +30,7 @@
     "electron-packager": "^14.1.1"
   },
   "homepage": "./",
-  "main": "src/electron-starter.js",
+  "main": "electron-starter.js",
   "scripts": {
     "electron": "ELECTRON_START_URL=http://localhost:3000 electron .",
     "start": "react-app-rewired start",
@@ -38,8 +38,8 @@
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
     "package-mac": "electron-packager ./ milvus --overwrite --platform=darwin --arch=x64 --out=electron-app",
-    "package-linux": "electron-packager ./build milvus --overwrite --platform=linux --arch=x64 --icon=resources/icon.png --out=electron-app",
-    "install-deb": "electron-installer-debian --src electron-app/milvus-linux-x64/ --arch amd64 --config debian.json",
+    "package-linux": "electron-packager ./ milvus - --overwrite --platform=linux --arch=x64 --icon=resources/icon.png --out=electron-app --ignore='node_modules|src|electron-app|public|.gitignore'",
+    "install-deb": "electron-installer-debian --src electron-app/milvus-linux-x64/ --arch amd64 --config debian.json ",
     "install-dmg": "electron-installer-dmg  electron-app/milvus-darwin-x64/milvus.app milvus --out=electron-app/installers/"
   },
   "eslintConfig": {

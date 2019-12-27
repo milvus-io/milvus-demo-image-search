@@ -15,10 +15,21 @@ export default {
     saveSuccess: "表创建成功",
     delete: "删除表成功",
     confirmDel: "是否确认删除表",
-    searchTxt: "请输入表名"
+    searchTxt: "请输入表名",
+    updateIndex: "更新索引",
+    tName: "表名",
+    tDimension: "维度",
+    tMetric: "Metric 类型",
+    tIndex: "索引",
+    tAction: "操作",
+    fileSize: "索引文件大小"
   },
   hardware: {
-    saveSuccess: "GPU配置更新成功"
+    saveSuccess: "GPU配置更新成功",
+    enable: "开启 GPU",
+    capacity: "GPU 缓存容量(GB)",
+    search: "用于搜索",
+    index: "用于创建索引"
   },
   advanced: {
     saveSuccess: "配置更新成功",
@@ -29,7 +40,8 @@ export default {
     capacityDesc2:
       "cpu_cache_capacity和 insert_buffer_size (db_config区域）之和不能超过内存总量。",
     insertDesc1: "设置为 true，则新插入的数据会自动加载到缓存以备搜索。",
-    insertDesc2: "如果想要实现数据即插即搜索，建议启用该功能。"
+    insertDesc2: "如果想要实现数据即插即搜索，建议启用该功能。",
+    enginSetting: "引擎设置"
   },
   button: {
     cancel: "取消",

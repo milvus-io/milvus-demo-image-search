@@ -15,10 +15,21 @@ export default {
     saveSuccess: "Create Table Success",
     delete: "Delete Table Success",
     confirmDel: "Are you sure to delete table",
-    searchTxt: "Table Name"
+    searchTxt: "Table Name",
+    updateIndex: "Update Index",
+    tName: "Name",
+    tDimension: "Dimension",
+    tMetric: "Metric Type",
+    tIndex: "Index",
+    tAction: "Action",
+    fileSize: "Index File Size"
   },
   hardware: {
-    saveSuccess: "Save Gpu Configs Success"
+    saveSuccess: "Save Gpu Configs Success",
+    enable: "Enable GPU",
+    capacity: "GPU Cache Capacity (GB)",
+    search: "Enabled For Searching",
+    index: "Enabled For Building Index"
   },
   advanced: {
     saveSuccess: "Update Configs Success",
@@ -32,7 +43,8 @@ export default {
     insertDesc1:
       "If set to true , the inserted data will be loaded into the cache immediately for hot query.",
     insertDesc2:
-      "If you want simultaneous inserting and searching of vector, it is recommended to enable this function."
+      "If you want simultaneous inserting and searching of vector, it is recommended to enable this function.",
+    enginSetting: "Engine Setting"
   },
   button: {
     cancel: "Cancel",

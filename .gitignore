@@ -10,6 +10,7 @@
 
 # production
 /build
+/dist
 /electron-app
 # misc
 .DS_Store

@@ -2,6 +2,7 @@ import axios from "axios";
 import { message } from "antd";
 import { URL } from "@/consts";
 
+let hasError = false; // make sure only one error message
 const http = axios.create({
   timeout: 5000
 });
@@ -35,13 +36,25 @@ http.interceptors.response.use(
     return res;
   },
   function(error) {
-    console.dir(error.response);
+    if (hasError) {
+      return Promise.reject(error);
+    }
     if (error.response && error.response.data) {
       const { message: errMsg } = error.response.data;
-      errMsg && message.warning(errMsg);
+      errMsg && message.error(errMsg);
+      hasError = true;
+      setTimeout(() => {
+        hasError = false;
+      }, 2000);
+      return Promise.reject(error);
     }
-
-    // Do something with response error
+    if (error.message) {
+      hasError = true;
+      setTimeout(() => {
+        hasError = false;
+      }, 2000);
+      message.error(error.message);
+    }
     return Promise.reject(error);
   }
 );

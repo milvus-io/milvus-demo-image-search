@@ -15,7 +15,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const [buildHardware, setBuildHardware] = useState([]);
   const [systemConfig, setSystemConfig] = useState({});
   const [enable, setEnable] = useState(false);
-  const [hardwareType, setHardwareType] = useState("CPU");
+  const [hardwareType, setHardwareType] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { t } = useTranslation();
@@ -104,7 +104,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
     </div>
   ) : (
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
-      <Form.Item label="Enable GPU">
+      <Form.Item label={hardwareTrans.enable}>
         {getFieldDecorator("enable", {
           valuePropName: "checked",
           initialValue: defalutValue.enable
@@ -112,7 +112,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
       </Form.Item>
       {enable ? (
         <>
-          <Form.Item label="GPU Cache Capacity (GB)">
+          <Form.Item label={hardwareTrans.capacity}>
             {getFieldDecorator("cache_capacity", {
               initialValue: defalutValue.cache_capacity || 1,
               rules: [
@@ -122,7 +122,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
             <span className="ml-10">{`(1~${systemConfig.gpuMemory} GB)`}</span>
           </Form.Item>
 
-          <Form.Item label="Enabled For Searching">
+          <Form.Item label={hardwareTrans.search}>
             <ol>
               {systemConfig.gpuList &&
                 systemConfig.gpuList.map((v, index) => (
@@ -138,7 +138,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
             </ol>
           </Form.Item>
 
-          <Form.Item label="Enabled For Building Index">
+          <Form.Item label={hardwareTrans.index}>
             <ol>
               {systemConfig.gpuList &&
                 systemConfig.gpuList.map((v, index) => (

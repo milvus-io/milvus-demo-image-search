@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { createIndex } from "@/http/table";
 
 const { Option } = Select;
-const INDEX_TYPES = ["FLAT", "IVFFLAT", "IVFSQ8", "IVFSQ8H"];
+const INDEX_TYPES = ["FLAT", "IVFFLAT", "IVFSQ8", "IVFSQ8H", "IVFPQ"];
 
 const TableForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line

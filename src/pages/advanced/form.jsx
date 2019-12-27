@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Switch, InputNumber, Button, message } from "antd";
+import { Form, Switch, InputNumber, Button, message } from "antd";
 import {
   getAdvancedConfig,
   updateAdvancedConfig,
@@ -66,7 +66,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
           initialValue: defalutValue.cpu_cache_capacity,
           rules: [{ required: true, message: "CPU Cache Capacity is required" }]
         })(<InputNumber min={1} max={systemConfig.cpuMemory} />)}
-        <span className="ml-10">{`(1~${systemConfig.cpuMemory}GB)`}</span>
+        <span className="ml-10">{`(1~${systemConfig.cpuMemory || 1}GB)`}</span>
       </Form.Item>
       <p className="desc">{advancedTrans.capacityDesc1}</p>
       <p className="desc">{advancedTrans.capacityDesc2}</p>
@@ -80,13 +80,13 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
       <p className="desc">{advancedTrans.insertDesc1}</p>
       <p className="desc">{advancedTrans.insertDesc2}</p>
 
-      <h1 className="title">Engine Setting</h1>
+      <h1 className="title">{advancedTrans.enginSetting}</h1>
 
       <Form.Item label="Use Blas Threshold">
         {getFieldDecorator("use_blas_threshold", {
           initialValue: defalutValue.use_blas_threshold,
           rules: [{ required: true, message: "Use Blas Threshold is required" }]
-        })(<InputNumber min={1} max={4096} />)}
+        })(<InputNumber min={1} />)}
       </Form.Item>
 
       <Form.Item label="Gpu Search Threshold">
@@ -95,7 +95,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
           rules: [
             { required: true, message: "Gpu Search Threshold is required" }
           ]
-        })(<InputNumber min={0} max={10000} />)}
+        })(<InputNumber min={1} />)}
       </Form.Item>
 
       <Form.Item label=" " colon={false}>
