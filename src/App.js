@@ -7,6 +7,7 @@ import HardwarePage from "pages/hardware";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { HashRouter, Switch, Route } from "react-router-dom";
 import "./app.scss";
+
 export default function App() {
   return (
     <HashRouter>

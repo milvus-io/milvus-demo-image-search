@@ -1,6 +1,6 @@
 import axios from "axios";
 import { message } from "antd";
-import { URL } from "@/consts";
+import { HOST, PORT } from "@/consts";
 
 let hasError = false; // make sure only one error message
 const http = axios.create({
@@ -8,11 +8,11 @@ const http = axios.create({
 });
 http.interceptors.request.use(
   function(config) {
-    const milvUrl = window.localStorage.getItem(URL) || "";
-
+    const host = window.localStorage.getItem(HOST) || "";
+    const port = window.localStorage.getItem(PORT) || "";
     console.log(config);
     // Do something before request is sent
-    return { ...config, url: `http://${milvUrl}${config.url}` };
+    return { ...config, url: `http://${host}:${port}/${config.url}` };
   },
   function(error) {
     // Do something with request error

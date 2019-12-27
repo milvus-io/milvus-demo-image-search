@@ -1,1 +1,3 @@
-export const URL = "milvus-url";
+export const HOST = "milvus-host";
+
+export const PORT = "milvus-port";
