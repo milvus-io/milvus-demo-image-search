@@ -3,7 +3,10 @@ import { NavLink, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Icon } from "antd";
 import "./index.scss";
+import { HOST, PORT } from "@/consts";
 import Logo from "assets/imgs/logo.svg";
+import CONFIG_ICON from "assets/imgs/config.png";
+import DATA_ICON from "assets/imgs/dataManage.png";
 
 const MyLink = props => {
   return (
@@ -37,7 +40,9 @@ const LayoutWrapper = props => {
     history.push("/login");
   };
 
-  const url = window.localStorage.getItem(URL);
+  const host = window.localStorage.getItem(HOST);
+  const port = window.localStorage.getItem(PORT);
+
   useEffect(() => {
     const lang = window.localStorage.getItem("lang") || "en";
     setLangTxt(lang === "cn" ? "En" : "中");
@@ -56,13 +61,16 @@ const LayoutWrapper = props => {
         </div>
         <div className="logout-wrapper">
           <div>
-            {url}
+            {`${host}:${port}`}
             <Icon type="logout" className="logout" onClick={handleLogout} />
           </div>
         </div>
 
         <div className="menu">
-          <h2 className="title">{configTrans.title}</h2>
+          <h2 className="title">
+            <img src={CONFIG_ICON} alt="config"></img>
+            {configTrans.title}
+          </h2>
           <ul className="list-wrapper">
             <MyLink to="/manage/advanced">{configTrans.advanced}</MyLink>
             <MyLink
@@ -74,7 +82,10 @@ const LayoutWrapper = props => {
               {configTrans.hardware}
             </MyLink>
           </ul>
-          <h2 className="title">{dataTrans.title}</h2>
+          <h2 className="title">
+            <img src={DATA_ICON} alt="data-manage"></img>
+            {dataTrans.title}
+          </h2>
           <ul className="list-wrapper">
             <MyLink
               to="/manage/table"
