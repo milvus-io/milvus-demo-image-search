@@ -27,6 +27,8 @@ const TableForm = Form.create({ name: "form_in_modal" })(
     const { t } = useTranslation();
     const tableTrans = t("table");
     const buttonTrans = t("button");
+    const { form } = props;
+    const { getFieldDecorator, resetFields } = form;
 
     const handleSubmit = async e => {
       e.preventDefault();
@@ -46,6 +48,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           const res = await createTable(data);
           if (res.code === 0) {
             props.saveSuccess(tableTrans.saveSuccess);
+            resetFields();
           }
         } finally {
           setLoading(false);
@@ -53,8 +56,10 @@ const TableForm = Form.create({ name: "form_in_modal" })(
       });
     };
 
-    const { form } = props;
-    const { getFieldDecorator } = form;
+    const handleCancel = e => {
+      resetFields();
+      props.handleCancel();
+    };
 
     return (
       <Form layout="vertical">
@@ -62,7 +67,8 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           {getFieldDecorator("table_name", {
             rules: [
               {
-                required: true
+                required: true,
+                message: tableTrans.error.name
               }
             ]
           })(<Input placeholder={tableTrans.create} />)}
@@ -122,7 +128,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           </Row>
         </Form.Item>
         <div>
-          <Button className="disable-btn mr-10" onClick={props.handleCancel}>
+          <Button className="disable-btn mr-10" onClick={handleCancel}>
             {buttonTrans.cancel}
           </Button>
           <Button

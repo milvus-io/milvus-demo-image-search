@@ -92,6 +92,11 @@ const TableManage = props => {
       key: "metric_type"
     },
     {
+      title: tableTrans.fileSize,
+      dataIndex: "index_file_size",
+      key: "index_file_size"
+    },
+    {
       title: tableTrans.tIndex,
       dataIndex: "index",
       key: "index"
@@ -125,7 +130,16 @@ const TableManage = props => {
               okText="Delete"
               cancelText="Cancel"
             >
-              <Icon type="delete" style={{ color: "#FAFAFA" }}></Icon>
+              {/* <Icon type="delete" style={{ color: "#FAFAFA" }}></Icon> */}
+              <span
+                style={{
+                  fontSize: "12px",
+                  color: "#FAFAFA",
+                  cursor: "pointer"
+                }}
+              >
+                {tableTrans.deleteTable}
+              </span>
             </Popconfirm>
           </span>
         );

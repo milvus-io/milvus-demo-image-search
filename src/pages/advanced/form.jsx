@@ -8,10 +8,12 @@ import {
 import { useTranslation } from "react-i18next";
 const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const { form } = props;
-  const { getFieldDecorator, resetFields } = form;
+  const { getFieldDecorator, resetFields, getFieldsValue } = form;
   const [defalutValue, setDefaultValue] = useState({});
   const [systemConfig, setSystemConfig] = useState({});
+
   const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(true);
 
   const { t } = useTranslation();
   const advancedTrans = t("advanced");
@@ -38,6 +40,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
         const res = await updateAdvancedConfig(values);
         if (res.code === 0) {
           message.success(advancedTrans.saveSuccess);
+          setDefaultValue(values);
         }
       } finally {
         setLoading(false);
@@ -45,8 +48,34 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
     });
   };
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
     resetFields();
+    setDisabled(true);
+  };
+
+  const handleFormChange = async (changedVal, key) => {
+    const regx = /^[0-9]*$/;
+    requestAnimationFrame(() => {
+      let values = getFieldsValue();
+      const isSame = Object.keys(values).every(
+        k => values[k] === defalutValue[k]
+      );
+      switch (key) {
+        case "cpu_cache_capacity":
+        case "use_blas_threshold":
+        case "gpu_search_threshold":
+          const isValid = regx.test(changedVal);
+          setDisabled(!isValid || isSame);
+          break;
+        case "cache_insert_data":
+          setDisabled(isSame);
+          break;
+
+        default:
+          setDisabled(true);
+          return;
+      }
+    });
   };
 
   useEffect(() => {
@@ -65,7 +94,15 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
         {getFieldDecorator("cpu_cache_capacity", {
           initialValue: defalutValue.cpu_cache_capacity,
           rules: [{ required: true, message: "CPU Cache Capacity is required" }]
-        })(<InputNumber min={1} max={systemConfig.cpuMemory} />)}
+        })(
+          <InputNumber
+            min={1}
+            max={systemConfig.cpuMemory}
+            onChange={val => {
+              handleFormChange(val, "cpu_cache_capacity");
+            }}
+          />
+        )}
         <span className="ml-10">{`(1~${systemConfig.cpuMemory || 1}GB)`}</span>
       </Form.Item>
       <p className="desc">{advancedTrans.capacityDesc1}</p>
@@ -75,7 +112,13 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
         {getFieldDecorator("cache_insert_data", {
           valuePropName: "checked",
           initialValue: defalutValue.cache_insert_data
-        })(<Switch />)}
+        })(
+          <Switch
+            onChange={val => {
+              handleFormChange(val, "cache_insert_data");
+            }}
+          />
+        )}
       </Form.Item>
       <p className="desc">{advancedTrans.insertDesc1}</p>
       <p className="desc">{advancedTrans.insertDesc2}</p>
@@ -86,7 +129,14 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
         {getFieldDecorator("use_blas_threshold", {
           initialValue: defalutValue.use_blas_threshold,
           rules: [{ required: true, message: "Use Blas Threshold is required" }]
-        })(<InputNumber min={1} />)}
+        })(
+          <InputNumber
+            min={1}
+            onChange={val => {
+              handleFormChange(val, "use_blas_threshold");
+            }}
+          />
+        )}
       </Form.Item>
 
       <Form.Item label="Gpu Search Threshold">
@@ -95,7 +145,14 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
           rules: [
             { required: true, message: "Gpu Search Threshold is required" }
           ]
-        })(<InputNumber min={1} />)}
+        })(
+          <InputNumber
+            min={1}
+            onChange={val => {
+              handleFormChange(val, "gpu_search_threshold");
+            }}
+          />
+        )}
       </Form.Item>
 
       <Form.Item label=" " colon={false}>
@@ -103,9 +160,10 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
           {buttonTrans.cancel}
         </Button>
         <Button
-          className="primary-btn"
+          className={disabled ? "disable-btn" : "primary-btn"}
           onClick={handleSubmit}
           loading={loading}
+          disabled={disabled}
         >
           {buttonTrans.save}
         </Button>

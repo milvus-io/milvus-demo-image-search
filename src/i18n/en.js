@@ -15,6 +15,7 @@ export default {
     saveSuccess: "Create Table Success",
     delete: "Delete Table Success",
     confirmDel: "Are you sure to delete table",
+    deleteTable: "Delete Table",
     searchTxt: "Table Name",
     updateIndex: "Update Index",
     tName: "Name",
@@ -22,7 +23,10 @@ export default {
     tMetric: "Metric Type",
     tIndex: "Index",
     tAction: "Action",
-    fileSize: "Index File Size"
+    fileSize: "Index File Size",
+    error: {
+      name: "表名是必填项"
+    }
   },
   hardware: {
     saveSuccess: "Save Gpu Configs Success",
@@ -49,6 +53,7 @@ export default {
   button: {
     cancel: "Cancel",
     save: "Save",
+    reset: "Reset",
     update: "Update"
   },
   index: {

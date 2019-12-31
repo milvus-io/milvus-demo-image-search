@@ -9,14 +9,19 @@ import {
 import { useTranslation } from "react-i18next";
 const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const { form } = props;
-  const { getFieldDecorator, resetFields } = form;
+  const { getFieldDecorator, resetFields, getFieldsValue } = form;
   const [defalutValue, setDefaultValue] = useState({});
   const [searchHardware, setSearchHardware] = useState([]);
+  const [defaultSearch, setDefaultSearch] = useState([]);
   const [buildHardware, setBuildHardware] = useState([]);
+  const [defaultBuild, setDefaultBuild] = useState([]);
+
   const [systemConfig, setSystemConfig] = useState({});
   const [enable, setEnable] = useState(false);
   const [hardwareType, setHardwareType] = useState("");
+
   const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(true);
 
   const { t } = useTranslation();
   const hardwareTrans = t("hardware");
@@ -34,17 +39,38 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   };
   const handleSearchSwitch = (checked, e) => {
     const { value } = e.target.dataset;
-    checked
-      ? setSearchHardware([...searchHardware, value])
-      : setSearchHardware(searchHardware.filter(v => v !== value));
+    const newSearch = checked
+      ? [...searchHardware, value]
+      : searchHardware.filter(v => v !== value);
+    setSearchHardware(newSearch);
+    setDisabled(checkSame());
   };
 
   const handleBuildSwitch = (checked, e) => {
     const { value } = e.target.dataset;
-    checked
-      ? setBuildHardware([...buildHardware, value])
-      : setBuildHardware([...buildHardware.filter(v => v !== value)]);
+    const newBuild = checked
+      ? [...buildHardware, value]
+      : [...buildHardware.filter(v => v !== value)];
+    setBuildHardware(newBuild);
   };
+  const checkSame = () => {
+    const values = getFieldsValue();
+    const isSame = Object.keys(values).every(
+      k => values[k] === defalutValue[k]
+    );
+    const isSearchSame =
+      searchHardware.length === defaultSearch.length &&
+      searchHardware.every(v => defaultSearch.includes(v));
+    const isBuildSame =
+      buildHardware.length === defaultBuild.length &&
+      buildHardware.every(v => defaultBuild.includes(v));
+
+    return isSame && isSearchSame && isBuildSame;
+  };
+  useEffect(() => {
+    setDisabled(checkSame());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [buildHardware, searchHardware, defaultSearch, defaultBuild, defalutValue]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -52,6 +78,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
       if (err) {
         return;
       }
+
       setLoading(true);
       const data = {
         ...values,
@@ -62,15 +89,38 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
         const res = await updateHardwareConfig(data);
         if (res.code === 0) {
           message.success(hardwareTrans.saveSuccess);
+          setDefaultValue(values);
+          setDefaultBuild(buildHardware);
+          setDefaultSearch(searchHardware);
         }
       } finally {
         setLoading(false);
       }
     });
   };
+
   const handleSwitch = val => {
+    if (val) {
+      !searchHardware.length && setSearchHardware([systemConfig.gpuList[0]]);
+      !buildHardware.length && setBuildHardware([systemConfig.gpuList[0]]);
+    }
     setEnable(val);
+    requestAnimationFrame(() => {
+      setDisabled(checkSame());
+    });
   };
+
+  const handleNumberChange = val => {
+    const regx = /^[0-9]*$/;
+    if (!regx.test(val)) {
+      setDisabled(true);
+      return;
+    }
+    requestAnimationFrame(() => {
+      setDisabled(checkSame());
+    });
+  };
+
   const fetchData = async () => {
     const res = await Promise.all([
       getHardwareConfig(),
@@ -84,7 +134,11 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
     } = res[0] || {};
 
     setBuildHardware(buildVal || []);
+    setDefaultBuild(buildVal || []);
+
     setSearchHardware(searchVal || []);
+    setDefaultSearch(searchVal || []);
+
     setEnable(!!enable);
     setDefaultValue(res[0] || {});
     setSystemConfig(res[1] || {});
@@ -94,6 +148,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
     fetchData();
     resetFields();
   };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -118,7 +173,13 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
               rules: [
                 { required: true, message: "GPU Cache Capacity is required" }
               ]
-            })(<InputNumber min={1} max={systemConfig.gpuMemory} />)}
+            })(
+              <InputNumber
+                min={1}
+                max={systemConfig.gpuMemory}
+                onChange={handleNumberChange}
+              />
+            )}
             <span className="ml-10">{`(1~${systemConfig.gpuMemory} GB)`}</span>
           </Form.Item>
 
@@ -161,9 +222,10 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
           {buttonTrans.cancel}
         </Button>
         <Button
-          className="primary-btn"
+          className={disabled ? "disable-btn" : "primary-btn"}
           onClick={handleSubmit}
           loading={loading}
+          disabled={disabled}
         >
           {buttonTrans.save}
         </Button>

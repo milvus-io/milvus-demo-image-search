@@ -17,6 +17,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
 
     const { table_name: tableName, index: type, nlist: defaultNlist } =
       props.record || {};
+    const { getFieldDecorator, resetFields } = props.form;
     const handleSubmit = e => {
       e.preventDefault();
       props.form.validateFields(async (err, values) => {
@@ -31,21 +32,24 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         };
         try {
           const res = await createIndex(tableName, params);
-          console.log(res);
           if (res.code === 0) {
             props.saveSuccess(indexTrans.saveSuccess);
+            resetFields();
           }
         } finally {
           setLoading(false);
         }
       });
     };
+
+    const handleCancel = e => {
+      resetFields();
+      props.handleCancel();
+    };
+
     useEffect(() => {
       setNlist(defaultNlist);
     }, [defaultNlist]);
-
-    const { form } = props;
-    const { getFieldDecorator } = form;
 
     return (
       <Form layout="vertical">
@@ -83,7 +87,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         </Form.Item>
 
         <div>
-          <Button className="disable-btn mr-10" onClick={props.handleCancel}>
+          <Button className="disable-btn mr-10" onClick={handleCancel}>
             {buttonTrans.cancel}
           </Button>
           <Button

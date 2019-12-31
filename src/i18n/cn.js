@@ -15,6 +15,7 @@ export default {
     saveSuccess: "表创建成功",
     delete: "删除表成功",
     confirmDel: "是否确认删除表",
+    deleteTable: "删除表",
     searchTxt: "请输入表名",
     updateIndex: "更新索引",
     tName: "表名",
@@ -22,7 +23,10 @@ export default {
     tMetric: "Metric 类型",
     tIndex: "索引",
     tAction: "操作",
-    fileSize: "索引文件大小"
+    fileSize: "索引文件大小",
+    error: {
+      name: "表名是必填项"
+    }
   },
   hardware: {
     saveSuccess: "GPU配置更新成功",
@@ -46,6 +50,7 @@ export default {
   button: {
     cancel: "取消",
     save: "保存",
+    reset: "重置",
     update: "更新"
   },
   index: {
