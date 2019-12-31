@@ -41,6 +41,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
         if (res.code === 0) {
           message.success(advancedTrans.saveSuccess);
           setDefaultValue(values);
+          handleFormChange();
         }
       } finally {
         setLoading(false);
