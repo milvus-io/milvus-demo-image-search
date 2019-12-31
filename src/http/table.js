@@ -1,9 +1,7 @@
 import http from "./index";
 
 export async function getTables(params = {}) {
-  console.log(http.get);
   const res = await http.get("/tables", { params });
-  console.log(res);
   return res.data;
 }
 

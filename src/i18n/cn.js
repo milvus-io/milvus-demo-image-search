@@ -33,13 +33,18 @@ export default {
     enable: "开启 GPU",
     capacity: "GPU 缓存容量(GB)",
     search: "用于搜索",
-    index: "用于创建索引"
+    index: "用于创建索引",
+    searchAtLeastOne: "至少需要一个 GPU 用于搜索",
+    buildAtLeastOne: "至少需要一个 GPU 用于创建索引"
   },
   advanced: {
     saveSuccess: "配置更新成功",
     cacheSetting: "缓存配置",
     capacity: "CPU缓存容量",
     insert: "数据加载到缓存",
+    blasThreshold: "Blas 阀值",
+    gpuThreshold: "GPU 搜索阀值",
+
     capacityDesc1: "内存中用于驻留搜索数据的缓存空间",
     capacityDesc2:
       "cpu_cache_capacity和 insert_buffer_size (db_config区域）之和不能超过内存总量。",
@@ -53,6 +58,7 @@ export default {
     reset: "重置",
     update: "更新"
   },
+  required: " 是必填项",
   index: {
     saveSuccess: "索引创建成功"
   }

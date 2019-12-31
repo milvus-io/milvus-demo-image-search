@@ -78,7 +78,14 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
       if (err) {
         return;
       }
-
+      if (!searchHardware.length) {
+        message.error(hardwareTrans.searchAtLeastOne);
+        return;
+      }
+      if (!buildHardware.length) {
+        message.error(hardwareTrans.buildAtLeastOne);
+        return;
+      }
       setLoading(true);
       const data = {
         ...values,
@@ -100,10 +107,17 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   };
 
   const handleSwitch = val => {
+    resetFields();
+
     if (val) {
-      !searchHardware.length && setSearchHardware([systemConfig.gpuList[0]]);
-      !buildHardware.length && setBuildHardware([systemConfig.gpuList[0]]);
+      !searchHardware.length
+        ? setSearchHardware([systemConfig.gpuList[0]])
+        : setSearchHardware(defaultSearch);
+      !buildHardware.length
+        ? setBuildHardware([systemConfig.gpuList[0]])
+        : setBuildHardware(defaultBuild);
     }
+
     setEnable(val);
     requestAnimationFrame(() => {
       setDisabled(checkSame());
@@ -171,7 +185,10 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
             {getFieldDecorator("cache_capacity", {
               initialValue: defalutValue.cache_capacity || 1,
               rules: [
-                { required: true, message: "GPU Cache Capacity is required" }
+                {
+                  required: true,
+                  message: `${hardwareTrans.capacity} ${t("required")}`
+                }
               ]
             })(
               <InputNumber
@@ -180,7 +197,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
                 onChange={handleNumberChange}
               />
             )}
-            <span className="ml-10">{`(1~${systemConfig.gpuMemory} GB)`}</span>
+            <span className="ml-10">{`[1 , ${systemConfig.gpuMemory}] GB`}</span>
           </Form.Item>
 
           <Form.Item label={hardwareTrans.search}>

@@ -25,7 +25,7 @@ export default {
     tAction: "Action",
     fileSize: "Index File Size",
     error: {
-      name: "表名是必填项"
+      name: "Table Name is required"
     }
   },
   hardware: {
@@ -33,13 +33,17 @@ export default {
     enable: "Enable GPU",
     capacity: "GPU Cache Capacity (GB)",
     search: "Enabled For Searching",
-    index: "Enabled For Building Index"
+    index: "Enabled For Building Index",
+    searchAtLeastOne: "Need at least one GPU for searching",
+    buildAtLeastOne: "Need at least one GPU for building index"
   },
   advanced: {
     saveSuccess: "Update Configs Success",
     cacheSetting: "Caches Setting",
     capacity: "CPU Cache Capacity",
     insert: "Cache Insert Data",
+    blasThreshold: "use blas threshold",
+    gpuThreshold: "GPU search threshold",
     capacityDesc1:
       "The size of the CPU memory for caching data for faster query. ",
     capacityDesc2:
@@ -56,6 +60,7 @@ export default {
     reset: "Reset",
     update: "Update"
   },
+  required: " is required",
   index: {
     saveSuccess: "Create Index Success"
   }

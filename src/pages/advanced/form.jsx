@@ -94,20 +94,26 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
       <Form.Item label={`${advancedTrans.capacity} (GB)`}>
         {getFieldDecorator("cpu_cache_capacity", {
           initialValue: defalutValue.cpu_cache_capacity,
-          rules: [{ required: true, message: "CPU Cache Capacity is required" }]
+          rules: [
+            {
+              required: true,
+              message: `${advancedTrans.capacity}${t("required")}`
+            }
+          ]
         })(
           <InputNumber
             min={1}
-            max={systemConfig.cpuMemory}
+            max={systemConfig.cpuMemory > 2 ? systemConfig.cpuMemory - 1 : 1}
             onChange={val => {
               handleFormChange(val, "cpu_cache_capacity");
             }}
           />
         )}
-        <span className="ml-10">{`(1~${systemConfig.cpuMemory || 1}GB)`}</span>
+        <span className="ml-10">{`[1, ${systemConfig.cpuMemory ||
+          1}) GB`}</span>
       </Form.Item>
       <p className="desc">{advancedTrans.capacityDesc1}</p>
-      <p className="desc">{advancedTrans.capacityDesc2}</p>
+      {/* <p className="desc">{advancedTrans.capacityDesc2}</p> */}
 
       <Form.Item label={advancedTrans.insert}>
         {getFieldDecorator("cache_insert_data", {
@@ -126,10 +132,15 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
 
       <h1 className="title">{advancedTrans.enginSetting}</h1>
 
-      <Form.Item label="Use Blas Threshold">
+      <Form.Item label={advancedTrans.blasThreshold}>
         {getFieldDecorator("use_blas_threshold", {
           initialValue: defalutValue.use_blas_threshold,
-          rules: [{ required: true, message: "Use Blas Threshold is required" }]
+          rules: [
+            {
+              required: true,
+              message: `${advancedTrans.blasThreshold}${t("required")}`
+            }
+          ]
         })(
           <InputNumber
             min={1}
@@ -140,11 +151,14 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
         )}
       </Form.Item>
 
-      <Form.Item label="Gpu Search Threshold">
+      <Form.Item label={advancedTrans.gpuThreshold}>
         {getFieldDecorator("gpu_search_threshold", {
           initialValue: defalutValue.gpu_search_threshold,
           rules: [
-            { required: true, message: "Gpu Search Threshold is required" }
+            {
+              required: true,
+              message: `${advancedTrans.gpuThreshold}${t("required")}`
+            }
           ]
         })(
           <InputNumber

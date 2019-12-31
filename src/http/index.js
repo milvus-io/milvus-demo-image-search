@@ -10,7 +10,6 @@ http.interceptors.request.use(
   function(config) {
     const host = window.localStorage.getItem(HOST) || "";
     const port = window.localStorage.getItem(PORT) || "";
-    console.log(config);
     // Do something before request is sent
     return { ...config, url: `http://${host}:${port}${config.url}` };
   },
@@ -23,7 +22,6 @@ http.interceptors.request.use(
 // Add a response interceptor
 http.interceptors.response.use(
   function(res) {
-    console.log("response", res);
     // Do something with res data
     if (res.data && res.data.code === 400) {
       message.error(res.data.data.msg);

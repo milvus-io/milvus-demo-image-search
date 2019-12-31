@@ -2,7 +2,6 @@ import http from "./index";
 
 export async function getAdvancedConfig(params = {}) {
   const res = await http.get("/config/advanced", { params });
-  console.log(res);
   return res.data;
 }
 
@@ -13,7 +12,6 @@ export async function updateAdvancedConfig(data) {
 
 export async function getHardwareConfig(params = {}) {
   const res = await http.get("/config/gpu_resources", { params });
-  console.log(res);
   return res.data;
 }
 
@@ -24,7 +22,6 @@ export async function updateHardwareConfig(data) {
 
 export async function getSystemConfig() {
   const res = await http.get("/devices");
-  console.log(res);
   const { gpus, cpu } = res.data || {};
   let gpuList = [];
   let cpuMemory = cpu.memory || 1000;
