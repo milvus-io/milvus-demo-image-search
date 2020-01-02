@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Input, Button, InputNumber } from "antd";
 import { useTranslation } from "react-i18next";
+import { searchVectors } from "@/http/vector";
 
 const { TextArea } = Input;
 const formItemLayout = {
@@ -25,17 +26,35 @@ const TableForm = Form.create({ name: "form_in_modal" })(
 
     const handleSubmit = async e => {
       e.preventDefault();
-      props.searchSuccess();
       props.form.validateFields(async (err, values) => {
         if (err) {
           return;
         }
         setLoading(true);
+        const records =
+          values.records.trim().charAt(0) === "["
+            ? JSON.parse(values.records)
+            : JSON.parse(`[${values.records}]`);
+        try {
+          const res = await searchVectors({
+            ...values,
+            records: [records]
+          });
+          props.searchSuccess(res.results[0] || []);
+        } catch (e) {
+          // if(e.name === 'SyntaxError'){
+          //   message.error('')
+          // }
+          throw e;
+        } finally {
+          setLoading(false);
+        }
       });
     };
 
     const handleCancel = e => {
       resetFields();
+      props.handleCancel();
     };
 
     return (
@@ -45,7 +64,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         style={{ marginTop: "40px", maxWidth: "600px" }}
       >
         <Form.Item label={vectorTrans.tName}>
-          {getFieldDecorator("table_name", {
+          {getFieldDecorator("tableName", {
             rules: [
               {
                 required: true,
@@ -55,7 +74,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           })(<Input placeholder={vectorTrans.tName} />)}
         </Form.Item>
         <Form.Item label={vectorTrans.tTop}>
-          {getFieldDecorator("top_k", {
+          {getFieldDecorator("topk", {
             rules: [
               {
                 required: true,
@@ -75,7 +94,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           })(<InputNumber min={1} placeholder={`[1, nlist]`} />)}
         </Form.Item>
         <Form.Item label={vectorTrans.tQuery}>
-          {getFieldDecorator("query_records", {
+          {getFieldDecorator("records", {
             rules: [
               {
                 required: true,

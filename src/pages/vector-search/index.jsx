@@ -20,41 +20,11 @@ const VectorSearch = props => {
       dataIndex: "distance"
     }
   ];
-  const searchSuccess = () => {
-    setData([
-      {
-        id: 1,
-        distance: "123"
-      },
-      {
-        id: 2,
-        distance: "333"
-      },
-      {
-        id: 3,
-        distance: "1231"
-      },
-      {
-        id: 4,
-        distance: "3331"
-      },
-      {
-        id: 5,
-        distance: "1232"
-      },
-      {
-        id: 6,
-        distance: "3332"
-      },
-      {
-        id: 7,
-        distance: "1233"
-      },
-      {
-        id: 8,
-        distance: "3333"
-      }
-    ]);
+  const searchSuccess = data => {
+    setData(data);
+  };
+  const handleCancel = () => {
+    setData(null);
   };
   const toggleSearch = () => {
     setShowSearch(!showSearch);
@@ -72,6 +42,7 @@ const VectorSearch = props => {
       <div>
         <SearchForm
           showSearch={showSearch}
+          handleCancel={handleCancel}
           searchSuccess={searchSuccess}
         ></SearchForm>
       </div>
