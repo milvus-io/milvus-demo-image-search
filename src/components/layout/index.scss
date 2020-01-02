@@ -1,10 +1,17 @@
+@import "~assets/scss/mixins.scss";
+
 .layout-wrapper {
   display: flex;
   justify-content: space-between;
   min-height: 100vh;
 
   .left {
-    flex: 0 0 300px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    width: 300px;
     background: linear-gradient(180deg, #101010 0%, rgba(16, 16, 16, 0) 100%);
     color: #fff;
 
@@ -62,9 +69,13 @@
 
 
   .right {
+    height: 100vh;
+    margin-left: 300px;
     flex: 1;
+    overflow-y: scroll;
     background: #28292E;
     padding: 40px;
+    @include scroll-bar;
   }
 
   .list-wrapper {
