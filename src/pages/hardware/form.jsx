@@ -111,10 +111,14 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
 
     if (val) {
       !searchHardware.length
-        ? setSearchHardware([systemConfig.gpuList[0]])
+        ? setSearchHardware([
+            systemConfig.gpuList ? systemConfig.gpuList[0] : ""
+          ])
         : setSearchHardware(defaultSearch);
       !buildHardware.length
-        ? setBuildHardware([systemConfig.gpuList[0]])
+        ? setBuildHardware([
+            systemConfig.gpuList ? systemConfig.gpuList[0] : ""
+          ])
         : setBuildHardware(defaultBuild);
     }
 
@@ -168,9 +172,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   }, []);
 
   return hardwareType === "CPU" ? (
-    <div className="warning">
-      Sorry, Your milvus version is only allowed CPU.
-    </div>
+    <div className="warning">{hardwareTrans.cpuVersion}</div>
   ) : (
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
       <Form.Item label={hardwareTrans.enable}>

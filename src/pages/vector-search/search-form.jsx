@@ -22,7 +22,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
     const vectorTrans = t("vector");
     const buttonTrans = t("button");
     const { form } = props;
-    const { getFieldDecorator, resetFields } = form;
+    const { getFieldDecorator, resetFields, setFieldsValue } = form;
 
     const handleSubmit = async e => {
       e.preventDefault();
@@ -31,20 +31,23 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           return;
         }
         setLoading(true);
-        const records =
-          values.records.trim().charAt(0) === "["
-            ? JSON.parse(values.records)
-            : JSON.parse(`[${values.records}]`);
+
         try {
+          const regx = /[^(0-9|,|.)]/g;
+          const records = values.records
+            .replace(regx, "")
+            .split(",")
+            .filter(v => v || v === 0);
+          setFieldsValue({
+            records: `[${records}]`
+          });
           const res = await searchVectors({
             ...values,
             records: [records]
           });
+
           props.searchSuccess(res.results[0] || []);
         } catch (e) {
-          // if(e.name === 'SyntaxError'){
-          //   message.error('')
-          // }
           throw e;
         } finally {
           setLoading(false);

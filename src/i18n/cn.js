@@ -36,7 +36,8 @@ export default {
     search: "用于搜索",
     index: "用于创建索引",
     searchAtLeastOne: "至少需要一个 GPU 用于搜索",
-    buildAtLeastOne: "至少需要一个 GPU 用于创建索引"
+    buildAtLeastOne: "至少需要一个 GPU 用于创建索引",
+    cpuVersion: "您的 Milvus 版本为CPU版本。"
   },
   advanced: {
     saveSuccess: "配置更新成功",

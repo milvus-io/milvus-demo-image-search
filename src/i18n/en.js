@@ -36,7 +36,8 @@ export default {
     search: "Enabled For Searching",
     index: "Enabled For Building Index",
     searchAtLeastOne: "Need at least one GPU for searching",
-    buildAtLeastOne: "Need at least one GPU for building index"
+    buildAtLeastOne: "Need at least one GPU for building index",
+    cpuVersion: "Your milvus version is CPU version."
   },
   advanced: {
     saveSuccess: "Update Configs Success",
@@ -62,7 +63,7 @@ export default {
     tQuery: "Query Records",
     queryPlace:
       "One vector to be searched in the table. Each vector value must be float data type, with the same dimension as that defined for the table.Example: [0.1, 0.2,2,3 ...]",
-    distance: "distance",
+    distance: "Distance",
     search: "Search Vector"
   },
   button: {
