@@ -7,7 +7,8 @@ export default {
   },
   dataManage: {
     title: "Data Management",
-    table: "Table and Index"
+    table: "Table and Index",
+    vector: "Vector Search"
   },
   table: {
     create: "New Table",
@@ -54,11 +55,22 @@ export default {
       "If you want simultaneous inserting and searching of vector, it is recommended to enable this function.",
     enginSetting: "Engine Setting"
   },
+  vector: {
+    tName: "Table Name",
+    tTop: "TopK",
+    tNprobe: "Nprobe",
+    tQuery: "Query Records",
+    queryPlace:
+      "The list of query vectors to be searched in the table. Each vector value must be float data type, with the same dimension as that defined for the table.Example: [[0.1, 0.2, ...], ...]",
+    distance: "distance",
+    search: "Search Vector"
+  },
   button: {
     cancel: "Cancel",
     save: "Save",
     reset: "Reset",
-    update: "Update"
+    update: "Update",
+    search: "Search"
   },
   required: " is required",
   index: {

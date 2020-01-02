@@ -1,0 +1,82 @@
+@import "~assets/scss/mixins.scss";
+
+.vector-wrapper {
+    color: #fff;
+    @include primary-btn;
+    @include disable-btn;
+    @include ant-input;
+    @include circle-btn;
+
+    .header {
+        display: flex;
+        align-items: center;
+    }
+
+    h2 {
+        color: #FAFAFA;
+        font-size: 26px;
+        font-weight: bold;
+        line-height: 26px;
+        margin: 0 10px 0 0;
+    }
+
+    .primary-btn {
+        margin-right: 10px;
+    }
+
+    .control {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+
+        .ant-input-search-icon {
+            color: #fff;
+        }
+    }
+
+    .ant-table-thead>tr>th {
+        padding: 14px;
+        background: #60606f;
+        color: #fff;
+    }
+
+    .ant-table-tbody>tr {
+        &:nth-child(even) {
+            background: #101010;
+        }
+
+        &:nth-child(odd) {
+            background: #28292e;
+        }
+
+        >td {
+            border: 0;
+            color: #fff;
+        }
+
+        &:hover {
+            background: #fff;
+        }
+    }
+
+    .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td {
+        background: #4FC4F9
+    }
+
+
+    .table-wrapper {
+        margin: 20px 0;
+        max-width: 1000px;
+    }
+
+    .search-wrapper {
+        overflow: hidden;
+        transition: max-height 0.3s ease-out; // note that we're transitioning max-height, not height!
+        height: auto;
+        max-height: 1000px;
+
+        &.hide {
+            max-height: 0;
+        }
+    }
+}

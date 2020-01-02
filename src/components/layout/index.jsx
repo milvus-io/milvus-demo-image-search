@@ -73,28 +73,15 @@ const LayoutWrapper = props => {
           </h2>
           <ul className="list-wrapper">
             <MyLink to="/manage/advanced">{configTrans.advanced}</MyLink>
-            <MyLink
-              to="/manage/hardware"
-              activeStyle={{
-                fontWeight: "bold"
-              }}
-            >
-              {configTrans.hardware}
-            </MyLink>
+            <MyLink to="/manage/hardware">{configTrans.hardware}</MyLink>
           </ul>
           <h2 className="title">
             <img src={DATA_ICON} alt="data-manage"></img>
             {dataTrans.title}
           </h2>
           <ul className="list-wrapper">
-            <MyLink
-              to="/manage/table"
-              activeStyle={{
-                fontWeight: "bold"
-              }}
-            >
-              {dataTrans.table}
-            </MyLink>
+            <MyLink to="/manage/table">{dataTrans.table}</MyLink>
+            <MyLink to="/manage/vector">{dataTrans.vector}</MyLink>
           </ul>
         </div>
       </div>

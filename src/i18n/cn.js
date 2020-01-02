@@ -7,7 +7,8 @@ export default {
   },
   dataManage: {
     title: "数据管理",
-    table: "表和索引"
+    table: "表和索引",
+    vector: "向量搜索"
   },
   table: {
     create: "新建表",
@@ -52,11 +53,22 @@ export default {
     insertDesc2: "如果想要实现数据即插即搜索，建议启用该功能。",
     enginSetting: "引擎设置"
   },
+  vector: {
+    tName: "表名",
+    tTop: "TopK",
+    tNprobe: "Nprobe",
+    tQuery: "目标向量",
+    queryPlace:
+      "要搜索的一组目标向量。每条向量必须为浮点数据类型，其维度必须和表中定义的维度一致。例如：[[0.1, 0.2, ...], ...]",
+    distance: "距离",
+    search: "搜索栏显示"
+  },
   button: {
     cancel: "取消",
     save: "保存",
     reset: "重置",
-    update: "更新"
+    update: "更新",
+    search: "搜索"
   },
   required: " 是必填项",
   index: {

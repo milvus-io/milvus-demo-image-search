@@ -4,6 +4,7 @@ import Login from "pages/Login";
 import TablePage from "pages/table";
 import AdvancedPage from "pages/advanced";
 import HardwarePage from "pages/hardware";
+import VectorSearch from "pages/vector-search";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { HashRouter, Switch, Route } from "react-router-dom";
 import "./app.scss";
@@ -33,7 +34,9 @@ export default function App() {
                         <Route path="/manage/hardware">
                           <HardwarePage></HardwarePage>
                         </Route>
-                        <Route path="/manage/index">index</Route>
+                        <Route path="/manage/vector">
+                          <VectorSearch></VectorSearch>
+                        </Route>
                       </Switch>
                     </section>
                   </CSSTransition>
