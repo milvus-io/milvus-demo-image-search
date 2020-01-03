@@ -42,7 +42,7 @@
     "install-deb": "electron-installer-debian --src electron-app/milvus-linux-x64/ --arch amd64 --config debian.json ",
     "install-dmg": "electron-installer-dmg  electron-app/milvus-darwin-x64/milvus.app milvus --overwrite --out=electron-app/installers/",
     "linux": "yarn build && yarn package-linux && yarn install-deb",
-    "mac": "yarn build && yarn package-deb && yarn install-dmg"
+    "mac": "yarn build && yarn package-mac && yarn install-dmg"
   },
   "eslintConfig": {
     "extends": "react-app"
