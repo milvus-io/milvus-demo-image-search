@@ -1,5 +1,10 @@
 export default {
   lang: "中文",
+  login: {
+    host: "Host",
+    port: "端口",
+    connect: "连接"
+  },
   config: {
     title: "配置",
     advanced: "高级配置",

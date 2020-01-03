@@ -6,6 +6,9 @@
   @include disable-btn;
   @include ant-input;
 
+  .ant-input-number {
+    width: 50%;
+  }
 
   h2 {
     color: #FAFAFA;

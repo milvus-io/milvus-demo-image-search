@@ -199,7 +199,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
                 onChange={handleNumberChange}
               />
             )}
-            <span className="ml-10">{`[1 , ${systemConfig.gpuMemory}] GB`}</span>
+            <span className="ml-10">{`[1 , ${systemConfig.gpuMemory} ] GB`}</span>
           </Form.Item>
 
           <Form.Item label={hardwareTrans.search}>

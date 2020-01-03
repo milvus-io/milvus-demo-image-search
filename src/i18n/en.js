@@ -1,5 +1,10 @@
 export default {
   lang: "en",
+  login: {
+    host: "Host",
+    port: "Port",
+    connect: "Connect"
+  },
   config: {
     title: "Configuration",
     advanced: "Advanced Settings",

@@ -37,7 +37,9 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           const records = values.records
             .replace(regx, "")
             .split(",")
-            .filter(v => v || v === 0);
+            .filter(v => v || v === 0)
+            .map(v => Number(v));
+
           setFieldsValue({
             records: `[${records}]`
           });
