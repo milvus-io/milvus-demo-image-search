@@ -6,6 +6,10 @@
   @include disable-btn;
   @include ant-input;
 
+  .ant-input-number {
+    width: 50%;
+  }
+
   .header {
     display: flex;
     align-items: center;

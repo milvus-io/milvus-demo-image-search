@@ -1,7 +1,7 @@
 export default {
   lang: "中文",
   login: {
-    host: "Host",
+    host: "主机",
     port: "端口",
     connect: "连接"
   },
