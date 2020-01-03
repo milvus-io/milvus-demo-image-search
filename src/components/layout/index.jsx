@@ -54,7 +54,9 @@ const LayoutWrapper = props => {
     <div className="layout-wrapper">
       <div className="left">
         <div className="logo-wrapper">
-          <img src={Logo} alt="Milvus Logo"></img>
+          <div className="img-wrapper">
+            <img src={Logo} alt="Milvus Logo"></img>
+          </div>
           <span onClick={changeLang} style={{ cursor: "pointer" }}>
             {langTxt}
           </span>
