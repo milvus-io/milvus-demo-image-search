@@ -33,7 +33,7 @@ const Login = () => {
         try {
           const res = await http.get("/state");
           if (res.data && res.data.code === 0) {
-            history.push("/manage/advanced");
+            history.push("/manage/table");
           }
         } catch (e) {
           message.warning(`Connect http://${url} Fail`);
@@ -74,7 +74,7 @@ const Login = () => {
     const login = async () => {
       const res = await http.get("/state");
       if (res.data && res.data.code === 0) {
-        history.push("/manage/advanced");
+        history.push("/manage/table");
       }
     };
     const host = window.localStorage.getItem(HOST);

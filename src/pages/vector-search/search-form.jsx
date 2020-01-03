@@ -80,6 +80,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         </Form.Item>
         <Form.Item label={vectorTrans.tTop}>
           {getFieldDecorator("topk", {
+            initialValue: 2,
             rules: [
               {
                 required: true,
@@ -90,6 +91,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         </Form.Item>
         <Form.Item label={vectorTrans.tNprobe}>
           {getFieldDecorator("nprobe", {
+            initialValue: 16,
             rules: [
               {
                 required: true,

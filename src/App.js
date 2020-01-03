@@ -7,7 +7,13 @@ import HardwarePage from "pages/hardware";
 import VectorSearch from "pages/vector-search";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { HashRouter, Switch, Route } from "react-router-dom";
+import { message } from "antd";
 import "./app.scss";
+
+message.config({
+  duration: 2,
+  maxCount: 1
+});
 
 export default function App() {
   return (
