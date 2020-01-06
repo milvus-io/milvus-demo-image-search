@@ -14,8 +14,8 @@ import { useTranslation } from "react-i18next";
 
 const { Option } = Select;
 const METRIC_TYPES = [
-  { label: "L2", value: 1 },
-  { label: "IP", value: 2 }
+  { label: "L2", value: "L2" },
+  { label: "IP", value: "IP" }
 ];
 
 const TableForm = Form.create({ name: "form_in_modal" })(
@@ -74,7 +74,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           })(<Input placeholder={tableTrans.create} />)}
         </Form.Item>
         <Form.Item label={tableTrans.tMetric}>
-          {getFieldDecorator("metric_type", { initialValue: 1 })(
+          {getFieldDecorator("metric_type", { initialValue: "L2" })(
             <Select>
               {METRIC_TYPES.map(t => (
                 <Option key={t.label} value={t.value}>
