@@ -43,6 +43,6 @@ export async function getSystemConfig() {
 }
 
 export async function getHardwareType() {
-  const res = await http.get("/cmd/mode");
+  const res = await http.get("/system/mode");
   return res.data ? res.data.reply || "CPU" : "CPU";
 }
