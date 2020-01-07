@@ -82,7 +82,7 @@ const Login = () => {
     if (host && port) {
       login();
     }
-  }, []);
+  }, [history]);
   return (
     <div className="login-wrapper">
       <div className="content">

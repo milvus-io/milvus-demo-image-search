@@ -3,7 +3,8 @@ import { Form, Switch, InputNumber, Button, message } from "antd";
 import {
   getAdvancedConfig,
   updateAdvancedConfig,
-  getSystemConfig
+  getSystemConfig,
+  getHardwareType
 } from "@/http/configs";
 import { useTranslation } from "react-i18next";
 const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
@@ -11,6 +12,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const { getFieldDecorator, resetFields, getFieldsValue } = form;
   const [defalutValue, setDefaultValue] = useState({});
   const [systemConfig, setSystemConfig] = useState({});
+  const [hardwareType, setHardwareType] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
@@ -81,9 +83,14 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await Promise.all([getAdvancedConfig(), getSystemConfig()]);
+      const res = await Promise.all([
+        getAdvancedConfig(),
+        getSystemConfig(),
+        getHardwareType()
+      ]);
       setDefaultValue(res[0] || {});
       setSystemConfig(res[1] || {});
+      setHardwareType(res[2]);
     };
     fetchData();
   }, []);
@@ -150,25 +157,26 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
           />
         )}
       </Form.Item>
-
-      <Form.Item label={advancedTrans.gpuThreshold}>
-        {getFieldDecorator("gpu_search_threshold", {
-          initialValue: defalutValue.gpu_search_threshold,
-          rules: [
-            {
-              required: true,
-              message: `${advancedTrans.gpuThreshold}${t("required")}`
-            }
-          ]
-        })(
-          <InputNumber
-            min={1}
-            onChange={val => {
-              handleFormChange(val, "gpu_search_threshold");
-            }}
-          />
-        )}
-      </Form.Item>
+      {hardwareType === "GPU" && (
+        <Form.Item label={advancedTrans.gpuThreshold}>
+          {getFieldDecorator("gpu_search_threshold", {
+            initialValue: defalutValue.gpu_search_threshold,
+            rules: [
+              {
+                required: true,
+                message: `${advancedTrans.gpuThreshold}${t("required")}`
+              }
+            ]
+          })(
+            <InputNumber
+              min={1}
+              onChange={val => {
+                handleFormChange(val, "gpu_search_threshold");
+              }}
+            />
+          )}
+        </Form.Item>
+      )}
 
       <Form.Item label=" " colon={false}>
         <Button className="disable-btn mr-10" onClick={handleCancel}>

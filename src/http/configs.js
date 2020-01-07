@@ -44,5 +44,6 @@ export async function getSystemConfig() {
 
 export async function getHardwareType() {
   const res = await http.get("/system/mode");
+  // return "CPU";
   return res.data ? res.data.reply || "CPU" : "CPU";
 }
