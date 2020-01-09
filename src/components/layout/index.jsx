@@ -7,7 +7,7 @@ import { HOST, PORT } from "@/consts";
 import Logo from "assets/imgs/logo.svg";
 import CONFIG_ICON from "assets/imgs/config.png";
 import DATA_ICON from "assets/imgs/dataManage.png";
-
+import { getHardwareType } from "@/http/configs";
 const MyLink = props => {
   return (
     <li>
@@ -29,6 +29,8 @@ const LayoutWrapper = props => {
   const configTrans = t("config");
   const dataTrans = t("dataManage");
   const [langTxt, setLangTxt] = useState("中");
+  const [hardwareType, setHardwareType] = useState("");
+
   const changeLang = () => {
     const lang = langTxt === "中" ? "cn" : "en";
     setLangTxt(langTxt === "中" ? "En" : "中");
@@ -47,6 +49,10 @@ const LayoutWrapper = props => {
     const lang = window.localStorage.getItem("lang") || "en";
     setLangTxt(lang === "cn" ? "En" : "中");
     i18n.changeLanguage(lang);
+
+    getHardwareType().then(res => {
+      setHardwareType(res);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -75,7 +81,9 @@ const LayoutWrapper = props => {
           </h2>
           <ul className="list-wrapper">
             <MyLink to="/manage/advanced">{configTrans.advanced}</MyLink>
-            <MyLink to="/manage/hardware">{configTrans.hardware}</MyLink>
+            {hardwareType === "GPU" && (
+              <MyLink to="/manage/hardware">{configTrans.hardware}</MyLink>
+            )}
           </ul>
           <h2 className="title">
             <img src={DATA_ICON} alt="data-manage"></img>

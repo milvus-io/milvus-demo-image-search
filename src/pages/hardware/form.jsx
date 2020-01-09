@@ -3,8 +3,8 @@ import { Form, Switch, InputNumber, Button, message } from "antd";
 import {
   getHardwareConfig,
   updateHardwareConfig,
-  getSystemConfig,
-  getHardwareType
+  getSystemConfig
+  // getHardwareType
 } from "@/http/configs";
 import { useTranslation } from "react-i18next";
 const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
@@ -18,7 +18,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
 
   const [systemConfig, setSystemConfig] = useState({});
   const [enable, setEnable] = useState(false);
-  const [hardwareType, setHardwareType] = useState("");
+  // const [hardwareType, setHardwareType] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
@@ -142,8 +142,8 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const fetchData = async () => {
     const res = await Promise.all([
       getHardwareConfig(),
-      getSystemConfig(),
-      getHardwareType()
+      getSystemConfig()
+      // getHardwareType()
     ]);
     const {
       build_index_resources: buildVal,
@@ -160,7 +160,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
     setEnable(!!enable);
     setDefaultValue(res[0] || {});
     setSystemConfig(res[1] || {});
-    setHardwareType(res[2]);
+    // setHardwareType(res[2]);
   };
   const handleCancel = () => {
     fetchData();
@@ -171,9 +171,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
     fetchData();
   }, []);
 
-  return hardwareType === "CPU" ? (
-    <div className="warning">{hardwareTrans.cpuVersion}</div>
-  ) : (
+  return (
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
       <Form.Item label={hardwareTrans.enable}>
         {getFieldDecorator("enable", {
