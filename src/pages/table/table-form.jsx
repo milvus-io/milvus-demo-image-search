@@ -11,6 +11,7 @@ import {
 } from "antd";
 import { createTable } from "@/http/table";
 import { useTranslation } from "react-i18next";
+import WithTip from "components/with-tip";
 
 const { Option } = Select;
 const METRIC_TYPES = [
@@ -26,6 +27,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
     const [loading, setLoading] = useState(false);
     const { t } = useTranslation();
     const tableTrans = t("table");
+    const tipsTrans = tableTrans.tips;
     const buttonTrans = t("button");
     const { form } = props;
     const { getFieldDecorator, resetFields } = form;
@@ -63,7 +65,11 @@ const TableForm = Form.create({ name: "form_in_modal" })(
 
     return (
       <Form layout="vertical">
-        <Form.Item label={tableTrans.tName}>
+        <Form.Item
+          label={
+            <WithTip text={tipsTrans.name} label={tableTrans.tName}></WithTip>
+          }
+        >
           {getFieldDecorator("table_name", {
             rules: [
               {
@@ -106,7 +112,14 @@ const TableForm = Form.create({ name: "form_in_modal" })(
             </Col>
           </Row>
         </Form.Item>
-        <Form.Item label={tableTrans.fileSize}>
+        <Form.Item
+          label={
+            <WithTip
+              text={tipsTrans.fileSize}
+              label={tableTrans.fileSize}
+            ></WithTip>
+          }
+        >
           <Row>
             <Col span={16}>
               <Slider

@@ -51,7 +51,7 @@ const TableManage = props => {
   };
   const fetchData = async () => {
     const res = await getTables({ offset, page_size: PAGE_SIZE });
-    if (res) {
+    if (res && res.tables) {
       setData(
         res.tables.map(v => ({
           ...v,

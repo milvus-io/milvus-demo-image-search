@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Input, Button, InputNumber } from "antd";
 import { useTranslation } from "react-i18next";
 import { searchVectors } from "@/http/vector";
+import WithTip from "components/with-tip";
 
 const { TextArea } = Input;
 const formItemLayout = {
@@ -21,6 +22,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
     const { t } = useTranslation();
     const vectorTrans = t("vector");
     const buttonTrans = t("button");
+    const tipsTrans = vectorTrans.tips;
     const { form } = props;
     const { getFieldDecorator, resetFields, setFieldsValue } = form;
 
@@ -64,6 +66,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
 
     return (
       <Form
+        colon={false}
         className={`search-wrapper ${props.showSearch ? "" : "hide"}`}
         {...formItemLayout}
         style={{ marginTop: "40px", maxWidth: "600px" }}
@@ -78,7 +81,12 @@ const TableForm = Form.create({ name: "form_in_modal" })(
             ]
           })(<Input placeholder={vectorTrans.tName} />)}
         </Form.Item>
-        <Form.Item label={vectorTrans.tTop}>
+        <Form.Item
+          colon={false}
+          label={
+            <WithTip text={tipsTrans.tTop} label={vectorTrans.tTop}></WithTip>
+          }
+        >
           {getFieldDecorator("topk", {
             initialValue: 2,
             rules: [
@@ -87,9 +95,17 @@ const TableForm = Form.create({ name: "form_in_modal" })(
                 message: `${vectorTrans.tTop} ${t("required")}`
               }
             ]
-          })(<InputNumber placeholder={`(0, 2048]`} min={1} max={2048} />)}
+          })(<InputNumber placeholder={tipsTrans.tTop} min={1} max={2048} />)}
         </Form.Item>
-        <Form.Item label={vectorTrans.tNprobe}>
+        <Form.Item
+          colon={false}
+          label={
+            <WithTip
+              text={tipsTrans.tNprobe}
+              label={vectorTrans.tNprobe}
+            ></WithTip>
+          }
+        >
           {getFieldDecorator("nprobe", {
             initialValue: 16,
             rules: [
@@ -98,9 +114,17 @@ const TableForm = Form.create({ name: "form_in_modal" })(
                 message: `${vectorTrans.tNprobe} ${t("required")}`
               }
             ]
-          })(<InputNumber min={1} placeholder={`[1, nlist]`} />)}
+          })(<InputNumber min={1} placeholder={tipsTrans.tNprobe} />)}
         </Form.Item>
-        <Form.Item label={vectorTrans.tQuery}>
+        <Form.Item
+          colon={false}
+          label={
+            <WithTip
+              text={tipsTrans.tQuery}
+              label={vectorTrans.tQuery}
+            ></WithTip>
+          }
+        >
           {getFieldDecorator("records", {
             rules: [
               {
@@ -110,7 +134,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
             ]
           })(
             <TextArea
-              placeholder={vectorTrans.queryPlace}
+              placeholder={tipsTrans.tQuery}
               autoSize={{ minRows: 4 }}
             ></TextArea>
           )}

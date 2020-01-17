@@ -29,9 +29,15 @@ export default {
     tMetric: "Metric 类型",
     tIndex: "索引",
     tAction: "操作",
-    fileSize: "索引文件大小",
+    fileSize: "索引文件大小 (MB)",
     error: {
       name: "表名是必填项"
+    },
+    tips: {
+      name:
+        "要创建的表的名字，由于是表的唯一标识符。表名由字母、下划线、和数字组成。首个字符必须是字母或下划线。总长度必须小于255个字符。",
+      fileSize:
+        "触发创建索引的阈值。该参数指定只有当原始数据文件大小达到某一阈值，系统才会为其创建索引，默认值为1024 MB。小于该阈值的数据文件不会创建索引。"
     }
   },
   hardware: {
@@ -52,11 +58,15 @@ export default {
     blasThreshold: "Blas 阀值",
     gpuThreshold: "GPU 搜索阀值",
 
-    capacityDesc1: "内存中用于驻留搜索数据的缓存空间",
+    capacityDesc1:
+      "内存中用于驻留搜索数据的缓存空间，它与 Insert Buffer Size 之和不能超过内存总量。",
     capacityDesc2:
       "cpu_cache_capacity和 insert_buffer_size (db_config区域）之和不能超过内存总量。",
-    insertDesc1: "设置为 true，则新插入的数据会自动加载到缓存以备搜索。",
+    insertDesc1:
+      "定义是否将新插入的数据自动加载到缓存以备搜索。如果想要实现数据即插即搜索，建议启用该功能。",
     insertDesc2: "如果想要实现数据即插即搜索，建议启用该功能。",
+    blasDesc:
+      "Milvus 性能调优参数。此参数必须与 nq 比较以确定是否触发使用 OpenBLAS 计算库。如果 nq >= Use Blas Threshold，则使用 OpenBLAS。搜索响应时间无波动，但搜索速度变慢。如果 nq < Use Blas Threshold，搜索速度更快，但搜索响应时间有波动。",
     enginSetting: "引擎设置"
   },
   vector: {
@@ -64,10 +74,16 @@ export default {
     tTop: "TopK",
     tNprobe: "Nprobe",
     tQuery: "目标向量",
-    queryPlace:
-      "要搜索的一个目标向量。每条向量必须为浮点数据类型，其维度必须和表中定义的维度一致。例如：[0.1, 0.2,1,2 ...], ",
+
     distance: "距离",
-    search: "搜索栏显示"
+    search: "搜索栏显示",
+    tips: {
+      tTop: "搜索结果中与要搜索的目标向量相似度最高的 k 条向量。 ",
+      tNprobe:
+        "查询所涉及的向量类的个数。Nprobe 影响查询精度。数值越大，精度越高，但查询速度更慢。",
+      tQuery:
+        "要搜索的一条目标向量，必须为浮点数据类型，其维度需要和表中定义的维度一致。"
+    }
   },
   button: {
     cancel: "取消",

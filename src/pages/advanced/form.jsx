@@ -135,7 +135,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
         )}
       </Form.Item>
       <p className="desc">{advancedTrans.insertDesc1}</p>
-      <p className="desc">{advancedTrans.insertDesc2}</p>
+      {/* <p className="desc">{advancedTrans.insertDesc2}</p> */}
 
       <h1 className="title">{advancedTrans.enginSetting}</h1>
 
@@ -157,6 +157,8 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
           />
         )}
       </Form.Item>
+      <p className="desc">{advancedTrans.blasDesc}</p>
+
       {hardwareType === "GPU" && (
         <Form.Item label={advancedTrans.gpuThreshold}>
           {getFieldDecorator("gpu_search_threshold", {

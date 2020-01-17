@@ -22,7 +22,7 @@ export async function updateHardwareConfig(data) {
 
 export async function getSystemConfig() {
   const res = await http.get("/devices");
-  const { gpus, cpu } = res.data || {};
+  const { gpus, cpu = {} } = res.data || {};
   let gpuList = [];
   let cpuMemory = cpu.memory || 1000;
   let gpuMemory = 1000000;

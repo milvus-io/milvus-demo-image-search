@@ -10,8 +10,12 @@ http.interceptors.request.use(
   function(config) {
     const host = window.localStorage.getItem(HOST) || "";
     const port = window.localStorage.getItem(PORT) || "";
+
     // Do something before request is sent
-    return { ...config, url: `http://${host}:${port}${config.url}` };
+    return {
+      ...config,
+      url: `http://${host || "localhost"}:${port || "8000"}${config.url}`
+    };
   },
   function(error) {
     // Do something with request error

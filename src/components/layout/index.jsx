@@ -29,18 +29,7 @@ const LayoutWrapper = props => {
   const configTrans = t("config");
   const dataTrans = t("dataManage");
   const [langTxt, setLangTxt] = useState("中");
-  const [hardwareType, setHardwareType] = useState("");
-
-  const changeLang = () => {
-    const lang = langTxt === "中" ? "cn" : "en";
-    setLangTxt(langTxt === "中" ? "En" : "中");
-    i18n.changeLanguage(lang);
-    window.localStorage.setItem("lang", lang);
-  };
-
-  const handleLogout = () => {
-    history.push("/login");
-  };
+  const [hardwareType, setHardwareType] = useState("GPU");
 
   const host = window.localStorage.getItem(HOST);
   const port = window.localStorage.getItem(PORT);
@@ -55,6 +44,19 @@ const LayoutWrapper = props => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const changeLang = () => {
+    const lang = langTxt === "中" ? "cn" : "en";
+    setLangTxt(langTxt === "中" ? "En" : "中");
+    i18n.changeLanguage(lang);
+    window.localStorage.setItem("lang", lang);
+  };
+
+  const handleLogout = () => {
+    window.localStorage.removeItem(HOST);
+    window.localStorage.removeItem(PORT);
+    history.push("/login");
+  };
 
   return (
     <div className="layout-wrapper">
