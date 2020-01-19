@@ -50,14 +50,17 @@
       "output": "electron-app"
     },
     "linux": {
+      "icon": "./build/milvus-icon.icns",
       "target": [
         "deb"
       ]
     },
     "mac": {
+      "icon": "./build/milvus-icon.icns",
       "target": "dmg"
     },
     "win": {
+      "icon": "./build/milvus-icon.png",
       "target": [
         {
           "target": "nsis"
