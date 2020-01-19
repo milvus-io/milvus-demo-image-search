@@ -3,14 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "description": "milvus",
+  "author": {
+    "name": "czz",
+    "email": "czz@zilliz.com",
+    "url": "https://www.milvus.io"
+  },
   "dependencies": {
     "@ant-design/dark-theme": "^1.0.3",
     "antd": "^3.25.3",
     "axios": "^0.19.0",
     "babel-plugin-import": "^1.13.0",
     "customize-cra": "^0.9.1",
-    "electron-installer-dmg": "^3.0.0",
-    "electron-installer-windows": "^2.0.0",
     "foreman": "^3.0.1",
     "i18next": "^19.0.2",
     "i18next-browser-languagedetector": "^4.0.1",
@@ -27,8 +30,7 @@
   },
   "devDependencies": {
     "electron": "^7.1.7",
-    "electron-installer-debian": "^2.0.1",
-    "electron-packager": "^14.1.1"
+    "electron-builder": "^22.2.0"
   },
   "homepage": "./",
   "main": "electron-starter.js",
@@ -38,15 +40,30 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
-    "package-windows": "electron-packager ./ milvus --overwrite --platform=win32 --arch=x64 --icon=resources/icon.png --out=electron-app --ignore='node_modules|src|electron-app|public|.gitignore'",
-    "package-mac": "electron-packager ./ milvus --overwrite --platform=darwin --arch=x64 --icon=resources/icon.png --out=electron-app --ignore='node_modules|src|electron-app|public|.gitignore'",
-    "package-linux": "electron-packager ./ milvus - --overwrite --platform=linux --arch=x64 --icon=resources/icon.png --out=electron-app --ignore='node_modules|src|electron-app|public|.gitignore'",
-    "install-deb": "electron-installer-debian --src electron-app/milvus-linux-x64/ --arch amd64 --config debian.json ",
-    "install-dmg": "electron-installer-dmg  electron-app/milvus-darwin-x64/milvus.app milvus --overwrite --out=electron-app/installers/",
-    "install-exe": "electron-installer-windows --src electron-app/milvus-win32-x64/ --dest electron-app/installers/",
-    "linux": "yarn build && yarn package-linux && yarn install-deb",
-    "mac": "yarn build && yarn package-mac && yarn install-dmg",
-    "windows": "yarn build && yarn package-windows && yarn install-exe"
+    "linux": "electron-builder --linux",
+    "mac": "electron-builder --mac",
+    "win": "electron-builder --win "
+  },
+  "build": {
+    "appId": "milvus",
+    "directories": {
+      "output": "electron-app"
+    },
+    "linux": {
+      "target": [
+        "deb"
+      ]
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis"
+        }
+      ]
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
