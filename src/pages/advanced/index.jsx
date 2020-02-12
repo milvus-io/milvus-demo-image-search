@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import AdvancedForm from "./form";
-import "./index.scss";
+import "./index.less";
 
 const Advanced = props => {
   const { t } = useTranslation();

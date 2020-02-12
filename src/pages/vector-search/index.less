@@ -1,11 +1,11 @@
-@import "~assets/scss/mixins.scss";
+@import "~assets/scss/mixins.less";
 
 .vector-wrapper {
     color: #fff;
-    @include primary-btn;
-    @include disable-btn;
-    @include ant-input;
-    @include circle-btn;
+    .primary-btn();
+    .disable-btn();
+    .ant-input();
+    .circle-btn();
 
     .header {
         display: flex;

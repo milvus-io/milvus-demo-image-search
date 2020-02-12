@@ -1,10 +1,10 @@
-@import "~assets/scss/mixins.scss";
+@import "~assets/scss/mixins.less";
 
 .advanced-wrapper {
   color: #fff;
-  @include primary-btn;
-  @include disable-btn;
-  @include ant-input;
+  .primary-btn();
+  .disable-btn();
+  .ant-input();
 
   .ant-input-number {
     width: 50%;

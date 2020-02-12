@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import TableForm from "./table-form";
 import IndexForm from "./index-form";
 import { getTables, deleteTable, searchTable } from "@/http/table";
-import "./index.scss";
+import "./index.less";
 
 const { Search } = Input;
 const PAGE_SIZE = 10;
@@ -222,12 +222,12 @@ const TableManage = props => {
             saveSuccess={saveSuccess}
           ></TableForm>
         ) : (
-          <IndexForm
-            handleCancel={handleCancel}
-            record={record}
-            saveSuccess={saveSuccess}
-          ></IndexForm>
-        )}
+            <IndexForm
+              handleCancel={handleCancel}
+              record={record}
+              saveSuccess={saveSuccess}
+            ></IndexForm>
+          )}
       </Modal>
     </div>
   );

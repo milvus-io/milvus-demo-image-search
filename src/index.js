@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "assets/scss/reset.scss";
+import "assets/scss/reset.less";
 import App from "./App";
 import "./i18n";
 // import * as serviceWorker from "./serviceWorker";

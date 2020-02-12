@@ -3,7 +3,7 @@ import { Button, Form, Input, message } from "antd";
 import { useHistory } from "react-router-dom";
 import http from "@/http/index";
 import Logo from "assets/imgs/logo.svg";
-import "./Login.scss";
+import "./Login.less";
 import { HOST, PORT } from "@/consts";
 import { useTranslation } from "react-i18next";
 
@@ -15,7 +15,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const localPort = window.localStorage.getItem(PORT);
   const localHost = window.localStorage.getItem(HOST);
-  const LoginForm = Form.create({ name: "login_form" })(function(props) {
+  const LoginForm = Form.create({ name: "login_form" })(function (props) {
     const { form } = props;
     const { getFieldDecorator } = form;
     const handleConnect = e => {

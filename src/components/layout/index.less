@@ -1,4 +1,4 @@
-@import "~assets/scss/mixins.scss";
+@import "~assets/scss/mixins.less";
 
 .layout-wrapper {
   display: flex;
@@ -80,7 +80,7 @@
     overflow-y: scroll;
     background: #28292E;
     padding: 40px;
-    @include scroll-bar;
+    .scroll-bar();
   }
 
   .list-wrapper {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Icon } from "antd";
-import "./index.scss";
+import "./index.less";
 import { HOST, PORT } from "@/consts";
 import Logo from "assets/imgs/logo.svg";
 import CONFIG_ICON from "assets/imgs/config.png";

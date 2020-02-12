@@ -8,7 +8,7 @@ import VectorSearch from "pages/vector-search";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { HashRouter, Switch, Route } from "react-router-dom";
 import { message } from "antd";
-import "./app.scss";
+import "./app.less";
 
 message.config({
   duration: 2,

@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import HardwareForm from "./form";
-import "./index.scss";
+import "./index.less";
 const Hardware = props => {
   const { t } = useTranslation();
   const configTrans = t("config");

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Table, Switch } from "antd";
 import SearchForm from "./search-form";
-import "./index.scss";
+import "./index.less";
 
 const VectorSearch = props => {
   const { t } = useTranslation();
