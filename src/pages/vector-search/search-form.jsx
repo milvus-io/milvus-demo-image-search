@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Form, Input, Button, InputNumber } from "antd";
 import { useTranslation } from "react-i18next";
 import { searchVectors } from "@/http/vector";
 import WithTip from "components/with-tip";
+import { vectorSearchContext } from '../../context/vector-search'
 
 const { TextArea } = Input;
 const formItemLayout = {
@@ -17,15 +18,15 @@ const formItemLayout = {
 };
 const TableForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
-  function(props) {
+  function (props) {
     const [loading, setLoading] = useState(false);
+    const { formInit, setFormInit } = useContext(vectorSearchContext)
     const { t } = useTranslation();
     const vectorTrans = t("vector");
     const buttonTrans = t("button");
     const tipsTrans = vectorTrans.tips;
     const { form } = props;
     const { getFieldDecorator, resetFields, setFieldsValue } = form;
-
     const handleSubmit = async e => {
       e.preventDefault();
       props.form.validateFields(async (err, values) => {
@@ -36,20 +37,23 @@ const TableForm = Form.create({ name: "form_in_modal" })(
 
         try {
           const regx = /[^(0-9|,|.)]/g;
-          const records = values.records
+          const newRecords = values.records
             .replace(regx, "")
             .split(",")
             .filter(v => v || v === 0)
             .map(v => Number(v));
 
           setFieldsValue({
-            records: `[${records}]`
+            records: JSON.stringify(newRecords)
           });
           const res = await searchVectors({
             ...values,
-            records: [records]
+            records: [newRecords]
           });
-
+          setFormInit({
+            ...values,
+            records: JSON.stringify(newRecords)
+          })
           props.searchSuccess(res.results[0] || []);
         } catch (e) {
           throw e;
@@ -64,6 +68,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
       props.handleCancel();
     };
 
+
     return (
       <Form
         colon={false}
@@ -73,6 +78,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
       >
         <Form.Item label={vectorTrans.tName}>
           {getFieldDecorator("tableName", {
+            initialValue: formInit.tableName || "",
             rules: [
               {
                 required: true,
@@ -88,7 +94,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           }
         >
           {getFieldDecorator("topk", {
-            initialValue: 2,
+            initialValue: formInit.topk || 2,
             rules: [
               {
                 required: true,
@@ -107,7 +113,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           }
         >
           {getFieldDecorator("nprobe", {
-            initialValue: 16,
+            initialValue: formInit.nprobe || 16,
             rules: [
               {
                 required: true,
@@ -126,6 +132,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           }
         >
           {getFieldDecorator("records", {
+            initialValue: formInit.records || "",
             rules: [
               {
                 required: true,

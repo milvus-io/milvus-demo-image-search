@@ -62,6 +62,7 @@ const Login = () => {
             className="primary-btn"
             onClick={handleConnect}
             loading={loading}
+            style={{ width: "150px" }}
           >
             {loginTrans.connect}
           </Button>

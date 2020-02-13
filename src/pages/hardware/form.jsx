@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Form, Switch, InputNumber, Button, message } from "antd";
 import {
   getHardwareConfig,
   updateHardwareConfig,
-  getSystemConfig
   // getHardwareType
 } from "@/http/configs";
+import { systemContext } from '../../context/system-config'
 import { useTranslation } from "react-i18next";
-const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
+const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
+  const { systemConfig } = useContext(systemContext)
   const { getFieldDecorator, resetFields, getFieldsValue } = form;
   const [defalutValue, setDefaultValue] = useState({});
   const [searchHardware, setSearchHardware] = useState([]);
   const [defaultSearch, setDefaultSearch] = useState([]);
   const [buildHardware, setBuildHardware] = useState([]);
   const [defaultBuild, setDefaultBuild] = useState([]);
-
-  const [systemConfig, setSystemConfig] = useState({});
   const [enable, setEnable] = useState(false);
   // const [hardwareType, setHardwareType] = useState("");
 
@@ -112,13 +111,13 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
     if (val) {
       !searchHardware.length
         ? setSearchHardware([
-            systemConfig.gpuList ? systemConfig.gpuList[0] : ""
-          ])
+          systemConfig.gpuList ? systemConfig.gpuList[0] : ""
+        ])
         : setSearchHardware(defaultSearch);
       !buildHardware.length
         ? setBuildHardware([
-            systemConfig.gpuList ? systemConfig.gpuList[0] : ""
-          ])
+          systemConfig.gpuList ? systemConfig.gpuList[0] : ""
+        ])
         : setBuildHardware(defaultBuild);
     }
 
@@ -142,7 +141,6 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
   const fetchData = async () => {
     const res = await Promise.all([
       getHardwareConfig(),
-      getSystemConfig()
       // getHardwareType()
     ]);
     const {
@@ -159,7 +157,6 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
 
     setEnable(!!enable);
     setDefaultValue(res[0] || {});
-    setSystemConfig(res[1] || {});
     // setHardwareType(res[2]);
   };
   const handleCancel = () => {

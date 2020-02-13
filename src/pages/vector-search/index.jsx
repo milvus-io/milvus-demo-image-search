@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Table, Switch } from "antd";
 import SearchForm from "./search-form";
 import "./index.less";
+import { vectorSearchContext } from '../../context/vector-search'
 
 const VectorSearch = props => {
   const { t } = useTranslation();
   const dataManageTrans = t("dataManage");
   const vectorTrans = t("vector");
-  const [data, setData] = useState(null);
   const [showSearch, setShowSearch] = useState(true);
+  const { data, setData } = useContext(vectorSearchContext)
   const columns = [
     {
       title: "ID",

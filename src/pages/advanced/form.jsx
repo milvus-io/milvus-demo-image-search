@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Form, Switch, InputNumber, Button, message } from "antd";
 import {
   getAdvancedConfig,
   updateAdvancedConfig,
-  getSystemConfig,
   getHardwareType
 } from "@/http/configs";
+import { systemContext } from '../../context/system-config'
 import { useTranslation } from "react-i18next";
-const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
+const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
+  const { systemConfig } = useContext(systemContext)
   const { getFieldDecorator, resetFields, getFieldsValue } = form;
   const [defalutValue, setDefaultValue] = useState({});
-  const [systemConfig, setSystemConfig] = useState({});
   const [hardwareType, setHardwareType] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
 
@@ -85,12 +84,10 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function(props) {
     const fetchData = async () => {
       const res = await Promise.all([
         getAdvancedConfig(),
-        getSystemConfig(),
         getHardwareType()
       ]);
       setDefaultValue(res[0] || {});
-      setSystemConfig(res[1] || {});
-      setHardwareType(res[2]);
+      setHardwareType(res[1]);
     };
     fetchData();
   }, []);
