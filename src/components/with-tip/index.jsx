@@ -1,6 +1,6 @@
 import React from "react";
 import { Icon, Tooltip } from "antd";
-import "./index.scss";
+import "./index.less";
 const WithTip = props => {
   const { text, label } = props;
 
