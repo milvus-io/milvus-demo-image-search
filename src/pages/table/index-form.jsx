@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Form, Select, Button, Row, Col, Slider, InputNumber } from "antd";
 import { useTranslation } from "react-i18next";
-import { createIndex } from "@/http/table";
+import { httpContext } from '../../context/http'
 
 const { Option } = Select;
 const INDEX_TYPES = ["FLAT", "IVFFLAT", "IVFSQ8", "IVFSQ8H", "IVFPQ"];
 
 const TableForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
-  function(props) {
+  function (props) {
+    const { createIndex } = useContext(httpContext)
     const { t } = useTranslation();
     const indexTrans = t("index");
     const buttonTrans = t("button");

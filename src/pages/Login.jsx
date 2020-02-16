@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, } from "react";
 import { Button, Form, Input, message } from "antd";
 import { useHistory } from "react-router-dom";
 import http from "@/http/index";
 import Logo from "assets/imgs/logo.svg";
+import { ADD } from '../reducers/milvus-servers'
 import "./Login.less";
 import { HOST, PORT } from "@/consts";
 import { useTranslation } from "react-i18next";
 
 const FormItem = Form.Item;
-const Login = () => {
+const Login = props => {
   const history = useHistory();
   const { t } = useTranslation();
   const loginTrans = t("login");
   const [loading, setLoading] = useState(false);
+  const { milvusAddress, setMilvusAddress, setCurrentAddress } = props
+
   const localPort = window.localStorage.getItem(PORT);
   const localHost = window.localStorage.getItem(HOST);
   const LoginForm = Form.create({ name: "login_form" })(function (props) {
@@ -28,14 +31,28 @@ const Login = () => {
         }
         const { host, port } = values;
         const url = `${host}:${port}`;
-        window.localStorage.setItem(HOST, host);
-        window.localStorage.setItem(PORT, port);
+        if (milvusAddress[url]) {
+          message.warning(`Already connected: http://${url}`)
+          return
+        }
+        window.localStorage.setItem(HOST, host)
+        window.localStorage.setItem(PORT, port)
+
         try {
           const res = await http.get("/state");
           if (res.data && res.data.code === 0) {
-            history.push("/manage/table");
+            // history.push("/manage/table");
+            setMilvusAddress({
+              type: ADD, payload: {
+                ...values,
+                url
+              }
+            })
+            setCurrentAddress(url)
           }
         } catch (e) {
+          window.localStorage.setItem(HOST, localHost)
+          window.localStorage.setItem(PORT, localPort)
           message.warning(`Connect http://${url} Fail`);
         } finally {
           setLoading(false);
@@ -71,19 +88,19 @@ const Login = () => {
     );
   });
 
-  useEffect(() => {
-    const login = async () => {
-      const res = await http.get("/state");
-      if (res.data && res.data.code === 0) {
-        history.push("/manage/table");
-      }
-    };
-    const host = window.localStorage.getItem(HOST);
-    const port = window.localStorage.getItem(PORT);
-    if (host && port) {
-      login();
-    }
-  }, [history]);
+  // useEffect(() => {
+  //   const login = async () => {
+  //     const res = await http.get("/state");
+  //     if (res.data && res.data.code === 0) {
+  //       history.push("/manage/table");
+  //     }
+  //   };
+  //   const host = window.localStorage.getItem(HOST);
+  //   const port = window.localStorage.getItem(PORT);
+  //   if (host && port) {
+  //     login();
+  //   }
+  // }, [history]);
   return (
     <div className="login-wrapper">
       <div className="content">

@@ -7,7 +7,7 @@ const http = axios.create({
   timeout: 5000
 });
 http.interceptors.request.use(
-  function(config) {
+  function (config) {
     const host = window.localStorage.getItem(HOST) || "";
     const port = window.localStorage.getItem(PORT) || "";
 
@@ -17,7 +17,7 @@ http.interceptors.request.use(
       url: `http://${host || "localhost"}:${port || "8000"}${config.url}`
     };
   },
-  function(error) {
+  function (error) {
     // Do something with request error
     return Promise.reject(error);
   }
@@ -25,7 +25,7 @@ http.interceptors.request.use(
 
 // Add a response interceptor
 http.interceptors.response.use(
-  function(res) {
+  function (res) {
     // Do something with res data
     if (res.data && res.data.code === 400) {
       message.error(res.data.data.msg);
@@ -37,7 +37,7 @@ http.interceptors.response.use(
     }
     return res;
   },
-  function(error) {
+  function (error) {
     if (hasError) {
       return Promise.reject(error);
     }

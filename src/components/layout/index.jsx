@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Icon } from "antd";
+import { Icon, Modal, Select } from "antd";
 import "./index.less";
 import { HOST, PORT } from "@/consts";
 import Logo from "assets/imgs/logo.svg";
 import CONFIG_ICON from "assets/imgs/config.png";
 import DATA_ICON from "assets/imgs/dataManage.png";
-import { getHardwareType } from "@/http/configs";
+import LoginForm from '../../pages/Login'
+import { ADD } from '../../reducers/milvus-servers'
+import { systemContext } from "../../context/system"
+import { httpContext } from "../../context/http"
+
 const MyLink = props => {
   return (
     <li>
@@ -22,6 +26,7 @@ const MyLink = props => {
     </li>
   );
 };
+const { Option } = Select
 
 const LayoutWrapper = props => {
   const { t, i18n } = useTranslation();
@@ -30,9 +35,9 @@ const LayoutWrapper = props => {
   const dataTrans = t("dataManage");
   const [langTxt, setLangTxt] = useState("中");
   const [hardwareType, setHardwareType] = useState("GPU");
-
-  const host = window.localStorage.getItem(HOST);
-  const port = window.localStorage.getItem(PORT);
+  const { currentAddress, setCurrentAddress, getHardwareType } = useContext(httpContext)
+  const { milvusAddress, setMilvusAddress } = useContext(systemContext)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     const lang = window.localStorage.getItem("lang") || "en";
@@ -44,6 +49,17 @@ const LayoutWrapper = props => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const host = window.localStorage.getItem(HOST);
+    const port = window.localStorage.getItem(PORT);
+    const url = `${host}:${port}`
+    if (host && port && !milvusAddress[url]) {
+      setMilvusAddress({ type: ADD, payload: { host, port, url } })
+      setCurrentAddress(url)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const changeLang = () => {
     const lang = langTxt === "中" ? "cn" : "en";
@@ -58,6 +74,17 @@ const LayoutWrapper = props => {
     history.push("/login");
   };
 
+  const handleAddressChange = val => {
+    setCurrentAddress(val)
+  }
+
+  const handleCancel = () => {
+    setVisible(false)
+  }
+  const handleAdd = () => {
+    setVisible(true)
+  }
+
   return (
     <div className="layout-wrapper">
       <div className="left">
@@ -71,9 +98,17 @@ const LayoutWrapper = props => {
         </div>
         <div className="logout-wrapper">
           <div>
-            {`${host}:${port}`}
-            <Icon type="logout" className="logout" onClick={handleLogout} />
+            <Select value={currentAddress} style={{ width: 190 }} onChange={handleAddressChange}>
+              {
+                Object.keys(milvusAddress).map(v =>
+                  <Option value={v} key={v}>{v}</Option>
+                )
+              }
+            </Select>
+            {/* {`${host}:${port}`} */}
           </div>
+          <Icon type="logout" className="logout" onClick={handleLogout} />
+          <Icon type="plus" className="ml-10" onClick={handleAdd}></Icon>
         </div>
 
         <div className="menu">
@@ -97,7 +132,18 @@ const LayoutWrapper = props => {
           </ul>
         </div>
       </div>
-      <div className="right">{props.children}</div>
+      <div className="right"> {props.children} </div>
+      <Modal
+        title="Connect to Milvus"
+        visible={visible}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <LoginForm
+          milvusAddress={milvusAddress}
+          setMilvusAddress={setMilvusAddress}
+          setCurrentAddress={setCurrentAddress}></LoginForm>
+      </Modal>
     </div>
   );
 };

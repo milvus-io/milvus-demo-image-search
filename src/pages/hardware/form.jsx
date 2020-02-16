@@ -1,15 +1,13 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Form, Switch, InputNumber, Button, message } from "antd";
-import {
-  getHardwareConfig,
-  updateHardwareConfig,
-  // getHardwareType
-} from "@/http/configs";
-import { systemContext } from '../../context/system-config'
+import { systemContext } from '../../context/system'
+import { httpContext } from '../../context/http'
+
 import { useTranslation } from "react-i18next";
 const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
-  const { systemConfig } = useContext(systemContext)
+  const { currentSystemInfo } = useContext(systemContext)
+  const { getHardwareConfig, updateHardwareConfig } = useContext(httpContext)
   const { getFieldDecorator, resetFields, getFieldsValue } = form;
   const [defalutValue, setDefaultValue] = useState({});
   const [searchHardware, setSearchHardware] = useState([]);
@@ -17,8 +15,6 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const [buildHardware, setBuildHardware] = useState([]);
   const [defaultBuild, setDefaultBuild] = useState([]);
   const [enable, setEnable] = useState(false);
-  // const [hardwareType, setHardwareType] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
 
@@ -111,12 +107,12 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
     if (val) {
       !searchHardware.length
         ? setSearchHardware([
-          systemConfig.gpuList ? systemConfig.gpuList[0] : ""
+          currentSystemInfo.gpuList ? currentSystemInfo.gpuList[0] : ""
         ])
         : setSearchHardware(defaultSearch);
       !buildHardware.length
         ? setBuildHardware([
-          systemConfig.gpuList ? systemConfig.gpuList[0] : ""
+          currentSystemInfo.gpuList ? currentSystemInfo.gpuList[0] : ""
         ])
         : setBuildHardware(defaultBuild);
     }
@@ -138,10 +134,9 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
     });
   };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const res = await Promise.all([
       getHardwareConfig(),
-      // getHardwareType()
     ]);
     const {
       build_index_resources: buildVal,
@@ -157,8 +152,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
 
     setEnable(!!enable);
     setDefaultValue(res[0] || {});
-    // setHardwareType(res[2]);
-  };
+  });
   const handleCancel = () => {
     fetchData();
     resetFields();
@@ -166,7 +160,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   return (
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
@@ -190,17 +184,17 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
             })(
               <InputNumber
                 min={1}
-                max={systemConfig.gpuMemory}
+                max={currentSystemInfo.gpuMemory}
                 onChange={handleNumberChange}
               />
             )}
-            <span className="ml-10">{`[1 , ${systemConfig.gpuMemory} ] GB`}</span>
+            <span className="ml-10">{`[1 , ${currentSystemInfo.gpuMemory} ] GB`}</span>
           </Form.Item>
 
           <Form.Item label={hardwareTrans.search}>
             <ol>
-              {systemConfig.gpuList &&
-                systemConfig.gpuList.map((v, index) => (
+              {currentSystemInfo.gpuList &&
+                currentSystemInfo.gpuList.map((v, index) => (
                   <li key={index}>
                     <Switch
                       checked={searchHardware.includes(v)}
@@ -215,8 +209,8 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
 
           <Form.Item label={hardwareTrans.index}>
             <ol>
-              {systemConfig.gpuList &&
-                systemConfig.gpuList.map((v, index) => (
+              {currentSystemInfo.gpuList &&
+                currentSystemInfo.gpuList.map((v, index) => (
                   <li key={index}>
                     <Switch
                       checked={buildHardware.includes(v)}

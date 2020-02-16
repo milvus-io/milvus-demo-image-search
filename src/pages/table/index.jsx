@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Button,
   Table,
@@ -12,12 +12,13 @@ import {
 import { useTranslation } from "react-i18next";
 import TableForm from "./table-form";
 import IndexForm from "./index-form";
-import { getTables, deleteTable, searchTable } from "@/http/table";
+import { httpContext } from '../../context/http'
 import "./index.less";
 
 const { Search } = Input;
 const PAGE_SIZE = 10;
 const TableManage = props => {
+  const { getTables, deleteTable, searchTable } = useContext(httpContext)
   const { t } = useTranslation();
   const tableTrans = t("table");
   const dataManageTrans = t("dataManage");

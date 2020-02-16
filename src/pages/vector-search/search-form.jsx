@@ -1,9 +1,8 @@
 import React, { useState, useContext } from "react";
 import { Form, Input, Button, InputNumber } from "antd";
 import { useTranslation } from "react-i18next";
-import { searchVectors } from "@/http/vector";
 import WithTip from "components/with-tip";
-import { vectorSearchContext } from '../../context/vector-search'
+import { httpContext } from '../../context/http'
 
 const { TextArea } = Input;
 const formItemLayout = {
@@ -16,11 +15,13 @@ const formItemLayout = {
     sm: { span: 18 }
   }
 };
+
 const TableForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   function (props) {
     const [loading, setLoading] = useState(false);
-    const { formInit, setFormInit } = useContext(vectorSearchContext)
+    const { searchVectors } = useContext(httpContext)
+    const { formInit = {}, setFormInit } = props
     const { t } = useTranslation();
     const vectorTrans = t("vector");
     const buttonTrans = t("button");

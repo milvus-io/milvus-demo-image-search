@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Form, Switch, InputNumber, Button, message } from "antd";
-import {
-  getAdvancedConfig,
-  updateAdvancedConfig,
-  getHardwareType
-} from "@/http/configs";
-import { systemContext } from '../../context/system-config'
+import { systemContext } from '../../context/system'
+import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
-  const { systemConfig } = useContext(systemContext)
+  const { currentSystemInfo } = useContext(systemContext)
+  const {
+    getAdvancedConfig,
+    updateAdvancedConfig,
+    getHardwareType
+  } = useContext(httpContext)
   const { getFieldDecorator, resetFields, getFieldsValue } = form;
   const [defalutValue, setDefaultValue] = useState({});
   const [hardwareType, setHardwareType] = useState("");
@@ -90,7 +91,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
       setHardwareType(res[1]);
     };
     fetchData();
-  }, []);
+  }, [getAdvancedConfig, getHardwareType]);
 
   return (
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
@@ -107,13 +108,13 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
         })(
           <InputNumber
             min={1}
-            max={systemConfig.cpuMemory > 2 ? systemConfig.cpuMemory - 1 : 1}
+            max={currentSystemInfo.cpuMemory > 2 ? currentSystemInfo.cpuMemory - 1 : 1}
             onChange={val => {
               handleFormChange(val, "cpu_cache_capacity");
             }}
           />
         )}
-        <span className="ml-10">{`[1, ${systemConfig.cpuMemory ||
+        <span className="ml-10">{`[1, ${currentSystemInfo.cpuMemory ||
           1}) GB`}</span>
       </Form.Item>
       <p className="desc">{advancedTrans.capacityDesc1}</p>

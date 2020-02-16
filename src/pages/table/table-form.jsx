@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Form,
   Input,
@@ -9,7 +9,7 @@ import {
   Slider,
   InputNumber
 } from "antd";
-import { createTable } from "@/http/table";
+import { httpContext } from '../../context/http'
 import { useTranslation } from "react-i18next";
 import WithTip from "components/with-tip";
 
@@ -21,7 +21,8 @@ const METRIC_TYPES = [
 
 const TableForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
-  function(props) {
+  function (props) {
+    const { createTable } = useContext(httpContext)
     const [dimension, setDimension] = useState(4096);
     const [size, setSize] = useState(1024);
     const [loading, setLoading] = useState(false);
