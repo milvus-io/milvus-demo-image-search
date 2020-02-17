@@ -14,7 +14,7 @@ const Login = props => {
   const { t } = useTranslation();
   const loginTrans = t("login");
   const [loading, setLoading] = useState(false);
-  const { milvusAddress, setMilvusAddress, setCurrentAddress } = props
+  const { milvusAddress, setMilvusAddress, setCurrentAddress, handleCancel } = props
 
   const localPort = window.localStorage.getItem(PORT);
   const localHost = window.localStorage.getItem(HOST);
@@ -56,6 +56,7 @@ const Login = props => {
           message.warning(`Connect http://${url} Fail`);
         } finally {
           setLoading(false);
+          handleCancel()
         }
       });
     };

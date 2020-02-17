@@ -1,5 +1,5 @@
 import React, { useReducer, useContext, useEffect } from 'react'
-import DataManagementReducer, { ADD, KEYS } from '../reducers/data-management'
+import DataManagementReducer, { INIT, KEYS } from '../reducers/data-management'
 import { httpContext } from './http'
 export const dataManagementContext = React.createContext({
   dataManagement: {},
@@ -16,18 +16,27 @@ export const DataManagementProvider = ({ children }) => {
      *  data // search result
         formInit, // form value
      */
-    vectorSearch: {}
+    vectorSearch: {},
+    /**
+     * data // search result
+     */
+    table: {}
   });
   useEffect(() => {
     if (!currentAddress || dataManagement[KEYS.vectorSearch][currentAddress]) return
     setDataManagement({
-      type: ADD,
+      type: INIT,
       payload: {
-        key: KEYS.vectorSearch,
+        keys: [KEYS.vectorSearch, KEYS.table],
         id: currentAddress,
-        value: {
-          formInit: {},
-          data: null
+        values: {
+          [KEYS.vectorSearch]: {
+            formInit: {},
+            data: null
+          },
+          [KEYS.table]: {
+            data: null
+          }
         }
       }
     })

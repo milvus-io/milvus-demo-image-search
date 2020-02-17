@@ -142,7 +142,9 @@ const LayoutWrapper = props => {
         <LoginForm
           milvusAddress={milvusAddress}
           setMilvusAddress={setMilvusAddress}
-          setCurrentAddress={setCurrentAddress}></LoginForm>
+          setCurrentAddress={setCurrentAddress}
+          handleCancel={handleCancel}
+        ></LoginForm>
       </Modal>
     </div>
   );

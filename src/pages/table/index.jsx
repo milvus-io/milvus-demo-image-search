@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import {
   Button,
   Table,
@@ -13,24 +13,33 @@ import { useTranslation } from "react-i18next";
 import TableForm from "./table-form";
 import IndexForm from "./index-form";
 import { httpContext } from '../../context/http'
+import { dataManagementContext } from '../../context/data-management'
+import { KEYS, UPDATE } from '../../reducers/data-management'
 import "./index.less";
 
 const { Search } = Input;
 const PAGE_SIZE = 10;
 const TableManage = props => {
-  const { getTables, deleteTable, searchTable } = useContext(httpContext)
+  const { getTables, deleteTable, searchTable, currentAddress } = useContext(httpContext)
+  const { dataManagement, setDataManagement } = useContext(dataManagementContext)
   const { t } = useTranslation();
   const tableTrans = t("table");
   const dataManageTrans = t("dataManage");
 
   const [visible, setVisible] = useState(false);
-  const [data, setData] = useState([]);
   const [record, setRecord] = useState("");
   const [type, setType] = useState("table");
 
   const [offset, setOffset] = useState(0);
   const [count, setCount] = useState(0);
   const [current, setCurrent] = useState(1);
+
+  const { data } = useMemo(() => {
+    const { data = null } = dataManagement[KEYS.table][currentAddress] || {}
+    console.log("in", dataManagement)
+    return { data }
+  }, [dataManagement, currentAddress])
+  console.log(data)
   const createTable = () => {
     setType("table");
     setVisible(true);
@@ -53,11 +62,20 @@ const TableManage = props => {
   const fetchData = async () => {
     const res = await getTables({ offset, page_size: PAGE_SIZE });
     if (res && res.tables) {
-      setData(
-        res.tables.map(v => ({
-          ...v,
-          key: v.table_name
-        }))
+      setDataManagement(
+        {
+          type: UPDATE,
+          payload: {
+            id: currentAddress,
+            key: KEYS.table,
+            value: {
+              data: res.tables.map(v => ({
+                ...v,
+                key: v.table_name
+              }))
+            }
+          }
+        }
       );
       setCount(res.count);
     }
@@ -156,7 +174,17 @@ const TableManage = props => {
     }
     const res = (await searchTable(name)) || {};
 
-    setData([{ ...res, key: res.table_name }]);
+    setDataManagement({
+      type: UPDATE,
+      payload: {
+        id: currentAddress,
+        key: KEYS.table,
+        value: {
+          data: [{ ...res, key: res.table_name }]
+        }
+      }
+
+    });
     setCount(1);
   };
 

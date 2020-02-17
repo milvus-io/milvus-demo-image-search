@@ -9,10 +9,11 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const {
     getAdvancedConfig,
     updateAdvancedConfig,
-    getHardwareType
+    getHardwareType,
+    currentAddress
   } = useContext(httpContext)
   const { getFieldDecorator, resetFields, getFieldsValue } = form;
-  const [defalutValue, setDefaultValue] = useState({});
+  const [oldValue, setOldValue] = useState({});
   const [hardwareType, setHardwareType] = useState("");
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
@@ -42,7 +43,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
         const res = await updateAdvancedConfig(values);
         if (res.code === 0) {
           message.success(advancedTrans.saveSuccess);
-          setDefaultValue(values);
+          setOldValue(values);
           handleFormChange();
         }
       } finally {
@@ -61,7 +62,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
     requestAnimationFrame(() => {
       let values = getFieldsValue();
       const isSame = Object.keys(values).every(
-        k => values[k] === defalutValue[k]
+        k => values[k] === oldValue[k]
       );
       switch (key) {
         case "cpu_cache_capacity":
@@ -87,18 +88,20 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
         getAdvancedConfig(),
         getHardwareType()
       ]);
-      setDefaultValue(res[0] || {});
+      console.log(props.form)
+      props.form.setFieldsValue(res[0] ? { ...res[0] } : {})
+      setOldValue(res[0] || {});
       setHardwareType(res[1]);
     };
     fetchData();
-  }, [getAdvancedConfig, getHardwareType]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getAdvancedConfig, getHardwareType, currentAddress]);
 
   return (
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
       <h1 className="title">{advancedTrans.cacheSetting}</h1>
       <Form.Item label={`${advancedTrans.capacity} (GB)`}>
         {getFieldDecorator("cpu_cache_capacity", {
-          initialValue: defalutValue.cpu_cache_capacity,
           rules: [
             {
               required: true,
@@ -123,7 +126,6 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
       <Form.Item label={advancedTrans.insert}>
         {getFieldDecorator("cache_insert_data", {
           valuePropName: "checked",
-          initialValue: defalutValue.cache_insert_data
         })(
           <Switch
             onChange={val => {
@@ -139,7 +141,6 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
 
       <Form.Item label={advancedTrans.blasThreshold}>
         {getFieldDecorator("use_blas_threshold", {
-          initialValue: defalutValue.use_blas_threshold,
           rules: [
             {
               required: true,
@@ -160,7 +161,6 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
       {hardwareType === "GPU" && (
         <Form.Item label={advancedTrans.gpuThreshold}>
           {getFieldDecorator("gpu_search_threshold", {
-            initialValue: defalutValue.gpu_search_threshold,
             rules: [
               {
                 required: true,
