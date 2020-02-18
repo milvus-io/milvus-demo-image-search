@@ -15,6 +15,7 @@ export default {
   config: {
     title: "Configuration",
     network: "Network Access",
+    storage: "Storage Path",
     advanced: "Advanced Settings",
     hardware: "Hardware Resources"
   },
@@ -22,6 +23,12 @@ export default {
     title: "Data Management",
     table: "Table and Index",
     vector: "Vector Search"
+  },
+  storage: {
+    primary: "Primary Path",
+    second: "Secondary Path",
+    metaData: "Meta Data Database",
+    metric: "Metric Collection"
   },
   network: {
     address: "Listening Address",

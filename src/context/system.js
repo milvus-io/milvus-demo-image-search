@@ -31,8 +31,8 @@ export const SystemProvider = ({ children }) => {
   const { currentAddress, getSystemConfig } = useContext(httpContext)
   const { t } = useTranslation();
   const notificationTrans = t("notification")
+
   const globalNotify = (title, desc, duration = 0) => {
-    console.log("notify")
     const args = {
       message: title || notificationTrans.restart.title,
       description: desc || notificationTrans.restart.desc,
@@ -40,6 +40,7 @@ export const SystemProvider = ({ children }) => {
     };
     notification.open(args);
   };
+
   useEffect(() => {
     if (!currentAddress) return
     const fetchData = async () => {

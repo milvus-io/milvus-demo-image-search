@@ -15,6 +15,7 @@ export default {
   config: {
     title: "配置",
     network: "网络配置",
+    storage: "存储路径",
     advanced: "高级配置",
     hardware: "硬件资源"
   },
@@ -22,6 +23,12 @@ export default {
     title: "数据管理",
     table: "表和索引",
     vector: "向量搜索"
+  },
+  storage: {
+    primary: "主要路径",
+    second: "第二路径",
+    metaData: "Meta Data Database",
+    metric: "Metric Collection"
   },
   table: {
     create: "新建表",

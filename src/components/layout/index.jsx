@@ -118,6 +118,7 @@ const LayoutWrapper = props => {
           </h2>
           <ul className="list-wrapper">
             <MyLink to="/manage/network">{configTrans.network}</MyLink>
+            <MyLink to="/manage/storage/path">{configTrans.storage}</MyLink>
             <MyLink to="/manage/advanced">{configTrans.advanced}</MyLink>
             {hardwareType === "GPU" && (
               <MyLink to="/manage/hardware">{configTrans.hardware}</MyLink>
