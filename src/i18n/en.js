@@ -1,5 +1,12 @@
 export default {
   lang: "en",
+  restartNotify: "Config will become effective after milvus restart. ",
+  notification: {
+    restart: {
+      title: "Config Changed",
+      desc: "Config will become effective after milvus restart."
+    }
+  },
   login: {
     host: "Host",
     port: "Port",
@@ -7,6 +14,7 @@ export default {
   },
   config: {
     title: "Configuration",
+    network: "Network Access",
     advanced: "Advanced Settings",
     hardware: "Hardware Resources"
   },
@@ -14,6 +22,10 @@ export default {
     title: "Data Management",
     table: "Table and Index",
     vector: "Vector Search"
+  },
+  network: {
+    address: "Listening Address",
+    port: "Listening Port"
   },
   table: {
     create: "New Table",

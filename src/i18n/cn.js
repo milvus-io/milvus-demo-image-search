@@ -1,5 +1,12 @@
 export default {
   lang: "中文",
+  restartNotify: "该页面配置，需要重启Milvus后才会生效",
+  notification: {
+    restart: {
+      title: "配置修改",
+      desc: "需要重启后，某些配置才会生效"
+    }
+  },
   login: {
     host: "主机",
     port: "端口",
@@ -7,6 +14,7 @@ export default {
   },
   config: {
     title: "配置",
+    network: "网络配置",
     advanced: "高级配置",
     hardware: "硬件资源"
   },
@@ -68,6 +76,10 @@ export default {
     blasDesc:
       "Milvus 性能调优参数。此参数必须与 nq 比较以确定是否触发使用 OpenBLAS 计算库。如果 nq >= Use Blas Threshold，则使用 OpenBLAS。搜索响应时间无波动，但搜索速度变慢。如果 nq < Use Blas Threshold，搜索速度更快，但搜索响应时间有波动。",
     enginSetting: "引擎设置"
+  },
+  network: {
+    address: "监听地址",
+    port: "监听端口"
   },
   vector: {
     tName: "表名",

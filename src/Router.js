@@ -2,6 +2,8 @@ import React from 'react'
 import Layout from "components/layout";
 import Login from "pages/Login";
 import TablePage from "pages/table";
+import NetworkPage from "pages/network";
+
 import AdvancedPage from "pages/advanced";
 import HardwarePage from "pages/hardware";
 import VectorSearch from "pages/vector-search";
@@ -25,6 +27,9 @@ const HashRouterWrapper = () => {
                       <Switch location={location}>
                         <Route path="/manage/table">
                           <TablePage></TablePage>
+                        </Route>
+                        <Route path="/manage/network">
+                          <NetworkPage></NetworkPage>
                         </Route>
                         <Route path="/manage/advanced">
                           <AdvancedPage></AdvancedPage>
