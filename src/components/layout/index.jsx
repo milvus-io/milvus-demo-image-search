@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Icon, Modal, Select } from "antd";
+import { Icon, Modal, Select, Popconfirm } from "antd";
 import "./index.less";
 import { HOST, PORT } from "@/consts";
 import Logo from "assets/imgs/logo.svg";
 import CONFIG_ICON from "assets/imgs/config.png";
 import DATA_ICON from "assets/imgs/dataManage.png";
 import LoginForm from '../../pages/Login'
-import { ADD } from '../../reducers/milvus-servers'
+import { ADD, DELETE } from '../../reducers/milvus-servers'
+import { DELETE_MUTIPLE, KEYS } from '../../reducers/data-management'
 import { systemContext } from "../../context/system"
 import { httpContext } from "../../context/http"
-
+import { dataManagementContext } from '../../context/data-management'
+import { cloneObj } from "../../utils/helpers"
 const MyLink = props => {
   return (
     <li>
@@ -37,6 +39,7 @@ const LayoutWrapper = props => {
   const [hardwareType, setHardwareType] = useState("GPU");
   const { currentAddress, setCurrentAddress, getHardwareType } = useContext(httpContext)
   const { milvusAddress, setMilvusAddress } = useContext(systemContext)
+  const { setDataManagement } = useContext(dataManagementContext)
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -69,9 +72,35 @@ const LayoutWrapper = props => {
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem(HOST);
-    window.localStorage.removeItem(PORT);
-    history.push("/login");
+    if (currentAddress) {
+      const copyAddress = cloneObj(milvusAddress)
+      delete copyAddress[currentAddress]
+      console.log(copyAddress, milvusAddress)
+      const addresses = Object.keys(copyAddress)
+      setCurrentAddress(addresses.length ? addresses[0] : "")
+      setMilvusAddress({
+        type: DELETE,
+        payload: {
+          id: currentAddress
+        }
+      })
+      setDataManagement({
+        type: DELETE_MUTIPLE,
+        payload: {
+          id: currentAddress,
+          keys: [KEYS.table, KEYS.vectorSearch]
+        }
+      })
+      if (addresses.length === 0) {
+        setVisible(true)
+        window.localStorage.removeItem(HOST);
+        window.localStorage.removeItem(PORT);
+      }
+    }
+    // window.localStorage.removeItem(HOST);
+    // window.localStorage.removeItem(PORT);
+    // history.push("/login");
+
   };
 
   const handleAddressChange = val => {
@@ -107,7 +136,14 @@ const LayoutWrapper = props => {
             </Select>
             {/* {`${host}:${port}`} */}
           </div>
-          <Icon type="logout" className="logout" onClick={handleLogout} />
+          <Popconfirm
+            title={`${t("disconnect")}${currentAddress}?`}
+            onConfirm={handleLogout}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Icon type="logout" className="logout" />
+          </Popconfirm>,
           <Icon type="plus" className="ml-10" onClick={handleAdd}></Icon>
         </div>
 
@@ -119,6 +155,7 @@ const LayoutWrapper = props => {
           <ul className="list-wrapper">
             <MyLink to="/manage/network">{configTrans.network}</MyLink>
             <MyLink to="/manage/storage/path">{configTrans.storage}</MyLink>
+            <MyLink to="/manage/metrics">{configTrans.metrics}</MyLink>
             <MyLink to="/manage/advanced">{configTrans.advanced}</MyLink>
             {hardwareType === "GPU" && (
               <MyLink to="/manage/hardware">{configTrans.hardware}</MyLink>

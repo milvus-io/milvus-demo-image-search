@@ -1,10 +1,12 @@
 import React, { useState, useContext } from "react";
-import { Form, Input, Button, Switch } from "antd";
+import { Form, Input, Button, Select } from "antd";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 
-const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
+const { Option } = Select
+
+const MetaDataForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
   const { globalNotify } = useContext(systemContext)
   const {
@@ -14,7 +16,7 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const [loading, setLoading] = useState(false);
 
   const { t } = useTranslation();
-  const storageTrans = t("storage");
+  const metaDataTrans = t("storage").metadata;
   const buttonTrans = t("button");
 
   const formItemLayout = {
@@ -46,32 +48,42 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const handleCancel = async () => {
     resetFields();
   };
+  const handleChange = val => {
+    console.log(val)
+  }
 
 
   return (
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
-
-      <Form.Item label={storageTrans.primary}>
-        {getFieldDecorator("primary_path")(
-          <Input placeholder="Primary Path"></Input>
+      <Form.Item label={metaDataTrans.type}>
+        {getFieldDecorator("type", {
+          initialValue: "mysql"
+        })(
+          <Select onChange={handleChange}>
+            <Option value="mysql">Mysql</Option>
+            <Option value="sqlite">SQlite</Option>
+          </Select>
         )}
       </Form.Item>
 
-      <Form.Item label={storageTrans.second}>
-        {getFieldDecorator("secondary_path")(
-          <Input placeholder="Secondary Path"></Input>
+      <Form.Item label={metaDataTrans.host}>
+        {getFieldDecorator("host")(
+          <Input placeholder="0.0.0.0"></Input>
         )}
       </Form.Item>
-
-      <Form.Item label={storageTrans.metaData}>
-        {getFieldDecorator("meta_data")(
-          <Input placeholder={storageTrans.metaData}></Input>
+      <Form.Item label={metaDataTrans.port}>
+        {getFieldDecorator("port")(
+          <Input placeholder="8000"></Input>
         )}
       </Form.Item>
-
-      <Form.Item label={storageTrans.metric}>
-        {getFieldDecorator("metric")(
-          <Switch defaultChecked />
+      <Form.Item label={metaDataTrans.username}>
+        {getFieldDecorator("username")(
+          <Input placeholder={metaDataTrans.username}></Input>
+        )}
+      </Form.Item>
+      <Form.Item label={metaDataTrans.password}>
+        {getFieldDecorator("password")(
+          <Input placeholder={metaDataTrans.password}></Input>
         )}
       </Form.Item>
 
@@ -91,4 +103,4 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   );
 });
 
-export default NetworkForm;
+export default MetaDataForm;

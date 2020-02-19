@@ -3,6 +3,7 @@ import { cloneObj } from '../utils/helpers'
 // actions
 export const ADD = "add"
 export const DELETE = "delete"
+export const DELETE_MUTIPLE = "delete_mutiple"
 export const UPDATE = "update"
 export const INIT = "init"
 // keys
@@ -26,6 +27,11 @@ function dataManagement(state, action) {
         return copyState
       }
       copyState[key][id] = value
+      return copyState
+    case DELETE_MUTIPLE:
+      keys.forEach(k => {
+        copyState[k] && delete copyState[k][id]
+      })
       return copyState
     case DELETE:
       if (copyState[key][id]) {

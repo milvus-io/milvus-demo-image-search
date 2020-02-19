@@ -40,7 +40,7 @@ export const SystemProvider = ({ children }) => {
     };
     notification.open(args);
   };
-
+  console.log(milvusAddress)
   useEffect(() => {
     if (!currentAddress) return
     const fetchData = async () => {

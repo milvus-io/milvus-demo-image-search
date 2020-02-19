@@ -3,11 +3,11 @@ import Layout from "components/layout";
 import Login from "pages/Login";
 import TablePage from "pages/table";
 import NetworkPage from "pages/network";
+import MetricsPage from "pages/metrics";
 
 import AdvancedPage from "pages/advanced";
 import HardwarePage from "pages/hardware";
 import StoragePath from "pages/storage-path";
-
 import VectorSearch from "pages/vector-search";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { HashRouter, Switch, Route } from "react-router-dom";
@@ -35,6 +35,9 @@ const HashRouterWrapper = () => {
                         </Route>
                         <Route path="/manage/storage/path">
                           <StoragePath></StoragePath>
+                        </Route>
+                        <Route path="/manage/metrics">
+                          <MetricsPage></MetricsPage>
                         </Route>
                         <Route path="/manage/advanced">
                           <AdvancedPage></AdvancedPage>

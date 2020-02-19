@@ -1,6 +1,7 @@
 export default {
   lang: "中文",
   restartNotify: "该页面配置，需要重启Milvus后才会生效",
+  disconnect: "是否断开 ",
   notification: {
     restart: {
       title: "配置修改",
@@ -17,7 +18,8 @@ export default {
     network: "网络配置",
     storage: "存储路径",
     advanced: "高级配置",
-    hardware: "硬件资源"
+    hardware: "硬件资源",
+    metrics: "Metrics"
   },
   dataManage: {
     title: "数据管理",
@@ -25,10 +27,24 @@ export default {
     vector: "向量搜索"
   },
   storage: {
-    primary: "主要路径",
-    second: "第二路径",
-    metaData: "Meta Data Database",
-    metric: "Metric Collection"
+    data: {
+      primary: "主要路径",
+      second: "第二路径",
+    },
+    metadata: {
+      type: "类型",
+      host: "主机IP",
+      username: "用户名",
+      password: "密码",
+      port: "端口"
+    }
+  },
+  network: {
+    address: "监听地址",
+    port: "监听端口"
+  },
+  metrics: {
+    enable: "启用"
   },
   table: {
     create: "新建表",
@@ -84,10 +100,7 @@ export default {
       "Milvus 性能调优参数。此参数必须与 nq 比较以确定是否触发使用 OpenBLAS 计算库。如果 nq >= Use Blas Threshold，则使用 OpenBLAS。搜索响应时间无波动，但搜索速度变慢。如果 nq < Use Blas Threshold，搜索速度更快，但搜索响应时间有波动。",
     enginSetting: "引擎设置"
   },
-  network: {
-    address: "监听地址",
-    port: "监听端口"
-  },
+
   vector: {
     tName: "表名",
     tTop: "TopK",

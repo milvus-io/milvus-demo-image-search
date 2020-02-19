@@ -1,6 +1,7 @@
 export default {
   lang: "en",
   restartNotify: "Config will become effective after milvus restart. ",
+  disconnect: "Are you sure disconnect with ",
   notification: {
     restart: {
       title: "Config Changed",
@@ -17,7 +18,9 @@ export default {
     network: "Network Access",
     storage: "Storage Path",
     advanced: "Advanced Settings",
-    hardware: "Hardware Resources"
+    hardware: "Hardware Resources",
+    metrics: "Metrics"
+
   },
   dataManage: {
     title: "Data Management",
@@ -25,14 +28,25 @@ export default {
     vector: "Vector Search"
   },
   storage: {
-    primary: "Primary Path",
-    second: "Secondary Path",
-    metaData: "Meta Data Database",
-    metric: "Metric Collection"
+    data: {
+      primary: "Primary Path",
+      second: "Secondary Path",
+    },
+
+    metadata: {
+      type: "Type",
+      host: "Host",
+      username: "Username",
+      password: "Password",
+      port: "Port"
+    }
   },
   network: {
     address: "Listening Address",
     port: "Listening Port"
+  },
+  metrics: {
+    enable: "Enabled"
   },
   table: {
     create: "New Table",

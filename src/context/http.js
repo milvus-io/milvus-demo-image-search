@@ -8,17 +8,11 @@ const axiosInstance = axios.create({
   timeout: 5000
 });
 
-
-// Add a response interceptor
 axiosInstance.interceptors.response.use(
   function (res) {
     // Do something with res data
     if (res.data && res.data.code === 400) {
       message.error(res.data.data.msg);
-      return res;
-    }
-    if (res.data && res.data.code === 401) {
-      window.location.href = "/login";
       return res;
     }
     return res;
@@ -27,6 +21,7 @@ axiosInstance.interceptors.response.use(
     if (hasError) {
       return Promise.reject(error);
     }
+
     if (error.response && error.response.data) {
       const { message: errMsg } = error.response.data;
       errMsg && message.error(errMsg);
@@ -47,6 +42,7 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+
 export const httpContext = React.createContext({
   currentAddress: "", // the current milvus we use
   setCurrentAddress: () => { },
@@ -60,6 +56,8 @@ export const httpContext = React.createContext({
   // config api
   getAdvancedConfig: () => { },
   getHardwareConfig: () => { },
+  getMilvusConfig: () => { },
+  setMilvusConfig: () => { },
   getSystemConfig: () => { },
   updateAdvancedConfig: () => { },
   updateHardwareConfig: () => { },
@@ -69,12 +67,27 @@ export const httpContext = React.createContext({
 
 const { Provider } = httpContext
 
+
 export const HttpProvider = ({ children }) => {
   const host = window.localStorage.getItem(HOST) || "";
   const port = window.localStorage.getItem(PORT) || "";
-  const [currentAddress, setCurrentAddress] = useState(`${host}:${port}`) // current milvus ip will store in localstorage
-
+  const [currentAddress, setCurrentAddress] = useState(host && port ? `${host}:${port}` : '') // current milvus ip will store in localstorage
   axiosInstance.defaults.baseURL = `http://${currentAddress}`
+
+  const httpWrapper = (httpFunc) => {
+    return () => {
+      if (!currentAddress) {
+        message.warning("Need connect to milvus first!", 3)
+        hasError = true
+        setTimeout(() => {
+          hasError = false
+        }, 2)
+        return Promise.resolve()
+      }
+      return httpFunc()
+    }
+  }
+
   // ------- Data Management Start ----------
 
   async function searchVectors(data = {}) {
@@ -132,6 +145,11 @@ export const HttpProvider = ({ children }) => {
     return res.data;
   }
 
+  async function setMilvusConfig(data) {
+    const res = await axiosInstance.put("/system/config", data);
+    return res.data
+  }
+
   async function getSystemConfig() {
     const res = await axiosInstance.get("/devices");
     const { gpus, cpu = {} } = res.data || {};
@@ -165,18 +183,19 @@ export const HttpProvider = ({ children }) => {
     currentAddress,
     setCurrentAddress,
     // config api
-    getAdvancedConfig,
-    getHardwareConfig,
-    getSystemConfig,
-    updateAdvancedConfig,
-    updateHardwareConfig,
-    getHardwareType,
+    getAdvancedConfig: httpWrapper(getAdvancedConfig),
+    getHardwareConfig: httpWrapper(getHardwareConfig),
+    setMilvusConfig: httpWrapper(setMilvusConfig),
+    getSystemConfig: httpWrapper(getSystemConfig),
+    updateAdvancedConfig: httpWrapper(updateAdvancedConfig),
+    updateHardwareConfig: httpWrapper(updateHardwareConfig),
+    getHardwareType: httpWrapper(getHardwareType),
     // data management api
-    searchVectors,
-    getTables,
-    createTable,
-    deleteTable,
-    createIndex,
-    searchTable,
+    searchVectors: httpWrapper(searchVectors),
+    getTables: httpWrapper(getTables),
+    createTable: httpWrapper(createTable),
+    deleteTable: httpWrapper(deleteTable),
+    createIndex: httpWrapper(createIndex),
+    searchTable: httpWrapper(searchTable)
   }}>{children}</Provider>
 }

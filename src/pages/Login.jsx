@@ -33,6 +33,7 @@ const Login = props => {
         const url = `${host}:${port}`;
         if (milvusAddress[url]) {
           message.warning(`Already connected: http://${url}`)
+          setLoading(false);
           return
         }
         window.localStorage.setItem(HOST, host)
@@ -105,9 +106,9 @@ const Login = props => {
   return (
     <div className="login-wrapper">
       <div className="content">
-        <div>
+        {/* <div>
           <img src={Logo} alt="Milvus Logo"></img>
-        </div>
+        </div> */}
         <LoginForm></LoginForm>
       </div>
     </div>
