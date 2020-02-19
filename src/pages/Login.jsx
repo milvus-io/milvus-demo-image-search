@@ -2,7 +2,7 @@ import React, { useState, useEffect, } from "react";
 import { Button, Form, Input, message } from "antd";
 import { useHistory } from "react-router-dom";
 import http from "@/http/index";
-import Logo from "assets/imgs/logo.svg";
+// import Logo from "assets/imgs/logo.svg";
 import { ADD } from '../reducers/milvus-servers'
 import "./Login.less";
 import { HOST, PORT } from "@/consts";
@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 
 const FormItem = Form.Item;
 const Login = props => {
-  const history = useHistory();
+  // const history = useHistory();
   const { t } = useTranslation();
   const loginTrans = t("login");
   const [loading, setLoading] = useState(false);

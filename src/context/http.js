@@ -168,25 +168,26 @@ export const HttpProvider = ({ children }) => {
   }
 
   async function getMilvusConfigs() {
-    // const res = await axiosInstance.put("/system/config");
-    return {
-      "reply": {
-        "cache_config": { "cache_insert_data": "false", "cpu_cache_capacity": "4", "cpu_cache_threshold": "0.85", "insert_buffer_size": "1" },
-        "db_config": { "archive_days_threshold": "0", "archive_disk_threshold": "0", "backend_url": "sqlite://czz:123@127.0.0.1:8000/", "preload_table": "" },
-        "engine_config": { "gpu_search_threshold": "1000", "omp_thread_num": "0", "use_blas_threshold": "1100" },
-        "gpu_resource_config": { "build_index_resources": ["gpu0"], "cache_capacity": "1", "cache_threshold": "0.85", "enable": "true", "search_resources": ["gpu0"] },
-        "metric_config": { "address": "127.0.0.1", "enable_monitor": "false", "port": "9091" },
-        "restart_required": false,
-        "server_config": { "address": "0.0.0.0", "deploy_mode": "single", "port": "19530", "time_zone": "UTC+8", "web_port": "19122" },
-        "storage_config": {
-          "primary_path": "/tmp/milvus",
-          "secondary_path": ""
-        },
-        "tracing_config": {
-          "json_config_path": ""
-        }
-      }
-    }
+    const res = await axiosInstance.put("/system/config");
+    return res.data
+    // return {
+    //   "reply": {
+    //     "cache_config": { "cache_insert_data": "false", "cpu_cache_capacity": "4", "cpu_cache_threshold": "0.85", "insert_buffer_size": "1" },
+    //     "db_config": { "archive_days_threshold": "0", "archive_disk_threshold": "0", "backend_url": "sqlite://czz:123@127.0.0.1:8000/", "preload_table": "" },
+    //     "engine_config": { "gpu_search_threshold": "1000", "omp_thread_num": "0", "use_blas_threshold": "1100" },
+    //     "gpu_resource_config": { "build_index_resources": ["gpu0"], "cache_capacity": "1", "cache_threshold": "0.85", "enable": "true", "search_resources": ["gpu0"] },
+    //     "metric_config": { "address": "127.0.0.1", "enable_monitor": "false", "port": "9091" },
+    //     "restart_required": false,
+    //     "server_config": { "address": "0.0.0.0", "deploy_mode": "single", "port": "19530", "time_zone": "UTC+8", "web_port": "19122" },
+    //     "storage_config": {
+    //       "primary_path": "/tmp/milvus",
+    //       "secondary_path": ""
+    //     },
+    //     "tracing_config": {
+    //       "json_config_path": ""
+    //     }
+    //   }
+    // }
   }
 
   async function getSystemConfig() {
