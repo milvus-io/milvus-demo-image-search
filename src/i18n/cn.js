@@ -24,6 +24,7 @@ export default {
   dataManage: {
     title: "数据管理",
     table: "表和索引",
+    partition: "分区",
     vector: "向量搜索"
   },
   storage: {
@@ -70,6 +71,19 @@ export default {
       fileSize:
         "触发创建索引的阈值。该参数指定只有当原始数据文件大小达到某一阈值，系统才会为其创建索引，默认值为1024 MB。小于该阈值的数据文件不会创建索引。"
     }
+  },
+  partition: {
+    tip: "请根据表名搜索相关分区",
+    create: "新建分区",
+    saveSuccess: "新建分区成功",
+    delete: "删除分区成功",
+    confirmDel: "是否确认删除该分区",
+    deletePartition: "删除分区",
+    searchTxt: "请输入表名",
+    tableName: "表名",
+    tag: "分区标签",
+    name: "分区名",
+    action: "操作",
   },
   hardware: {
     saveSuccess: "GPU配置更新成功",

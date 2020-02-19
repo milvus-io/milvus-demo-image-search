@@ -1,0 +1,106 @@
+@import "~assets/scss/mixins.less";
+
+.table-wrapper {
+  color: #fff;
+  .primary-btn();
+  .disable-btn();
+  .ant-input();
+  .circle-btn();
+
+  .tip{
+    margin-top: 40px;
+    text-align: center;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+  }
+
+  h2 {
+    color: #FAFAFA;
+    font-size: 26px;
+    font-weight: bold;
+    line-height: 26px;
+    margin: 0 10px 0 0;
+  }
+
+  .control {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    .ant-input-search-icon {
+      color: #fff;
+    }
+  }
+
+  .ant-table-thead>tr>th {
+    padding: 14px;
+    background: #60606f;
+    color: #fff;
+  }
+
+  .ant-table-tbody>tr {
+    &:nth-child(even) {
+      background: #101010;
+    }
+
+    &:nth-child(odd) {
+      background: #28292e;
+    }
+
+    >td {
+      border: 0;
+      color: #fff;
+    }
+
+    &:hover {
+      background: #fff;
+    }
+  }
+
+  .ant-table-tbody>tr:hover:not(.ant-table-expanded-row)>td {
+    background: #4FC4F9
+  }
+
+
+  .table-wrapper {
+    margin-top: 20px;
+  }
+}
+
+.my-modal {
+
+  .ant-modal-content,
+  .ant-modal-header,
+  .ant-modal-footer {
+    background-color: #28292E;
+    border: 0;
+    color: #fff;
+    text-align: center;
+  }
+
+  .ant-modal-title {
+    color: #fff;
+    font-size: 26px;
+    font-weight: bold;
+  }
+
+  .ant-form-item-label>label,
+  .ant-modal-close {
+    color: #fff;
+  }
+
+
+  .ant-slider-rail {
+    background-color: rgba(250, 250, 250, 0.3);
+  }
+
+  .primary-btn();
+  .disable-btn();
+  .ant-input();
+
+ 
+
+}

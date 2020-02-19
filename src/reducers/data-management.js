@@ -9,7 +9,8 @@ export const INIT = "init"
 // keys
 export const KEYS = {
   vectorSearch: "vectorSearch",
-  table: "table"
+  table: "table",
+  partition: "partition"
 }
 
 function dataManagement(state, action) {

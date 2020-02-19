@@ -143,7 +143,7 @@ const LayoutWrapper = props => {
             cancelText="No"
           >
             <Icon type="logout" className="logout" />
-          </Popconfirm>,
+          </Popconfirm>
           <Icon type="plus" className="ml-10" onClick={handleAdd}></Icon>
         </div>
 
@@ -167,6 +167,8 @@ const LayoutWrapper = props => {
           </h2>
           <ul className="list-wrapper">
             <MyLink to="/manage/table">{dataTrans.table}</MyLink>
+            <MyLink to="/manage/partition">{dataTrans.partition}</MyLink>
+
             <MyLink to="/manage/vector">{dataTrans.vector}</MyLink>
           </ul>
         </div>

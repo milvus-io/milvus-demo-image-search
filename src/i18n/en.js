@@ -25,6 +25,7 @@ export default {
   dataManage: {
     title: "Data Management",
     table: "Table and Index",
+    partition: "Partition",
     vector: "Vector Search"
   },
   storage: {
@@ -72,6 +73,20 @@ export default {
       fileSize:
         "Threshold value that triggers index building for raw data files. Index creation is controlled by the size of raw data files specified in this parameter, with a default of 1024 MB. Data files with smaller sizes will not have indexes built. "
     }
+  },
+  partition: {
+    tip: "Please search partitions by table name.",
+    create: "New Partition",
+    saveSuccess: "Create Partition Success",
+    delete: "Delete Partition Success",
+    confirmDel: "Are you sure to delete partition",
+    deletePartition: "Delete Partition",
+    searchTxt: "Table Name",
+    tag: "Partition Tag",
+    name: "Partition Name",
+    tableName: "Table Name",
+    action: "Action ",
+
   },
   hardware: {
     saveSuccess: "Save Gpu Configs Success",

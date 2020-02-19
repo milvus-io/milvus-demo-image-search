@@ -53,6 +53,9 @@ export const httpContext = React.createContext({
   createIndex: () => { },
   searchTable: () => { },
   searchVectors: () => { },
+  getPartitions: () => { },
+  createPartition: () => { },
+  deletePartition: () => { },
   // config api
   getAdvancedConfig: () => { },
   getHardwareConfig: () => { },
@@ -75,7 +78,7 @@ export const HttpProvider = ({ children }) => {
   axiosInstance.defaults.baseURL = `http://${currentAddress}`
 
   const httpWrapper = (httpFunc) => {
-    return () => {
+    return function inner() {
       if (!currentAddress) {
         message.warning("Need connect to milvus first!", 3)
         hasError = true
@@ -84,7 +87,7 @@ export const HttpProvider = ({ children }) => {
         }, 2)
         return Promise.resolve()
       }
-      return httpFunc()
+      return httpFunc(...arguments)
     }
   }
 
@@ -122,6 +125,20 @@ export const HttpProvider = ({ children }) => {
     return res.data;
   }
 
+  async function createPartition(tableName, data) {
+    const res = await axiosInstance.post(`/tables/${tableName}/partitions`, { "partition_name": data.partition_name, "partition_tag": data.partition_tag });
+    return res.data;
+  }
+
+  async function getPartitions(tableName, params) {
+    const res = await axiosInstance.get(`/tables/${tableName}/partitions`, { params })
+    return res.data
+  }
+
+  async function deletePartition(tableName, tag) {
+    const res = await axiosInstance.delete(`/tables/${tableName}/partitions/${tag}`)
+    return res.data
+  }
   // ------- Data Management End ----------
 
   // ------- config Api Start ----------
@@ -196,6 +213,9 @@ export const HttpProvider = ({ children }) => {
     createTable: httpWrapper(createTable),
     deleteTable: httpWrapper(deleteTable),
     createIndex: httpWrapper(createIndex),
-    searchTable: httpWrapper(searchTable)
+    searchTable: httpWrapper(searchTable),
+    createPartition: httpWrapper(createPartition),
+    getPartitions: httpWrapper(getPartitions),
+    deletePartition: httpWrapper(deletePartition)
   }}>{children}</Provider>
 }

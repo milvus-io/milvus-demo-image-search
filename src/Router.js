@@ -2,6 +2,8 @@ import React from 'react'
 import Layout from "components/layout";
 import Login from "pages/Login";
 import TablePage from "pages/table";
+import PartitionPage from "pages/partition";
+
 import NetworkPage from "pages/network";
 import MetricsPage from "pages/metrics";
 
@@ -29,6 +31,9 @@ const HashRouterWrapper = () => {
                       <Switch location={location}>
                         <Route path="/manage/table">
                           <TablePage></TablePage>
+                        </Route>
+                        <Route path="/manage/partition">
+                          <PartitionPage></PartitionPage>
                         </Route>
                         <Route path="/manage/network">
                           <NetworkPage></NetworkPage>

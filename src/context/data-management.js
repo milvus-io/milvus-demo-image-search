@@ -20,14 +20,19 @@ export const DataManagementProvider = ({ children }) => {
     /**
      * data // search result
      */
-    table: {}
+    table: {},
+    /**
+     * tableName // for search partition
+     * data // search result
+     */
+    partition: {}
   });
   useEffect(() => {
     if (!currentAddress || dataManagement[KEYS.vectorSearch][currentAddress]) return
     setDataManagement({
       type: INIT,
       payload: {
-        keys: [KEYS.vectorSearch, KEYS.table],
+        keys: [KEYS.vectorSearch, KEYS.table, KEYS.partition],
         id: currentAddress,
         values: {
           [KEYS.vectorSearch]: {
@@ -35,6 +40,10 @@ export const DataManagementProvider = ({ children }) => {
             data: null
           },
           [KEYS.table]: {
+            data: null
+          },
+          [KEYS.partition]: {
+            tableName: "",
             data: null
           }
         }
