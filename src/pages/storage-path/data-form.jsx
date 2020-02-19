@@ -1,14 +1,15 @@
-import React, { useState, useContext } from "react";
-import { Form, Input, Button, Switch } from "antd";
+import React, { useState, useContext, useMemo } from "react";
+import { Form, Input, Button, Switch, message } from "antd";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 
 const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
-  const { globalNotify } = useContext(systemContext)
+  const { globalNotify, storageConfig } = useContext(systemContext)
   const {
-    currentAddress
+    currentAddress,
+    setMilvusConfig
   } = useContext(httpContext)
   const { getFieldDecorator, resetFields } = form;
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,10 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const { t } = useTranslation();
   const dataTrans = t("storage").data;
   const buttonTrans = t("button");
+
+  const { primary_path: primaryPath, secondary_path: secondaryPath } = useMemo(() => {
+    return storageConfig[currentAddress] || {}
+  }, [currentAddress, storageConfig])
 
   const formItemLayout = {
     labelCol: {
@@ -27,9 +32,9 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
       sm: { span: 16 }
     }
   };
+
   const handleSubmit = e => {
     e.preventDefault();
-    globalNotify()
     props.form.validateFields(async (err, values) => {
       if (err) {
         return;
@@ -37,6 +42,14 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
       setLoading(true);
       try {
         console.log(values)
+        const res = await setMilvusConfig({
+          storage_config: values
+        })
+        if (res.code === 0) {
+          message.success(t("submitSuccess"));
+          resetFields();
+          globalNotify()
+        }
       } finally {
         setLoading(false);
       }
@@ -52,13 +65,17 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
 
       <Form.Item label={dataTrans.primary}>
-        {getFieldDecorator("primary_path")(
+        {getFieldDecorator("primary_path", {
+          initialValue: primaryPath
+        })(
           <Input placeholder="Primary Path"></Input>
         )}
       </Form.Item>
 
       <Form.Item label={dataTrans.second}>
-        {getFieldDecorator("secondary_path")(
+        {getFieldDecorator("secondary_path", {
+          initialValue: secondaryPath
+        })(
           <Input placeholder="Secondary Path"></Input>
         )}
       </Form.Item>

@@ -1,20 +1,25 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Form, Switch, Input, Button, message } from "antd";
+import React, { useMemo, useState, useContext } from "react";
+import { Form, Input, Button, message } from "antd";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
-  const { currentSystemInfo, globalNotify } = useContext(systemContext)
+  const { serverConfig, globalNotify } = useContext(systemContext)
   const {
-    currentAddress
+    currentAddress,
+    setMilvusConfig
   } = useContext(httpContext)
-  const { getFieldDecorator, resetFields, getFieldsValue } = form;
+  const { getFieldDecorator, resetFields } = form;
   const [loading, setLoading] = useState(false);
 
   const { t } = useTranslation();
   const networkTrans = t("network");
   const buttonTrans = t("button");
+
+  const { address, port } = useMemo(() => {
+    return serverConfig[currentAddress] || {}
+  }, [currentAddress, serverConfig])
 
   const formItemLayout = {
     labelCol: {
@@ -28,14 +33,18 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   };
   const handleSubmit = e => {
     e.preventDefault();
-    globalNotify()
     props.form.validateFields(async (err, values) => {
       if (err) {
         return;
       }
       setLoading(true);
       try {
-        console.log(values)
+        const res = await setMilvusConfig({ server_config: values })
+        if (res.code === 0) {
+          message.success(t("submitSuccess"));
+          resetFields();
+          globalNotify()
+        }
       } finally {
         setLoading(false);
       }
@@ -51,13 +60,17 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
 
       <Form.Item label={networkTrans.address}>
-        {getFieldDecorator("ip")(
-          <Input placeholder="Listening Ip"></Input>
+        {getFieldDecorator("address", {
+          initialValue: address
+        })(
+          <Input placeholder="Listening Address"></Input>
         )}
       </Form.Item>
 
       <Form.Item label={networkTrans.port}>
-        {getFieldDecorator("port")(
+        {getFieldDecorator("port", {
+          initialValue: port
+        })(
           <Input placeholder="Listening Port"></Input>
         )}
       </Form.Item>

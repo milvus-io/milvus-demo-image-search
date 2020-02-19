@@ -12,7 +12,7 @@ import HardwarePage from "pages/hardware";
 import StoragePath from "pages/storage-path";
 import VectorSearch from "pages/vector-search";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { HashRouter, Switch, Route } from "react-router-dom";
+import { HashRouter, Switch, Route, Redirect } from "react-router-dom";
 const HashRouterWrapper = () => {
   return (
     <HashRouter>
@@ -59,9 +59,11 @@ const HashRouterWrapper = () => {
                 </TransitionGroup>
               </Layout>
             </Route>
-            <Route path="/">
+            <Redirect from='/' to='/manage/network' />
+
+            {/* <Route path="/">
               <Login></Login>
-            </Route>
+            </Route> */}
           </Switch>
         )}
       />

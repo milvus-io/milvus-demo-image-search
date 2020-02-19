@@ -1,6 +1,7 @@
 export default {
   lang: "中文",
   restartNotify: "该页面配置，需要重启Milvus后才会生效",
+  submitSuccess: "提交成功",
   disconnect: "是否断开 ",
   notification: {
     restart: {

@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Form, Switch, Button } from "antd";
+import React, { useMemo, useState, useContext } from "react";
+import { Form, Switch, Button, message } from "antd";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
-  const { globalNotify } = useContext(systemContext)
+  const { globalNotify, metricConfig } = useContext(systemContext)
   const {
-    currentAddress
+    currentAddress,
+    setMilvusConfig
   } = useContext(httpContext)
   const { getFieldDecorator, resetFields } = form;
   const [loading, setLoading] = useState(false);
@@ -15,6 +16,10 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const { t } = useTranslation();
   const metricsTrans = t("metrics");
   const buttonTrans = t("button");
+
+  const { enable_monitor } = useMemo(() => {
+    return metricConfig[currentAddress] || {}
+  }, [currentAddress, metricConfig])
 
   const formItemLayout = {
     labelCol: {
@@ -28,14 +33,18 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   };
   const handleSubmit = e => {
     e.preventDefault();
-    globalNotify()
     props.form.validateFields(async (err, values) => {
       if (err) {
         return;
       }
       setLoading(true);
       try {
-        console.log(values)
+        const res = await setMilvusConfig({ metric_config: values })
+        if (res.code === 0) {
+          message.success(t("submitSuccess"));
+          resetFields();
+          globalNotify()
+        }
       } finally {
         setLoading(false);
       }
@@ -51,7 +60,10 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
 
       <Form.Item label={metricsTrans.enable}>
-        {getFieldDecorator("ip")(
+        {getFieldDecorator("enable_monitor", {
+          valuePropName: "checked",
+          initialValue: String(enable_monitor) === "true"
+        })(
           <Switch />
         )}
       </Form.Item>

@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Form, Input, Button, Select } from "antd";
+import React, { useState, useContext, useMemo } from "react";
+import { Form, Input, Button, Select, message } from "antd";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
@@ -8,9 +8,10 @@ const { Option } = Select
 
 const MetaDataForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
-  const { globalNotify } = useContext(systemContext)
+  const { globalNotify, dbConfig } = useContext(systemContext)
   const {
-    currentAddress
+    currentAddress,
+    setMilvusConfig
   } = useContext(httpContext)
   const { getFieldDecorator, resetFields } = form;
   const [loading, setLoading] = useState(false);
@@ -18,6 +19,10 @@ const MetaDataForm = Form.create({ name: "advanced-form" })(function (props) {
   const { t } = useTranslation();
   const metaDataTrans = t("storage").metadata;
   const buttonTrans = t("button");
+
+  const { type, username, password, host, port } = useMemo(() => {
+    return dbConfig[currentAddress] || {}
+  }, [currentAddress, dbConfig])
 
   const formItemLayout = {
     labelCol: {
@@ -31,14 +36,24 @@ const MetaDataForm = Form.create({ name: "advanced-form" })(function (props) {
   };
   const handleSubmit = e => {
     e.preventDefault();
-    globalNotify()
     props.form.validateFields(async (err, values) => {
       if (err) {
         return;
       }
       setLoading(true);
+      const { host, port, username, password, type } = values
+      const url = `${type}://${username}:${password}@${host}:${port}/`
       try {
-        console.log(values)
+        const res = await setMilvusConfig({
+          db_config: {
+            backend_url: url
+          }
+        })
+        if (res.code === 0) {
+          message.success(t("submitSuccess"));
+          resetFields();
+          globalNotify()
+        }
       } finally {
         setLoading(false);
       }
@@ -57,7 +72,7 @@ const MetaDataForm = Form.create({ name: "advanced-form" })(function (props) {
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
       <Form.Item label={metaDataTrans.type}>
         {getFieldDecorator("type", {
-          initialValue: "mysql"
+          initialValue: type || "sqlite"
         })(
           <Select onChange={handleChange}>
             <Option value="mysql">Mysql</Option>
@@ -67,22 +82,30 @@ const MetaDataForm = Form.create({ name: "advanced-form" })(function (props) {
       </Form.Item>
 
       <Form.Item label={metaDataTrans.host}>
-        {getFieldDecorator("host")(
+        {getFieldDecorator("host", {
+          initialValue: host
+        })(
           <Input placeholder="0.0.0.0"></Input>
         )}
       </Form.Item>
       <Form.Item label={metaDataTrans.port}>
-        {getFieldDecorator("port")(
+        {getFieldDecorator("port", {
+          initialValue: port
+        })(
           <Input placeholder="8000"></Input>
         )}
       </Form.Item>
       <Form.Item label={metaDataTrans.username}>
-        {getFieldDecorator("username")(
+        {getFieldDecorator("username", {
+          initialValue: username
+        })(
           <Input placeholder={metaDataTrans.username}></Input>
         )}
       </Form.Item>
       <Form.Item label={metaDataTrans.password}>
-        {getFieldDecorator("password")(
+        {getFieldDecorator("password", {
+          initialValue: password
+        })(
           <Input placeholder={metaDataTrans.password}></Input>
         )}
       </Form.Item>

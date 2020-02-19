@@ -61,6 +61,10 @@ const LayoutWrapper = props => {
       setMilvusAddress({ type: ADD, payload: { host, port, url } })
       setCurrentAddress(url)
     }
+
+    if (!host || !port) {
+      setVisible(true)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

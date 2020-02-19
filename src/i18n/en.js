@@ -1,6 +1,7 @@
 export default {
   lang: "en",
   restartNotify: "Config will become effective after milvus restart. ",
+  submitSuccess: "Submit Success",
   disconnect: "Are you sure disconnect with ",
   notification: {
     restart: {
