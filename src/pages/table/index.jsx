@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
+import { useHistory } from 'react-router-dom'
 import {
   Button,
   Table,
@@ -22,6 +23,7 @@ const PAGE_SIZE = 10;
 const TableManage = props => {
   const { getTables, deleteTable, searchTable, currentAddress } = useContext(httpContext)
   const { dataManagement, setDataManagement } = useContext(dataManagementContext)
+  const history = useHistory()
   const { t } = useTranslation();
   const tableTrans = t("table");
   const dataManageTrans = t("dataManage");
@@ -48,6 +50,11 @@ const TableManage = props => {
   const handleCancel = () => {
     setVisible(false);
   };
+
+  const handleGoPartitions = record => {
+    history.push(`/manage/table/${record.table_name}/partitions`)
+  }
+
   const handleAddIndex = record => {
     setType("index");
     setVisible(true);
@@ -131,6 +138,15 @@ const TableManage = props => {
       render: (text, record) => {
         return (
           <span>
+            <span
+              style={{ fontSize: "12px", color: "#FAFAFA", cursor: "pointer" }}
+              onClick={() => {
+                handleGoPartitions(record);
+              }}
+            >
+              {tableTrans.partitions}
+            </span>
+            <Divider type="vertical" />
             <span
               style={{ fontSize: "12px", color: "#FAFAFA", cursor: "pointer" }}
               onClick={() => {

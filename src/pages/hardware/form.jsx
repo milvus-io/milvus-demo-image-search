@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useState, useContext, useMemo } from "react";
 import { Form, Switch, InputNumber, Button, message } from "antd";
 import { systemContext } from '../../context/system'
 import { httpContext } from '../../context/http'
-
 import { useTranslation } from "react-i18next";
+
 const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
-  const { currentSystemInfo } = useContext(systemContext)
-  const { getHardwareConfig, updateHardwareConfig } = useContext(httpContext)
+  const { systemInfos } = useContext(systemContext)
+  const { getHardwareConfig, updateHardwareConfig, currentAddress } = useContext(httpContext)
   const { getFieldDecorator, resetFields, getFieldsValue } = form;
   const [defalutValue, setDefaultValue] = useState({});
   const [searchHardware, setSearchHardware] = useState([]);
@@ -21,6 +21,10 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const { t } = useTranslation();
   const hardwareTrans = t("hardware");
   const buttonTrans = t("button");
+
+  const currentSystemInfo = useMemo(() => {
+    return systemInfos[currentAddress]
+  }, [systemInfos, currentAddress])
 
   const formItemLayout = {
     labelCol: {
@@ -134,7 +138,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
     });
   };
 
-  const fetchData = useCallback(async () => {
+  const fetchData = async () => {
     const res = await Promise.all([
       getHardwareConfig(),
     ]);
@@ -152,7 +156,8 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
 
     setEnable(!!enable);
     setDefaultValue(res[0] || {});
-  });
+  }
+
   const handleCancel = () => {
     fetchData();
     resetFields();
@@ -160,7 +165,8 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentAddress]);
 
   return (
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>

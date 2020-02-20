@@ -3,6 +3,7 @@ import { Form, Input, Button, Switch, message, Icon } from "antd";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
+import { clipboard } from '../../utils/helpers'
 
 const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
@@ -93,7 +94,9 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
       return copy
     })
     setEditIndex(index)
-
+  }
+  const handleCopy = value => {
+    clipboard(value, t("copySuccess"))
   }
 
 
@@ -104,24 +107,34 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
         {getFieldDecorator("primary_path", {
           initialValue: primaryPath
         })(
-          <Input placeholder="Primary Path"></Input>
+          <Input placeholder={dataTrans.primary}></Input>
         )}
       </Form.Item>
+      <p className="desc">{dataTrans.primaryTip}</p>
 
       <Form.Item label={dataTrans.second}>
         <ul className="secondary-path">
           {
             secondaryValues.map((v, i) => (
               <li key={`${v}${i}`}>
-                <Input placeholder="Secondary Path" autoFocus={editIndex === i} value={v} onChange={(val) => { handleSecondaryChange(val, i) }}></Input>
+                <Input placeholder={dataTrans.second} autoFocus={editIndex === i} value={v} onChange={(val) => { handleSecondaryChange(val, i) }}></Input>
                 {i === 0
-                  ? (<Icon type="plus-circle" className="add" onClick={handleAddPath}></Icon>)
-                  : (<Icon type="minus-circle" className="add" onClick={() => { handleDeletePath(i) }}></Icon>)}
+                  ? (<>
+                    <Icon type="copy" className="copy" onClick={() => { handleCopy(v) }} />
+                    <Icon type="plus-circle" className="add" onClick={handleAddPath}></Icon>
+                  </>)
+                  : (
+                    <>
+                      <Icon type="copy" className="copy" onClick={() => { handleCopy(v) }} />
+                      <Icon type="minus-circle" className="add" onClick={() => { handleDeletePath(i) }}></Icon>
+                    </>
+                  )}
               </li>
             ))
           }
         </ul>
       </Form.Item>
+      <p className="desc">{dataTrans.secondTip}</p>
 
       <Form.Item label=" " colon={false}>
         <Button className="disable-btn mr-10" onClick={handleCancel}>

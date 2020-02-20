@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
+import { useHistory, useParams } from 'react-router-dom'
 import {
   Button,
   Table,
   Modal,
   Input,
   Popconfirm,
-  message
+  message,
+  Icon
 } from "antd";
 import { useTranslation } from "react-i18next";
 import { httpContext } from '../../context/http'
@@ -19,6 +21,8 @@ const PAGE_SIZE = 2;
 const TableManage = props => {
   const { getPartitions, deletePartition, currentAddress } = useContext(httpContext)
   const { dataManagement, setDataManagement } = useContext(dataManagementContext)
+  const history = useHistory()
+  const params = useParams()
   const { t } = useTranslation();
   const partitionTrans = t("partition");
   const dataManageTrans = t("dataManage");
@@ -28,6 +32,11 @@ const TableManage = props => {
   const [offset, setOffset] = useState(0);
   const [count, setCount] = useState(0); // total count for pagination
   const [current, setCurrent] = useState(1); // current page for pagination
+
+  // useEffect(() => {
+  //   updateTableName(params.tableName)
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [params])
 
   const { data, tableName } = useMemo(() => {
     const { data = null, tableName = "" } = dataManagement[KEYS.partition][currentAddress] || {}
@@ -64,8 +73,13 @@ const TableManage = props => {
     setCurrent(1);
     message.success(partitionTrans.delete);
   };
-  const fetchData = async (name) => {
-    const res = await getPartitions(name, { offset, page_size: PAGE_SIZE });
+
+  /**
+   *  for now we just take the table from params
+   *  so the fecthData(xxx) will igonre
+   */
+  const fetchData = async () => {
+    const res = await getPartitions(params.tableName, { offset, page_size: PAGE_SIZE });
     if (res && res.partitions) {
       setDataManagement(
         {
@@ -76,7 +90,7 @@ const TableManage = props => {
             value: {
               data: res.partitions.map(v => ({
                 ...v,
-                tableName: name,
+                tableName: params.tableName,
                 key: v.partition_name
               }))
             }
@@ -167,15 +181,23 @@ const TableManage = props => {
     setCurrent(page);
   };
 
+  const handleBack = () => {
+    history.goBack()
+  }
+
   useEffect(() => {
-    if (!tableName) return
+    // if (!tableName) return
     fetchData(tableName);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset]);
+
   return (
     <div className="table-wrapper">
       <div className="header">
-        <h2>{dataManageTrans.partition}</h2>
+        <h2>
+          <span style={{ color: "#3F9CD1", cursor: "pointer" }} onClick={handleBack}>{params.tableName}</span>
+          <span style={{ margin: "0 10px" }}>></span>
+          {dataManageTrans.partition}</h2>
       </div>
       <div className="control">
         <div onClick={createTable} style={{ cursor: "pointer" }}>
@@ -187,13 +209,13 @@ const TableManage = props => {
           />
           <span>{partitionTrans.create}</span>
         </div>
-        <Search
+        {/* <Search
           placeholder={partitionTrans.searchTxt}
           onSearch={handleSearch}
           style={{ width: 200 }}
-        />
+        /> */}
       </div>
-      {tableName ? <Table
+      <Table
         columns={columns}
         className="table-wrapper"
         pagination={{
@@ -203,7 +225,7 @@ const TableManage = props => {
           pageSize: PAGE_SIZE
         }}
         dataSource={data}
-      /> : <div className="tip">{partitionTrans.tip}</div>}
+      />
 
       <Modal
         title={partitionTrans.create}
@@ -213,6 +235,7 @@ const TableManage = props => {
         wrapClassName="my-modal"
       >
         <PatitionForm
+          tableName={params.tableName}
           handleCancel={handleCancel}
           saveSuccess={saveSuccess}
         ></PatitionForm>

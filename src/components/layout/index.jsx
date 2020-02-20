@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Icon, Modal, Select, Popconfirm } from "antd";
 import "./index.less";
@@ -14,6 +14,8 @@ import { systemContext } from "../../context/system"
 import { httpContext } from "../../context/http"
 import { dataManagementContext } from '../../context/data-management'
 import { cloneObj } from "../../utils/helpers"
+import http from "@/http/index";
+
 const MyLink = props => {
   return (
     <li>
@@ -32,7 +34,6 @@ const { Option } = Select
 
 const LayoutWrapper = props => {
   const { t, i18n } = useTranslation();
-  const history = useHistory();
   const configTrans = t("config");
   const dataTrans = t("dataManage");
   const [langTxt, setLangTxt] = useState("中");
@@ -118,6 +119,18 @@ const LayoutWrapper = props => {
     setVisible(true)
   }
 
+  useEffect(() => {
+    const login = async () => {
+      await http.get("/state");
+    };
+    const host = window.localStorage.getItem(HOST);
+    const port = window.localStorage.getItem(PORT);
+    console.log(host, port)
+    if (host && port) {
+      login();
+    }
+  }, []);
+
   return (
     <div className="layout-wrapper">
       <div className="left">
@@ -171,7 +184,7 @@ const LayoutWrapper = props => {
           </h2>
           <ul className="list-wrapper">
             <MyLink to="/manage/table">{dataTrans.table}</MyLink>
-            <MyLink to="/manage/partition">{dataTrans.partition}</MyLink>
+            {/* <MyLink to="/manage/partition">{dataTrans.partition}</MyLink> */}
 
             <MyLink to="/manage/vector">{dataTrans.vector}</MyLink>
           </ul>
@@ -179,7 +192,7 @@ const LayoutWrapper = props => {
       </div>
       <div className="right"> {props.children} </div>
       <Modal
-        title="Connect to Milvus"
+        title={t("connectTitle")}
         visible={visible}
         footer={null}
         onCancel={handleCancel}

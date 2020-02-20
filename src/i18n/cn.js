@@ -2,7 +2,9 @@ export default {
   lang: "中文",
   restartNotify: "该页面配置，需要重启Milvus后才会生效",
   submitSuccess: "提交成功",
+  copySuccess: "复制成功",
   disconnect: "是否断开 ",
+  connectTitle: "连接Milvus",
   notification: {
     restart: {
       title: "配置修改",
@@ -17,7 +19,7 @@ export default {
   config: {
     title: "配置",
     network: "网络配置",
-    storage: "存储路径",
+    storage: "存储目录",
     advanced: "高级配置",
     hardware: "硬件资源",
     metrics: "Metrics"
@@ -30,10 +32,15 @@ export default {
   },
   storage: {
     data: {
-      primary: "主要路径",
-      second: "第二路径",
+      title: "数据文件目录",
+      primary: "主要目录",
+      second: "第二目录",
+      primaryTip: "请填写存储向量数据文件的目录路径，确保留有足够的空。",
+      secondTip: "所有文件都会被平分得写到这些目录中，每个目录数据大小 = 总数据量 / 目录数量。 请确保这些目录有足够的空间。"
+
     },
     metadata: {
+      title: "元数据文件目录",
       type: "类型",
       host: "主机IP",
       username: "用户名",
@@ -41,7 +48,7 @@ export default {
       port: "端口"
     },
     error: {
-      second: "第二路径不能为空"
+      second: "第二目录不能为空"
     }
   },
   network: {
@@ -62,6 +69,7 @@ export default {
     deleteTable: "删除表",
     searchTxt: "请输入表名",
     updateIndex: "更新索引",
+    partitions: "查看分区",
     tName: "表名",
     tDimension: "维度",
     tMetric: "Metric 类型",
