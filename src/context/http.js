@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from 'react'
 import axios from "axios";
 import { message } from "antd";
 import { HOST, PORT } from "@/consts";
+import { useTranslation } from "react-i18next";
+import { notification } from 'antd'
 
 let hasError = false; // make sure only one error message
 const axiosInstance = axios.create({
@@ -46,6 +48,7 @@ axiosInstance.interceptors.response.use(
 export const httpContext = React.createContext({
   currentAddress: "", // the current milvus we use
   setCurrentAddress: () => { },
+  restartNotify: () => { },
   // data management api
   getTables: () => { },
   createTable: () => { },
@@ -70,15 +73,34 @@ export const httpContext = React.createContext({
 
 const { Provider } = httpContext
 
+let timer = null
 
 export const HttpProvider = ({ children }) => {
   const host = window.localStorage.getItem(HOST) || "";
   const port = window.localStorage.getItem(PORT) || "";
   const [currentAddress, setCurrentAddress] = useState(host && port ? `${host}:${port}` : '') // current milvus ip will store in localstorage
+  const [restartNotifyStatus, setRestartNotifyStatus] = useState(false) // is restartnotify open
+  const [restartStatus, setRestartStatus] = useState(false) // some config change . need to restart milvus
+  const { t } = useTranslation();
+  const notificationTrans = t("notification")
+
+  const restartNotify = () => {
+    const args = {
+      message: notificationTrans.restart.title,
+      description: notificationTrans.restart.desc,
+      duration: 0,
+      onClose: () => {
+        setRestartNotifyStatus(false)
+      }
+    };
+    notification.open(args);
+    setRestartNotifyStatus(true)
+    setRestartStatus(true)
+  };
   axiosInstance.defaults.baseURL = `http://${currentAddress}`
 
   const httpWrapper = (httpFunc) => {
-    return function inner() {
+    return async function inner() {
       if (!currentAddress) {
         message.warning("Need connect to milvus first!", 3)
         hasError = true
@@ -86,6 +108,24 @@ export const HttpProvider = ({ children }) => {
           hasError = false
         }, 2)
         return Promise.resolve()
+      }
+      console.log(restartStatus, timer)
+      if (restartStatus) {
+        if (timer) {
+          clearTimeout(timer)
+        }
+        timer = setTimeout(async () => {
+          console.log("in---")
+          const res = await getMilvusConfigs()
+          const { restart_required } = res.reply
+          console.log(restart_required, restartNotifyStatus)
+          if (!restartNotifyStatus && restart_required) {
+            restartNotify()
+          }
+          if (!restart_required) {
+            setRestartStatus(false)
+          }
+        }, 1000)
       }
       return httpFunc(...arguments)
     }
@@ -168,26 +208,26 @@ export const HttpProvider = ({ children }) => {
   }
 
   async function getMilvusConfigs() {
-    const res = await axiosInstance.put("/system/config");
-    return res.data
-    // return {
-    //   "reply": {
-    //     "cache_config": { "cache_insert_data": "false", "cpu_cache_capacity": "4", "cpu_cache_threshold": "0.85", "insert_buffer_size": "1" },
-    //     "db_config": { "archive_days_threshold": "0", "archive_disk_threshold": "0", "backend_url": "sqlite://czz:123@127.0.0.1:8000/", "preload_table": "" },
-    //     "engine_config": { "gpu_search_threshold": "1000", "omp_thread_num": "0", "use_blas_threshold": "1100" },
-    //     "gpu_resource_config": { "build_index_resources": ["gpu0"], "cache_capacity": "1", "cache_threshold": "0.85", "enable": "true", "search_resources": ["gpu0"] },
-    //     "metric_config": { "address": "127.0.0.1", "enable_monitor": "false", "port": "9091" },
-    //     "restart_required": false,
-    //     "server_config": { "address": "0.0.0.0", "deploy_mode": "single", "port": "19530", "time_zone": "UTC+8", "web_port": "19122" },
-    //     "storage_config": {
-    //       "primary_path": "/tmp/milvus",
-    //       "secondary_path": ""
-    //     },
-    //     "tracing_config": {
-    //       "json_config_path": ""
-    //     }
-    //   }
-    // }
+    // const res = await axiosInstance.put("/system/config");
+    // return res.data
+    return {
+      "reply": {
+        "cache_config": { "cache_insert_data": "false", "cpu_cache_capacity": "4", "cpu_cache_threshold": "0.85", "insert_buffer_size": "1" },
+        "db_config": { "archive_days_threshold": "0", "archive_disk_threshold": "0", "backend_url": "sqlite://czz:123@127.0.0.1:8000/", "preload_table": "" },
+        "engine_config": { "gpu_search_threshold": "1000", "omp_thread_num": "0", "use_blas_threshold": "1100" },
+        "gpu_resource_config": { "build_index_resources": ["gpu0"], "cache_capacity": "1", "cache_threshold": "0.85", "enable": "true", "search_resources": ["gpu0"] },
+        "metric_config": { "address": "127.0.0.1", "enable_monitor": "false", "port": "9091" },
+        "restart_required": true,
+        "server_config": { "address": "0.0.0.0", "deploy_mode": "single", "port": "19530", "time_zone": "UTC+8", "web_port": "19122" },
+        "storage_config": {
+          "primary_path": "/tmp/milvus",
+          "secondary_path": "/tmp,/tmp2"
+        },
+        "tracing_config": {
+          "json_config_path": ""
+        }
+      }
+    }
   }
 
   async function getSystemConfig() {
@@ -222,6 +262,7 @@ export const HttpProvider = ({ children }) => {
   return <Provider value={{
     currentAddress,
     setCurrentAddress,
+    restartNotify,
     // config api
     getAdvancedConfig: httpWrapper(getAdvancedConfig),
     getHardwareConfig: httpWrapper(getHardwareConfig),

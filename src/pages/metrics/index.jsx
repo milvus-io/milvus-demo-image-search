@@ -5,14 +5,14 @@ import WithTip from "components/with-tip";
 import "./index.less";
 
 
-const Network = props => {
+const Mertrics = props => {
   const { t } = useTranslation();
   const configTrans = t("config");
 
   return (
-    <div className="network-wrapper">
+    <div className="mertrics-wrapper">
       <div className="header">
-        <h2>{configTrans.network}</h2>
+        <h2>{configTrans.metrics}</h2>
         <WithTip text={t("restartNotify")}></WithTip>
       </div>
       <MetricsForm></MetricsForm>
@@ -20,4 +20,4 @@ const Network = props => {
   );
 };
 
-export default Network;
+export default Mertrics;

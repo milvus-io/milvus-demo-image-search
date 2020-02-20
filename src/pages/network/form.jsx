@@ -5,10 +5,11 @@ import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
-  const { serverConfig, globalNotify } = useContext(systemContext)
+  const { serverConfig } = useContext(systemContext)
   const {
     currentAddress,
-    setMilvusConfig
+    setMilvusConfig,
+    restartNotify
   } = useContext(httpContext)
   const { getFieldDecorator, resetFields } = form;
   const [loading, setLoading] = useState(false);
@@ -33,6 +34,8 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   };
   const handleSubmit = e => {
     e.preventDefault();
+    restartNotify()
+
     props.form.validateFields(async (err, values) => {
       if (err) {
         return;
@@ -42,8 +45,7 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
         const res = await setMilvusConfig({ server_config: values })
         if (res.code === 0) {
           message.success(t("submitSuccess"));
-          resetFields();
-          globalNotify()
+          restartNotify()
         }
       } finally {
         setLoading(false);

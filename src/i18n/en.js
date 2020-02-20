@@ -41,6 +41,9 @@ export default {
       username: "Username",
       password: "Password",
       port: "Port"
+    },
+    error: {
+      second: "Secondary Path cant be empty"
     }
   },
   network: {
@@ -48,7 +51,9 @@ export default {
     port: "Listening Port"
   },
   metrics: {
-    enable: "Enabled"
+    enable: "Enabled",
+    address: "Push Address",
+    port: "Push Port"
   },
   table: {
     create: "New Table",

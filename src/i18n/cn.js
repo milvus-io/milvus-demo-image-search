@@ -39,6 +39,9 @@ export default {
       username: "用户名",
       password: "密码",
       port: "端口"
+    },
+    error: {
+      second: "第二路径不能为空"
     }
   },
   network: {
@@ -46,7 +49,9 @@ export default {
     port: "监听端口"
   },
   metrics: {
-    enable: "启用"
+    enable: "启用",
+    address: "推送地址",
+    port: "推送端口"
   },
   table: {
     create: "新建表",

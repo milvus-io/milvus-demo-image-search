@@ -8,10 +8,11 @@ const { Option } = Select
 
 const MetaDataForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
-  const { globalNotify, dbConfig } = useContext(systemContext)
+  const { dbConfig } = useContext(systemContext)
   const {
     currentAddress,
-    setMilvusConfig
+    setMilvusConfig,
+    restartNotify
   } = useContext(httpContext)
   const { getFieldDecorator, resetFields } = form;
   const [loading, setLoading] = useState(false);
@@ -52,7 +53,7 @@ const MetaDataForm = Form.create({ name: "advanced-form" })(function (props) {
         if (res.code === 0) {
           message.success(t("submitSuccess"));
           resetFields();
-          globalNotify()
+          restartNotify()
         }
       } finally {
         setLoading(false);

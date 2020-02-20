@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useReducer, useContext } from 'react'
 import { httpContext } from './http'
-import { notification } from 'antd'
 import MilvusReducer from "../reducers/milvus-servers"
-import { useTranslation } from "react-i18next";
 
 export const systemContext = React.createContext({
 
   milvusAddress: {}, // all milvus server ip
   setMilvusAddress: () => { },
-  globalNotify: () => { },
   /**
    * key: milvus address
    * value: {sysytemConfig: {}, version: ''}
@@ -35,18 +32,8 @@ export const SystemProvider = ({ children }) => {
   const [metricConfig, setMetricConfig] = useState({})
 
   const [milvusAddress, setMilvusAddress] = useReducer(MilvusReducer, {});
-  const { currentAddress, getSystemConfig, getMilvusConfigs } = useContext(httpContext)
-  const { t } = useTranslation();
-  const notificationTrans = t("notification")
+  const { currentAddress, getSystemConfig, getMilvusConfigs, restartNotify } = useContext(httpContext)
 
-  const globalNotify = (title, desc, duration = 0) => {
-    const args = {
-      message: title || notificationTrans.restart.title,
-      description: desc || notificationTrans.restart.desc,
-      duration,
-    };
-    notification.open(args);
-  };
 
   const getInfosFromUrl = (url) => {
     if (!url) return
@@ -82,9 +69,10 @@ export const SystemProvider = ({ children }) => {
       setMetricConfig(v => ({ ...v, [currentAddress]: { ...metric_config } }))
       setDbConifg(v => ({ ...v, [currentAddress]: { ...dbConfig } }))
       if (restart_required) {
-        globalNotify()
+        restartNotify()
       }
     };
+    console.log("sytem in")
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress]);
@@ -96,9 +84,7 @@ export const SystemProvider = ({ children }) => {
     serverConfig,
     metricConfig,
     dbConfig,
-
     milvusAddress,
-    globalNotify,
     setMilvusAddress
   }}>{children}</Provider>
 }

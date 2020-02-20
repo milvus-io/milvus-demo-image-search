@@ -1,26 +1,32 @@
-import React, { useState, useContext, useMemo } from "react";
-import { Form, Input, Button, Switch, message } from "antd";
+import React, { useState, useContext, useMemo, useEffect } from "react";
+import { Form, Input, Button, Switch, message, Icon } from "antd";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 
 const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
-  const { globalNotify, storageConfig } = useContext(systemContext)
+  const { storageConfig } = useContext(systemContext)
   const {
     currentAddress,
-    setMilvusConfig
+    setMilvusConfig,
+    restartNotify
   } = useContext(httpContext)
   const { getFieldDecorator, resetFields } = form;
   const [loading, setLoading] = useState(false);
-
+  const [secondaryValues, setSecondaryValues] = useState([])
+  const [editIndex, setEditIndex] = useState(null) // change secondaryValues array will cause input lose focus status. this will help to focus
   const { t } = useTranslation();
   const dataTrans = t("storage").data;
   const buttonTrans = t("button");
 
-  const { primary_path: primaryPath, secondary_path: secondaryPath } = useMemo(() => {
+  const { primary_path: primaryPath, secondary_path: secondaryPath = "" } = useMemo(() => {
     return storageConfig[currentAddress] || {}
   }, [currentAddress, storageConfig])
+
+  useEffect(() => {
+    setSecondaryValues(secondaryPath ? secondaryPath.split(',') : [""])
+  }, [secondaryPath])
 
   const formItemLayout = {
     labelCol: {
@@ -39,16 +45,21 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
       if (err) {
         return;
       }
+      if (secondaryValues.includes("")) {
+        message.warning(t("storage").error.second)
+        return
+      }
       setLoading(true);
       try {
-        console.log(values)
         const res = await setMilvusConfig({
-          storage_config: values
+          storage_config: {
+            ...values,
+            secondary_path: secondaryValues.join(',')
+          }
         })
         if (res.code === 0) {
           message.success(t("submitSuccess"));
-          resetFields();
-          globalNotify()
+          restartNotify()
         }
       } finally {
         setLoading(false);
@@ -56,9 +67,34 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
     });
   };
 
-  const handleCancel = async () => {
+  const handleCancel = () => {
     resetFields();
   };
+
+  const handleAddPath = () => {
+    setSecondaryValues(v => [...v, ''])
+  }
+  const handleDeletePath = (index) => {
+    setSecondaryValues(v => {
+      const copy = [...v]
+      copy.splice(index, 1)
+      return copy
+    })
+  }
+
+
+
+  const handleSecondaryChange = (e, index) => {
+    console.log(e.currentTarget.value, index)
+    const value = e.currentTarget.value
+    setSecondaryValues(v => {
+      const copy = [...v]
+      copy.splice(index, 1, value)
+      return copy
+    })
+    setEditIndex(index)
+
+  }
 
 
   return (
@@ -73,11 +109,18 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
       </Form.Item>
 
       <Form.Item label={dataTrans.second}>
-        {getFieldDecorator("secondary_path", {
-          initialValue: secondaryPath
-        })(
-          <Input placeholder="Secondary Path"></Input>
-        )}
+        <ul className="secondary-path">
+          {
+            secondaryValues.map((v, i) => (
+              <li key={`${v}${i}`}>
+                <Input placeholder="Secondary Path" autoFocus={editIndex === i} value={v} onChange={(val) => { handleSecondaryChange(val, i) }}></Input>
+                {i === 0
+                  ? (<Icon type="plus-circle" className="add" onClick={handleAddPath}></Icon>)
+                  : (<Icon type="minus-circle" className="add" onClick={() => { handleDeletePath(i) }}></Icon>)}
+              </li>
+            ))
+          }
+        </ul>
       </Form.Item>
 
       <Form.Item label=" " colon={false}>
