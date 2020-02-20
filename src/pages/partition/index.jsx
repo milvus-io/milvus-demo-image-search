@@ -4,10 +4,10 @@ import {
   Button,
   Table,
   Modal,
-  Input,
+  // Input,
   Popconfirm,
   message,
-  Icon
+  // Icon
 } from "antd";
 import { useTranslation } from "react-i18next";
 import { httpContext } from '../../context/http'
@@ -16,7 +16,7 @@ import { KEYS, UPDATE } from '../../reducers/data-management'
 import PatitionForm from './form'
 import "./index.less";
 
-const { Search } = Input;
+// const { Search } = Input;
 const PAGE_SIZE = 2;
 const TableManage = props => {
   const { getPartitions, deletePartition, currentAddress } = useContext(httpContext)
@@ -33,16 +33,10 @@ const TableManage = props => {
   const [count, setCount] = useState(0); // total count for pagination
   const [current, setCurrent] = useState(1); // current page for pagination
 
-  // useEffect(() => {
-  //   updateTableName(params.tableName)
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [params])
-
   const { data, tableName } = useMemo(() => {
     const { data = null, tableName = "" } = dataManagement[KEYS.partition][currentAddress] || {}
     return { data, tableName }
   }, [dataManagement, currentAddress])
-
 
   const updateTableName = (tableName) => {
     setDataManagement(
@@ -68,7 +62,7 @@ const TableManage = props => {
   };
 
   const handleDelete = async record => {
-    await deletePartition(tableName, record.partition_tag);
+    await deletePartition(params.tableName, record.partition_tag);
     getFirstPage(tableName);
     setCurrent(1);
     message.success(partitionTrans.delete);
@@ -79,27 +73,32 @@ const TableManage = props => {
    *  so the fecthData(xxx) will igonre
    */
   const fetchData = async () => {
-    const res = await getPartitions(params.tableName, { offset, page_size: PAGE_SIZE });
-    if (res && res.partitions) {
-      setDataManagement(
-        {
-          type: UPDATE,
-          payload: {
-            id: currentAddress,
-            key: KEYS.partition,
-            value: {
-              data: res.partitions.map(v => ({
-                ...v,
-                tableName: params.tableName,
-                key: v.partition_name
-              }))
+    try {
+      const res = await getPartitions(params.tableName, { offset, page_size: PAGE_SIZE });
+      if (res && res.partitions) {
+        setDataManagement(
+          {
+            type: UPDATE,
+            payload: {
+              id: currentAddress,
+              key: KEYS.partition,
+              value: {
+                data: res.partitions.map(v => ({
+                  ...v,
+                  tableName: params.tableName,
+                  key: v.partition_name
+                }))
+              }
             }
           }
-        }
-      );
-      setCount(res.count || 10);
+        );
+        setCount(res.count || 10);
+      }
+    } catch (e) {
+      // when toggle currentaddress . table name may not exist in diff milvus.
+      handleBack()
     }
-  };
+  }
 
   const saveSuccess = (txt, tableName) => {
     setVisible(false);
@@ -189,7 +188,7 @@ const TableManage = props => {
     // if (!tableName) return
     fetchData(tableName);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offset]);
+  }, [offset, currentAddress]);
 
   return (
     <div className="table-wrapper">

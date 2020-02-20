@@ -22,7 +22,7 @@ export default {
     storage: "存储目录",
     advanced: "高级配置",
     hardware: "硬件资源",
-    metrics: "Metrics"
+    metrics: "监控报警"
   },
   dataManage: {
     title: "数据管理",
