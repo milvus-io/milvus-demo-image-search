@@ -129,7 +129,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    webPreferences: { devTools: false },
+    // webPreferences: { devTools: false },
     icon: "./milvus-icon.png"
   });
   // mainWindow.maximize();
