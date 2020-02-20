@@ -12,6 +12,7 @@ const { TabPane } = Tabs
 const Network = props => {
   const { t } = useTranslation();
   const configTrans = t("config");
+  const storageTrans = t("storage")
 
   return (
     <div className="network-wrapper">
@@ -20,10 +21,10 @@ const Network = props => {
         <WithTip text={t("restartNotify")}></WithTip>
       </div>
       <Tabs defaultActiveKey="1">
-        <TabPane tab="Data Path" key="1">
+        <TabPane tab={storageTrans.data.title} key="data">
           <DataForm></DataForm>
         </TabPane>
-        <TabPane tab="Meta Data Path" key="2">
+        <TabPane tab={storageTrans.metadata.title} key="metadata">
           <MetaDataForm></MetaDataForm>
         </TabPane>
 

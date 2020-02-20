@@ -2,6 +2,7 @@ export default {
   lang: "en",
   restartNotify: "Config will become effective after milvus restart. ",
   submitSuccess: "Submit Success",
+  copySuccess: "Copy Success",
   disconnect: "Are you sure disconnect with ",
   notification: {
     restart: {
@@ -31,11 +32,15 @@ export default {
   },
   storage: {
     data: {
+      title: "Data Path",
       primary: "Primary Path",
       second: "Secondary Path",
+      primaryTip: "Primary directory used for both the vector data files you want to import, and the metadata.	Make sure the space left is enough.",
+      secondTip: "A semicolon-separated list of secondary directories used only for the vector data files imported into Milvus. Set this parameter when the data size is too much to fit in the primary_path.Each file, whether in primary_path or secondary_path, is assigned an equal part of the imported data. Data Size per Directory = Total Data Size / Number of Directories. So make sure the available storage space in these files are enough."
     },
 
     metadata: {
+      title: "Meta Data Path",
       type: "Type",
       host: "Host",
       username: "Username",

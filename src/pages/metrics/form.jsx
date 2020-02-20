@@ -89,7 +89,7 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
               message: `${metricsTrans.port}${t('required')}`
             }
           ]
-        })(<Input placeholder="推送地址" />)}
+        })(<Input placeholder={metricsTrans.port} />)}
       </Form.Item>
 
 

@@ -134,7 +134,7 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
     });
   };
 
-  const fetchData = useCallback(async () => {
+  const fetchData = async () => {
     const res = await Promise.all([
       getHardwareConfig(),
     ]);
@@ -152,7 +152,8 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
 
     setEnable(!!enable);
     setDefaultValue(res[0] || {});
-  });
+  }
+
   const handleCancel = () => {
     fetchData();
     resetFields();
@@ -160,7 +161,8 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>

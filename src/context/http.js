@@ -115,10 +115,8 @@ export const HttpProvider = ({ children }) => {
           clearTimeout(timer)
         }
         timer = setTimeout(async () => {
-          console.log("in---")
           const res = await getMilvusConfigs()
           const { restart_required } = res.reply
-          console.log(restart_required, restartNotifyStatus)
           if (!restartNotifyStatus && restart_required) {
             restartNotify()
           }
@@ -208,7 +206,7 @@ export const HttpProvider = ({ children }) => {
   }
 
   async function getMilvusConfigs() {
-    const res = await axiosInstance.put("/system/config");
+    const res = await axiosInstance.get("/system/config");
     return res.data
     // return {
     //   "reply": {

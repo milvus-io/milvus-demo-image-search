@@ -65,7 +65,7 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
         {getFieldDecorator("address", {
           initialValue: address
         })(
-          <Input placeholder="Listening Address"></Input>
+          <Input placeholder={networkTrans.address}></Input>
         )}
       </Form.Item>
 
@@ -73,7 +73,7 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
         {getFieldDecorator("port", {
           initialValue: port
         })(
-          <Input placeholder="Listening Port"></Input>
+          <Input placeholder={networkTrans.port}></Input>
         )}
       </Form.Item>
 
