@@ -14,7 +14,6 @@ export const systemContext = React.createContext({
   /**
    * systemInfos[currentAddress]
    */
-  currentSystemInfo: {},
   storageConfig: {},
   serverConfig: {},
   metricConfig: {},
@@ -78,7 +77,6 @@ export const SystemProvider = ({ children }) => {
   }, [currentAddress]);
 
   return <Provider value={{
-    currentSystemInfo: systemInfos[currentAddress] || {},
     systemInfos,
     storageConfig,
     serverConfig,

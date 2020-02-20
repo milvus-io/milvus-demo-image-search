@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useMemo } from "react";
 import { Form, Switch, InputNumber, Button, message } from "antd";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
+
 const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
-  const { currentSystemInfo } = useContext(systemContext)
+  const { systemInfos } = useContext(systemContext)
   const {
     getAdvancedConfig,
     updateAdvancedConfig,
@@ -21,6 +22,10 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const { t } = useTranslation();
   const advancedTrans = t("advanced");
   const buttonTrans = t("button");
+
+  const currentSystemInfo = useMemo(() => {
+    return systemInfos[currentAddress]
+  }, [systemInfos, currentAddress])
 
   const formItemLayout = {
     labelCol: {

@@ -4,6 +4,7 @@ export default {
   submitSuccess: "提交成功",
   copySuccess: "复制成功",
   disconnect: "是否断开 ",
+  connectTitle: "连接Milvus",
   notification: {
     restart: {
       title: "配置修改",
@@ -68,6 +69,7 @@ export default {
     deleteTable: "删除表",
     searchTxt: "请输入表名",
     updateIndex: "更新索引",
+    partitions: "查看分区",
     tName: "表名",
     tDimension: "维度",
     tMetric: "Metric 类型",

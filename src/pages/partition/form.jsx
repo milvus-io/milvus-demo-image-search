@@ -16,9 +16,8 @@ const TableForm = Form.create({ name: "form_in_modal" })(
     const { t } = useTranslation();
     const partitionTrans = t("partition");
     const buttonTrans = t("button");
-    const { form } = props;
+    const { form, tableName } = props;
     const { getFieldDecorator, resetFields } = form;
-
     const handleSubmit = async e => {
       e.preventDefault();
 
@@ -33,7 +32,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           ...values
         };
         try {
-          const res = await createPartition(data.table_name, data);
+          const res = await createPartition(tableName, data);
           if (res.code === 0) {
             props.saveSuccess(partitionTrans.saveSuccess, data.table_name);
             resetFields();
@@ -51,7 +50,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
 
     return (
       <Form layout="vertical">
-        <Form.Item
+        {/* <Form.Item
           label={partitionTrans.tableName}
         >
           {getFieldDecorator("table_name", {
@@ -62,7 +61,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
               }
             ]
           })(<Input placeholder={partitionTrans.tableName} />)}
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           label={partitionTrans.name}
         >

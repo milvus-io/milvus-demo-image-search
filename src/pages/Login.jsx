@@ -1,6 +1,5 @@
-import React, { useState, useEffect, } from "react";
+import React, { useState, } from "react";
 import { Button, Form, Input, message } from "antd";
-import { useHistory } from "react-router-dom";
 import http from "@/http/index";
 // import Logo from "assets/imgs/logo.svg";
 import { ADD } from '../reducers/milvus-servers'
@@ -16,7 +15,7 @@ const Login = props => {
   const [loading, setLoading] = useState(false);
   const { milvusAddress, setMilvusAddress, setCurrentAddress, handleCancel } = props
 
-  const localPort = window.localStorage.getItem(PORT);
+  const localPort = window.localStorage.getItem(PORT) || '19121';
   const localHost = window.localStorage.getItem(HOST);
   const LoginForm = Form.create({ name: "login_form" })(function (props) {
     const { form } = props;
@@ -74,7 +73,7 @@ const Login = props => {
           {getFieldDecorator("port", {
             initialValue: localPort,
             rules: [{ required: true, message: "port is required" }]
-          })(<Input placeholder=""></Input>)}
+          })(<Input placeholder="19121"></Input>)}
         </FormItem>
         <div style={{ textAlign: "center" }}>
           <Button
@@ -90,19 +89,7 @@ const Login = props => {
     );
   });
 
-  // useEffect(() => {
-  //   const login = async () => {
-  //     const res = await http.get("/state");
-  //     if (res.data && res.data.code === 0) {
-  //       history.push("/manage/table");
-  //     }
-  //   };
-  //   const host = window.localStorage.getItem(HOST);
-  //   const port = window.localStorage.getItem(PORT);
-  //   if (host && port) {
-  //     login();
-  //   }
-  // }, [history]);
+
   return (
     <div className="login-wrapper">
       <div className="content">

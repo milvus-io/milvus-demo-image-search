@@ -164,7 +164,7 @@ export const HttpProvider = ({ children }) => {
   }
 
   async function createPartition(tableName, data) {
-    const res = await axiosInstance.post(`/tables/${tableName}/partitions`, { "partition_name": data.partition_name, "partition_tag": data.partition_tag });
+    const res = await axiosInstance.post(`/tables/${tableName}/partitions`, data);
     return res.data;
   }
 

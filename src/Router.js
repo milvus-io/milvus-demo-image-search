@@ -29,10 +29,13 @@ const HashRouterWrapper = () => {
                   >
                     <section className="route-section">
                       <Switch location={location}>
-                        <Route path="/manage/table">
+                        <Route path="/manage/table" exact>
                           <TablePage></TablePage>
                         </Route>
                         <Route path="/manage/partition">
+                          <PartitionPage></PartitionPage>
+                        </Route>
+                        <Route path="/manage/table/:tableName/partitions">
                           <PartitionPage></PartitionPage>
                         </Route>
                         <Route path="/manage/network">

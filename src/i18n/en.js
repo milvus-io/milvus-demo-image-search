@@ -4,6 +4,8 @@ export default {
   submitSuccess: "Submit Success",
   copySuccess: "Copy Success",
   disconnect: "Are you sure disconnect with ",
+  connectTitle: "Connect Milvus",
+
   notification: {
     restart: {
       title: "Config Changed",
@@ -69,6 +71,7 @@ export default {
     deleteTable: "Delete Table",
     searchTxt: "Table Name",
     updateIndex: "Update Index",
+    partitions: "Patitions",
     tName: "Name",
     tDimension: "Dimension",
     tMetric: "Metric Type",
