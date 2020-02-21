@@ -24,10 +24,10 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const buttonTrans = t("button");
 
   const currentSystemInfo = useMemo(() => {
-    return systemInfos[currentAddress]
+    return systemInfos[currentAddress] || {}
   }, [systemInfos, currentAddress])
-
-  const formItemLayout = {
+  console.log(systemInfos)
+  const SwitchItemLayout = {
     labelCol: {
       xs: { span: 24 },
       sm: { span: 8 }
@@ -103,8 +103,8 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   }, [getAdvancedConfig, getHardwareType, currentAddress]);
 
   return (
-    <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
-      <h1 className="title">{advancedTrans.cacheSetting}</h1>
+    <Form layout="vertical" style={{ maxWidth: "400px" }}>
+      {/* <h1 className="title">{advancedTrans.cacheSetting}</h1> */}
       <Form.Item label={`${advancedTrans.capacity} (GB)`}>
         {getFieldDecorator("cpu_cache_capacity", {
           rules: [
@@ -114,21 +114,25 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
             }
           ]
         })(
-          <InputNumber
-            min={1}
-            max={currentSystemInfo.cpuMemory > 2 ? currentSystemInfo.cpuMemory - 1 : 1}
-            onChange={val => {
-              handleFormChange(val, "cpu_cache_capacity");
-            }}
-          />
+          <div className="item-wrapper">
+            <InputNumber
+              min={1}
+              max={currentSystemInfo.cpuMemory > 2 ? currentSystemInfo.cpuMemory - 1 : 1}
+              onChange={val => {
+                handleFormChange(val, "cpu_cache_capacity");
+              }}
+            />
+            <span className="ml-10 tip">{`[1, ${currentSystemInfo.cpuMemory ||
+              1}) GB`}</span>
+          </div>
+
         )}
-        <span className="ml-10">{`[1, ${currentSystemInfo.cpuMemory ||
-          1}) GB`}</span>
+
       </Form.Item>
       <p className="desc">{advancedTrans.capacityDesc1}</p>
       {/* <p className="desc">{advancedTrans.capacityDesc2}</p> */}
 
-      <Form.Item label={advancedTrans.insert}>
+      <Form.Item label={advancedTrans.insert} {...SwitchItemLayout} style={{ padding: 0 }}>
         {getFieldDecorator("cache_insert_data", {
           valuePropName: "checked",
         })(
@@ -184,11 +188,11 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
       )}
 
       <Form.Item label=" " colon={false}>
-        <Button className="disable-btn mr-10" onClick={handleCancel}>
+        <Button className=" mr-10" onClick={handleCancel}>
           {buttonTrans.cancel}
         </Button>
         <Button
-          className={disabled ? "disable-btn" : "primary-btn"}
+          type={disabled ? "diabled" : "primary"}
           onClick={handleSubmit}
           loading={loading}
           disabled={disabled}

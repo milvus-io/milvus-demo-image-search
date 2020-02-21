@@ -242,6 +242,7 @@ const TableManage = props => {
       <Table
         columns={columns}
         className="table-wrapper"
+        size="middle"
         pagination={{
           current,
           total: count,
@@ -260,6 +261,8 @@ const TableManage = props => {
         footer={null}
         onCancel={handleCancel}
         wrapClassName="my-modal"
+        centered={true}
+        width={528}
       >
         {type === "table" ? (
           <TableForm

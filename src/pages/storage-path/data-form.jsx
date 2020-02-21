@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useEffect } from "react";
+import React, { useState, useContext, useMemo, useEffect, useRef } from "react";
 import { Form, Input, Button, Switch, message, Icon } from "antd";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
@@ -17,6 +17,7 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const [loading, setLoading] = useState(false);
   const [secondaryValues, setSecondaryValues] = useState([])
   const [editIndex, setEditIndex] = useState(null) // change secondaryValues array will cause input lose focus status. this will help to focus
+  const primaryRef = useRef(null)
   const { t } = useTranslation();
   const dataTrans = t("storage").data;
   const buttonTrans = t("button");
@@ -29,16 +30,6 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
     setSecondaryValues(secondaryPath ? secondaryPath.split(',') : [""])
   }, [secondaryPath])
 
-  const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 }
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 }
-    }
-  };
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -99,20 +90,25 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
     clipboard(value, t("copySuccess"))
   }
 
-
+  const formItemLayout = {
+    layout: "vertical"
+  };
   return (
-    <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
+    <Form {...formItemLayout} style={{ maxWidth: "400px" }}>
 
       <Form.Item label={dataTrans.primary}>
         {getFieldDecorator("primary_path", {
           initialValue: primaryPath
         })(
-          <Input placeholder={dataTrans.primary}></Input>
+          <div className="copy-wrapper">
+            <Input placeholder={dataTrans.primary} ref={primaryRef}></Input>
+            <Icon type="copy" className="copy" onClick={() => { handleCopy(primaryRef.current.state.value) }} />
+          </div>
         )}
       </Form.Item>
       <p className="desc">{dataTrans.primaryTip}</p>
 
-      <Form.Item label={dataTrans.second}>
+      <Form.Item label={dataTrans.second} >
         <ul className="secondary-path">
           {
             secondaryValues.map((v, i) => (
@@ -137,11 +133,11 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
       <p className="desc">{dataTrans.secondTip}</p>
 
       <Form.Item label=" " colon={false}>
-        <Button className="disable-btn mr-10" onClick={handleCancel}>
+        <Button className="mr-10" onClick={handleCancel}>
           {buttonTrans.cancel}
         </Button>
         <Button
-          className={"primary-btn"}
+          type="primary"
           onClick={handleSubmit}
           loading={loading}
         >

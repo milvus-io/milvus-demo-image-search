@@ -88,13 +88,13 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         </Form.Item>
 
         <div>
-          <Button className="disable-btn mr-10" onClick={handleCancel}>
+          <Button className=" mr-10" onClick={handleCancel}>
             {buttonTrans.cancel}
           </Button>
           <Button
-            className="primary-btn"
             onClick={handleSubmit}
             loading={loading}
+            type="primary"
           >
             {buttonTrans.update}
           </Button>

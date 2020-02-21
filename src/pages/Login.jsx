@@ -3,7 +3,7 @@ import { Button, Form, Input, message } from "antd";
 import http from "@/http/index";
 // import Logo from "assets/imgs/logo.svg";
 import { ADD } from '../reducers/milvus-servers'
-import "./Login.less";
+// import "./Login.less";
 import { HOST, PORT } from "@/consts";
 import { useTranslation } from "react-i18next";
 
@@ -62,7 +62,7 @@ const Login = props => {
     };
 
     return (
-      <Form layout="vertical" style={{ width: "400px" }}>
+      <Form layout="vertical" >
         <FormItem label={loginTrans.host}>
           {getFieldDecorator("host", {
             initialValue: localHost,
@@ -77,7 +77,7 @@ const Login = props => {
         </FormItem>
         <div style={{ textAlign: "center" }}>
           <Button
-            className="primary-btn"
+            type="primary"
             onClick={handleConnect}
             loading={loading}
             style={{ width: "150px" }}

@@ -23,14 +23,7 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   }, [currentAddress, metricConfig])
 
   const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 }
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 }
-    }
+    layout: "vertical"
   };
   const handleSubmit = e => {
     e.preventDefault();
@@ -57,9 +50,18 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
 
 
   return (
-    <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
+    <Form {...formItemLayout} style={{ maxWidth: "400px" }}>
 
-      <Form.Item label={metricsTrans.enable}>
+      <Form.Item label={metricsTrans.enable}
+        labelCol={{
+          xs: { span: 24 },
+          sm: { span: 4 }
+        }}
+        wrapperCol={{
+          xs: { span: 24 },
+          sm: { span: 20 }
+        }}
+      >
         {getFieldDecorator("enable_monitor", {
           valuePropName: "checked",
           initialValue: String(enable_monitor) === "true"
@@ -94,12 +96,12 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
 
 
 
-      <Form.Item label=" " colon={false}>
-        <Button className="disable-btn mr-10" onClick={handleCancel}>
+      <Form.Item label=" " >
+        <Button className=" mr-10" onClick={handleCancel}>
           {buttonTrans.cancel}
         </Button>
         <Button
-          className={"primary-btn"}
+          type="primary"
           onClick={handleSubmit}
           loading={loading}
         >

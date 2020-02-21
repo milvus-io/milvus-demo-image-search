@@ -23,7 +23,9 @@ module.exports = override(
     javascriptEnabled: true,
     modifyVars: {
       ...darkTheme,
-      "@input-bg": "transparent"
+      "@input-bg": "transparent",
+      "@primary-color": "#4FC4F9", // 全局色
+      "@link-color": "#4FC4F9", // 链接色
       // "@checkbox-check-color": "#28292E"
     }
   })

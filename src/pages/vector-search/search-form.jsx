@@ -5,16 +5,6 @@ import WithTip from "components/with-tip";
 import { httpContext } from '../../context/http'
 
 const { TextArea } = Input;
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 6 }
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 18 }
-  }
-};
 
 const TableForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
@@ -74,8 +64,8 @@ const TableForm = Form.create({ name: "form_in_modal" })(
       <Form
         colon={false}
         className={`search-wrapper ${props.showSearch ? "" : "hide"}`}
-        {...formItemLayout}
-        style={{ marginTop: "40px", maxWidth: "600px" }}
+        layout="vertical"
+        style={{ maxWidth: "400px" }}
       >
         <Form.Item label={vectorTrans.tName}>
           {getFieldDecorator("tableName", {
@@ -149,11 +139,11 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         </Form.Item>
 
         <Form.Item label=" " colon={false}>
-          <Button className="disable-btn mr-10" onClick={handleCancel}>
+          <Button className=" mr-10" onClick={handleCancel}>
             {buttonTrans.cancel}
           </Button>
           <Button
-            className="primary-btn"
+            type="primary"
             onClick={handleSubmit}
             loading={loading}
           >

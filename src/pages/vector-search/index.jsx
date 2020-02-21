@@ -64,10 +64,10 @@ const VectorSearch = props => {
       <div className="header">
         <h2>{dataManageTrans.vector}</h2>
       </div>
-      <div style={{ marginTop: "20px" }}>
+      {/* <div style={{ marginTop: "20px" }}>
         <span className="mr-10">{vectorTrans.search}</span>
         <Switch checked={showSearch} onChange={toggleSearch}></Switch>
-      </div>
+      </div> */}
 
       <div>
         <SearchForm
@@ -81,6 +81,7 @@ const VectorSearch = props => {
 
       {data && (
         <Table
+          size="middle"
           rowKey={record => record.id}
           columns={columns}
           pagination={false}

@@ -23,17 +23,17 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const buttonTrans = t("button");
 
   const currentSystemInfo = useMemo(() => {
-    return systemInfos[currentAddress]
+    return systemInfos[currentAddress] || {}
   }, [systemInfos, currentAddress])
-
-  const formItemLayout = {
+  console.log(currentSystemInfo)
+  const SwitchItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 8 }
+      sm: { span: 4 }
     },
     wrapperCol: {
       xs: { span: 24 },
-      sm: { span: 16 }
+      sm: { span: 20 }
     }
   };
   const handleSearchSwitch = (checked, e) => {
@@ -169,8 +169,8 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   }, [currentAddress]);
 
   return (
-    <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
-      <Form.Item label={hardwareTrans.enable}>
+    <Form layout="vertical" style={{ marginTop: "40px", maxWidth: "600px" }}>
+      <Form.Item label={hardwareTrans.enable} {...SwitchItemLayout}>
         {getFieldDecorator("enable", {
           valuePropName: "checked",
           initialValue: defalutValue.enable
@@ -232,11 +232,11 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
       ) : null}
 
       <Form.Item label=" " colon={false}>
-        <Button className="disable-btn mr-10" onClick={handleCancel}>
+        <Button className=" mr-10" onClick={handleCancel}>
           {buttonTrans.cancel}
         </Button>
         <Button
-          className={disabled ? "disable-btn" : "primary-btn"}
+          type={disabled ? "diabled" : "primary"}
           onClick={handleSubmit}
           loading={loading}
           disabled={disabled}

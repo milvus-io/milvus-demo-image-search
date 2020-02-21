@@ -93,7 +93,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         </Form.Item>
         <Form.Item label={tableTrans.tDimension}>
           <Row>
-            <Col span={16}>
+            <Col span={19}>
               <Slider
                 min={1}
                 max={16384}
@@ -122,7 +122,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           }
         >
           <Row>
-            <Col span={16}>
+            <Col span={19}>
               <Slider
                 min={1}
                 max={4096}
@@ -142,11 +142,11 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           </Row>
         </Form.Item>
         <div>
-          <Button className="disable-btn mr-10" onClick={handleCancel}>
+          <Button className=" mr-10" onClick={handleCancel}>
             {buttonTrans.cancel}
           </Button>
           <Button
-            className="primary-btn"
+            type="primary"
             onClick={handleSubmit}
             loading={loading}
           >

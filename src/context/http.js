@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState } from 'react'
 import axios from "axios";
 import { message } from "antd";
 import { HOST, PORT } from "@/consts";
@@ -230,6 +230,8 @@ export const HttpProvider = ({ children }) => {
 
   async function getSystemConfig() {
     const res = await axiosInstance.get("/devices");
+    res.data = { "cpu": { "memory": 31 }, "gpus": { "GPU0": { "memory": 7 }, "GPU1": { "memory": 10 } } }
+
     const { gpus, cpu = {} } = res.data || {};
     let gpuList = [];
     let cpuMemory = cpu.memory || 1000;

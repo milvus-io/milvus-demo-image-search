@@ -5,6 +5,7 @@ import { DataManagementProvider } from './context/data-management'
 import { SystemProvider } from './context/system'
 import { HttpProvider } from './context/http'
 import "./app.less";
+import "./assets/scss/reset.less"
 
 message.config({
   duration: 2,

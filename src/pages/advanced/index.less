@@ -6,13 +6,11 @@
   .disable-btn();
   .ant-input();
 
-  .ant-input-number {
-    width: 50%;
-  }
-
   .header {
     display: flex;
     align-items: center;
+    margin-bottom: 40px;
+
   }
 
   h2 {
@@ -35,7 +33,9 @@
   }
 
   .desc {
-    padding-left: 200px;
+    position: relative;
+    top: -10px;
+    margin-bottom: 30px;
     font-size: 14px;
     color: #B0B0B9;
   }
@@ -49,8 +49,18 @@
   }
 
   .ant-form-item {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
+  .item-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .tip {
+      flex: 0 0 70px;
+      margin-left: 20px
+    }
+  }
 
 }

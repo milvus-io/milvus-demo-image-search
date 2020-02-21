@@ -215,6 +215,7 @@ const TableManage = props => {
         /> */}
       </div>
       <Table
+        size="middle"
         columns={columns}
         className="table-wrapper"
         pagination={{
@@ -232,6 +233,7 @@ const TableManage = props => {
         footer={null}
         onCancel={handleCancel}
         wrapClassName="my-modal"
+        centered={true}
       >
         <PatitionForm
           tableName={params.tableName}

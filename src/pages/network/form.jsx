@@ -23,14 +23,7 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   }, [currentAddress, serverConfig])
 
   const formItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 }
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 }
-    }
+    layout: "vertical"
   };
   const handleSubmit = e => {
     e.preventDefault();
@@ -59,7 +52,7 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
 
 
   return (
-    <Form {...formItemLayout} style={{ marginTop: "40px", maxWidth: "600px" }}>
+    <Form {...formItemLayout} style={{ maxWidth: "400px" }}>
 
       <Form.Item label={networkTrans.address}>
         {getFieldDecorator("address", {
@@ -78,13 +71,13 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
       </Form.Item>
 
       <Form.Item label=" " colon={false}>
-        <Button className="disable-btn mr-10" onClick={handleCancel}>
+        <Button className="mr-10" onClick={handleCancel}>
           {buttonTrans.cancel}
         </Button>
         <Button
-          className={"primary-btn"}
           onClick={handleSubmit}
           loading={loading}
+          type="primary"
         >
           {buttonTrans.save}
         </Button>

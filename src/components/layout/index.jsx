@@ -22,7 +22,8 @@ const MyLink = props => {
       <NavLink
         to={props.to}
         activeStyle={{
-          fontWeight: "bold"
+          fontWeight: "bold",
+          color: "#4FC4F9"
         }}
       >
         {props.children}
@@ -138,13 +139,13 @@ const LayoutWrapper = props => {
           <div className="img-wrapper">
             <img src={Logo} alt="Milvus Logo"></img>
           </div>
-          <span onClick={changeLang} style={{ cursor: "pointer" }}>
+          {/* <span onClick={changeLang} style={{ cursor: "pointer" }}>
             {langTxt}
-          </span>
+          </span> */}
         </div>
         <div className="logout-wrapper">
           <div>
-            <Select value={currentAddress} style={{ width: 190 }} onChange={handleAddressChange}>
+            <Select value={currentAddress} style={{ width: 160 }} onChange={handleAddressChange}>
               {
                 Object.keys(milvusAddress).map(v =>
                   <Option value={v} key={v}>{v}</Option>
@@ -161,7 +162,7 @@ const LayoutWrapper = props => {
           >
             <Icon type="logout" className="logout" />
           </Popconfirm>
-          <Icon type="plus" className="ml-10" onClick={handleAdd}></Icon>
+          <Icon type="plus-circle" className="ml-10" onClick={handleAdd}></Icon>
         </div>
 
         <div className="menu">
@@ -196,6 +197,9 @@ const LayoutWrapper = props => {
         visible={visible}
         footer={null}
         onCancel={handleCancel}
+        wrapClassName="my-modal"
+        width={528}
+        centered={true}
       >
         <LoginForm
           milvusAddress={milvusAddress}

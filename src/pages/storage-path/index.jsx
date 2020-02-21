@@ -15,7 +15,7 @@ const Network = props => {
   const storageTrans = t("storage")
 
   return (
-    <div className="network-wrapper">
+    <div className="storage-wrapper">
       <div className="header">
         <h2>{configTrans.storage}</h2>
         <WithTip text={t("restartNotify")}></WithTip>

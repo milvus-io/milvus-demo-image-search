@@ -1,6 +1,6 @@
 @import "~assets/scss/mixins.less";
 
-.network-wrapper {
+.storage-wrapper {
   color: #fff;
   .primary-btn();
   .disable-btn();
@@ -9,6 +9,7 @@
   .header {
     display: flex;
     align-items: center;
+    margin-bottom: 40px;
   }
 
   h2 {
@@ -31,7 +32,9 @@
   }
 
   .desc {
-    padding-left: 200px;
+    position: relative;
+    top: -10px;
+    margin-bottom: 30px;
     font-size: 14px;
     color: #B0B0B9;
   }
@@ -45,10 +48,25 @@
   }
 
   .ant-form-item {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  .copy-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .copy {
+      margin-left: 10px;
+      font-size: 20px;
+    }
   }
 
   .secondary-path {
+    position: relative;
+    top: -8px;
+    margin: 0;
+
     li {
       display: flex;
       justify-content: space-between;
