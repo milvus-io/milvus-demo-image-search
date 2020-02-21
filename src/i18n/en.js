@@ -5,7 +5,11 @@ export default {
   copySuccess: "Copy Success",
   disconnect: "Are you sure disconnect with ",
   connectTitle: "Connect Milvus",
-
+  monitor: {
+    title: "Mintors",
+    log: "Log Monitor",
+    pm: "Performance Monitor"
+  },
   notification: {
     restart: {
       title: "Config Changed",
@@ -23,8 +27,8 @@ export default {
     storage: "Storage Path",
     advanced: "Advanced Settings",
     hardware: "Hardware Resources",
-    metrics: "Metrics"
-
+    metrics: "Metrics",
+    others: "Others"
   },
   dataManage: {
     title: "Data Management",
@@ -61,6 +65,10 @@ export default {
     enable: "Enabled",
     address: "Push Address",
     port: "Push Port"
+  },
+  others: {
+    logServer: "Log Server",
+    pmServer: "Performance Monitor Server"
   },
   table: {
     create: "New Table",

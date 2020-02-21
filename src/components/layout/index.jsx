@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Icon, Modal, Select, Popconfirm } from "antd";
 import "./index.less";
-import { HOST, PORT } from "@/consts";
+import { HOST, PORT, LOG_SERVER, PM_SERVER } from "@/consts";
 import Logo from "assets/imgs/logo.svg";
 import CONFIG_ICON from "assets/imgs/config.png";
 import DATA_ICON from "assets/imgs/dataManage.png";
@@ -34,16 +34,18 @@ const MyLink = props => {
 const { Option } = Select
 
 const LayoutWrapper = props => {
+  const history = useHistory()
   const { t, i18n } = useTranslation();
   const configTrans = t("config");
   const dataTrans = t("dataManage");
+  const mintorTrans = t("monitor")
   const [langTxt, setLangTxt] = useState("中");
   const [hardwareType, setHardwareType] = useState("GPU");
   const { currentAddress, setCurrentAddress, getHardwareType } = useContext(httpContext)
   const { milvusAddress, setMilvusAddress } = useContext(systemContext)
   const { setDataManagement } = useContext(dataManagementContext)
   const [visible, setVisible] = useState(false)
-
+  console.log(history)
   useEffect(() => {
     const lang = window.localStorage.getItem("lang") || "en";
     setLangTxt(lang === "cn" ? "En" : "中");
@@ -58,9 +60,12 @@ const LayoutWrapper = props => {
   useEffect(() => {
     const host = window.localStorage.getItem(HOST);
     const port = window.localStorage.getItem(PORT);
+    const logServer = window.localStorage.getItem(LOG_SERVER)
+    const pmServer = window.localStorage.getItem(PM_SERVER)
+
     const url = `${host}:${port}`
     if (host && port && !milvusAddress[url]) {
-      setMilvusAddress({ type: ADD, payload: { host, port, url } })
+      setMilvusAddress({ type: ADD, payload: { host, port, url, logServer, pmServer } })
       setCurrentAddress(url)
     }
 
@@ -101,6 +106,8 @@ const LayoutWrapper = props => {
         setVisible(true)
         window.localStorage.removeItem(HOST);
         window.localStorage.removeItem(PORT);
+        window.localStorage.removeItem(LOG_SERVER)
+        window.localStorage.removeItem(PM_SERVER)
       }
     }
     // window.localStorage.removeItem(HOST);
@@ -178,6 +185,7 @@ const LayoutWrapper = props => {
             {hardwareType === "GPU" && (
               <MyLink to="/manage/hardware">{configTrans.hardware}</MyLink>
             )}
+            <MyLink to="/manage/others">{configTrans.others}</MyLink>
           </ul>
           <h2 className="title">
             <img src={DATA_ICON} alt="data-manage"></img>
@@ -189,6 +197,16 @@ const LayoutWrapper = props => {
 
             <MyLink to="/manage/vector">{dataTrans.vector}</MyLink>
           </ul>
+          <h2 className="title">
+            <img src={DATA_ICON} alt="data-manage"></img>
+            {mintorTrans.title}
+          </h2>
+          <ul className="list-wrapper">
+
+            <MyLink to="/manage/logs">{mintorTrans.log}</MyLink>
+            <MyLink to="/manage/pm">{mintorTrans.pm}</MyLink>
+          </ul>
+
         </div>
       </div>
       <div className="right"> {props.children} </div>

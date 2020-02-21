@@ -26,7 +26,6 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const currentSystemInfo = useMemo(() => {
     return systemInfos[currentAddress] || {}
   }, [systemInfos, currentAddress])
-  console.log(systemInfos)
   const SwitchItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -93,7 +92,6 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
         getAdvancedConfig(),
         getHardwareType()
       ]);
-      console.log(props.form)
       props.form.setFieldsValue(res[0] ? { ...res[0] } : {})
       setOldValue(res[0] || {});
       setHardwareType(res[1]);

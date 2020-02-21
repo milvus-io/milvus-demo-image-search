@@ -5,6 +5,11 @@ export default {
   copySuccess: "复制成功",
   disconnect: "是否断开 ",
   connectTitle: "连接Milvus",
+  monitor: {
+    title: "Mintors",
+    log: "Log Monitor",
+    pm: "Performance Monitor"
+  },
   notification: {
     restart: {
       title: "配置修改",
@@ -22,7 +27,8 @@ export default {
     storage: "存储目录",
     advanced: "高级配置",
     hardware: "硬件资源",
-    metrics: "监控报警"
+    metrics: "监控报警",
+    others: "其他"
   },
   dataManage: {
     title: "数据管理",
@@ -59,6 +65,10 @@ export default {
     enable: "启用",
     address: "推送地址",
     port: "推送端口"
+  },
+  others: {
+    logServer: "Log Server",
+    pmServer: "Performance Monitor Server"
   },
   table: {
     create: "新建表",

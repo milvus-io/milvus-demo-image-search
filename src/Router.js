@@ -1,16 +1,17 @@
 import React from 'react'
 import Layout from "components/layout";
-import Login from "pages/Login";
 import TablePage from "pages/table";
 import PartitionPage from "pages/partition";
 
 import NetworkPage from "pages/network";
 import MetricsPage from "pages/metrics";
-
+import OtherConfigsPage from "pages/others";
 import AdvancedPage from "pages/advanced";
 import HardwarePage from "pages/hardware";
 import StoragePath from "pages/storage-path";
 import VectorSearch from "pages/vector-search";
+import IframeWrapper from "pages/iframe-wrapper";
+
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { HashRouter, Switch, Route, Redirect } from "react-router-dom";
 const HashRouterWrapper = () => {
@@ -53,8 +54,17 @@ const HashRouterWrapper = () => {
                         <Route path="/manage/hardware">
                           <HardwarePage></HardwarePage>
                         </Route>
+                        <Route path="/manage/others">
+                          <OtherConfigsPage></OtherConfigsPage>
+                        </Route>
                         <Route path="/manage/vector">
                           <VectorSearch></VectorSearch>
+                        </Route>
+                        <Route path="/manage/logs">
+                          <IframeWrapper type="logs"></IframeWrapper>
+                        </Route>
+                        <Route path="/manage/pm">
+                          <IframeWrapper type="mintors"></IframeWrapper>
                         </Route>
                       </Switch>
                     </section>

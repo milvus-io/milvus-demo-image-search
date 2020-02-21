@@ -3,24 +3,23 @@ import { Form, Input, Button, message } from "antd";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
+import { UPDATE } from "../../reducers/milvus-servers";
 const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
-  const { serverConfig } = useContext(systemContext)
+  const { milvusAddress, setMilvusAddress } = useContext(systemContext)
   const {
     currentAddress,
-    setMilvusConfig,
-    restartNotify
+
   } = useContext(httpContext)
   const { getFieldDecorator, resetFields } = form;
-  const [loading, setLoading] = useState(false);
 
   const { t } = useTranslation();
-  const networkTrans = t("network");
+  const othersTrans = t("others");
   const buttonTrans = t("button");
 
-  const { address, port } = useMemo(() => {
-    return serverConfig[currentAddress] || {}
-  }, [currentAddress, serverConfig])
+  const { logServer, pmServer } = useMemo(() => {
+    return milvusAddress[currentAddress] || {}
+  }, [currentAddress, milvusAddress])
 
   const formItemLayout = {
     layout: "vertical"
@@ -32,16 +31,14 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
       if (err) {
         return;
       }
-      setLoading(true);
-      try {
-        const res = await setMilvusConfig({ server_config: values })
-        if (res.code === 0) {
-          message.success(t("submitSuccess"));
-          restartNotify()
+      console.log(values)
+      setMilvusAddress({
+        type: UPDATE,
+        payload: {
+          id: currentAddress,
+          values
         }
-      } finally {
-        setLoading(false);
-      }
+      })
     });
   };
 
@@ -53,19 +50,19 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   return (
     <Form {...formItemLayout} style={{ maxWidth: "400px" }}>
 
-      <Form.Item label={networkTrans.address}>
-        {getFieldDecorator("address", {
-          initialValue: address
+      <Form.Item label={othersTrans.logServer}>
+        {getFieldDecorator("logServer", {
+          initialValue: logServer
         })(
-          <Input placeholder={networkTrans.address}></Input>
+          <Input placeholder={othersTrans.logServer}></Input>
         )}
       </Form.Item>
 
-      <Form.Item label={networkTrans.port}>
-        {getFieldDecorator("port", {
-          initialValue: port
+      <Form.Item label={othersTrans.pmServer}>
+        {getFieldDecorator("pmServer", {
+          initialValue: pmServer
         })(
-          <Input placeholder={networkTrans.port}></Input>
+          <Input placeholder={othersTrans.pmServer}></Input>
         )}
       </Form.Item>
 
@@ -75,7 +72,6 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
         </Button>
         <Button
           onClick={handleSubmit}
-          loading={loading}
           type="primary"
         >
           {buttonTrans.save}
