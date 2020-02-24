@@ -5,7 +5,7 @@ const {
   addLessLoader
 } = require("customize-cra");
 const path = require("path");
-const darkTheme = require("@ant-design/dark-theme").default;
+// const darkTheme = require("@ant-design/dark-theme").default;
 module.exports = override(
   fixBabelImports("import", {
     libraryName: "antd",
@@ -22,7 +22,7 @@ module.exports = override(
   addLessLoader({
     javascriptEnabled: true,
     modifyVars: {
-      ...darkTheme,
+      // ...darkTheme,
       "@input-bg": "transparent",
       "@primary-color": "#4FC4F9", // 全局色
       "@link-color": "#4FC4F9", // 链接色

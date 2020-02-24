@@ -1,124 +1,153 @@
-import React, { useState, useContext, useMemo } from "react";
-import { Form, Input, Button, Select, message } from "antd";
+import React, { useState, useContext, useEffect } from "react";
+import { Select, MenuItem, FormControl, InputLabel, TextField, Button } from "@material-ui/core"
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
+import { materialContext } from '../../context/material'
 import { useTranslation } from "react-i18next";
+import { useFormStyles, useFormValidate } from '../../hooks/form'
+import { safetyGet } from '../../utils/helpers'
 
-const { Option } = Select
-
-const MetaDataForm = Form.create({ name: "advanced-form" })(function (props) {
-  const { form } = props;
+const defaultForm = {
+  type: "mysql",
+  host: "",
+  port: "",
+  username: "",
+  password: ""
+}
+const MetaDataForm = function (props) {
   const { dbConfig } = useContext(systemContext)
   const {
     currentAddress,
     setMilvusConfig,
     restartNotify
   } = useContext(httpContext)
-  const { getFieldDecorator, resetFields } = form;
-  const [loading, setLoading] = useState(false);
+  const { openSnackBar } = useContext(materialContext)
 
   const { t } = useTranslation();
   const metaDataTrans = t("storage").metadata;
   const buttonTrans = t("button");
+  const [form, setForm] = useState({ ...defaultForm })
+  const [error, setError] = useState({})
 
-  const { type, username, password, host, port } = useMemo(() => {
-    return dbConfig[currentAddress] || {}
+  const classes = useFormStyles();
+  const { validateForm, handleCheck, handleChange } = useFormValidate(form, setForm, setError)
+
+  useEffect(() => {
+    const currentConfig = dbConfig[currentAddress] || {}
+    setForm({
+      type: safetyGet(currentConfig, 'type', 'mysql'),
+      host: safetyGet(currentConfig, 'host'),
+      port: safetyGet(currentConfig, 'port'),
+      username: safetyGet(currentConfig, 'username'),
+      password: safetyGet(currentConfig, 'password')
+    })
   }, [currentAddress, dbConfig])
 
-  const formItemLayout = {
-    layout: "vertical"
-  };
-
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    props.form.validateFields(async (err, values) => {
-      if (err) {
-        return;
+    const isValid = validateForm()
+    if (!isValid) {
+      return
+    }
+    const { host, port, username, password, type } = form
+    const url = `${type}://${username}:${password}@${host}:${port}/`
+    const res = await setMilvusConfig({
+      db_config: {
+        backend_url: url
       }
-      setLoading(true);
-      const { host, port, username, password, type } = values
-      const url = `${type}://${username}:${password}@${host}:${port}/`
-      try {
-        const res = await setMilvusConfig({
-          db_config: {
-            backend_url: url
-          }
-        })
-        if (res.code === 0) {
-          message.success(t("submitSuccess"));
-          resetFields();
-          restartNotify()
-        }
-      } finally {
-        setLoading(false);
-      }
-    });
+    })
+    if (res.code === 0) {
+      openSnackBar(t("submitSuccess"));
+      restartNotify()
+    }
+
   };
 
-  const handleCancel = async () => {
-    resetFields();
+  const handleCancel = () => {
+    setForm({ ...defaultForm })
+    setError({})
   };
-  const handleChange = val => {
-    console.log(val)
-  }
 
 
   return (
-    <Form {...formItemLayout} style={{ maxWidth: "400px" }}>
-      <Form.Item label={metaDataTrans.type}>
-        {getFieldDecorator("type", {
-          initialValue: type || "sqlite"
-        })(
-          <Select onChange={handleChange}>
-            <Option value="mysql">Mysql</Option>
-            <Option value="sqlite">SQlite</Option>
+    <form>
+      <div className={classes.formItem} style={{ marginLeft: "8px" }}>
+        <FormControl className={classes.formControl}>
+          <InputLabel id="meta-data-type">{metaDataTrans.type}</InputLabel>
+          <Select
+            name="type"
+            labelId="meta-data-type"
+            id="meta-data-type-select"
+            value={form.type}
+            onChange={handleChange}
+            className={classes.select}
+          >
+            <MenuItem value="mysql">Mysql</MenuItem>
+            <MenuItem value="sqlite">SQlite</MenuItem>
           </Select>
-        )}
-      </Form.Item>
+        </FormControl>
+      </div>
+      <div className={classes.formItem}>
+        <TextField
+          name="host"
+          label={metaDataTrans.host}
+          value={form.host}
+          onBlur={() => { handleCheck(form.host, "host") }}
+          onChange={handleChange}
+          className={classes.textField}
+          placeholder="0.0.0.0"
+          error={error.host}
+          helperText={error.host && `${metaDataTrans.host}${t('required')}`}
+        />
+      </div>
+      <div className={classes.formItem}>
+        <TextField
+          name="port"
+          label={metaDataTrans.port}
+          value={form.port}
+          onBlur={() => { handleCheck(form.port, "port") }}
+          onChange={handleChange}
+          className={classes.textField}
+          placeholder="19121"
+          error={error.port}
+          helperText={error.port && `${metaDataTrans.port}${t('required')}`}
+        />
+      </div>
+      <div className={classes.formItem}>
+        <TextField
+          name="username"
+          label={metaDataTrans.username}
+          value={form.username}
+          onBlur={() => { handleCheck(form.username, "username") }}
+          onChange={handleChange}
+          className={classes.textField}
+          placeholder={metaDataTrans.username}
+          error={error.username}
+          helperText={error.username && `${metaDataTrans.username}${t('required')}`}
+        />
+      </div>
+      <div className={classes.formItem}>
+        <TextField
+          name="password"
+          label={metaDataTrans.password}
+          value={form.password}
+          onBlur={() => { handleCheck(form.password, "password") }}
+          onChange={handleChange}
+          className={classes.textField}
+          placeholder={metaDataTrans.password}
+          error={error.password}
+          helperText={error.password && `${metaDataTrans.password}${t('required')}`}
+        />
+      </div>
 
-      <Form.Item label={metaDataTrans.host}>
-        {getFieldDecorator("host", {
-          initialValue: host
-        })(
-          <Input placeholder="0.0.0.0"></Input>
-        )}
-      </Form.Item>
-      <Form.Item label={metaDataTrans.port}>
-        {getFieldDecorator("port", {
-          initialValue: port
-        })(
-          <Input placeholder="8000"></Input>
-        )}
-      </Form.Item>
-      <Form.Item label={metaDataTrans.username}>
-        {getFieldDecorator("username", {
-          initialValue: username
-        })(
-          <Input placeholder={metaDataTrans.username}></Input>
-        )}
-      </Form.Item>
-      <Form.Item label={metaDataTrans.password}>
-        {getFieldDecorator("password", {
-          initialValue: password
-        })(
-          <Input placeholder={metaDataTrans.password}></Input>
-        )}
-      </Form.Item>
-
-      <Form.Item label=" " colon={false}>
-        <Button className=" mr-10" onClick={handleCancel}>
-          {buttonTrans.cancel}
-        </Button>
-        <Button
-          type="primary"
-          onClick={handleSubmit}
-          loading={loading}
-        >
+      <div className={classes['mt-4']} >
+        <Button variant="outlined" onClick={handleCancel}>{buttonTrans.cancel}</Button>
+        <Button variant="outlined" color="primary" className={classes['ml-2']} onClick={handleSubmit}>
           {buttonTrans.save}
         </Button>
-      </Form.Item>
-    </Form>
+      </div>
+    </form>
   );
-});
+}
 
 export default MetaDataForm;

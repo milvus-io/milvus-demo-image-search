@@ -4,6 +4,7 @@ import { message } from "antd";
 import { DataManagementProvider } from './context/data-management'
 import { SystemProvider } from './context/system'
 import { HttpProvider } from './context/http'
+import { MaterialProvider } from './context/material'
 import "./app.less";
 import "./assets/scss/reset.less"
 
@@ -25,12 +26,14 @@ message.config({
  */
 export default function App() {
   return (
-    <HttpProvider>
-      <SystemProvider>
-        <DataManagementProvider>
-          <HashRouter></HashRouter>
-        </DataManagementProvider>
-      </SystemProvider>
-    </HttpProvider>
+    <MaterialProvider>
+      <HttpProvider>
+        <SystemProvider>
+          <DataManagementProvider>
+            <HashRouter></HashRouter>
+          </DataManagementProvider>
+        </SystemProvider>
+      </HttpProvider>
+    </MaterialProvider>
   );
 }

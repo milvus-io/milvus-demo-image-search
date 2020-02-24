@@ -1,88 +1,100 @@
-import React, { useMemo, useState, useContext } from "react";
-import { Form, Input, Button, message } from "antd";
+import React, { useContext, useState, useEffect } from 'react'
+import { TextField, Button } from '@material-ui/core'
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
+import { materialContext } from '../../context/material'
 import { useTranslation } from "react-i18next";
-const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
-  const { form } = props;
+import { useFormStyles, useFormValidate } from '../../hooks/form'
+
+const defaultForm = { address: "", port: "" }
+
+const NetworkFrom = (props) => {
+  const [form, setForm] = useState({ ...defaultForm })
+
+  const [error, setError] = useState({})
+
+  const classes = useFormStyles();
+  const { validateForm, handleCheck, handleChange } = useFormValidate(form, setForm, setError)
+
   const { serverConfig } = useContext(systemContext)
+  const { openSnackBar } = useContext(materialContext)
   const {
     currentAddress,
     setMilvusConfig,
     restartNotify
   } = useContext(httpContext)
-  const { getFieldDecorator, resetFields } = form;
-  const [loading, setLoading] = useState(false);
 
   const { t } = useTranslation();
   const networkTrans = t("network");
   const buttonTrans = t("button");
 
-  const { address, port } = useMemo(() => {
-    return serverConfig[currentAddress] || {}
+  useEffect(() => {
+    const currentConfig = serverConfig[currentAddress] || {}
+    setForm({
+      address: currentConfig.address || "",
+      port: currentConfig.port || ""
+    })
   }, [currentAddress, serverConfig])
 
-  const formItemLayout = {
-    layout: "vertical"
-  };
-  const handleSubmit = e => {
-    e.preventDefault();
 
-    props.form.validateFields(async (err, values) => {
-      if (err) {
-        return;
-      }
-      setLoading(true);
-      try {
-        const res = await setMilvusConfig({ server_config: values })
-        if (res.code === 0) {
-          message.success(t("submitSuccess"));
-          restartNotify()
-        }
-      } finally {
-        setLoading(false);
-      }
-    });
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const isValid = validateForm()
+
+    if (!isValid) {
+      return
+    }
+    const res = await setMilvusConfig({ server_config: { ...form } })
+    if (res.code === 0) {
+      openSnackBar(t('submitSuccess'))
+      restartNotify()
+    }
   };
 
   const handleCancel = async () => {
-    resetFields();
+    setForm({ ...defaultForm })
+    setError({})
   };
 
-
   return (
-    <Form {...formItemLayout} style={{ maxWidth: "400px" }}>
+    <form className={classes.root}>
+      <div>
+        <TextField
+          name="address"
+          label={networkTrans.address}
+          value={form.address}
+          onBlur={() => { handleCheck(form.address, "address") }}
+          onChange={handleChange}
+          className={classes.textField}
+          placeholder={networkTrans.address}
+          error={error.address}
+          helperText={error.address && `${networkTrans.address}${t('required')}`}
+        />
+      </div>
+      <div className={classes['mt-4']}>
+        <TextField
+          name="port"
+          label={networkTrans.port}
+          value={form.port}
+          onBlur={() => { handleCheck(form.port, "port") }}
+          onChange={handleChange}
+          className={classes.textField}
+          placeholder={networkTrans.port}
+          error={error.port}
+          helperText={error.port && `${networkTrans.port}${t('required')}`}
+        />
+      </div>
 
-      <Form.Item label={networkTrans.address}>
-        {getFieldDecorator("address", {
-          initialValue: address
-        })(
-          <Input placeholder={networkTrans.address}></Input>
-        )}
-      </Form.Item>
-
-      <Form.Item label={networkTrans.port}>
-        {getFieldDecorator("port", {
-          initialValue: port
-        })(
-          <Input placeholder={networkTrans.port}></Input>
-        )}
-      </Form.Item>
-
-      <Form.Item label=" " colon={false}>
-        <Button className="mr-10" onClick={handleCancel}>
-          {buttonTrans.cancel}
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          loading={loading}
-          type="primary"
-        >
+      <div className={classes['mt-4']}>
+        <Button variant="outlined" onClick={handleCancel}>{buttonTrans.cancel}</Button>
+        <Button variant="outlined" type="submit" color="primary" className={classes['ml-2']} onClick={handleSubmit}>
           {buttonTrans.save}
-        </Button>
-      </Form.Item>
-    </Form>
-  );
-});
 
-export default NetworkForm;
+        </Button>
+      </div>
+
+    </form>
+
+  );
+}
+export default NetworkFrom

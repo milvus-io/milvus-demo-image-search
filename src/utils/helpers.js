@@ -19,3 +19,14 @@ export const clipboard = (text, successTxt) => {
   }
   document.body.removeChild(input);
 }
+
+export const validateEmpty = (value) => {
+  if (value && !value.trim) {
+    return true
+  }
+  return !!value && value.trim().length
+}
+
+export const safetyGet = (obj = {}, key = "", defaultVal = "") => {
+  return obj[key] || defaultVal
+}
