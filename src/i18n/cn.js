@@ -160,7 +160,8 @@ export default {
     save: "保存",
     reset: "重置",
     update: "更新",
-    search: "搜索"
+    search: "搜索",
+    confirm: "确认"
   },
   required: " 是必填项",
   index: {

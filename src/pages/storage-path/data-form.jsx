@@ -158,7 +158,7 @@ const NetworkForm = function (props) {
       <p className={classes.desc}>{dataTrans.secondTip}</p>
       <div className={classes['mt-4']} style={{ marginBottom: "30px" }}>
         <Button variant="outlined" onClick={handleCancel}>{buttonTrans.cancel}</Button>
-        <Button variant="outlined" type="submit" color="primary" className={classes['ml-2']} onClick={handleSubmit}>
+        <Button variant="outlined" color="primary" className={classes['ml-2']} onClick={handleSubmit}>
           {buttonTrans.save}
         </Button>
       </div>

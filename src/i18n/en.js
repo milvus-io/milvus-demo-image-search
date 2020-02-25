@@ -159,7 +159,8 @@ export default {
     save: "Save",
     reset: "Reset",
     update: "Update",
-    search: "Search"
+    search: "Search",
+    confirm: "Confirm"
   },
   required: " is required",
   index: {

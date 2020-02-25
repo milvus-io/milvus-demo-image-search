@@ -52,7 +52,7 @@ const TableManage = props => {
   };
 
   const handleGoPartitions = record => {
-    history.push(`/manage/table/${record.table_name}/partitions`)
+    history.push(`/data/table/${record.table_name}/partitions`)
   }
 
   const handleAddIndex = record => {

@@ -87,7 +87,7 @@ const NetworkFrom = (props) => {
 
       <div className={classes['mt-4']}>
         <Button variant="outlined" onClick={handleCancel}>{buttonTrans.cancel}</Button>
-        <Button variant="outlined" type="submit" color="primary" className={classes['ml-2']} onClick={handleSubmit}>
+        <Button variant="outlined" color="primary" className={classes['ml-2']} onClick={handleSubmit}>
           {buttonTrans.save}
 
         </Button>
