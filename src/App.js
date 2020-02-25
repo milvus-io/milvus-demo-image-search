@@ -22,7 +22,7 @@ message.config({
  *  }
  *  
  *  Then we can get current data by currenAddress!
- *  The currenAddress also need store in localstorage for http/index.js to use it.
+ *  The currenAddress also need store in localstorage for http context to use it.
  */
 export default function App() {
   return (

@@ -1,8 +1,7 @@
 import React, { useState, useContext } from 'react'
 import axios from "axios";
 import { materialContext } from './material'
-import { message } from "antd";
-import { HOST, PORT } from "@/consts";
+import { getConnectedMilvus } from '../utils/helpers'
 import { useTranslation } from "react-i18next";
 
 let hasError = false; // make sure only one error message
@@ -41,9 +40,8 @@ const { Provider } = httpContext
 let timer = null
 
 export const HttpProvider = ({ children }) => {
-  const host = window.localStorage.getItem(HOST) || "";
-  const port = window.localStorage.getItem(PORT) || "";
-  const [currentAddress, setCurrentAddress] = useState(host && port ? `${host}:${port}` : '') // current milvus ip will store in localstorage
+  const connectedMilvus = getConnectedMilvus()
+  const [currentAddress, setCurrentAddress] = useState(connectedMilvus ? connectedMilvus.url : '') // current milvus ip will store in localstorage
   const [restartStatus, setRestartStatus] = useState(false) // some config change . need to restart milvus
   const { t } = useTranslation();
   const notificationTrans = t("notification")
@@ -92,7 +90,7 @@ export const HttpProvider = ({ children }) => {
   const httpWrapper = (httpFunc) => {
     return async function inner() {
       if (!currentAddress) {
-        message.warning("Need connect to milvus first!", 3)
+        openSnackBar("Need connect to milvus first!", 'warning')
         hasError = true
         setTimeout(() => {
           hasError = false

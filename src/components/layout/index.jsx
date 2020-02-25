@@ -7,14 +7,15 @@ import { HOST, PORT, LOG_SERVER, PM_SERVER } from "@/consts";
 import Logo from "assets/imgs/logo.svg";
 import CONFIG_ICON from "assets/imgs/config.png";
 import DATA_ICON from "assets/imgs/dataManage.png";
-import LoginForm from '../../pages/Login'
-import { ADD, DELETE } from '../../reducers/milvus-servers'
+import LoginForm from '../../pages/oldLogin'
+import { ADD, DISCONNECT, INIT } from '../../reducers/milvus-servers'
 import { DELETE_MUTIPLE, KEYS } from '../../reducers/data-management'
 import { systemContext } from "../../context/system"
 import { httpContext } from "../../context/http"
 import { dataManagementContext } from '../../context/data-management'
-import { cloneObj } from "../../utils/helpers"
+import { cloneObj, getConnectedMilvus } from "../../utils/helpers"
 import http from "@/http/index";
+import { CLIENT_HISTORY } from "../../consts";
 
 const MyLink = props => {
   return (
@@ -58,19 +59,12 @@ const LayoutWrapper = props => {
   }, []);
 
   useEffect(() => {
-    const host = window.localStorage.getItem(HOST);
-    const port = window.localStorage.getItem(PORT);
-    const logServer = window.localStorage.getItem(LOG_SERVER)
-    const pmServer = window.localStorage.getItem(PM_SERVER)
-
-    const url = `${host}:${port}`
-    if (host && port && !milvusAddress[url]) {
-      setMilvusAddress({ type: ADD, payload: { host, port, url, logServer, pmServer } })
-      setCurrentAddress(url)
-    }
-
-    if (!host || !port) {
-      setVisible(true)
+    try {
+      let clients = window.localStorage.getItem(CLIENT_HISTORY) || {}
+      clients = JSON.parse(clients)
+      setMilvusAddress({ type: INIT, payload: { ...clients } })
+    } catch (error) {
+      console.log(error)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -90,7 +84,7 @@ const LayoutWrapper = props => {
       const addresses = Object.keys(copyAddress)
       setCurrentAddress(addresses.length ? addresses[0] : "")
       setMilvusAddress({
-        type: DELETE,
+        type: DISCONNECT,
         payload: {
           id: currentAddress
         }

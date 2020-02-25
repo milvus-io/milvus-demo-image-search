@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useReducer, useContext } from 'react'
 import { httpContext } from './http'
 import MilvusReducer from "../reducers/milvus-servers"
+import { getConnectedMilvus } from '../utils/helpers'
 
 export const systemContext = React.createContext({
 
@@ -31,7 +32,7 @@ export const SystemProvider = ({ children }) => {
   const [metricConfig, setMetricConfig] = useState({})
 
   const [milvusAddress, setMilvusAddress] = useReducer(MilvusReducer, {});
-  const { currentAddress, getSystemConfig, getMilvusConfigs, restartNotify } = useContext(httpContext)
+  const { currentAddress, setCurrentAddress, getSystemConfig, getMilvusConfigs, restartNotify } = useContext(httpContext)
 
 
   const getInfosFromUrl = (url) => {
@@ -51,6 +52,12 @@ export const SystemProvider = ({ children }) => {
       port
     }
   }
+
+  useEffect(() => {
+    const connectedMilvus = getConnectedMilvus()
+    setCurrentAddress(connectedMilvus ? connectedMilvus.url : "")
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [milvusAddress])
 
   useEffect(() => {
 

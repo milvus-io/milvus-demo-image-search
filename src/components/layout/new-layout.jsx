@@ -1,11 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { makeStyles, Popover, Typography, Box, Button } from "@material-ui/core";
 import { Home, Settings, Storage, ExitToApp } from '@material-ui/icons';
 import { useTranslation } from "react-i18next";
-import { HOST, PORT, LOG_SERVER, PM_SERVER } from "@/consts";
-
 import Logo from '../../assets/imgs/logo.svg'
-import { ADD, DELETE } from '../../reducers/milvus-servers'
+import { ADD, DISCONNECT, INIT } from '../../reducers/milvus-servers'
 import { DELETE_MUTIPLE, KEYS } from '../../reducers/data-management'
 import { httpContext } from "../../context/http"
 import { dataManagementContext } from "../../context/data-management"
@@ -15,6 +13,7 @@ import { cloneObj } from '../../utils/helpers'
 import DataMenu from './data-menu'
 import ConfigMenu from './config-menu'
 import LoginMenu from './login-menu';
+import { CLIENT_HISTORY } from '../../consts';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -92,6 +91,18 @@ const Layout = props => {
     setAnchorEl(null);
   };
 
+  const handleAdd = () => {
+    setMilvusAddress({
+      type: ADD,
+      payload: {
+        id: '127.0.0.1:19121',
+        values: {
+          connected: true
+        }
+      }
+    })
+  }
+
   const handleLogout = () => {
     if (currentAddress) {
       const copyAddress = cloneObj(milvusAddress)
@@ -99,7 +110,7 @@ const Layout = props => {
       const addresses = Object.keys(copyAddress)
       setCurrentAddress(addresses.length ? addresses[0] : "")
       setMilvusAddress({
-        type: DELETE,
+        type: DISCONNECT,
         payload: {
           id: currentAddress
         }
@@ -111,15 +122,21 @@ const Layout = props => {
           keys: [KEYS.table, KEYS.vectorSearch]
         }
       })
-      if (addresses.length === 0) {
-        window.localStorage.removeItem(HOST);
-        window.localStorage.removeItem(PORT);
-        window.localStorage.removeItem(LOG_SERVER)
-        window.localStorage.removeItem(PM_SERVER)
-      }
     }
-
+    setAnchorEl(null);
   };
+
+  useEffect(() => {
+    try {
+      let clients = window.localStorage.getItem(CLIENT_HISTORY) || {}
+      clients = JSON.parse(clients)
+      setMilvusAddress({ type: INIT, payload: { ...clients } })
+    } catch (error) {
+      console.log(error)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const open = Boolean(anchorEl)
   return (
     <div className={classes.root}>
@@ -160,7 +177,7 @@ const Layout = props => {
             }}
           >
             <Box p={2}>
-              <Typography className={classes.typography}>{`${t("disconnect")}${currentAddress}?`}</Typography>
+              <Typography>{`${t("disconnect")}${currentAddress}?`}</Typography>
               <div style={{ textAlign: "right" }}>
                 <Button onClick={handleClose}>{buttonTrans.cancel}</Button>
                 <Button color="primary" className={classes['ml-2']} onClick={handleLogout}>
