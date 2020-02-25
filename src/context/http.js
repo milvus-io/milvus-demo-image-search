@@ -1,49 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import axios from "axios";
+import { materialContext } from './material'
 import { message } from "antd";
 import { HOST, PORT } from "@/consts";
 import { useTranslation } from "react-i18next";
-import { notification } from 'antd'
 
 let hasError = false; // make sure only one error message
 const axiosInstance = axios.create({
   timeout: 5000
 });
-
-axiosInstance.interceptors.response.use(
-  function (res) {
-    // Do something with res data
-    if (res.data && res.data.code === 400) {
-      message.error(res.data.data.msg);
-      return res;
-    }
-    return res;
-  },
-  function (error) {
-    if (hasError) {
-      return Promise.reject(error);
-    }
-
-    if (error.response && error.response.data) {
-      const { message: errMsg } = error.response.data;
-      errMsg && message.error(errMsg);
-      hasError = true;
-      setTimeout(() => {
-        hasError = false;
-      }, 2000);
-      return Promise.reject(error);
-    }
-    if (error.message) {
-      hasError = true;
-      setTimeout(() => {
-        hasError = false;
-      }, 2000);
-      message.error(error.message);
-    }
-    return Promise.reject(error);
-  }
-);
-
 
 export const httpContext = React.createContext({
   currentAddress: "", // the current milvus we use
@@ -79,25 +44,50 @@ export const HttpProvider = ({ children }) => {
   const host = window.localStorage.getItem(HOST) || "";
   const port = window.localStorage.getItem(PORT) || "";
   const [currentAddress, setCurrentAddress] = useState(host && port ? `${host}:${port}` : '') // current milvus ip will store in localstorage
-  const [restartNotifyStatus, setRestartNotifyStatus] = useState(false) // is restartnotify open
   const [restartStatus, setRestartStatus] = useState(false) // some config change . need to restart milvus
   const { t } = useTranslation();
   const notificationTrans = t("notification")
+  const { openSnackBar } = useContext(materialContext)
 
   const restartNotify = () => {
-    const args = {
-      message: notificationTrans.restart.title,
-      description: notificationTrans.restart.desc,
-      duration: 0,
-      onClose: () => {
-        setRestartNotifyStatus(false)
-      }
-    };
-    notification.open(args);
-    setRestartNotifyStatus(true)
+    openSnackBar(notificationTrans.restart.desc, 'warning', null, { vertical: "top", horizontal: "right" })
     setRestartStatus(true)
   };
   axiosInstance.defaults.baseURL = `http://${currentAddress}`
+
+  axiosInstance.interceptors.response.use(
+    function (res) {
+      // Do something with res data
+      if (res.data && res.data.code === 400) {
+        openSnackBar(res.data.data.msg, 'error')
+        return res;
+      }
+      return res;
+    },
+    function (error) {
+      if (hasError) {
+        return Promise.reject(error);
+      }
+
+      if (error.response && error.response.data) {
+        const { message: errMsg } = error.response.data;
+        errMsg && openSnackBar(errMsg, 'error')
+        hasError = true;
+        setTimeout(() => {
+          hasError = false;
+        }, 2000);
+        return Promise.reject(error);
+      }
+      if (error.message) {
+        hasError = true;
+        setTimeout(() => {
+          hasError = false;
+        }, 2000);
+        openSnackBar(error.message, 'error')
+      }
+      return Promise.reject(error);
+    }
+  );
 
   const httpWrapper = (httpFunc) => {
     return async function inner() {
@@ -117,7 +107,7 @@ export const HttpProvider = ({ children }) => {
         timer = setTimeout(async () => {
           const res = await getMilvusConfigs()
           const { restart_required } = res.reply
-          if (!restartNotifyStatus && restart_required) {
+          if (restart_required) {
             restartNotify()
           }
           if (!restart_required) {

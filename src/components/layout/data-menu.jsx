@@ -9,7 +9,7 @@ const DataMenu = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (
-    <div>Login Menu</div>
+    <div>Data Menu</div>
   )
 }
 

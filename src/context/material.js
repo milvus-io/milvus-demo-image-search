@@ -10,7 +10,7 @@ function Alert(props) {
 }
 
 export const materialContext = React.createContext({
-  openSnackBar: (message, type = "success", position = { vertical: "top", horizontal: "center" }) => { },
+  openSnackBar: (message, type = "success", duration, position = { vertical: "top", horizontal: "center" }) => { },
 })
 
 const theme = createMuiTheme({
@@ -36,15 +36,20 @@ export const MaterialProvider = ({ children }) => {
   })
 
 
-  const handleClose = () => {
+  const handleClose = (e, reason) => {
+    // only click x to close or auto hide.
+    if (reason === 'clickaway') {
+      return;
+    }
     setSnackBar(v => ({ ...v, open: false }))
   };
 
-  const openSnackBar = (message, type = "success", position = { vertical: "top", horizontal: "center" }) => {
+  const openSnackBar = (message, type = "success", duration = 2000, position = { vertical: "top", horizontal: "center" }) => {
     setSnackBar({
       open: true,
       message,
       type,
+      duration,
       ...position
     })
   }
@@ -58,7 +63,7 @@ export const MaterialProvider = ({ children }) => {
         key={`${snackBar.vertical}${snackBar.horizontal}`}
         open={snackBar.open}
         onClose={handleClose}
-        autoHideDuration={2000}
+        autoHideDuration={snackBar.duration}
       >
         <Alert onClose={handleClose} severity={snackBar.type}>
           {snackBar.message}
