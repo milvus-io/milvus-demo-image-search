@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Tab, Paper, Box } from '@material-ui/core'
+import { Tab } from '@material-ui/core'
+import PaperWrapper from '../../components/page-wrapper'
 import TabPanel from '../../components/tab-panel'
 import MyTabs from '../../components/tab'
 
@@ -27,29 +28,25 @@ const Network = props => {
         <h2 className={classes.h2}>{configTrans.storage}</h2>
         <WithTip text={t("restartNotify")}></WithTip>
       </div>
-      <Paper className={classes.paper}>
-        <Box p={2}>
-          <MyTabs
-            value={value}
-            indicatorColor="primary"
-            textColor="primary"
-            onChange={handleChange}
-          >
-            <Tab label={storageTrans.data.title} />
-            <Tab label={storageTrans.metadata.title} />
+      <PaperWrapper className={classes.paper}>
+        <MyTabs
+          value={value}
+          indicatorColor="primary"
+          textColor="primary"
+          onChange={handleChange}
+        >
+          <Tab label={storageTrans.data.title} />
+          <Tab label={storageTrans.metadata.title} />
 
-          </MyTabs>
+        </MyTabs>
 
-          <TabPanel value={value} index={0}>
-            <DataForm></DataForm>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <MetaDataForm></MetaDataForm>
-          </TabPanel>
-        </Box>
-
-      </Paper>
-
+        <TabPanel value={value} index={0}>
+          <DataForm></DataForm>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <MetaDataForm></MetaDataForm>
+        </TabPanel>
+      </PaperWrapper>
     </div>
   );
 };

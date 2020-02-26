@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react'
 import axios from "axios";
 import { materialContext } from './material'
-import { getConnectedMilvus } from '../utils/helpers'
 import { useTranslation } from "react-i18next";
 
 let hasError = false; // make sure only one error message
@@ -13,7 +12,6 @@ export const httpContext = React.createContext({
   currentAddress: "", // the current milvus we use
   setCurrentAddress: () => { },
   restartNotify: () => { },
-  connect: () => { },
   // data management api
   getTables: () => { },
   createTable: () => { },
@@ -41,13 +39,11 @@ const { Provider } = httpContext
 let timer = null
 
 export const HttpProvider = ({ children }) => {
-  const connectedMilvus = getConnectedMilvus()
-  const [currentAddress, setCurrentAddress] = useState(connectedMilvus ? connectedMilvus.url : '') // current milvus ip will store in localstorage
+  const [currentAddress, setCurrentAddress] = useState('') // current milvus ip will store in localstorage
   const [restartStatus, setRestartStatus] = useState(false) // some config change . need to restart milvus
   const { t } = useTranslation();
   const notificationTrans = t("notification")
   const { openSnackBar } = useContext(materialContext)
-
   const restartNotify = () => {
     openSnackBar(notificationTrans.restart.desc, 'warning', null, { vertical: "top", horizontal: "right" })
     setRestartStatus(true)
@@ -116,11 +112,6 @@ export const HttpProvider = ({ children }) => {
       }
       return httpFunc(...arguments)
     }
-  }
-
-  async function connect() {
-    const res = await axiosInstance.get('/state')
-    return res.data
   }
 
   // ------- Data Management Start ----------
@@ -257,7 +248,6 @@ export const HttpProvider = ({ children }) => {
     currentAddress,
     setCurrentAddress,
     restartNotify,
-    connect: httpWrapper(connect),
     // config api
     getAdvancedConfig: httpWrapper(getAdvancedConfig),
     getHardwareConfig: httpWrapper(getHardwareConfig),

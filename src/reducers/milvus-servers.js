@@ -6,22 +6,18 @@ import { INIT, ADD, DISCONNECT, UPDATE, CLIENT_HISTORY } from '../consts/index'
  * @param {*} action 
  */
 function milvusServers(state, action) {
-  const copyState = cloneObj(state)
-  const { id, values = {}, url = "" } = action.payload
-
+  let copyState = cloneObj(state)
+  const { id, values = {} } = action.payload
+  console.log(action.type, id)
   switch (action.type) {
     case INIT:
-      console.log("init", action.payload)
       return action.payload
     case ADD:
-      Object.keys(copyState).forEach(v => {
-        copyState[v].connected = false
-        return v
-      })
-      if (copyState[url]) {
-        copyState[url].connected = true
+      disconnectAll(copyState)
+      if (copyState[id]) {
+        copyState[id].connected = true
       } else {
-        copyState[url] = action.payload
+        copyState[id] = values
       }
       window.localStorage.setItem(CLIENT_HISTORY, JSON.stringify(copyState))
       return copyState
@@ -33,6 +29,9 @@ function milvusServers(state, action) {
       return copyState
     case UPDATE:
       if (copyState[id]) {
+        if (values.connected) {
+          disconnectAll(copyState)
+        }
         copyState[id] = {
           ...copyState[id],
           ...values
@@ -43,6 +42,13 @@ function milvusServers(state, action) {
     default:
       return copyState
   }
+}
+
+const disconnectAll = (data) => {
+  Object.keys(data).forEach(v => {
+    data[v].connected = false
+    return v
+  })
 }
 
 export default milvusServers

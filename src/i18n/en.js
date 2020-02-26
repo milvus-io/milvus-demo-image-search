@@ -5,6 +5,7 @@ export default {
   copySuccess: "Copy Success",
   disconnect: "Are you sure disconnect with ",
   connectTitle: "Connect Milvus",
+  recentConnect: "Recent Connections",
   monitor: {
     title: "Mintors",
     log: "Log Monitor",
