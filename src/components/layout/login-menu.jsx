@@ -11,6 +11,9 @@ const LoginMenu = props => {
     },
     icon: {
       marginRight: theme.spacing(1)
+    },
+    wrapper: {
+      marginBottom:theme.spacing(1)
     }
   })()
   const history = useHistory()
@@ -30,7 +33,7 @@ const LoginMenu = props => {
       {fakeList.map(data => {
         const { ip, port } = data;
         return (
-          <div>
+          <div className={classes.wrapper}>
             <FaDatabase className={classes.icon} />
             <span>{`${ip}: `}</span>
             <span>{port}</span>
