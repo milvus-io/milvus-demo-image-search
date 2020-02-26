@@ -2,7 +2,6 @@ import React from 'react'
 import Layout from "components/layout/new-layout";
 import TablePage from "pages/table";
 import PartitionPage from "pages/partition";
-
 import Login from 'pages/login/index'
 import NetworkPage from "pages/network";
 import MetricsPage from "pages/metrics";
@@ -15,6 +14,7 @@ import IframeWrapper from "pages/iframe-wrapper";
 
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { HashRouter, Switch, Route, Redirect } from "react-router-dom";
+
 const HashRouterWrapper = () => {
   return (
     <HashRouter>
@@ -78,7 +78,6 @@ const HashRouterWrapper = () => {
               </Layout>
             </Route>
             <Redirect from='/' to='/login' />
-
           </Switch>
         )}
       />
