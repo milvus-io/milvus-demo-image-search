@@ -13,6 +13,7 @@ export const httpContext = React.createContext({
   currentAddress: "", // the current milvus we use
   setCurrentAddress: () => { },
   restartNotify: () => { },
+  connect: () => { },
   // data management api
   getTables: () => { },
   createTable: () => { },
@@ -115,6 +116,11 @@ export const HttpProvider = ({ children }) => {
       }
       return httpFunc(...arguments)
     }
+  }
+
+  async function connect() {
+    const res = await axiosInstance.get('/state')
+    return res.data
   }
 
   // ------- Data Management Start ----------
@@ -251,6 +257,7 @@ export const HttpProvider = ({ children }) => {
     currentAddress,
     setCurrentAddress,
     restartNotify,
+    connect: httpWrapper(connect),
     // config api
     getAdvancedConfig: httpWrapper(getAdvancedConfig),
     getHardwareConfig: httpWrapper(getHardwareConfig),
