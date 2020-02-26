@@ -1,12 +1,5 @@
 import { cloneObj } from '../utils/helpers'
-import { LOG_SERVER, PM_SERVER, CLIENT_HISTORY } from '../consts/index'
-import { message } from 'antd'
-
-export const ADD = "add"
-export const DISCONNECT = "disconnect"
-export const UPDATE = "update"
-export const INIT = "init" // get all address from localstorage at first time 
-
+import { INIT, ADD, DISCONNECT, UPDATE, CLIENT_HISTORY } from '../consts/index'
 /**
  * 
  * @param {*} state: host port connected pmServer logServer  
@@ -21,15 +14,15 @@ function milvusServers(state, action) {
       console.log("init", action.payload)
       return action.payload
     case ADD:
-      if (copyState[url]) {
-        message.warning(`Already connect with http://${url}`)
-        return copyState
-      }
       Object.keys(copyState).forEach(v => {
         copyState[v].connected = false
         return v
       })
-      copyState[url] = action.payload
+      if (copyState[url]) {
+        copyState[url].connected = true
+      } else {
+        copyState[url] = action.payload
+      }
       window.localStorage.setItem(CLIENT_HISTORY, JSON.stringify(copyState))
       return copyState
     case DISCONNECT:
@@ -46,7 +39,6 @@ function milvusServers(state, action) {
         }
       }
       window.localStorage.setItem(CLIENT_HISTORY, JSON.stringify(copyState))
-
       return copyState
     default:
       return copyState

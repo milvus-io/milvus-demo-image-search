@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useHistory } from 'react-router-dom'
+import { Tab, Paper, Box } from '@material-ui/core'
+
 import {
   Button,
   Table,
@@ -10,12 +12,14 @@ import {
   Popconfirm,
   message
 } from "antd";
+import { useDataPageStyles } from '../../hooks/page'
 import { useTranslation } from "react-i18next";
 import TableForm from "./table-form";
 import IndexForm from "./index-form";
 import { httpContext } from '../../context/http'
 import { dataManagementContext } from '../../context/data-management'
-import { KEYS, UPDATE } from '../../reducers/data-management'
+import { KEYS } from '../../reducers/data-management'
+import { UPDATE } from '../../consts'
 import "./index.less";
 
 const { Search } = Input;
@@ -24,6 +28,7 @@ const TableManage = props => {
   const { getTables, deleteTable, searchTable, currentAddress } = useContext(httpContext)
   const { dataManagement, setDataManagement } = useContext(dataManagementContext)
   const history = useHistory()
+  const classes = useDataPageStyles()
   const { t } = useTranslation();
   const tableTrans = t("table");
   const dataManageTrans = t("dataManage");
@@ -217,40 +222,43 @@ const TableManage = props => {
     setCurrent(page);
   };
   return (
-    <div className="table-wrapper">
-      <div className="header">
+    <div className={`${classes.root} table-wrapper`}>
+      {/* <div className="header">
         <h2>{dataManageTrans.table}</h2>
-        {/* <Button className="primary-btn">Save</Button>
-        <Button className="disable-btn">Cancel</Button> */}
-      </div>
-      <div className="control">
-        <div onClick={createTable} style={{ cursor: "pointer" }}>
-          <Button
-            className="mr-10 circle-btn"
-            type="primary"
-            shape="circle"
-            icon="plus"
+      </div> */}
+      <Paper className={classes.paper}>
+        <Box p={2}>
+          <div className="control">
+            <div onClick={createTable} style={{ cursor: "pointer" }}>
+              <Button
+                className="mr-10 circle-btn"
+                type="primary"
+                shape="circle"
+                icon="plus"
+              />
+              <span>{tableTrans.create}</span>
+            </div>
+            <Search
+              placeholder={tableTrans.searchTxt}
+              onSearch={handleSearch}
+              style={{ width: 200 }}
+            />
+          </div>
+          <Table
+            columns={columns}
+            className="table-wrapper"
+            size="middle"
+            pagination={{
+              current,
+              total: count,
+              onChange: handlePageChange,
+              pageSize: PAGE_SIZE
+            }}
+            dataSource={data}
           />
-          <span>{tableTrans.create}</span>
-        </div>
-        <Search
-          placeholder={tableTrans.searchTxt}
-          onSearch={handleSearch}
-          style={{ width: 200 }}
-        />
-      </div>
-      <Table
-        columns={columns}
-        className="table-wrapper"
-        size="middle"
-        pagination={{
-          current,
-          total: count,
-          onChange: handlePageChange,
-          pageSize: PAGE_SIZE
-        }}
-        dataSource={data}
-      />
+        </Box>
+      </Paper>
+
       <Modal
         title={
           type === "table"

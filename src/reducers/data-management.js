@@ -1,11 +1,5 @@
 import { cloneObj } from '../utils/helpers'
-
-// actions
-export const ADD = "add"
-export const DELETE = "delete"
-export const DELETE_MUTIPLE = "delete_mutiple"
-export const UPDATE = "update"
-export const INIT = "init"
+import { INIT, ADD, DELETE_MUTIPLE, DELETE, UPDATE } from '../consts'
 // keys
 export const KEYS = {
   vectorSearch: "vectorSearch",

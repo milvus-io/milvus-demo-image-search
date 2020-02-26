@@ -1,5 +1,6 @@
 import React, { useReducer, useContext, useEffect } from 'react'
-import DataManagementReducer, { INIT, KEYS } from '../reducers/data-management'
+import { INIT } from '../consts'
+import DataManagementReducer, { KEYS } from '../reducers/data-management'
 import { httpContext } from './http'
 export const dataManagementContext = React.createContext({
   dataManagement: {},

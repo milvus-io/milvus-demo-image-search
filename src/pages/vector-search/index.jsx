@@ -5,7 +5,8 @@ import SearchForm from "./search-form";
 import "./index.less";
 import { dataManagementContext } from '../../context/data-management'
 import { httpContext } from '../../context/http'
-import { KEYS, UPDATE } from '../../reducers/data-management'
+import { KEYS } from '../../reducers/data-management'
+import { UPDATE } from '../../consts'
 const VectorSearch = props => {
   const { t } = useTranslation();
   const dataManageTrans = t("dataManage");

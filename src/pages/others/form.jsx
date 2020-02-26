@@ -1,9 +1,9 @@
-import React, { useMemo, useState, useContext } from "react";
-import { Form, Input, Button, message } from "antd";
+import React, { useMemo, useContext } from "react";
+import { Form, Input, Button } from "antd";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
-import { UPDATE } from "../../reducers/milvus-servers";
+import { UPDATE } from "../../consts";
 const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
   const { form } = props;
   const { milvusAddress, setMilvusAddress } = useContext(systemContext)
