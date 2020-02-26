@@ -45,7 +45,8 @@ const Login = props => {
             setMilvusAddress({
               type: ADD, payload: {
                 ...values,
-                url
+                url,
+                connected: true
               }
             })
             setCurrentAddress(url)

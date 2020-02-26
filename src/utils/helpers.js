@@ -1,4 +1,6 @@
 import { message } from 'antd'
+import { CLIENT_HISTORY } from '../consts'
+
 export const cloneObj = (obj) => {
   return JSON.parse(JSON.stringify(obj));
 };
@@ -29,4 +31,16 @@ export const validateEmpty = (value) => {
 
 export const safetyGet = (obj = {}, key = "", defaultVal = "") => {
   return obj[key] || defaultVal
+}
+
+export const getConnectedMilvus = () => {
+  try {
+    let clients = window.localStorage.getItem(CLIENT_HISTORY) || {}
+    clients = JSON.parse(clients)
+    const key = Object.keys(clients).find(key => clients[key] && clients[key].connected)
+    return key && clients[key]
+  } catch (error) {
+    console.error(error)
+    return false
+  }
 }

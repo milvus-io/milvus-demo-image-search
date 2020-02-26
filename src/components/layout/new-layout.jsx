@@ -1,16 +1,17 @@
-import React, { useContext, useState } from 'react'
-import { makeStyles, Popover, Typography, Box, Button } from "@material-ui/core";
+import React, { useContext, useState, useEffect } from 'react'
+import { makeStyles, Popover, Typography, Box, Button, Tab } from "@material-ui/core";
 import { Home, Settings, Storage, ExitToApp } from '@material-ui/icons';
 import { useTranslation } from "react-i18next";
-import { HOST, PORT, LOG_SERVER, PM_SERVER } from "@/consts";
-
 import Logo from '../../assets/imgs/logo.svg'
-import { ADD, DELETE } from '../../reducers/milvus-servers'
-import { DELETE_MUTIPLE, KEYS } from '../../reducers/data-management'
+import { KEYS } from '../../reducers/data-management'
 import { httpContext } from "../../context/http"
 import { dataManagementContext } from "../../context/data-management"
 import { systemContext } from "../../context/system"
+import { CLIENT_HISTORY, DELETE_MUTIPLE, ADD, DISCONNECT, INIT } from '../../consts';
 import { cloneObj } from '../../utils/helpers'
+import MyTabs from '../../components/tab'
+import TabPanel from '../../components/tab-panel'
+import { useQuery } from '../../hooks'
 
 import DataMenu from './data-menu'
 import ConfigMenu from './config-menu'
@@ -25,28 +26,38 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     padding: `${theme.spacing(8)}px ${theme.spacing(1)}px`,
     height: "100vh",
-    borderRight: "1px solid #eee"
+    backgroundColor: "rgb(35, 47, 62)",
   },
   icon: {
     marginBottom: theme.spacing(4),
     fontSize: "30px",
+    fill: "rgb(238, 238, 238)",
+
   },
   active: {
     fill: theme.palette.primary.main
   },
   menuWrapper: {
-    padding: `${theme.spacing(2)}px ${theme.spacing(1)}px`,
     flex: " 0 0 300px",
-    borderRight: "1px solid #eee",
-    '& > img': {
+    backgroundColor: "rgb(27, 36, 48)",
+    color: "rgb(238, 238, 238)",
+    '& .logo-wrapper': {
+      padding: `${theme.spacing(2)}px 0 0 ${theme.spacing(2)}px`,
       width: "120px"
     }
+  },
+  menu: {
+    padding: theme.spacing(2),
+    height: 'calc(100vh - 117px)',
+    overflowY: 'scroll',
+    backgroundColor: "rgb(27, 36, 48)",
+    fontSize: "14px",
+    fontWeight: 400
   },
   logoutWrapper: {
     display: "flex",
     alignItems: "center",
-    paddingBottom: theme.spacing(2),
-    borderBottom: "1px solid #eee",
+    padding: theme.spacing(2),
     '& .circle': {
       display: "inline-block",
       width: "10px",
@@ -65,21 +76,27 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     position: "relative",
-    flex: 1
+    flex: 1,
+    height: "100vh",
+    overflowY: "scroll",
   }
 }));
 
 const Layout = props => {
   const classes = useStyles()
+  const query = useQuery()
   const { t } = useTranslation();
   const buttonTrans = t("button");
   const { currentAddress, setCurrentAddress } = useContext(httpContext)
   const { milvusAddress, setMilvusAddress } = useContext(systemContext)
   const { setDataManagement } = useContext(dataManagementContext)
-
   const [anchorEl, setAnchorEl] = useState(null)
   const [firstMenu, setFisrstMenu] = useState('login')
-
+  const [tabValue, setTabValue] = useState(0)
+  const [tabName, setTabName] = useState("")
+  useEffect(() => {
+    setTabName(query.get('tabName'))
+  }, [query])
   const handleFirstMenuChange = e => {
     const name = e.currentTarget.dataset.name
     setFisrstMenu(name)
@@ -92,6 +109,18 @@ const Layout = props => {
     setAnchorEl(null);
   };
 
+  const handleAdd = () => {
+    setMilvusAddress({
+      type: ADD,
+      payload: {
+        id: '127.0.0.1:19121',
+        values: {
+          connected: true
+        }
+      }
+    })
+  }
+
   const handleLogout = () => {
     if (currentAddress) {
       const copyAddress = cloneObj(milvusAddress)
@@ -99,7 +128,7 @@ const Layout = props => {
       const addresses = Object.keys(copyAddress)
       setCurrentAddress(addresses.length ? addresses[0] : "")
       setMilvusAddress({
-        type: DELETE,
+        type: DISCONNECT,
         payload: {
           id: currentAddress
         }
@@ -111,15 +140,26 @@ const Layout = props => {
           keys: [KEYS.table, KEYS.vectorSearch]
         }
       })
-      if (addresses.length === 0) {
-        window.localStorage.removeItem(HOST);
-        window.localStorage.removeItem(PORT);
-        window.localStorage.removeItem(LOG_SERVER)
-        window.localStorage.removeItem(PM_SERVER)
-      }
     }
-
+    setAnchorEl(null);
   };
+
+  const handleTabChange = (event, newValue) => {
+    console.log(newValue)
+    setTabValue(newValue);
+  };
+
+  useEffect(() => {
+    try {
+      let clients = window.localStorage.getItem(CLIENT_HISTORY) || {}
+      clients = JSON.parse(clients)
+      setMilvusAddress({ type: INIT, payload: { ...clients } })
+    } catch (error) {
+      console.log(error)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const open = Boolean(anchorEl)
   return (
     <div className={classes.root}>
@@ -142,7 +182,10 @@ const Layout = props => {
         ></Settings>
       </div>
       <div className={classes.menuWrapper}>
-        <img src={Logo} alt="Milvus Logo"></img>
+        <div className="logo-wrapper">
+          <img src={Logo} alt="Milvus Logo"></img>
+
+        </div>
         <div className={classes.logoutWrapper}>
           <span className="circle"></span>
           <span>{currentAddress}</span>
@@ -160,7 +203,7 @@ const Layout = props => {
             }}
           >
             <Box p={2}>
-              <Typography className={classes.typography}>{`${t("disconnect")}${currentAddress}?`}</Typography>
+              <Typography>{`${t("disconnect")}${currentAddress}?`}</Typography>
               <div style={{ textAlign: "right" }}>
                 <Button onClick={handleClose}>{buttonTrans.cancel}</Button>
                 <Button color="primary" className={classes['ml-2']} onClick={handleLogout}>
@@ -171,7 +214,7 @@ const Layout = props => {
           </Popover>
           <ExitToApp className="icon" onClick={handleExit}></ExitToApp>
         </div>
-        <div>
+        <div className={classes.menu}>
           {
             firstMenu === 'login'
               ? (<LoginMenu></LoginMenu>)
@@ -182,7 +225,37 @@ const Layout = props => {
 
         </div>
       </div>
-      <div className={classes.content}>{props.children}</div>
+      <div className={classes.content}>
+        {
+          firstMenu === 'data' ? (
+            <>
+              <MyTabs
+                value={tabValue}
+                indicatorColor="primary"
+                textColor="primary"
+                onChange={handleTabChange}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  zIndex: 10
+                }}
+              >
+                <Tab label={tabName || ""} />
+                <Tab label="search" />
+              </MyTabs>
+              <TabPanel value={tabValue} index={0} >{props.children}</TabPanel>
+              <TabPanel value={tabValue} index={1} >Seach page</TabPanel>
+            </>
+
+          ) : props.children
+        }
+
+      </div>
+
+
+
     </div>
   )
 }

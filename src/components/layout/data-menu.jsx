@@ -5,7 +5,7 @@ const DataMenu = props => {
   const history = useHistory()
 
   useEffect(() => {
-    history.push('/data/table')
+    history.push('/data/table?tabName=czz')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (

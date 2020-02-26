@@ -1,28 +1,35 @@
 import { cloneObj } from '../utils/helpers'
-import { LOG_SERVER, PM_SERVER } from '../consts/index'
-import { message } from 'antd'
-
-export const ADD = "add"
-export const DELETE = "delete"
-export const UPDATE = "update"
-
+import { INIT, ADD, DISCONNECT, UPDATE, CLIENT_HISTORY } from '../consts/index'
+/**
+ * 
+ * @param {*} state: host port connected pmServer logServer  
+ * @param {*} action 
+ */
 function milvusServers(state, action) {
   const copyState = cloneObj(state)
-  const { host, port, id, values = {} } = action.payload
+  const { id, values = {}, url = "" } = action.payload
 
   switch (action.type) {
+    case INIT:
+      console.log("init", action.payload)
+      return action.payload
     case ADD:
-      const url = `${host}:${port}`
+      Object.keys(copyState).forEach(v => {
+        copyState[v].connected = false
+        return v
+      })
       if (copyState[url]) {
-        message.warning(`Already connect with http://${url}`)
-        return copyState
+        copyState[url].connected = true
+      } else {
+        copyState[url] = action.payload
       }
-      copyState[url] = action.payload
+      window.localStorage.setItem(CLIENT_HISTORY, JSON.stringify(copyState))
       return copyState
-    case DELETE:
+    case DISCONNECT:
       if (copyState[id]) {
-        delete copyState[id]
+        copyState[id].connected = false
       }
+      window.localStorage.setItem(CLIENT_HISTORY, JSON.stringify(copyState))
       return copyState
     case UPDATE:
       if (copyState[id]) {
@@ -30,9 +37,8 @@ function milvusServers(state, action) {
           ...copyState[id],
           ...values
         }
-        window.localStorage.setItem(LOG_SERVER, values[LOG_SERVER])
-        window.localStorage.setItem(PM_SERVER, values[PM_SERVER])
       }
+      window.localStorage.setItem(CLIENT_HISTORY, JSON.stringify(copyState))
       return copyState
     default:
       return copyState

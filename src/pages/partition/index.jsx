@@ -12,7 +12,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { httpContext } from '../../context/http'
 import { dataManagementContext } from '../../context/data-management'
-import { KEYS, UPDATE } from '../../reducers/data-management'
+import { KEYS } from '../../reducers/data-management'
+import { UPDATE } from '../../consts'
 import PatitionForm from './form'
 import "./index.less";
 
