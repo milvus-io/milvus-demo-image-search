@@ -21,6 +21,21 @@ import IframeWrapper from "pages/iframe-wrapper";
 
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { HashRouter, Switch, Route, Redirect } from "react-router-dom";
+
+const HiddenDialog = {
+  open: false,
+  title: "",
+  component: <></>,
+  confirm: {
+    label: '',
+    onConfirm: () => { },
+  },
+  cancle: {
+    label: '',
+    onCancel: () => { }
+  }
+}
+
 const HashRouterWrapper = () => {
   const classes = makeStyles({
     paper: {
@@ -33,13 +48,13 @@ const HashRouterWrapper = () => {
     if (confirm.onConfirm) {
       confirm.onConfirm();
     }
-    setDialog({ open: false })
+    setDialog(HiddenDialog)
   }
   const _onCancelClick = () => {
     if (cancle.onCancel) {
       cancle.onCancel();
     }
-    setDialog({ open: false })
+    setDialog(HiddenDialog)
   }
 
   return (

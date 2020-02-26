@@ -3,30 +3,17 @@ export const rootContext = createContext({})
 
 const { Provider } = rootContext;
 
-const BasicDialog = {
-  open: true,
-  title: "",
-  component: <></>,
-  confirm: {
-    label: '',
-    onConfirm: () => { },
-  },
-  cancle: {
-    label: '',
-    onCancel: () => { }
-  }
-}
 const TestDialog = {
   open: true,
   title: "Test Dialog",
   component: <div onClick={()=>console.log('xixiixiixiix')}><p>wahhhhhh</p><p>this is test dialog </p></div>,
   confirm: {
     label: '确定',
-    onConfirm: () => { console.log('ahhhh') },
+    onConfirm: () => { console.log('dialog confirm') },
   },
   cancle: {
     label: '取消',
-    onCancel: () => { console.log('wullalallala') }
+    onCancel: () => { console.log('dialog cancle') }
   }
 }
 const RootProvider = ({ children }) => {
