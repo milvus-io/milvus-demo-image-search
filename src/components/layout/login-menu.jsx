@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react'
-import { useTheme, makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/styles'
 import { FaDatabase } from 'react-icons/fa'
 import { useHistory } from 'react-router-dom'
 
 const LoginMenu = props => {
-  const theme = useTheme()
-  const classes = makeStyles({
+  const classes = makeStyles(theme => ({
     root: {
       paddingTop: theme.spacing(1)
     },
@@ -13,9 +12,9 @@ const LoginMenu = props => {
       marginRight: theme.spacing(1)
     },
     wrapper: {
-      marginBottom:theme.spacing(1)
+      marginBottom: theme.spacing(1)
     }
-  })()
+  }))()
   const history = useHistory()
   const fakeList = [
     { ip: '192.168.1.169', port: '5432' },

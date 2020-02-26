@@ -5,6 +5,9 @@ import Button from '@material-ui/core/Button'
 const Login = props => {
   const theme = useTheme()
   const classes = makeStyles({
+    root: {
+      padding: theme.spacing(3),
+    },
     inputWrapper: {
       width: '35%',
       marginBottom: theme.spacing(1),
@@ -24,7 +27,7 @@ const Login = props => {
   })
   const connectMilvus = () => { }
   return (
-    <div>
+    <div className={classes.root}>
       <h3 className={classes.title}>Connect to Milvus</h3>
       <div className={classes.inputWrapper}>
         <TextField

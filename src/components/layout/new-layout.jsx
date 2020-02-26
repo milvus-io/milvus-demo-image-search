@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
   menu: {
     padding: theme.spacing(2),
     height: 'calc(100vh - 117px)',
-    overflowY: 'scroll',
+    overflowY: 'auto',
     backgroundColor: "rgb(27, 36, 48)",
     fontSize: "14px",
     fontWeight: 400
