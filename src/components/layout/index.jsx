@@ -8,12 +8,12 @@ import Logo from "assets/imgs/logo.svg";
 import CONFIG_ICON from "assets/imgs/config.png";
 import DATA_ICON from "assets/imgs/dataManage.png";
 import LoginForm from '../../pages/oldLogin'
-import { ADD, DISCONNECT, INIT } from '../../reducers/milvus-servers'
+import { DISCONNECT, INIT } from '../../reducers/milvus-servers'
 import { DELETE_MUTIPLE, KEYS } from '../../reducers/data-management'
 import { systemContext } from "../../context/system"
 import { httpContext } from "../../context/http"
 import { dataManagementContext } from '../../context/data-management'
-import { cloneObj, getConnectedMilvus } from "../../utils/helpers"
+import { cloneObj } from "../../utils/helpers"
 import http from "@/http/index";
 import { CLIENT_HISTORY } from "../../consts";
 

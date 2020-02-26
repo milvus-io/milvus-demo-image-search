@@ -5,6 +5,7 @@ export default {
   copySuccess: "复制成功",
   disconnect: "是否断开 ",
   connectTitle: "连接Milvus",
+  recentConnect: "最近连接",
   monitor: {
     title: "Mintors",
     log: "Log Monitor",

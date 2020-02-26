@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useReducer, useContext } from 'react'
 import { httpContext } from './http'
 import MilvusReducer from "../reducers/milvus-servers"
-import { getConnectedMilvus } from '../utils/helpers'
 
 export const systemContext = React.createContext({
 
@@ -52,12 +51,14 @@ export const SystemProvider = ({ children }) => {
       port
     }
   }
-
+  console.log(milvusAddress)
   useEffect(() => {
-    const connectedMilvus = getConnectedMilvus()
+    console.log(milvusAddress)
+    const key = Object.keys(milvusAddress).find(key => milvusAddress[key] && milvusAddress[key].connected)
+    const connectedMilvus = key && milvusAddress[key]
     setCurrentAddress(connectedMilvus ? connectedMilvus.url : "")
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [milvusAddress])
+  }, [JSON.stringify(milvusAddress)])
 
   useEffect(() => {
 
