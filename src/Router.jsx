@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { makeStyles } from '@material-ui/styles'
+import { rootContext } from './context/Root'
 import Layout from "components/layout/new-layout";
 import TablePage from "pages/table";
 import PartitionPage from "pages/partition";
-
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 import Login from 'pages/login/index'
 import NetworkPage from "pages/network";
 import MetricsPage from "pages/metrics";
@@ -16,6 +22,26 @@ import IframeWrapper from "pages/iframe-wrapper";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { HashRouter, Switch, Route, Redirect } from "react-router-dom";
 const HashRouterWrapper = () => {
+  const classes = makeStyles({
+    paper: {
+      minWidth: '300px'
+    }
+  })()
+  const { dialog, setDialog } = useContext(rootContext)
+  const { open, title, component, confirm = {}, cancle = {} } = dialog;
+  const _onConfirmClick = () => {
+    if (confirm.onConfirm) {
+      confirm.onConfirm();
+    }
+    setDialog({ open: false })
+  }
+  const _onCancelClick = () => {
+    if (cancle.onCancel) {
+      cancle.onCancel();
+    }
+    setDialog({ open: false })
+  }
+
   return (
     <HashRouter>
       <Route
@@ -75,10 +101,23 @@ const HashRouterWrapper = () => {
                     </section>
                   </CSSTransition>
                 </TransitionGroup>
+                <Dialog classes={{ paper: classes.paper }} open={open} onClose={() => { }}>
+                  <DialogTitle >{title}</DialogTitle>
+                  <DialogContent>
+                    {component}
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => _onConfirmClick()} color="primary">
+                      {confirm.label}
+                    </Button>
+                    <Button onClick={() => _onCancelClick()} color="primary">
+                      {cancle.label}
+                    </Button>
+                  </DialogActions>
+                </Dialog>
               </Layout>
             </Route>
             <Redirect from='/' to='/login' />
-
           </Switch>
         )}
       />

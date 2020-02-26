@@ -109,17 +109,17 @@ const Layout = props => {
     setAnchorEl(null);
   };
 
-  const handleAdd = () => {
-    setMilvusAddress({
-      type: ADD,
-      payload: {
-        id: '127.0.0.1:19121',
-        values: {
-          connected: true
-        }
-      }
-    })
-  }
+  // const handleAdd = () => {
+  //   setMilvusAddress({
+  //     type: ADD,
+  //     payload: {
+  //       id: '127.0.0.1:19121',
+  //       values: {
+  //         connected: true
+  //       }
+  //     }
+  //   })
+  // }
 
   const handleLogout = () => {
     if (currentAddress) {
