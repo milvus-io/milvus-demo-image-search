@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useHistory } from 'react-router-dom'
-import { Tab, Paper, Box } from '@material-ui/core'
+import { Paper, Box } from '@material-ui/core'
 
 import {
   Button,
