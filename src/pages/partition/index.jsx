@@ -63,7 +63,7 @@ const TableManage = props => {
   };
 
   const handleDelete = async record => {
-    await deletePartition(params.tableName, record.partition_tag);
+    await deletePartition(params.collectionName, record.partition_tag);
     getFirstPage(tableName);
     setCurrent(1);
     message.success(partitionTrans.delete);
@@ -75,7 +75,7 @@ const TableManage = props => {
    */
   const fetchData = async () => {
     try {
-      const res = await getPartitions(params.tableName, { offset, page_size: PAGE_SIZE });
+      const res = await getPartitions(params.collectionName, { offset, page_size: PAGE_SIZE });
       if (res && res.partitions) {
         setDataManagement(
           {
@@ -86,7 +86,7 @@ const TableManage = props => {
               value: {
                 data: res.partitions.map(v => ({
                   ...v,
-                  tableName: params.tableName,
+                  tableName: params.collectionName,
                   key: v.partition_name
                 }))
               }
@@ -195,7 +195,7 @@ const TableManage = props => {
     <div className="table-wrapper">
       <div className="header">
         <h2>
-          <span style={{ color: "#3F9CD1", cursor: "pointer" }} onClick={handleBack}>{params.tableName}</span>
+          <span style={{ color: "#3F9CD1", cursor: "pointer" }} onClick={handleBack}>{params.collectionName}</span>
           <span style={{ margin: "0 10px" }}>></span>
           {dataManageTrans.partition}</h2>
       </div>
@@ -237,7 +237,7 @@ const TableManage = props => {
         centered={true}
       >
         <PatitionForm
-          tableName={params.tableName}
+          tableName={params.collectionName}
           handleCancel={handleCancel}
           saveSuccess={saveSuccess}
         ></PatitionForm>

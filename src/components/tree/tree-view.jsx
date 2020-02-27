@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles, CircularProgress } from '@material-ui/core';
 import { TreeView } from '@material-ui/lab';
-import { Mail, ArrowDropDown, ArrowRight } from '@material-ui/icons';
+import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
 import { AiOutlineTable } from 'react-icons/ai'
+import { IoMdRefresh } from 'react-icons/io'
 
 import StyledTreeItem from './tree-item'
 
@@ -28,11 +29,12 @@ const useStyles = makeStyles(theme => ({
  */
 const StyledTreeView = props => {
   const classes = useStyles();
-  const { data, total } = props
+  const { data, total, handleMenuClick, handleRefresh } = props
   const [activeId, setAcitveId] = useState('')
   const [expanded, setExpanded] = useState(['1'])
-  const handleClick = nodeId => {
+  const handleClick = (nodeId, url, name) => {
     setAcitveId(nodeId || '')
+    handleMenuClick(url, name, nodeId)
   }
 
 
@@ -45,6 +47,7 @@ const StyledTreeView = props => {
         labelIcon={v.icon}
         labelInfo={v.value}
         disabled={v.disabled}
+        url={v.url}
         propsClick={handleClick}
         activeId={activeId}
       >
@@ -57,9 +60,19 @@ const StyledTreeView = props => {
   }
 
   const handleNodeToggle = (e, nodeIds) => {
-    const copy = [...nodeIds]
-    // only allow one child open
-    copy.length > 2 && copy.splice(1, 1)
+
+    const copy = nodeIds.filter((v, i) => {
+      // the newer
+      if (i === 0) {
+        return true
+      }
+      // collections 
+      if (v === '1') {
+        return true
+      }
+      // the older
+      return false
+    })
     setExpanded(copy)
   }
 
@@ -74,11 +87,12 @@ const StyledTreeView = props => {
     >
       <StyledTreeItem
         nodeId="1"
-        labelText="Collections"
-        labelInfo={total}
+        labelText={`Collections(${total})`}
+        labelRefresh={IoMdRefresh}
         labelIcon={AiOutlineTable}
         activeId={activeId}
         propsClick={handleClick}
+        propsRefresh={handleRefresh}
         url="/data/collections?tabName=collections"
       >
         {
