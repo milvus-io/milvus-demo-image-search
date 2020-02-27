@@ -91,7 +91,7 @@ const Layout = props => {
   const { milvusAddress, setMilvusAddress } = useContext(systemContext)
   const { setDataManagement } = useContext(dataManagementContext)
   const [anchorEl, setAnchorEl] = useState(null)
-  const [firstMenu, setFisrstMenu] = useState('login')
+  const [firstMenu, setFisrstMenu] = useState('data')
   const [tabValue, setTabValue] = useState(0)
   const [tabName, setTabName] = useState("")
   useEffect(() => {

@@ -51,9 +51,7 @@ export const SystemProvider = ({ children }) => {
       port
     }
   }
-  console.log(milvusAddress)
   useEffect(() => {
-    console.log(milvusAddress)
     const key = Object.keys(milvusAddress).find(key => milvusAddress[key] && milvusAddress[key].connected)
     const connectedMilvus = key && milvusAddress[key]
     setCurrentAddress(connectedMilvus ? connectedMilvus.url : "")

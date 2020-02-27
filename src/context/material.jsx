@@ -2,14 +2,9 @@ import React, { useState, useEffect, useReducer, useContext } from 'react'
 import { Snackbar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
-import green from '@material-ui/core/colors/green';
+import { DialogActions, DialogContent, DialogTitle, Button, Dialog } from '@material-ui/core'
+import { blue } from '@material-ui/core/colors'
 import MuiAlert from '@material-ui/lab/Alert';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -21,11 +16,7 @@ export const materialContext = React.createContext({
 
 const theme = createMuiTheme({
   palette: {
-    primary: purple,
-    secondary: green,
-  },
-  status: {
-    danger: 'orange',
+    primary: blue,
   },
 });
 
@@ -43,7 +34,7 @@ const HiddenDialog = {
   }
 }
 const TestDialog = {
-  open: true,
+  open: false,
   title: "Test Dialog",
   component: <div onClick={() => console.log('xixiixiixiix')}><p>wahhhhhh</p><p>this is test dialog </p></div>,
   confirm: {
