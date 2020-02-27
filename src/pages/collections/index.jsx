@@ -220,7 +220,7 @@ const TableManage = props => {
     {
       label: "",
       icon: "search",
-      searchText: "abc",
+      searchText: "",
       onSearch: text => console.log("search value is", text),
       onClear: () => {
         console.log("clear clear");
@@ -241,6 +241,7 @@ const TableManage = props => {
             rowsPerPage={5}
             rowCount={rows.length}
             primaryKey="table_name"
+            isLoading={false}
           ></MilvusGrid>
         </Box>
       </Paper>

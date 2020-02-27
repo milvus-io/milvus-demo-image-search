@@ -34,7 +34,7 @@ const MilvusGrid = props => {
     page = 0,
     rows = [],
     colDefinitions = [],
-    isLoading = true
+    isLoading = false
   } = props;
 
   const [selected, setSelected] = React.useState([]);
