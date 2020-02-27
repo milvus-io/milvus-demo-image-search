@@ -4,8 +4,11 @@ import { httpContext } from '../../context/http'
 import { IoIosSettings } from 'react-icons/io'
 import { AiOutlineTable } from 'react-icons/ai'
 import { parseObjectToAssignKey, generateId } from '../../utils/helpers'
+import { useHistory } from 'react-router-dom'
+
 const DataMenu = props => {
-  const { getCollections, currentAddress } = useContext(httpContext)
+  const histroy = useHistory()
+  const { getCollections, currentAddress, getPartitions } = useContext(httpContext)
   const [collections, setCollections] = useState([])
   const [total, setToltal] = useState(0)
 
@@ -27,19 +30,53 @@ const DataMenu = props => {
           value: "",
           children,
           id: generateId(),
-          icon: AiOutlineTable
+          icon: AiOutlineTable,
+          url: `/collections/${table_name}`
         }
       })
       setToltal(count)
       setCollections(data)
-      console.log('data-menu:---', data)
     }
     fetchCollections()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress])
+  console.log(collections)
+  const fetchPartitions = async (collectionName) => {
+    const target = collections.find(col => col.label === collectionName)
+    // already fetch partitions
+    if (!target || target.loaded) {
+      return
+    }
+    const res = await getPartitions(collectionName)
+    const { partitions } = res
+    const data = partitions.map(v => {
+      const label = v.partition_tag
+      return {
+        label,
+        value: "",
+        id: generateId(),
+        icon: AiOutlineTable,
+        url: `/collections/${collectionName}/partitions/${label}`
+      }
+    })
+    setCollections(collections => {
+      return collections.map(col => {
+        if (col.label === collectionName) {
+          col.children = [...col.children, ...data]
+          col.loaded = true
+        }
+        return col
+      })
+    })
+  }
+  const handleMenuClick = (url, collectionName, id) => {
+    console.log(url)
+    id !== '1' && fetchPartitions(collectionName)
+    url && histroy.push(url)
+  }
   return (
     <div>
-      <TreeView data={collections} total={total}></TreeView>
+      <TreeView data={collections} total={total} handleMenuClick={handleMenuClick}></TreeView>
     </div>
   )
 }

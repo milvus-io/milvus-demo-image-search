@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     padding: `${theme.spacing(8)}px ${theme.spacing(1)}px`,
     height: "100vh",
-    backgroundColor: "rgb(35, 47, 62)",
+    backgroundColor: "rgb(27, 36, 48)",
   },
   icon: {
     marginBottom: theme.spacing(4),
@@ -38,8 +38,8 @@ const useStyles = makeStyles(theme => ({
     fill: theme.palette.primary.main
   },
   menuWrapper: {
-    flex: " 0 0 300px",
-    backgroundColor: "rgb(27, 36, 48)",
+    flex: " 0 0 270px",
+    backgroundColor: "rgb(35, 47, 62)",
     color: "rgb(238, 238, 238)",
     '& .logo-wrapper': {
       padding: `${theme.spacing(2)}px 0 0 ${theme.spacing(2)}px`,
@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     height: 'calc(100vh - 117px)',
     overflowY: 'auto',
-    backgroundColor: "rgb(27, 36, 48)",
+    backgroundColor: "rgb(35, 47, 62)",
     fontSize: "14px",
     fontWeight: 400
   },

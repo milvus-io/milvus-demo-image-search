@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles, CircularProgress } from '@material-ui/core';
 import { TreeView } from '@material-ui/lab';
-import { Mail, ArrowDropDown, ArrowRight } from '@material-ui/icons';
+import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
 import { AiOutlineTable } from 'react-icons/ai'
 
 import StyledTreeItem from './tree-item'
@@ -28,11 +28,12 @@ const useStyles = makeStyles(theme => ({
  */
 const StyledTreeView = props => {
   const classes = useStyles();
-  const { data, total } = props
+  const { data, total, handleMenuClick } = props
   const [activeId, setAcitveId] = useState('')
   const [expanded, setExpanded] = useState(['1'])
-  const handleClick = nodeId => {
+  const handleClick = (nodeId, url, name) => {
     setAcitveId(nodeId || '')
+    handleMenuClick(url, name, nodeId)
   }
 
 
@@ -45,6 +46,7 @@ const StyledTreeView = props => {
         labelIcon={v.icon}
         labelInfo={v.value}
         disabled={v.disabled}
+        url={v.url}
         propsClick={handleClick}
         activeId={activeId}
       >
