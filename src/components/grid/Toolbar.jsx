@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { lighten, makeStyles } from "@material-ui/core/styles";
+import { lighten, fade, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Typography from "@material-ui/core/Typography";
@@ -10,9 +10,99 @@ import RefreshedIcon from "@material-ui/icons/Cached";
 import FlashOn from "@material-ui/icons/FlashOn";
 import FlashOff from "@material-ui/icons/FlashOff";
 import PostAdd from "@material-ui/icons/PostAdd";
+import SearchIcon from "@material-ui/icons/Search";
+import Clear from "@material-ui/icons/Clear";
+import InputBase from "@material-ui/core/InputBase";
 import Grid from "@material-ui/core/Grid";
-
 import Tooltip from "@material-ui/core/Tooltip";
+
+const useSearchStyles = makeStyles(theme => ({
+  search: {
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    "&:hover": {
+      backgroundColor: fade(theme.palette.common.white, 0.25)
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      marginLeft: theme.spacing(3),
+      width: "auto"
+    }
+  },
+  searchIcon: {
+    width: theme.spacing(7),
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  clearIcon: {
+    position: "absolute",
+    top: 6,
+    right: -24,
+    cursor: "pointer"
+  },
+  inputRoot: {
+    color: "inherit"
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 7),
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: 100
+    }
+  }
+}));
+const Search = props => {
+  const classes = useSearchStyles();
+  const { onClick = () => {}, searchText = "", onClear = () => {} } = props;
+  const [searchValue, setSearchValue] = React.useState(searchText);
+  const searched = searchValue !== "";
+  return (
+    <div className={classes.search}>
+      <div className={classes.searchIcon}>
+        <SearchIcon />
+      </div>
+      <InputBase
+        onChange={e => {
+          console.log(`change `, e.target.value);
+          setSearchValue(e.target.value);
+        }}
+        onKeyPress={e => {
+          console.log(`Pressed keyCode ${e.key}`, e.target.value);
+          if (e.key === "Enter") {
+            // Do code here
+            onClick(searchValue);
+            e.preventDefault();
+          }
+        }}
+        value={searchValue}
+        placeholder="Search…"
+        classes={{
+          root: classes.inputRoot,
+          input: classes.inputInput
+        }}
+        inputProps={{ "aria-label": "search" }}
+      />
+      {searched && (
+        <div className={classes.clearIcon}>
+          <Clear
+            onClick={e => {
+              setSearchValue("");
+              onClear();
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
 
 const useToolbarStyles = makeStyles(theme => ({
   root: {
@@ -34,14 +124,15 @@ const useToolbarStyles = makeStyles(theme => ({
   }
 }));
 
-const iconGetter = icon => {
+const iconGetter = (icon, props) => {
   const iconConfig = {
     create: <AddCircleIcon />,
     delete: <DeleteIcon />,
     refresh: <RefreshedIcon />,
     createIndex: <FlashOn />,
     dropIndex: <FlashOff />,
-    import: <PostAdd />
+    import: <PostAdd />,
+    search: <Search {...props} />
   };
 
   return iconConfig[icon] || <Button></Button>;
@@ -59,27 +150,36 @@ const Toolbar = props => {
   });
 
   const numSelected = selected.length;
-
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid item xs={8}>
-          <ButtonGroup color={color} aria-label="outlined primary button group">
+      <Grid container spacing={2}>
+        <Grid item xs={9}>
+          <ButtonGroup
+            color={color}
+            size="small"
+            color="primary"
+            fullWidth={false}
+            aria-label="outlined button group"
+          >
             {newConfig.map(c => {
-              const btn = (
-                <Button
-                  key={c.icon}
-                  variant="contained"
-                  color="secondary"
-                  size="small"
-                  className={classes.button}
-                  disabled={c._disabled}
-                  onClick={e => c.onClick(e, selected)}
-                  startIcon={iconGetter(c.icon)}
-                >
-                  {c.label}
-                </Button>
-              );
+              const btn =
+                c.icon === "search" ? (
+                  iconGetter(c.icon, c)
+                ) : (
+                  <Button
+                    key={c.icon}
+                    variant="contained"
+                    size="small"
+                    className={classes.button}
+                    disabled={c._disabled}
+                    onClick={e => c.onClick(e, selected)}
+                    startIcon={iconGetter(c.icon, c)}
+                  >
+                    <Typography nowrap={true} variant="button">
+                      {c.label}
+                    </Typography>
+                  </Button>
+                );
 
               const showTooltip =
                 c.tooltip || (c.disabledTooltip && c._disabled);
@@ -97,7 +197,7 @@ const Toolbar = props => {
             })}
           </ButtonGroup>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Typography
             className={classes.title}
             color="inherit"
