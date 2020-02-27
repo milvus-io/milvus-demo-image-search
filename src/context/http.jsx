@@ -19,7 +19,7 @@ export const httpContext = React.createContext({
   createIndex: () => { },
   searchTable: () => { },
   searchVectors: () => { },
-  getPartitions: () => { },
+  getPartitions: (tableName, params) => { },
   createPartition: () => { },
   deletePartition: () => { },
   // config api

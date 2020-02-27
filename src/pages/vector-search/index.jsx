@@ -3,24 +3,27 @@ import { useTranslation } from "react-i18next";
 import { Table, Switch } from "antd";
 import SearchForm from "./search-form";
 import "./index.less";
-import { dataManagementContext } from '../../context/data-management'
-import { httpContext } from '../../context/http'
-import { KEYS } from '../../reducers/data-management'
-import { UPDATE } from '../../consts'
+import { dataManagementContext } from "../../context/data-management";
+import { httpContext } from "../../context/http";
+import { KEYS } from "../../reducers/data-management";
+import { UPDATE } from "../../consts";
 const VectorSearch = props => {
   const { t } = useTranslation();
   const dataManageTrans = t("dataManage");
   const vectorTrans = t("vector");
   const [showSearch, setShowSearch] = useState(true);
-  const { currentAddress } = useContext(httpContext)
-  const { dataManagement, setDataManagement } = useContext(dataManagementContext)
+  const { currentAddress } = useContext(httpContext);
+  const { dataManagement, setDataManagement } = useContext(
+    dataManagementContext
+  );
 
   const { data, formInit } = useMemo(() => {
-    const { data = null, formInit = {} } = dataManagement[KEYS.vectorSearch][currentAddress] || {}
-    console.log("in", dataManagement)
-    return { data, formInit }
-  }, [dataManagement, currentAddress])
-  console.log(data, formInit)
+    const { data = null, formInit = {} } =
+      dataManagement[KEYS.vectorSearch][currentAddress] || {};
+    console.log("in", dataManagement);
+    return { data, formInit };
+  }, [dataManagement, currentAddress]);
+  console.log(data, formInit);
   const columns = [
     {
       title: "ID",
@@ -35,30 +38,35 @@ const VectorSearch = props => {
     setDataManagement({
       type: UPDATE,
       payload: {
-        key: KEYS.vectorSearch, id: currentAddress, value: { data }
+        key: KEYS.vectorSearch,
+        id: currentAddress,
+        value: { data }
       }
-    })
+    });
   };
   const handleCancel = () => {
     setDataManagement({
       type: UPDATE,
       payload: {
-        key: KEYS.vectorSearch, id: currentAddress, value: { data: null }
+        key: KEYS.vectorSearch,
+        id: currentAddress,
+        value: { data: null }
       }
-    })
+    });
   };
-  const setFormInit = (data) => {
+  const setFormInit = data => {
     setDataManagement({
       type: UPDATE,
       payload: {
-        key: KEYS.vectorSearch, id: currentAddress, value: { formInit: { ...data } }
+        key: KEYS.vectorSearch,
+        id: currentAddress,
+        value: { formInit: { ...data } }
       }
-    })
-  }
+    });
+  };
   const toggleSearch = () => {
     setShowSearch(!showSearch);
   };
-
 
   return (
     <div className="vector-wrapper">

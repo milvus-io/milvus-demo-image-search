@@ -1,10 +1,24 @@
 import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import TablePagination from "@material-ui/core/TablePagination";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Toolbar from "./Toolbar";
 import Table from "./Table";
 
+const userStyle = makeStyles(theme => ({
+  loading: {
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: theme.spacing(20),
+    width: "100%"
+  }
+}));
+
 const MilvusGrid = props => {
+  const classes = userStyle();
   const {
     rowCount = 10,
     rowsPerPage = 5,
@@ -19,7 +33,8 @@ const MilvusGrid = props => {
     },
     page = 0,
     rows = [],
-    colDefinitions = []
+    colDefinitions = [],
+    isLoading = false
   } = props;
 
   const [selected, setSelected] = React.useState([]);
@@ -60,24 +75,34 @@ const MilvusGrid = props => {
         ></Toolbar>
       </Grid>
       <Grid item xs={12}>
-        <Table
-          rows={rows}
-          selected={selected}
-          colDefinitions={colDefinitions}
-          onSelectedAll={_onSelectedAll}
-          onSelected={_onSelected}
-          isSelected={_isSelected}
-        ></Table>
-        <TablePagination
-          component="div"
-          count={rowCount}
-          page={page}
-          labelDisplayedRows={labelDisplayedRows}
-          rowsPerPage={rowsPerPage}
-          rowsPerPageOptions={[]}
-          onChangePage={onChangePage}
-        />
+        {!isLoading && (
+          <>
+            <Table
+              rows={rows}
+              selected={selected}
+              colDefinitions={colDefinitions}
+              onSelectedAll={_onSelectedAll}
+              onSelected={_onSelected}
+              isSelected={_isSelected}
+            ></Table>
+            <TablePagination
+              component="div"
+              count={rowCount}
+              page={page}
+              labelDisplayedRows={labelDisplayedRows}
+              rowsPerPage={rowsPerPage}
+              rowsPerPageOptions={[]}
+              onChangePage={onChangePage}
+            />
+          </>
+        )}
       </Grid>
+
+      {isLoading && (
+        <div className={classes.loading}>
+          <CircularProgress></CircularProgress>
+        </div>
+      )}
     </Grid>
   );
 };
