@@ -1,16 +1,19 @@
-import React, { useReducer, useContext, useEffect } from 'react'
+import React, { useReducer, useContext, useEffect, useState } from 'react'
 import { INIT } from '../consts'
 import DataManagementReducer, { KEYS } from '../reducers/data-management'
 import { httpContext } from './http'
 export const dataManagementContext = React.createContext({
   dataManagement: {},
-  setDataManagement: () => { }
+  setDataManagement: () => { },
+  refresh: false,
+  setRefresh: (refresh) => { }
 })
 
 
 const { Provider } = dataManagementContext
 
 export const DataManagementProvider = ({ children }) => {
+  const [refresh, setRefresh] = useState(false)
   const { currentAddress } = useContext(httpContext)
   const [dataManagement, setDataManagement] = useReducer(DataManagementReducer, {
     /**
@@ -28,6 +31,7 @@ export const DataManagementProvider = ({ children }) => {
      */
     partition: {}
   });
+
   useEffect(() => {
     if (!currentAddress || dataManagement[KEYS.vectorSearch][currentAddress]) return
     setDataManagement({
@@ -53,5 +57,5 @@ export const DataManagementProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress])
 
-  return <Provider value={{ dataManagement, setDataManagement }}>{children}</Provider>
+  return <Provider value={{ dataManagement, setDataManagement, refresh, setRefresh }}>{children}</Provider>
 }

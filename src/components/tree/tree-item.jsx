@@ -2,7 +2,6 @@
 import React, { useRef } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import { TreeItem } from '@material-ui/lab';
-import { useHistory } from 'react-router-dom'
 const useTreeItemStyles = makeStyles(theme => ({
   root: {
     color: '#fff',
@@ -69,16 +68,15 @@ const useTreeItemStyles = makeStyles(theme => ({
 }));
 function StyledTreeItem(props) {
   const classes = useTreeItemStyles();
-  const histroy = useHistory()
-  const { labelText, labelIcon: LabelIcon, url, labelInfo, propsClick, disabled, activeId, nodeId, ...other } = props;
+  const { labelText, labelIcon: LabelIcon, url, labelInfo, propsClick, propsRefresh, disabled, activeId, nodeId, labelRefresh: LabelRefresh, ...other } = props;
   const itemRef = useRef(null)
   const handleClick = e => {
-    const { id, url } = itemRef.current.dataset
-    propsClick(id)
-    url && histroy.push(url)
-
+    const { id, url, name } = itemRef.current.dataset
+    propsClick(id, url, name)
   }
-  console.log(disabled)
+  const handleRefresh = () => {
+    propsRefresh()
+  }
   return (
     <TreeItem
       ref={itemRef}
@@ -91,6 +89,9 @@ function StyledTreeItem(props) {
           <Typography variant="caption" color="inherit">
             {labelInfo}
           </Typography>
+          {
+            LabelRefresh && <LabelRefresh onClick={handleRefresh}></LabelRefresh>
+          }
         </div>
       }
       style={{
@@ -99,6 +100,7 @@ function StyledTreeItem(props) {
       }}
       data-id={nodeId}
       data-url={url}
+      data-name={labelText}
       nodeId={nodeId}
       classes={{
         root: `${disabled ? classes.disabled : classes.root} ${activeId === nodeId && classes.active}`,

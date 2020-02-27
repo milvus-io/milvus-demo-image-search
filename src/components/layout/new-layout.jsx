@@ -2,17 +2,16 @@ import React, { useContext, useState, useEffect } from 'react'
 import { makeStyles, Popover, Typography, Box, Button, Tab } from "@material-ui/core";
 import { Home, Settings, Storage, ExitToApp } from '@material-ui/icons';
 import { useTranslation } from "react-i18next";
+import { useRouteMatch } from 'react-router-dom'
 import Logo from '../../assets/imgs/logo.svg'
 import { KEYS } from '../../reducers/data-management'
 import { httpContext } from "../../context/http"
 import { dataManagementContext } from "../../context/data-management"
 import { systemContext } from "../../context/system"
-import { CLIENT_HISTORY, DELETE_MUTIPLE, ADD, DISCONNECT, INIT } from '../../consts';
+import { CLIENT_HISTORY, DELETE_MUTIPLE, DISCONNECT, INIT } from '../../consts';
 import { cloneObj } from '../../utils/helpers'
 import MyTabs from '../../components/tab'
 import TabPanel from '../../components/tab-panel'
-import { useQuery } from '../../hooks'
-
 import DataMenu from './data-menu'
 import ConfigMenu from './config-menu'
 import LoginMenu from './login-menu';
@@ -26,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     padding: `${theme.spacing(8)}px ${theme.spacing(1)}px`,
     height: "100vh",
-    backgroundColor: "rgb(35, 47, 62)",
+    backgroundColor: "rgb(27, 36, 48)",
   },
   icon: {
     marginBottom: theme.spacing(4),
@@ -38,8 +37,8 @@ const useStyles = makeStyles(theme => ({
     fill: theme.palette.primary.main
   },
   menuWrapper: {
-    flex: " 0 0 300px",
-    backgroundColor: "rgb(27, 36, 48)",
+    flex: " 0 0 270px",
+    backgroundColor: "rgb(35, 47, 62)",
     color: "rgb(238, 238, 238)",
     '& .logo-wrapper': {
       padding: `${theme.spacing(2)}px 0 0 ${theme.spacing(2)}px`,
@@ -50,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     height: 'calc(100vh - 117px)',
     overflowY: 'auto',
-    backgroundColor: "rgb(27, 36, 48)",
+    backgroundColor: "rgb(35, 47, 62)",
     fontSize: "14px",
     fontWeight: 400
   },
@@ -84,7 +83,6 @@ const useStyles = makeStyles(theme => ({
 
 const Layout = props => {
   const classes = useStyles()
-  const query = useQuery()
   const { t } = useTranslation();
   const buttonTrans = t("button");
   const { currentAddress, setCurrentAddress } = useContext(httpContext)
@@ -94,9 +92,26 @@ const Layout = props => {
   const [firstMenu, setFisrstMenu] = useState('data')
   const [tabValue, setTabValue] = useState(0)
   const [tabName, setTabName] = useState("")
+
+  const collectionMatch = useRouteMatch("/data/collections/:collectionName");
+  const partitionMatch = useRouteMatch("/data/collections/:collectionName/partitions/:partitionTag")
+  const collectionsMatch = useRouteMatch("/data/collections")
+
   useEffect(() => {
-    setTabName(query.get('tabName'))
-  }, [query])
+    const { isExact, params } = collectionMatch || {}
+    const { isExact: isPartition, params: partitionParams } = partitionMatch || {}
+    const { isExact: isCollections } = collectionsMatch || {}
+    if (isExact) {
+      setTabName(params.collectionName)
+    }
+    if (isPartition) {
+      setTabName(partitionParams.partitionTag)
+    }
+    if (isCollections) {
+      setTabName('collections')
+    }
+  }, [partitionMatch, collectionMatch, collectionsMatch])
+
   const handleFirstMenuChange = e => {
     const name = e.currentTarget.dataset.name
     setFisrstMenu(name)
@@ -242,7 +257,7 @@ const Layout = props => {
                   zIndex: 10
                 }}
               >
-                <Tab label={tabName || ""} />
+                <Tab label={tabName} />
                 <Tab label="search" />
               </MyTabs>
               <TabPanel value={tabValue} index={0} >{props.children}</TabPanel>
