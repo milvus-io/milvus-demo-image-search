@@ -13,7 +13,7 @@ export const httpContext = React.createContext({
   setCurrentAddress: () => { },
   restartNotify: () => { },
   // data management api
-  getTables: () => { },
+  getCollections: () => { },
   createTable: () => { },
   deleteTable: () => { },
   createIndex: () => { },
@@ -94,7 +94,6 @@ export const HttpProvider = ({ children }) => {
         }, 2)
         return Promise.resolve()
       }
-      console.log(restartStatus, timer)
       if (restartStatus) {
         if (timer) {
           clearTimeout(timer)
@@ -123,7 +122,7 @@ export const HttpProvider = ({ children }) => {
     return res.data;
   }
 
-  async function getTables(params = {}) {
+  async function getCollections(params = {}) {
     const res = await axiosInstance.get("/tables", { params });
     return res.data;
   }
@@ -259,7 +258,7 @@ export const HttpProvider = ({ children }) => {
     getHardwareType: httpWrapper(getHardwareType),
     // data management api
     searchVectors: httpWrapper(searchVectors),
-    getTables: httpWrapper(getTables),
+    getCollections: httpWrapper(getCollections),
     createTable: httpWrapper(createTable),
     deleteTable: httpWrapper(deleteTable),
     createIndex: httpWrapper(createIndex),

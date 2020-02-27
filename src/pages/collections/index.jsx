@@ -44,7 +44,7 @@ const fake = [
 const { Search } = Input;
 const PAGE_SIZE = 10;
 const TableManage = props => {
-  const { getTables, deleteTable, searchTable, currentAddress } = useContext(
+  const { getCollections, deleteTable, searchTable, currentAddress } = useContext(
     httpContext
   );
   const { dataManagement, setDataManagement } = useContext(
@@ -95,7 +95,7 @@ const TableManage = props => {
   //   message.success(tableTrans.delete);
   // };
   const fetchData = async () => {
-    const res = await getTables({ offset, page_size: PAGE_SIZE });
+    const res = await getCollections({ offset, page_size: PAGE_SIZE });
     if (res && res.tables) {
       setDataManagement({
         type: UPDATE,

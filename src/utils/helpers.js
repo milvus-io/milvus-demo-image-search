@@ -31,3 +31,20 @@ export const validateEmpty = (value) => {
 export const safetyGet = (obj = {}, key = "", defaultVal = "") => {
   return obj[key] || defaultVal
 }
+
+/**
+ * 
+ * @param {*} obj  {a:1}
+ * @param {*} key1 "label"
+ * @param {*} key2 "value"
+ * @returns {*} [{[key1]:a,[key2]:1}]
+ */
+export const parseObjectToAssignKey = (obj, key1, key2) => {
+  return Object.keys(obj).map(key => {
+    const val = obj[key]
+    return {
+      [key1]: key,
+      [key2]: val,
+    }
+  })
+}

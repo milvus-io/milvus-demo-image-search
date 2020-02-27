@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from "components/layout/new-layout";
-import TablePage from "pages/table";
+import Collections from "pages/collections";
 import PartitionPage from "pages/partition";
 import Login from 'pages/login/index'
 import NetworkPage from "pages/network";
@@ -34,13 +34,13 @@ const HashRouterWrapper = () => {
                         <Route path="/login" exact>
                           <Login></Login>
                         </Route>
-                        <Route path="/data/table" exact>
-                          <TablePage></TablePage>
+                        <Route path="/data/collections" exact>
+                          <Collections></Collections>
                         </Route>
                         <Route path="/data/partition">
                           <PartitionPage></PartitionPage>
                         </Route>
-                        <Route path="/data/table/:tableName/partitions">
+                        <Route path="/data/collections/:collectionName/partitions">
                           <PartitionPage></PartitionPage>
                         </Route>
 
