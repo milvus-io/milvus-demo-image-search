@@ -3,8 +3,7 @@ import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
 import { FaQuestionCircle } from 'react-icons/fa';
 import { Slider, Select, MenuItem, DialogActions, DialogContent, DialogTitle, Button } from '@material-ui/core'
-import TextField from '@material-ui/core/TextField';
-const CreateCollection = props => {
+const DeleteCollection = props => {
   const classes = makeStyles(theme => ({
     wrapper: {
       display: 'flex',
@@ -31,13 +30,7 @@ const CreateCollection = props => {
       <DialogContent>
         <Grid container spacing={3}>
           <Grid item sm={4}>
-            <div className={classes.wrapper}><span className={classes.column}>Collection Name</span> <FaQuestionCircle /></div>
-          </Grid>
-          <Grid item sm={8}>
-            <TextField value={params.name} onChange={e => setParams(params => ({ ...params, name: e.target.value }))} />
-          </Grid>
-          <Grid item sm={4}>
-            <div className={classes.wrapper}><span className={classes.column}>Metric Type</span> <FaQuestionCircle /></div>
+            <div className={classes.wrapper}><span className={classes.column}>Index Type</span> <FaQuestionCircle /></div>
           </Grid>
           <Grid item sm={8}>
             <Select
@@ -53,13 +46,7 @@ const CreateCollection = props => {
             </Select>
           </Grid>
           <Grid item sm={4}>
-            <div className={classes.wrapper}><span className={classes.column}>Dimension</span> <FaQuestionCircle /></div>
-          </Grid>
-          <Grid item sm={8}>
-            <Slider value={params.dimension} />
-          </Grid>
-          <Grid item sm={4}>
-            <div className={classes.wrapper}><span className={classes.column}>Index File Size</span> <FaQuestionCircle /></div>
+            <div className={classes.wrapper}><span className={classes.column}>nlist</span> <FaQuestionCircle /></div>
           </Grid>
           <Grid item sm={8}>
             <Slider value={params.dimension} />
@@ -77,4 +64,4 @@ const CreateCollection = props => {
     </>)
 }
 
-export default CreateCollection
+export default DeleteCollection
