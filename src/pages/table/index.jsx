@@ -24,6 +24,23 @@ import { KEYS } from "../../reducers/data-management";
 import { UPDATE } from "../../consts";
 import "./index.less";
 
+function createData(name, calories, fat, carbs, protein) {
+  return { id: name, name, calories, fat, carbs, protein };
+}
+
+const fake = [
+  createData("Cupcake", 305, 3.7, 67, 4.3),
+  createData("Donut", 452, 25.0, 51, 4.9),
+  createData("Eclair", 262, 16.0, 24, 6.0),
+  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
+  createData("Gingerbread", 356, 16.0, 49, 3.9),
+  createData("Honeycomb", 408, 3.2, 87, 6.5),
+  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+  createData("Jelly Bean", 375, 0.0, 94, 0.0),
+  createData("KitKat", 518, 26.0, 65, 7.0),
+  createData("Lollipop", 392, 0.2, 98, 0.0)
+];
+
 const { Search } = Input;
 const PAGE_SIZE = 10;
 const TableManage = props => {
@@ -47,11 +64,11 @@ const TableManage = props => {
   const [count, setCount] = useState(0);
   const [current, setCurrent] = useState(1);
 
-  // const { data } = useMemo(() => {
-  //   const { data = null } = dataManagement[KEYS.table][currentAddress] || {};
-  //   console.log("in", dataManagement);
-  //   return { data };
-  // }, [dataManagement, currentAddress]);
+  const { data } = useMemo(() => {
+    const { data = [] } = dataManagement[KEYS.table][currentAddress] || {};
+    console.log("in", dataManagement);
+    return { data };
+  }, [dataManagement, currentAddress]);
   // console.log(data);
   // const createTable = () => {
   //   setType("table");
@@ -77,25 +94,25 @@ const TableManage = props => {
   //   setCurrent(1);
   //   message.success(tableTrans.delete);
   // };
-  // const fetchData = async () => {
-  //   const res = await getTables({ offset, page_size: PAGE_SIZE });
-  //   if (res && res.tables) {
-  //     setDataManagement({
-  //       type: UPDATE,
-  //       payload: {
-  //         id: currentAddress,
-  //         key: KEYS.table,
-  //         value: {
-  //           data: res.tables.map(v => ({
-  //             ...v,
-  //             key: v.table_name
-  //           }))
-  //         }
-  //       }
-  //     });
-  //     setCount(res.count);
-  //   }
-  // };
+  const fetchData = async () => {
+    const res = await getTables({ offset, page_size: PAGE_SIZE });
+    if (res && res.tables) {
+      setDataManagement({
+        type: UPDATE,
+        payload: {
+          id: currentAddress,
+          key: KEYS.table,
+          value: {
+            data: res.tables.map(v => ({
+              ...v,
+              key: v.table_name
+            }))
+          }
+        }
+      });
+      setCount(res.count);
+    }
+  };
 
   // const saveSuccess = txt => {
   //   setVisible(false);
@@ -104,92 +121,10 @@ const TableManage = props => {
   //   message.success(txt);
   // };
 
-  // useEffect(() => {
-  //   fetchData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [offset, currentAddress]);
-
-  // const columns = [
-  //   {
-  //     title: tableTrans.tName,
-  //     dataIndex: "table_name",
-  //     key: "table_name"
-  //   },
-  //   {
-  //     title: tableTrans.tDimension,
-  //     dataIndex: "dimension",
-  //     key: "dimension"
-  //   },
-
-  //   {
-  //     title: tableTrans.tMetric,
-  //     dataIndex: "metric_type",
-  //     key: "metric_type"
-  //   },
-  //   {
-  //     title: tableTrans.fileSize,
-  //     dataIndex: "index_file_size",
-  //     key: "index_file_size"
-  //   },
-  //   {
-  //     title: tableTrans.tIndex,
-  //     dataIndex: "index",
-  //     key: "index"
-  //   },
-  //   {
-  //     title: "nlist",
-  //     dataIndex: "nlist",
-  //     key: "nlist"
-  //   },
-  //   {
-  //     title: tableTrans.tAction,
-  //     key: "action",
-  //     render: (text, record) => {
-  //       return (
-  //         <span>
-  //           <span
-  //             style={{ fontSize: "12px", color: "#FAFAFA", cursor: "pointer" }}
-  //             onClick={() => {
-  //               handleGoPartitions(record);
-  //             }}
-  //           >
-  //             {tableTrans.partitions}
-  //           </span>
-  //           <Divider type="vertical" />
-  //           <span
-  //             style={{ fontSize: "12px", color: "#FAFAFA", cursor: "pointer" }}
-  //             onClick={() => {
-  //               handleAddIndex(record);
-  //             }}
-  //           >
-  //             {tableTrans.updateIndex}
-  //           </span>
-  //           <Divider type="vertical" />
-  //           <Popconfirm
-  //             placement="top"
-  //             title={`${tableTrans.confirmDel} ${record.table_name} ?`}
-  //             onConfirm={() => {
-  //               handleDelete(record);
-  //             }}
-  //             okText="Delete"
-  //             cancelText="Cancel"
-  //           >
-  //             {/* <Icon type="delete" style={{ color: "#FAFAFA" }}></Icon> */}
-  //             <span
-  //               style={{
-  //                 fontSize: "12px",
-  //                 color: "#FAFAFA",
-  //                 cursor: "pointer"
-  //               }}
-  //             >
-  //               {tableTrans.deleteTable}
-  //             </span>
-  //           </Popconfirm>
-  //         </span>
-  //       );
-  //     }
-  //   }
-  // ];
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offset, currentAddress]);
 
   // const handleSearch = async name => {
   //   setCurrent(1);
@@ -225,15 +160,93 @@ const TableManage = props => {
   //   setCurrent(page);
   // };
 
+  console.log("data", data);
+
+  const colDefinitions = [
+    {
+      id: "table_name",
+      numeric: false,
+      disablePadding: true,
+      label: tableTrans.tName
+    },
+    {
+      id: "dimension",
+      numeric: true,
+      disablePadding: false,
+      label: tableTrans.tDimension
+    },
+    {
+      id: "metric_type",
+      numeric: true,
+      disablePadding: false,
+      label: tableTrans.tMetric
+    },
+    {
+      id: "index_file_size",
+      numeric: true,
+      disablePadding: false,
+      label: tableTrans.fileSize
+    },
+    {
+      id: "index",
+      numeric: true,
+      disablePadding: false,
+      label: tableTrans.tIndex
+    }
+  ];
+
+  const toolbarConfig = [
+    {
+      label: "",
+      icon: "refresh",
+      onClick: () => {
+        console.log();
+      },
+      disabled: false
+    },
+    {
+      label: "Create",
+      icon: "create",
+      onClick: () => console.log("one"),
+      disabled: selected => selected.length > 2
+    },
+
+    {
+      label: "Delete",
+      icon: "delete",
+      onClick: (e, selected) => console.log("one", selected),
+      disabled: selected => selected.length === 0,
+      disabledTooltip: "You can not delete this"
+    },
+    {
+      label: "Create Index",
+      icon: "createIndex",
+      onClick: selected => console.log("one", selected),
+      disabled: selected => selected.length > 2,
+      disabledTooltip: "You can not create index on multiple collections"
+    },
+    {
+      label: "Drop Index",
+      icon: "dropIndex",
+      onClick: selected => console.log("one", selected),
+      disabled: false
+    }
+  ];
+
+  const rows = data || [];
 
   return (
     <div className={`${classes.root} table-wrapper`}>
-      {/* <div className="header">
-        <h2>{dataManageTrans.table}</h2>
-      </div> */}
       <Paper className={classes.paper}>
         <Box p={2}>
-          <MilvusGrid></MilvusGrid>
+          <MilvusGrid
+            toolbarConfig={toolbarConfig}
+            colDefinitions={colDefinitions}
+            rows={rows}
+            rowsPerPage={5}
+            rowCount={rows.length}
+            primaryKey="table_name"
+          ></MilvusGrid>
         </Box>
       </Paper>
     </div>

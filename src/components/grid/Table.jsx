@@ -69,18 +69,18 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
+            {headCell.label}
+            {/* <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
+              // onClick={createSortHandler(headCell.id)}
             >
-              {headCell.label}
               {orderBy === headCell.id ? (
                 <span className={classes.visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </span>
               ) : null}
-            </TableSortLabel>
+            </TableSortLabel> */}
           </TableCell>
         ))}
       </TableRow>
@@ -129,7 +129,7 @@ export default function EnhancedTable(props) {
     onSelected,
     isSelected,
     onSelectedAll,
-    rows,
+    rows = [],
     colDefinitions
   } = props;
   const classes = useStyles();
@@ -164,13 +164,13 @@ export default function EnhancedTable(props) {
           <TableBody>
             {stableSort(rows, getComparator(order, orderBy)).map(
               (row, index) => {
-                const isItemSelected = isSelected(row.name);
+                const isItemSelected = isSelected(row);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={event => onSelected(event, row.name)}
+                    onClick={event => onSelected(event, row, index)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -183,18 +183,16 @@ export default function EnhancedTable(props) {
                         inputProps={{ "aria-labelledby": labelId }}
                       />
                     </TableCell>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
-                    >
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
+                    {colDefinitions.map((colDef, i) => {
+                      return (
+                        <TableCell
+                          padding={i === 0 ? "none" : "auto"}
+                          align={colDef.numeric ? "right" : "left"}
+                        >
+                          {row[colDef.id]}
+                        </TableCell>
+                      );
+                    })}
                   </TableRow>
                 );
               }
