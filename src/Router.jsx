@@ -37,10 +37,11 @@ const HashRouterWrapper = () => {
                         <Route path="/data/collections" exact>
                           <Collections></Collections>
                         </Route>
-                        <Route path="/data/partition">
+                        <Route path="/data/collections/:collectionName" exact>
                           <PartitionPage></PartitionPage>
                         </Route>
-                        <Route path="/data/collections/:collectionName/partitions">
+
+                        <Route path="/data/collections/:collectionName/partitions/:partitionTag">
                           <PartitionPage></PartitionPage>
                         </Route>
 

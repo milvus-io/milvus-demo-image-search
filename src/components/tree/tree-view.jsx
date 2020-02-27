@@ -3,6 +3,7 @@ import { makeStyles, CircularProgress } from '@material-ui/core';
 import { TreeView } from '@material-ui/lab';
 import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
 import { AiOutlineTable } from 'react-icons/ai'
+import { IoMdRefresh } from 'react-icons/io'
 
 import StyledTreeItem from './tree-item'
 
@@ -28,7 +29,7 @@ const useStyles = makeStyles(theme => ({
  */
 const StyledTreeView = props => {
   const classes = useStyles();
-  const { data, total, handleMenuClick } = props
+  const { data, total, handleMenuClick, handleRefresh } = props
   const [activeId, setAcitveId] = useState('')
   const [expanded, setExpanded] = useState(['1'])
   const handleClick = (nodeId, url, name) => {
@@ -59,9 +60,19 @@ const StyledTreeView = props => {
   }
 
   const handleNodeToggle = (e, nodeIds) => {
-    const copy = [...nodeIds]
-    // only allow one child open
-    copy.length > 2 && copy.splice(1, 1)
+
+    const copy = nodeIds.filter((v, i) => {
+      // the newer
+      if (i === 0) {
+        return true
+      }
+      // collections 
+      if (v === '1') {
+        return true
+      }
+      // the older
+      return false
+    })
     setExpanded(copy)
   }
 
@@ -76,11 +87,12 @@ const StyledTreeView = props => {
     >
       <StyledTreeItem
         nodeId="1"
-        labelText="Collections"
-        labelInfo={total}
+        labelText={`Collections(${total})`}
+        labelRefresh={IoMdRefresh}
         labelIcon={AiOutlineTable}
         activeId={activeId}
         propsClick={handleClick}
+        propsRefresh={handleRefresh}
         url="/data/collections?tabName=collections"
       >
         {

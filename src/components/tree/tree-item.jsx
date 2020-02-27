@@ -68,11 +68,14 @@ const useTreeItemStyles = makeStyles(theme => ({
 }));
 function StyledTreeItem(props) {
   const classes = useTreeItemStyles();
-  const { labelText, labelIcon: LabelIcon, url, labelInfo, propsClick, disabled, activeId, nodeId, ...other } = props;
+  const { labelText, labelIcon: LabelIcon, url, labelInfo, propsClick, propsRefresh, disabled, activeId, nodeId, labelRefresh: LabelRefresh, ...other } = props;
   const itemRef = useRef(null)
   const handleClick = e => {
     const { id, url, name } = itemRef.current.dataset
     propsClick(id, url, name)
+  }
+  const handleRefresh = () => {
+    propsRefresh()
   }
   return (
     <TreeItem
@@ -86,6 +89,9 @@ function StyledTreeItem(props) {
           <Typography variant="caption" color="inherit">
             {labelInfo}
           </Typography>
+          {
+            LabelRefresh && <LabelRefresh onClick={handleRefresh}></LabelRefresh>
+          }
         </div>
       }
       style={{
