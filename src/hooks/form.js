@@ -40,7 +40,6 @@ export function useFormStyles() {
   return classes
 }
 
-
 export function useFormValidate(form, setForm, setError) {
   // just validate is required 
   const validateForm = () => {
