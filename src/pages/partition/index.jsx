@@ -1,22 +1,19 @@
-import React, { useState, useEffect, useContext, useMemo } from "react";
-import { useHistory, useParams } from 'react-router-dom'
+import React, { useState, useEffect, useContext } from "react";
+import { useParams } from 'react-router-dom'
 import { useTranslation } from "react-i18next";
 import { httpContext } from '../../context/http'
 import { materialContext } from '../../context/material'
 import PageWrapper from '../../components/page-wrapper'
 import MilvusGrid from "../../components/grid";
+import CreatePartition from '../../components/dialogs/CreatePartition'
 import { useDataPageStyles } from "../../hooks/page";
 
-import PatitionForm from './form'
-import "./index.less";
 
-// const { Search } = Input;
 const PAGE_SIZE = 2;
 const Partitions = props => {
   const classes = useDataPageStyles()
-  const { getPartitions, getCollectionByName, deletePartition, currentAddress } = useContext(httpContext)
-  const { openSnackBar } = useContext(materialContext)
-  const history = useHistory()
+  const { getPartitions, getCollectionByName, deletePartition, currentAddress, createPartition } = useContext(httpContext)
+  const { openSnackBar, setDialog } = useContext(materialContext)
   const { collectionName } = useParams()
   const { t } = useTranslation();
   const partitionTrans = t("partition");
@@ -27,14 +24,12 @@ const Partitions = props => {
   const [count, setCount] = useState(0); // total count for pagination
   const [current, setCurrent] = useState(0); // current page for pagination
 
-
-
-
   /**
    *  for now we just take the table from params
    *  so the fecthData(xxx) will igonre
    */
   const fetchData = async () => {
+    if (!currentAddress) return
     try {
       const res = await Promise.all([getPartitions(collectionName, { offset, page_size: PAGE_SIZE }), getCollectionByName(collectionName)]);
       const partitions = res[0] && res[0].partitions
@@ -54,37 +49,9 @@ const Partitions = props => {
     }
   }
 
-  const saveSuccess = (txt, tableName) => {
-    getFirstPage(tableName);
+  const saveSuccess = () => {
+    getFirstPage();
     setCurrent(0);
-    openSnackBar(txt)
-  };
-
-  const columns = [
-    {
-      title: partitionTrans.name,
-      dataIndex: "partition_name",
-      key: "partition_name"
-    },
-    {
-      title: partitionTrans.tag,
-      dataIndex: "partition_tag",
-      key: "partition_tag"
-    },
-    {
-      title: partitionTrans.tableName,
-      dataIndex: "tableName",
-      key: "tableName"
-    },
-  ];
-
-
-  const handleSearch = async name => {
-    if (!name) {
-      return;
-    }
-    setCurrent(0);
-    getFirstPage(name)
   };
 
   const getFirstPage = () => {
@@ -100,12 +67,7 @@ const Partitions = props => {
     setCurrent(page);
   };
 
-  const handleBack = () => {
-    history.goBack()
-  }
-
   useEffect(() => {
-    console.log('in')
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset, currentAddress]);
@@ -156,7 +118,13 @@ const Partitions = props => {
     {
       label: "Create",
       icon: "create",
-      onClick: () => console.log("one"),
+      onClick: () => setDialog({
+        open: true,
+        type: 'custom',
+        params: {
+          component: <CreatePartition createPartition={createPartition} saveSuccess={saveSuccess} collectionName={collectionName}></CreatePartition>,
+        }
+      }),
       disabled: selected => selected.length > 2
     },
     {
@@ -166,15 +134,15 @@ const Partitions = props => {
       disabled: selected => selected.length === 0,
       disabledTooltip: "You can not delete this"
     },
-    {
-      label: "",
-      icon: "search",
-      searchText: "",
-      onSearch: text => console.log("search value is", text),
-      onClear: () => {
-        console.log("clear clear");
-      }
-    }
+    // {
+    //   label: "",
+    //   icon: "search",
+    //   searchText: "",
+    //   onSearch: text => console.log("search value is", text),
+    //   onClear: () => {
+    //     console.log("clear clear");
+    //   }
+    // }
   ];
 
   const rows = data || [];
@@ -193,25 +161,9 @@ const Partitions = props => {
           onChangePage={handlePageChange}
           primaryKey="partition_tag"
           isLoading={false}
+          title={collectionName}
         ></MilvusGrid>
       </PageWrapper>
-
-
-      {/* <Modal
-        title={partitionTrans.create}
-        visible={visible}
-        footer={null}
-        onCancel={handleCancel}
-        wrapClassName="my-modal"
-        centered={true}
-      >
-        <PatitionForm
-          tableName={collectionName}
-          handleCancel={handleCancel}
-          saveSuccess={saveSuccess}
-        ></PatitionForm>
-
-      </Modal> */}
     </div>
   );
 };

@@ -60,6 +60,7 @@ const Collections = props => {
   };
 
   useEffect(() => {
+    if (!currentAddress) return
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset, currentAddress]);

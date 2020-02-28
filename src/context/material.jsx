@@ -11,6 +11,9 @@ function Alert(props) {
 
 export const materialContext = React.createContext({
   openSnackBar: (message, type = "success", duration, position = { vertical: "top", horizontal: "center" }) => { },
+  dialog: {},
+  setDialog: (params) => { },
+  hideDialog: () => { }
 })
 
 const theme = createMuiTheme({

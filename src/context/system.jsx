@@ -59,6 +59,7 @@ export const SystemProvider = ({ children }) => {
   }, [JSON.stringify(milvusAddress)])
 
   useEffect(() => {
+    if (!currentAddress) return
 
     const fetchData = async () => {
       const res = await Promise.all([
