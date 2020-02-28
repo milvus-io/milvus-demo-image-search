@@ -5,10 +5,6 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { DialogActions, DialogContent, DialogTitle, Button, Dialog } from '@material-ui/core'
 import { blue } from '@material-ui/core/colors'
 import MuiAlert from '@material-ui/lab/Alert';
-// import ImportVectorToCollection from '../components/dialogs/ImportVectorToCollection'
-import CreateCollection from '../components/dialogs/CreateCollection'
-// import CreatePartition from '../components/dialogs/CreatePartition'
-// import DeleteCollection from '../components/dialogs/DeleteCollection'
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
