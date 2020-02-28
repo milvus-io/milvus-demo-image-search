@@ -33,7 +33,7 @@ export default {
   },
   dataManage: {
     title: "Data Management",
-    table: "Table and Index",
+    collections: "Collections",
     partition: "Partition",
     vector: "Vector Search"
   },

@@ -33,7 +33,7 @@ export default {
   },
   dataManage: {
     title: "数据管理",
-    table: "表和索引",
+    collections: "Collections",
     partition: "分区",
     vector: "向量搜索"
   },

@@ -10,7 +10,6 @@ const defaultForm = { address: "", port: "" }
 
 const NetworkFrom = (props) => {
   const [form, setForm] = useState({ ...defaultForm })
-
   const [error, setError] = useState({})
 
   const classes = useFormStyles();

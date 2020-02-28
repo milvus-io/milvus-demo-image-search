@@ -7,7 +7,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 
 function descendingComparator(a, b, orderBy) {
@@ -38,18 +37,13 @@ function stableSort(array, comparator) {
 
 function EnhancedTableHead(props) {
   const {
-    classes,
     onSelectAllClick,
     order,
     orderBy,
     numSelected,
     rowCount,
-    onRequestSort,
     colDefinitions
   } = props;
-  const createSortHandler = property => event => {
-    onRequestSort(event, property);
-  };
 
   return (
     <TableHead>
@@ -130,7 +124,8 @@ export default function EnhancedTable(props) {
     isSelected,
     onSelectedAll,
     rows = [],
-    colDefinitions
+    colDefinitions,
+    primaryKey
   } = props;
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
@@ -170,11 +165,11 @@ export default function EnhancedTable(props) {
                 return (
                   <TableRow
                     hover
+                    key={'row' + row[primaryKey] + index}
                     onClick={event => onSelected(event, row, index)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.name}
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">
@@ -186,7 +181,8 @@ export default function EnhancedTable(props) {
                     {colDefinitions.map((colDef, i) => {
                       return (
                         <TableCell
-                          padding={i === 0 ? "none" : "auto"}
+                          key={'cell' + row[primaryKey] + i}
+                          padding={i === 0 ? "none" : "default"}
                           align={colDef.numeric ? "right" : "left"}
                         >
                           {row[colDef.id]}

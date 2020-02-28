@@ -92,12 +92,14 @@ const MilvusGrid = props => {
           config={toolbarConfig}
           total={rowCount}
           selected={selected}
+          setSelected={setSelected}
         ></Toolbar>
       </Grid>
       <Grid item xs={12}>
         {!isLoading && (
           <>
             <Table
+              primaryKey={primaryKey}
               rows={rows}
               selected={selected}
               colDefinitions={colDefinitions}

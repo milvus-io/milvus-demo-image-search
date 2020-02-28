@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { lighten, fade, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
@@ -61,7 +60,7 @@ const useSearchStyles = makeStyles(theme => ({
 }));
 const Search = props => {
   const classes = useSearchStyles();
-  const { onClick = () => {}, searchText = "", onClear = () => {} } = props;
+  const { searchText = "", onClear = () => {}, onSearch = () => {} } = props;
   const [searchValue, setSearchValue] = React.useState(searchText);
   const searched = searchValue !== "";
   return (
@@ -78,7 +77,7 @@ const Search = props => {
           console.log(`Pressed keyCode ${e.key}`, e.target.value);
           if (e.key === "Enter") {
             // Do code here
-            onClick(searchValue);
+            onSearch(searchValue);
             e.preventDefault();
           }
         }}
@@ -139,11 +138,11 @@ const iconGetter = (icon, props) => {
 };
 
 const Toolbar = props => {
-  const { color = "primary", config = [], selected, total } = props;
+  const { color = "primary", config = [], selected, setSelected } = props;
   const classes = useToolbarStyles();
 
   // remove hidden button
-  const newConfig = config.filter(c => !c.hidden && c.icon !== 'search');
+  const newConfig = config.filter(c => !c.hidden && c.icon !== "search");
   const searchConfig = config.filter(c => c.icon === "search")[0];
   newConfig.forEach(c => {
     c._disabled =
@@ -157,8 +156,6 @@ const Toolbar = props => {
           <ButtonGroup
             color={color}
             size="small"
-            color="primary"
-            fullWidth={false}
             aria-label="outlined button group"
           >
             {newConfig.map(c => {
@@ -169,12 +166,13 @@ const Toolbar = props => {
                   size="small"
                   className={classes.button}
                   disabled={c._disabled}
-                  onClick={e => c.onClick(e, selected)}
+                  onClick={async e => {
+                    await c.onClick(e, selected);
+                    setSelected([]);
+                  }}
                   startIcon={iconGetter(c.icon, c)}
                 >
-                  <Typography nowrap variant="button">
-                    {c.label}
-                  </Typography>
+                  <Typography variant="button">{c.label}</Typography>
                 </Button>
               );
 
@@ -186,7 +184,7 @@ const Toolbar = props => {
                   title={c._disabled ? c.disabledTooltip : c.tooltip}
                   key={c.icon + "tooltip"}
                 >
-                  <span>{btn}</span>
+                  <div>{btn}</div>
                 </Tooltip>
               ) : (
                 btn

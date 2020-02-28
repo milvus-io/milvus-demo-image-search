@@ -11,6 +11,9 @@ function Alert(props) {
 
 export const materialContext = React.createContext({
   openSnackBar: (message, type = "success", duration, position = { vertical: "top", horizontal: "center" }) => { },
+  dialog: {},
+  setDialog: (params) => { },
+  hideDialog: () => { }
 })
 
 const theme = createMuiTheme({
@@ -33,7 +36,7 @@ const theme = createMuiTheme({
   },
 });
 
-const HiddenDialog = {
+const DefaultDialogConfigs = {
   open: false,
   type: 'notice',
   params: {
@@ -61,7 +64,7 @@ export const MaterialProvider = ({ children }) => {
     vertical: "top",
     horizontal: "center"
   })
-  const [dialog, setDialog] = useState(HiddenDialog);
+  const [dialog, setDialog] = useState(DefaultDialogConfigs);
 
   const handleClose = (e, reason) => {
     // only click x to close or auto hide.
@@ -81,7 +84,7 @@ export const MaterialProvider = ({ children }) => {
   }
   const { open, type, params = {} } = dialog;
   const { title, component, confirm, confirmLabel = "", cancel, cancelLabel = "" } = params; // for notice type
-  const { props = {}, Component } = params; // for custom type
+  const { props = {}, component: CustomComponent } = params; // for custom type
   const _confirmDialog = async () => {
     if (confirm) {
       await confirm()
@@ -96,12 +99,14 @@ export const MaterialProvider = ({ children }) => {
   }
   const hideDialog = () => {
     console.log('hide dialog')
-    setDialog(HiddenDialog)
+    setDialog(DefaultDialogConfigs)
   }
 
   return <Provider value={{
     openSnackBar,
-    dialog, setDialog,
+    dialog,
+    setDialog,
+    hideDialog
   }}>
     <ThemeProvider theme={theme}>
       <Snackbar
@@ -116,7 +121,7 @@ export const MaterialProvider = ({ children }) => {
         </Alert>
       </Snackbar>
       {children}
-      <Dialog classes={{ paper: classes.paper }} open={open} onClose={() => setDialog(HiddenDialog)}>
+      <Dialog classes={{ paper: classes.paper }} open={open} onClose={() => setDialog(DefaultDialogConfigs)}>
         {type === 'notice'
           ? (<>
             <DialogTitle >{title}</DialogTitle>
@@ -130,7 +135,7 @@ export const MaterialProvider = ({ children }) => {
               </Button>
             </DialogActions>
           </>)
-          : (<Component {...props} hideDialog={hideDialog} />)
+          : CustomComponent
         }
 
       </Dialog>
