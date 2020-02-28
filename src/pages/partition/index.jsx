@@ -96,7 +96,6 @@ const Partitions = props => {
   };
 
   const handlePageChange = (e, page) => {
-    console.log('page---change', page)
     setOffset(page * PAGE_SIZE);
     setCurrent(page);
   };

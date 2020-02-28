@@ -3,8 +3,7 @@ import { validateEmpty } from "../utils/helpers";
 
 const useStyles = makeStyles(theme => ({
   textField: {
-    marginBottom: theme.spacing(1),
-    width: "400px"
+    width: "300px"
   },
   "ml-2": {
     marginLeft: theme.spacing(2)
@@ -18,8 +17,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: "flex-end"
   },
   select: {
-    marginLeft: 0,
-    width: 400
+    width: '300px'
   },
   desc: {
     fontSize: "14px",

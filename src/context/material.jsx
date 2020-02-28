@@ -33,7 +33,7 @@ const theme = createMuiTheme({
   },
 });
 
-const HiddenDialog = {
+const DefaultDialogConfigs = {
   open: false,
   type: 'notice',
   params: {
@@ -43,25 +43,7 @@ const HiddenDialog = {
     cancel: () => { }
   },
 }
-// const TestDialog = {
-//   open: true,
-//   type: 'notice', // notice | custom
-//   params: {
-//     title: "Test Dialog",
-//     component: <div onClick={() => console.log('xixiixiixiix')}><p>wahhhhhh</p><p>this is test dialog </p></div>,
-//     confirmLabel: '确定',
-//     confirm: () => { console.log('dialog confirm') },
-//     cancelLabel: '取消',
-//     cancel: () => { console.log('dialog cancel') },
-//   },
-// }
-// const TestCustomDialog = {
-//   open: true,
-//   type: 'custom',
-//   params: {
-//     Component: CreateCollection
-//   },
-// }
+
 const { Provider } = materialContext
 // Dialog has two type : notice | custom;
 // notice type mean it's a notice dialog you need to set props like title, content, actions 
@@ -79,7 +61,7 @@ export const MaterialProvider = ({ children }) => {
     message: "",
     type: "success"
   })
-  const [dialog, setDialog] = useState(HiddenDialog);
+  const [dialog, setDialog] = useState(DefaultDialogConfigs);
 
   const handleClose = (e, reason) => {
     // only click x to close or auto hide.
@@ -99,7 +81,7 @@ export const MaterialProvider = ({ children }) => {
   }
   const { open, type, params = {} } = dialog;
   const { title, component, confirm, confirmLabel = "", cancel, cancelLabel = "" } = params; // for notice type
-  const { props = {}, Component } = params; // for custom type
+  const { props = {}, component: CustomComponent } = params; // for custom type
   const _confirmDialog = async () => {
     if (confirm) {
       await confirm()
@@ -114,12 +96,14 @@ export const MaterialProvider = ({ children }) => {
   }
   const hideDialog = () => {
     console.log('hide dialog')
-    setDialog(HiddenDialog)
+    setDialog(DefaultDialogConfigs)
   }
 
   return <Provider value={{
     openSnackBar,
-    dialog, setDialog,
+    dialog,
+    setDialog,
+    hideDialog
   }}>
     <ThemeProvider theme={theme}>
       <Snackbar
@@ -134,7 +118,7 @@ export const MaterialProvider = ({ children }) => {
         </Alert>
       </Snackbar>
       {children}
-      <Dialog classes={{ paper: classes.paper }} open={open} onClose={() => setDialog(HiddenDialog)}>
+      <Dialog classes={{ paper: classes.paper }} open={open} onClose={() => setDialog(DefaultDialogConfigs)}>
         {type === 'notice'
           ? (<>
             <DialogTitle >{title}</DialogTitle>
@@ -148,7 +132,7 @@ export const MaterialProvider = ({ children }) => {
               </Button>
             </DialogActions>
           </>)
-          : (<Component {...props} hideDialog={hideDialog} />)
+          : CustomComponent
         }
 
       </Dialog>

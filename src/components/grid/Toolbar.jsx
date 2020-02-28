@@ -61,7 +61,7 @@ const useSearchStyles = makeStyles(theme => ({
 }));
 const Search = props => {
   const classes = useSearchStyles();
-  const { onClick = () => {}, searchText = "", onClear = () => {} } = props;
+  const { searchText = "", onClear = () => { }, onSearch = () => { } } = props;
   const [searchValue, setSearchValue] = React.useState(searchText);
   const searched = searchValue !== "";
   return (
@@ -78,7 +78,7 @@ const Search = props => {
           console.log(`Pressed keyCode ${e.key}`, e.target.value);
           if (e.key === "Enter") {
             // Do code here
-            onClick(searchValue);
+            onSearch(searchValue);
             e.preventDefault();
           }
         }}
@@ -112,13 +112,13 @@ const useToolbarStyles = makeStyles(theme => ({
   highlight:
     theme.palette.type === "light"
       ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-        }
+        color: theme.palette.secondary.main,
+        backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+      }
       : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark
-        },
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.secondary.dark
+      },
   title: {
     flex: "1 1 100%"
   }
@@ -189,8 +189,8 @@ const Toolbar = props => {
                   <span>{btn}</span>
                 </Tooltip>
               ) : (
-                btn
-              );
+                  btn
+                );
             })}
           </ButtonGroup>
         </Grid>

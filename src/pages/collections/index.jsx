@@ -1,156 +1,96 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import MilvusGrid from "../../components/grid";
-import { useHistory } from "react-router-dom";
-import { Tab, Paper, Box } from "@material-ui/core";
+import { Paper, Box } from "@material-ui/core";
 import CollectionIcon from "@material-ui/icons/GridOnSharp";
-
-import {
-  Button,
-  Table,
-  Divider,
-  // Icon,
-  Modal,
-  Input,
-  Popconfirm,
-  message
-} from "antd";
 import { useDataPageStyles } from "../../hooks/page";
 import { useTranslation } from "react-i18next";
-import TableForm from "./table-form";
-import IndexForm from "./index-form";
 import { httpContext } from "../../context/http";
-import {materialContext} from '../../context/material'
-import { dataManagementContext } from "../../context/data-management";
+import { materialContext } from '../../context/material'
 import CreateCollection from '../../components/dialogs/CreateCollection'
-import { setDialog } from '../../context/material'
-import { KEYS } from "../../reducers/data-management";
-import { UPDATE } from "../../consts";
+
 import "./index.less";
 
-const { Search } = Input;
 const PAGE_SIZE = 10;
-const TableManage = props => {
+const Collections = props => {
   const {
     getCollections,
     deleteTable,
     searchTable,
+    createTable,
     currentAddress
   } = useContext(httpContext);
-  const { dataManagement, setDataManagement } = useContext(
-    dataManagementContext
-  );
-  const {setDialog} = useContext(materialContext)
-  const history = useHistory();
+
+  const { setDialog, openSnackBar } = useContext(materialContext)
   const classes = useDataPageStyles();
   const { t } = useTranslation();
   const tableTrans = t("table");
   const dataManageTrans = t("dataManage");
 
-  const [visible, setVisible] = useState(false);
-  const [record, setRecord] = useState("");
-  const [type, setType] = useState("table");
-
+  const [data, setData] = useState([])
   const [offset, setOffset] = useState(0);
   const [count, setCount] = useState(0);
-  const [current, setCurrent] = useState(1);
-
-  const { data } = useMemo(() => {
-    const { data = [] } = dataManagement[KEYS.table][currentAddress] || {};
-    console.log("in", dataManagement);
-    return { data };
-  }, [dataManagement, currentAddress]);
-  // console.log(data);
-  // const createTable = () => {
-  //   setType("table");
-  //   setVisible(true);
-  // };
-
-  // const handleCancel = () => {
-  //   setVisible(false);
-  // };
-
-  // const handleGoPartitions = record => {
-  //   history.push(`/data/table/${record.table_name}/partitions`);
-  // };
+  const [current, setCurrent] = useState(0);
 
   // const handleAddIndex = record => {
   //   setType("index");
   //   setVisible(true);
   //   setRecord(record);
   // };
-  // const handleDelete = async record => {
-  //   await deleteTable(record.table_name);
-  //   getFirstPage();
-  //   setCurrent(1);
-  //   message.success(tableTrans.delete);
-  // };
+  const handleDelete = async (e, selected) => {
+    await deleteTable(selected[0].table_name);
+    getFirstPage();
+    setCurrent(0);
+    openSnackBar(tableTrans.delete)
+  };
   const fetchData = async () => {
     const res = await getCollections({ offset, page_size: PAGE_SIZE });
     if (res && res.tables) {
-      setDataManagement({
-        type: UPDATE,
-        payload: {
-          id: currentAddress,
-          key: KEYS.table,
-          value: {
-            data: res.tables.map(v => ({
-              ...v,
-              key: v.table_name
-            }))
-          }
-        }
-      });
+      setData(res.tables.map(v => ({
+        ...v,
+        key: v.table_name
+      })))
+
       setCount(res.count);
     }
   };
 
-  // const saveSuccess = txt => {
-  //   setVisible(false);
-  //   getFirstPage();
-  //   setCurrent(1);
-  //   message.success(txt);
-  // };
+  const saveSuccess = txt => {
+    getFirstPage();
+    setCurrent(0);
+  };
 
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset, currentAddress]);
 
-  // const handleSearch = async name => {
-  //   setCurrent(1);
-  //   if (!name) {
-  //     getFirstPage();
-  //     return;
-  //   }
-  //   const res = (await searchTable(name)) || {};
+  const handleSearch = async name => {
+    console.log(name)
+    setCurrent(0);
+    if (!name) {
+      getFirstPage();
+      return;
+    }
+    const res = (await searchTable(name)) || {};
 
-  //   setDataManagement({
-  //     type: UPDATE,
-  //     payload: {
-  //       id: currentAddress,
-  //       key: KEYS.table,
-  //       value: {
-  //         data: [{ ...res, key: res.table_name }]
-  //       }
-  //     }
-  //   });
-  //   setCount(1);
-  // };
+    setData([{ ...res, key: res.table_name }])
 
-  // const getFirstPage = () => {
-  //   if (offset === 0) {
-  //     fetchData();
-  //   } else {
-  //     setOffset(0);
-  //   }
-  // };
+    setCount(1);
+  };
 
-  // const handlePageChange = async page => {
-  //   setOffset((page - 1) * PAGE_SIZE);
-  //   setCurrent(page);
-  // };
+  const getFirstPage = () => {
+    if (offset === 0) {
+      fetchData();
+    } else {
+      setOffset(0);
+    }
+  };
 
-  console.log("data", data);
+  const handlePageChange = async (e, page) => {
+    setOffset(page * PAGE_SIZE);
+    setCurrent(page);
+  };
+
 
   const colDefinitions = [
     {
@@ -197,13 +137,19 @@ const TableManage = props => {
     {
       label: "Create",
       icon: "create",
-      onClick: () => setDialog({open:true,}),
+      onClick: () => setDialog({
+        open: true,
+        type: 'custom',
+        params: {
+          component: <CreateCollection createTable={createTable} saveSuccess={saveSuccess}></CreateCollection>,
+        }
+      }),
       disabled: selected => selected.length > 2
     },
     {
       label: "Delete",
       icon: "delete",
-      onClick: (e, selected) => console.log("one", selected),
+      onClick: handleDelete,
       disabled: selected => selected.length === 0,
       disabledTooltip: "You can not delete this"
     },
@@ -224,9 +170,9 @@ const TableManage = props => {
       label: "",
       icon: "search",
       searchText: "",
-      onSearch: text => console.log("search value is", text),
+      onSearch: handleSearch,
       onClear: () => {
-        console.log("clear clear");
+        handleSearch('')
       }
     }
   ];
@@ -238,13 +184,15 @@ const TableManage = props => {
       <Paper className={classes.paper} elevation={3} >
         <Box p={2}>
           <MilvusGrid
-            title={'Collections'}
+            title={dataManageTrans.collections}
             titleIcon={<CollectionIcon />}
             toolbarConfig={toolbarConfig}
             colDefinitions={colDefinitions}
             rows={rows}
-            rowsPerPage={5}
-            rowCount={rows.length}
+            rowsPerPage={PAGE_SIZE}
+            rowCount={count}
+            page={current}
+            onChangePage={handlePageChange}
             primaryKey="table_name"
             isLoading={false}
           ></MilvusGrid>
@@ -254,4 +202,4 @@ const TableManage = props => {
   );
 };
 
-export default TableManage;
+export default Collections;
