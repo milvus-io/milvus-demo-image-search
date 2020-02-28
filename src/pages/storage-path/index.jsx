@@ -23,8 +23,10 @@ const Network = props => {
   return (
     <div className={classes.root}>
       <PaperWrapper className={classes.paper}>
-        <Typography variant={"h5"}>{configTrans.storage}</Typography>
-        <WithTip text={t("restartNotify")}></WithTip>
+        <div className={classes.titleContainer}>
+          <Typography variant={"h5"}>{configTrans.storage}</Typography>
+          <WithTip text={t("restartNotify")}></WithTip>
+        </div>
         <MyTabs
           value={value}
           indicatorColor="primary"
