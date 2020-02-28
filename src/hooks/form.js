@@ -3,8 +3,7 @@ import { validateEmpty } from "../utils/helpers";
 
 const useStyles = makeStyles(theme => ({
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     width: "400px"
   },
   "ml-2": {
@@ -13,18 +12,16 @@ const useStyles = makeStyles(theme => ({
   "mt-4": {
     marginTop: theme.spacing(4)
   },
-  formContainer: {
-    paddingTop:  theme.spacing(2)
-  },
+  formContainer: {},
   formItem: {
     display: "flex",
-    alignItems: "flex-end",
+    alignItems: "flex-end"
   },
   select: {
+    marginLeft: 0,
     width: 400
   },
   desc: {
-    paddingLeft: theme.spacing(1),
     fontSize: "14px",
     color: "#B0B0B9",
     maxWidth: "500px"
@@ -32,6 +29,9 @@ const useStyles = makeStyles(theme => ({
   icon: {
     marginLeft: theme.spacing(2),
     cursor: "pointer"
+  },
+  formControl: {
+    marginTop: theme.spacing(2)
   }
 }));
 

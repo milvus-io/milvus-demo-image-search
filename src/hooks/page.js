@@ -1,6 +1,4 @@
-import {
-  makeStyles
-} from '@material-ui/core'
+import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -8,11 +6,15 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     backgroundColor: "#F4F4F4"
   },
+  titleContainer: {
+    display: "flex",
+    padding: theme.spacing(1, 0, 2),
+  },
   h2: {
     fontSize: "26px",
     fontWeight: "bold",
-    margin: "0 10px 0 0",
-  },
+    margin: "0 10px 0 0"
+  }
 }));
 
 const dataPageStyles = makeStyles(theme => ({
@@ -20,7 +22,7 @@ const dataPageStyles = makeStyles(theme => ({
     height: "calc(100vh - 50px)",
     padding: theme.spacing(2),
     backgroundColor: "#F4F4F4"
-  },
+  }
 }));
 
 export function useDataPageStyles() {
@@ -28,5 +30,5 @@ export function useDataPageStyles() {
 }
 
 export function usePageStyles() {
-  return useStyles()
+  return useStyles();
 }
