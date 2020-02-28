@@ -61,7 +61,7 @@ const useSearchStyles = makeStyles(theme => ({
 }));
 const Search = props => {
   const classes = useSearchStyles();
-  const { searchText = "", onClear = () => { }, onSearch = () => { } } = props;
+  const { searchText = "", onClear = () => {}, onSearch = () => {} } = props;
   const [searchValue, setSearchValue] = React.useState(searchText);
   const searched = searchValue !== "";
   return (
@@ -112,13 +112,13 @@ const useToolbarStyles = makeStyles(theme => ({
   highlight:
     theme.palette.type === "light"
       ? {
-        color: theme.palette.secondary.main,
-        backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-      }
+          color: theme.palette.secondary.main,
+          backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+        }
       : {
-        color: theme.palette.text.primary,
-        backgroundColor: theme.palette.secondary.dark
-      },
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.secondary.dark
+        },
   title: {
     flex: "1 1 100%"
   }
@@ -139,11 +139,11 @@ const iconGetter = (icon, props) => {
 };
 
 const Toolbar = props => {
-  const { color = "primary", config = [], selected, total } = props;
+  const { color = "primary", config = [], selected, setSelected } = props;
   const classes = useToolbarStyles();
 
   // remove hidden button
-  const newConfig = config.filter(c => !c.hidden && c.icon !== 'search');
+  const newConfig = config.filter(c => !c.hidden && c.icon !== "search");
   const searchConfig = config.filter(c => c.icon === "search")[0];
   newConfig.forEach(c => {
     c._disabled =
@@ -169,7 +169,10 @@ const Toolbar = props => {
                   size="small"
                   className={classes.button}
                   disabled={c._disabled}
-                  onClick={e => c.onClick(e, selected)}
+                  onClick={ async e => {
+                    await c.onClick(e, selected);
+                    setSelected([]);
+                  }}
                   startIcon={iconGetter(c.icon, c)}
                 >
                   <Typography nowrap variant="button">
@@ -189,8 +192,8 @@ const Toolbar = props => {
                   <span>{btn}</span>
                 </Tooltip>
               ) : (
-                  btn
-                );
+                btn
+              );
             })}
           </ButtonGroup>
         </Grid>
