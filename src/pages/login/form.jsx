@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { useFormStyles, useFormValidate } from '../../hooks/form'
 import { ADD } from '../../consts'
 import { useConnectMilvus } from '../../hooks'
-
 import axios from 'axios'
 
 axios.defaults.timeout = 2000
@@ -84,7 +83,7 @@ const LoginForm = (props) => {
       </div>
 
       <div className={classes['mt-4']}>
-        <Button variant="outlined" color="primary" className={classes['ml-2']} onClick={handleSubmit}>
+        <Button variant="outlined" color="primary"  onClick={handleSubmit}>
           {buttonTrans.save}
         </Button>
       </div>

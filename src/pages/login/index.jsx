@@ -1,20 +1,22 @@
-import React from "react";
-import { usePageStyles } from "../../hooks/page";
-import { Typography, Box } from "@material-ui/core";
-import PageWrapper from "../../components/page-wrapper";
-import LoginForm from "./form";
-
+import React from 'react'
+import Grid from '@material-ui/core/Grid'
+import { usePageStyles } from '../../hooks/page'
+import PageWrapper from '../../components/page-wrapper'
+import LoginForm from './form'
 const Login = props => {
-  const classes = usePageStyles();
-
+  const classes = usePageStyles()
   return (
     <div className={classes.root}>
-      <PageWrapper className={classes.paper}>
-        <Typography variant={"h5"}>Connect to Milvus</Typography>
-        <Box p={2}>
-          <LoginForm></LoginForm>
-        </Box>
-      </PageWrapper>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <h2 className={classes.h2}>Connect to Milvus</h2>
+        </Grid>
+        <Grid item xs={6}>
+          <PageWrapper>
+            <LoginForm></LoginForm>
+          </PageWrapper>
+        </Grid>
+      </Grid>
     </div>
   );
 };
