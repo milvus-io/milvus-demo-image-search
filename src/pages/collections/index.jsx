@@ -19,7 +19,10 @@ import { useTranslation } from "react-i18next";
 import TableForm from "./table-form";
 import IndexForm from "./index-form";
 import { httpContext } from "../../context/http";
+import {materialContext} from '../../context/material'
 import { dataManagementContext } from "../../context/data-management";
+import CreateCollection from '../../components/dialogs/CreateCollection'
+import { setDialog } from '../../context/material'
 import { KEYS } from "../../reducers/data-management";
 import { UPDATE } from "../../consts";
 import "./index.less";
@@ -36,6 +39,7 @@ const TableManage = props => {
   const { dataManagement, setDataManagement } = useContext(
     dataManagementContext
   );
+  const {setDialog} = useContext(materialContext)
   const history = useHistory();
   const classes = useDataPageStyles();
   const { t } = useTranslation();
@@ -193,10 +197,9 @@ const TableManage = props => {
     {
       label: "Create",
       icon: "create",
-      onClick: () => console.log("one"),
+      onClick: () => setDialog({open:true,}),
       disabled: selected => selected.length > 2
     },
-
     {
       label: "Delete",
       icon: "delete",
