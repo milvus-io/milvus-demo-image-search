@@ -1,17 +1,10 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/styles';
+import useStyles from './Style'
 import Grid from '@material-ui/core/Grid';
 import { FaUpload } from 'react-icons/fa';
 import { DialogActions, DialogContent, DialogTitle, Button } from '@material-ui/core'
 const ImportVectorToCollection = props => {
-  const classes = makeStyles(theme => ({
-    wrapper: {
-      textAlign: "center",
-      border: 'dashed 1px',
-      borderRadius: '10px',
-      padding: '15px',
-    },
-  }))()
+  const classes = useStyles()
   const { hideDialog = () => { } } = props;
 
   const update = async () => {

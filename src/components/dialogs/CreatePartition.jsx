@@ -1,20 +1,11 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
+import useStyles from './Style'
 import Grid from '@material-ui/core/Grid';
 import { FaQuestionCircle } from 'react-icons/fa';
 import { DialogActions, DialogContent, DialogTitle, Button } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField';
 const CreatePartition = props => {
-  const classes = makeStyles(theme => ({
-    wrapper: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-    },
-    column: {
-      marginRight: theme.spacing(1)
-    }
-  }))()
+  const classes = useStyles()
   const { hideDialog = () => { } } = props;
   const [params, setParams] = useState({
     name: '',
