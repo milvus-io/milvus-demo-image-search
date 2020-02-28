@@ -1,28 +1,21 @@
-import React, { useContext, useState, useEffect } from "react";
-import {
-  makeStyles,
-  Popover,
-  Typography,
-  Box,
-  Button,
-  Tab,
-  Paper
-} from "@material-ui/core";
-import { Home, Settings, Storage, ExitToApp } from "@material-ui/icons";
+import React, { useContext, useState, useEffect } from 'react'
+import { makeStyles, Tab } from "@material-ui/core";
+import { Home, Settings, Storage, ExitToApp } from '@material-ui/icons';
 import { useTranslation } from "react-i18next";
-import { useRouteMatch } from "react-router-dom";
-import Logo from "../../assets/imgs/logo.svg";
-import { KEYS } from "../../reducers/data-management";
-import { httpContext } from "../../context/http";
-import { dataManagementContext } from "../../context/data-management";
-import { systemContext } from "../../context/system";
-import { CLIENT_HISTORY, DELETE_MUTIPLE, DISCONNECT, INIT } from "../../consts";
-import { cloneObj } from "../../utils/helpers";
-import MyTabs from "../../components/tab";
-import TabPanel from "../../components/tab-panel";
-import DataMenu from "./data-menu";
-import ConfigMenu from "./config-menu";
-import LoginMenu from "./login-menu";
+import { useRouteMatch } from 'react-router-dom'
+import Logo from '../../assets/imgs/logo.svg'
+import { KEYS } from '../../reducers/data-management'
+import { httpContext } from "../../context/http"
+import { dataManagementContext } from "../../context/data-management"
+import { systemContext } from "../../context/system"
+import { CLIENT_HISTORY, DELETE_MUTIPLE, DISCONNECT, INIT } from '../../consts';
+import { cloneObj } from '../../utils/helpers'
+import MyTabs from '../../components/tab'
+import TabPanel from '../../components/tab-panel'
+import PopConfirm from '../../components/pop-confirm'
+import DataMenu from './data-menu'
+import ConfigMenu from './config-menu'
+import LoginMenu from './login-menu';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -90,14 +83,13 @@ const useStyles = makeStyles(theme => ({
 const Layout = props => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const buttonTrans = t("button");
-  const { currentAddress, setCurrentAddress } = useContext(httpContext);
-  const { milvusAddress, setMilvusAddress } = useContext(systemContext);
-  const { setDataManagement } = useContext(dataManagementContext);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [firstMenu, setFisrstMenu] = useState("data");
-  const [tabValue, setTabValue] = useState(0);
-  const [tabName, setTabName] = useState("");
+  const { currentAddress, setCurrentAddress } = useContext(httpContext)
+  const { milvusAddress, setMilvusAddress } = useContext(systemContext)
+  const { setDataManagement } = useContext(dataManagementContext)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [firstMenu, setFisrstMenu] = useState('data')
+  const [tabValue, setTabValue] = useState(0)
+  const [tabName, setTabName] = useState("")
 
   const collectionMatch = useRouteMatch("/data/collections/:collectionName");
   const partitionMatch = useRouteMatch(
@@ -214,33 +206,17 @@ const Layout = props => {
         <div className={classes.logoutWrapper}>
           <span className="circle"></span>
           <span>{currentAddress}</span>
-          <Popover
-            open={open}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center"
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "center"
-            }}
-          >
-            <Box p={2}>
-              <Typography>{`${t("disconnect")}${currentAddress}?`}</Typography>
-              <div style={{ textAlign: "right" }}>
-                <Button onClick={handleClose}>{buttonTrans.cancel}</Button>
-                <Button
-                  color="primary"
-                  className={classes["ml-2"]}
-                  onClick={handleLogout}
-                >
-                  {buttonTrans.confirm}
-                </Button>
-              </div>
-            </Box>
-          </Popover>
+          {
+            anchorEl && <PopConfirm
+              open={open}
+              anchorEl={anchorEl}
+              handleClose={handleClose}
+              handleConfirm={handleLogout}
+              text={`${t("disconnect")}${currentAddress}?`}
+            ></PopConfirm>
+          }
+
+
           <ExitToApp className="icon" onClick={handleExit}></ExitToApp>
         </div>
         <div className={classes.menu}>
@@ -249,8 +225,8 @@ const Layout = props => {
           ) : firstMenu === "data" ? (
             <DataMenu></DataMenu>
           ) : (
-            <ConfigMenu></ConfigMenu>
-          )}
+                <ConfigMenu></ConfigMenu>
+              )}
         </div>
       </div>
       <div className={classes.content}>{props.children}</div>
