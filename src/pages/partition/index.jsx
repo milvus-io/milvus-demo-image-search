@@ -1,73 +1,34 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useHistory, useParams } from 'react-router-dom'
-import {
-  Button,
-  Table,
-  Modal,
-  // Input,
-  Popconfirm,
-  message,
-  // Icon
-} from "antd";
 import { useTranslation } from "react-i18next";
 import { httpContext } from '../../context/http'
-import { dataManagementContext } from '../../context/data-management'
-import { KEYS } from '../../reducers/data-management'
-import { UPDATE } from '../../consts'
+import { materialContext } from '../../context/material'
+import PageWrapper from '../../components/page-wrapper'
+import MilvusGrid from "../../components/grid";
+import { useDataPageStyles } from "../../hooks/page";
+
 import PatitionForm from './form'
 import "./index.less";
 
 // const { Search } = Input;
 const PAGE_SIZE = 2;
-const TableManage = props => {
-  const { getPartitions, deletePartition, currentAddress } = useContext(httpContext)
-  const { dataManagement, setDataManagement } = useContext(dataManagementContext)
+const Partitions = props => {
+  const classes = useDataPageStyles()
+  const { getPartitions, getCollectionByName, deletePartition, currentAddress } = useContext(httpContext)
+  const { openSnackBar } = useContext(materialContext)
   const history = useHistory()
-  const params = useParams()
+  const { collectionName } = useParams()
   const { t } = useTranslation();
   const partitionTrans = t("partition");
-  const dataManageTrans = t("dataManage");
+  const tableTrans = t("table");
 
-  const [visible, setVisible] = useState(false);
-
+  const [data, setData] = useState([])
   const [offset, setOffset] = useState(0);
   const [count, setCount] = useState(0); // total count for pagination
-  const [current, setCurrent] = useState(1); // current page for pagination
+  const [current, setCurrent] = useState(0); // current page for pagination
 
-  const { data, tableName } = useMemo(() => {
-    const { data = null, tableName = "" } = dataManagement[KEYS.partition][currentAddress] || {}
-    return { data, tableName }
-  }, [dataManagement, currentAddress])
 
-  const updateTableName = (tableName) => {
-    setDataManagement(
-      {
-        type: UPDATE,
-        payload: {
-          id: currentAddress,
-          key: KEYS.partition,
-          value: {
-            tableName
-          }
-        }
-      }
-    );
-  }
 
-  const createTable = () => {
-    setVisible(true);
-  };
-
-  const handleCancel = () => {
-    setVisible(false);
-  };
-
-  const handleDelete = async record => {
-    await deletePartition(params.collectionName, record.partition_tag);
-    getFirstPage(tableName);
-    setCurrent(1);
-    message.success(partitionTrans.delete);
-  };
 
   /**
    *  for now we just take the table from params
@@ -75,38 +36,28 @@ const TableManage = props => {
    */
   const fetchData = async () => {
     try {
-      const res = await getPartitions(params.collectionName, { offset, page_size: PAGE_SIZE });
-      if (res && res.partitions) {
-        setDataManagement(
-          {
-            type: UPDATE,
-            payload: {
-              id: currentAddress,
-              key: KEYS.partition,
-              value: {
-                data: res.partitions.map(v => ({
-                  ...v,
-                  tableName: params.collectionName,
-                  key: v.partition_name
-                }))
-              }
-            }
-          }
-        );
+      const res = await Promise.all([getPartitions(collectionName, { offset, page_size: PAGE_SIZE }), getCollectionByName(collectionName)]);
+      const partitions = res[0] && res[0].partitions
+      const collections = res[1] || {}
+      if (partitions) {
+        setData(partitions.map(v => ({
+          ...v,
+          ...collections
+        })))
         setCount(res.count || 10);
       }
+
     } catch (e) {
+      console.log(e)
       // when toggle currentaddress . table name may not exist in diff milvus.
-      handleBack()
+      // handleBack()
     }
   }
 
   const saveSuccess = (txt, tableName) => {
-    setVisible(false);
-    updateTableName(tableName)
     getFirstPage(tableName);
-    setCurrent(1);
-    message.success(txt);
+    setCurrent(0);
+    openSnackBar(txt)
   };
 
   const columns = [
@@ -125,59 +76,28 @@ const TableManage = props => {
       dataIndex: "tableName",
       key: "tableName"
     },
-    {
-      title: partitionTrans.action,
-      key: "action",
-      render: (text, record) => {
-        return (
-          <span>
-            <Popconfirm
-              placement="top"
-              title={`${partitionTrans.confirmDel} ${record.partition_name} ?`}
-              onConfirm={() => {
-                handleDelete(record);
-              }}
-              okText="Delete"
-              cancelText="Cancel"
-            >
-              {/* <Icon type="delete" style={{ color: "#FAFAFA" }}></Icon> */}
-              <span
-                style={{
-                  fontSize: "12px",
-                  color: "#FAFAFA",
-                  cursor: "pointer"
-                }}
-              >
-                {partitionTrans.deletePartition}
-              </span>
-            </Popconfirm>
-          </span>
-        );
-      }
-    }
   ];
 
 
   const handleSearch = async name => {
     if (!name) {
-      message.warning("Need table name to search partitions")
       return;
     }
-    updateTableName(name)
-    setCurrent(1);
+    setCurrent(0);
     getFirstPage(name)
   };
 
-  const getFirstPage = (tableName) => {
+  const getFirstPage = () => {
     if (offset === 0) {
-      fetchData(tableName);
+      fetchData();
     } else {
       setOffset(0);
     }
   };
 
-  const handlePageChange = async page => {
-    setOffset((page - 1) * PAGE_SIZE);
+  const handlePageChange = (e, page) => {
+    console.log('page---change', page)
+    setOffset(page * PAGE_SIZE);
     setCurrent(page);
   };
 
@@ -186,49 +106,99 @@ const TableManage = props => {
   }
 
   useEffect(() => {
-    // if (!tableName) return
-    fetchData(tableName);
+    console.log('in')
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset, currentAddress]);
 
-  return (
-    <div className="table-wrapper">
-      <div className="header">
-        <h2>
-          <span style={{ color: "#3F9CD1", cursor: "pointer" }} onClick={handleBack}>{params.collectionName}</span>
-          <span style={{ margin: "0 10px" }}>></span>
-          {dataManageTrans.partition}</h2>
-      </div>
-      <div className="control">
-        <div onClick={createTable} style={{ cursor: "pointer" }}>
-          <Button
-            className="mr-10 circle-btn"
-            type="primary"
-            shape="circle"
-            icon="plus"
-          />
-          <span>{partitionTrans.create}</span>
-        </div>
-        {/* <Search
-          placeholder={partitionTrans.searchTxt}
-          onSearch={handleSearch}
-          style={{ width: 200 }}
-        /> */}
-      </div>
-      <Table
-        size="middle"
-        columns={columns}
-        className="table-wrapper"
-        pagination={{
-          current,
-          total: count,
-          onChange: handlePageChange,
-          pageSize: PAGE_SIZE
-        }}
-        dataSource={data}
-      />
+  const handleDelete = async (e, selected) => {
+    await deletePartition(collectionName, selected[0].partition_tag);
+    getFirstPage();
+    setCurrent(0);
+    openSnackBar(partitionTrans.delete)
+  };
 
-      <Modal
+  const colDefinitions = [
+    {
+      id: "partition_tag",
+      numeric: false,
+      disablePadding: true,
+      label: partitionTrans.tag
+    },
+
+    {
+      id: "index_file_size",
+      numeric: true,
+      disablePadding: true,
+      label: tableTrans.fileSize
+    },
+    {
+      id: "dimension",
+      numeric: true,
+      disablePadding: false,
+      label: tableTrans.tDimension
+    },
+    {
+      id: "metric_type",
+      numeric: false,
+      disablePadding: true,
+      label: tableTrans.tMetric
+    },
+    {
+      id: "index",
+      numeric: false,
+      disablePadding: true,
+      label: tableTrans.tIndex
+    },
+
+  ];
+
+  const toolbarConfig = [
+    {
+      label: "Create",
+      icon: "create",
+      onClick: () => console.log("one"),
+      disabled: selected => selected.length > 2
+    },
+    {
+      label: "Delete",
+      icon: "delete",
+      onClick: handleDelete,
+      disabled: selected => selected.length === 0,
+      disabledTooltip: "You can not delete this"
+    },
+    {
+      label: "",
+      icon: "search",
+      searchText: "",
+      onSearch: text => console.log("search value is", text),
+      onClear: () => {
+        console.log("clear clear");
+      }
+    }
+  ];
+
+  const rows = data || [];
+
+
+  return (
+    <div className={classes.root}>
+      <PageWrapper>
+        <MilvusGrid
+          toolbarConfig={toolbarConfig}
+          colDefinitions={colDefinitions}
+          rows={rows}
+          rowsPerPage={PAGE_SIZE}
+          rowCount={count}
+          page={current}
+          onChangePage={handlePageChange}
+          primaryKey="partition_tag"
+          isLoading={false}
+        ></MilvusGrid>
+      </PageWrapper>
+
+
+      {/* <Modal
         title={partitionTrans.create}
         visible={visible}
         footer={null}
@@ -237,14 +207,14 @@ const TableManage = props => {
         centered={true}
       >
         <PatitionForm
-          tableName={params.collectionName}
+          tableName={collectionName}
           handleCancel={handleCancel}
           saveSuccess={saveSuccess}
         ></PatitionForm>
 
-      </Modal>
+      </Modal> */}
     </div>
   );
 };
 
-export default TableManage;
+export default Partitions;
