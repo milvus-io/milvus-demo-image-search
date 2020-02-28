@@ -70,8 +70,8 @@ const MetaDataForm = function (props) {
 
 
   return (
-    <form>
-      <div className={classes.formItem} style={{ marginLeft: "8px" }}>
+    <form className={classes.formContainer}>
+      <div className={`${classes.formItem}`}>
         <FormControl className={classes.formControl}>
           <InputLabel id="meta-data-type">{metaDataTrans.type}</InputLabel>
           <Select
@@ -87,7 +87,7 @@ const MetaDataForm = function (props) {
           </Select>
         </FormControl>
       </div>
-      <div className={classes.formItem}>
+      <div className={`${classes.formItem} ${classes["mt-2"]}`}>
         <TextField
           name="host"
           label={metaDataTrans.host}
@@ -100,7 +100,7 @@ const MetaDataForm = function (props) {
           helperText={error.host && `${metaDataTrans.host}${t('required')}`}
         />
       </div>
-      <div className={classes.formItem}>
+      <div className={`${classes.formItem} ${classes["mt-2"]}`}>
         <TextField
           name="port"
           label={metaDataTrans.port}
@@ -113,7 +113,7 @@ const MetaDataForm = function (props) {
           helperText={error.port && `${metaDataTrans.port}${t('required')}`}
         />
       </div>
-      <div className={classes.formItem}>
+      <div className={`${classes.formItem} ${classes["mt-2"]}`}>
         <TextField
           name="username"
           label={metaDataTrans.username}
@@ -126,7 +126,7 @@ const MetaDataForm = function (props) {
           helperText={error.username && `${metaDataTrans.username}${t('required')}`}
         />
       </div>
-      <div className={classes.formItem}>
+      <div className={`${classes.formItem} ${classes["mt-2"]}`}>
         <TextField
           name="password"
           label={metaDataTrans.password}
