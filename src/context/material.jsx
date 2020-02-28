@@ -24,26 +24,30 @@ const theme = createMuiTheme({
 const HiddenDialog = {
   open: false,
   type: 'notice',
-  title: "",
-  component: <></>,
-  confirm: () => { },
-  cancel: () => { }
+  params: {
+    title: "",
+    component: <></>,
+    confirm: () => { },
+    cancel: () => { }
+  },
 }
 const TestDialog = {
-  open: false,
+  open: true,
   type: 'notice', // notice | custom
-  title: "Test Dialog",
-  Component: <div onClick={() => console.log('xixiixiixiix')}><p>wahhhhhh</p><p>this is test dialog </p></div>,
-  confirmLabel: '确定',
-  confirm: () => { console.log('dialog confirm') },
-  cancelLabel: '取消',
-  cancel: () => { console.log('dialog cancel') },
+  params: {
+    title: "Test Dialog",
+    component: <div onClick={() => console.log('xixiixiixiix')}><p>wahhhhhh</p><p>this is test dialog </p></div>,
+    confirmLabel: '确定',
+    confirm: () => { console.log('dialog confirm') },
+    cancelLabel: '取消',
+    cancel: () => { console.log('dialog cancel') },
+  },
 }
 const TestCustomDialog = {
   open: true,
   type: 'custom',
   params: {
-    Component: ImportVectorToCollection
+    Component: CreateCollection
   },
 }
 const { Provider } = materialContext
@@ -82,9 +86,8 @@ export const MaterialProvider = ({ children }) => {
     })
   }
   const { open, type, params = {} } = dialog;
-  const { Component } = params
-  const { title, confirm, confirmLabel = "", cancel, cancelLabel = "" } = params; // for notice type
-  const { props = {} } = params; // for custom type
+  const { title, component, confirm, confirmLabel = "", cancel, cancelLabel = "" } = params; // for notice type
+  const { props = {}, Component } = params; // for custom type
   const _confirmDialog = async () => {
     if (confirm) {
       await confirm()
@@ -97,7 +100,10 @@ export const MaterialProvider = ({ children }) => {
     }
     hideDialog()
   }
-  const hideDialog = () => setDialog(HiddenDialog)
+  const hideDialog = () => {
+    console.log('hide dialog')
+    setDialog(HiddenDialog)
+  }
 
   return <Provider value={{
     openSnackBar,
@@ -120,7 +126,7 @@ export const MaterialProvider = ({ children }) => {
         {type === 'notice'
           ? (<>
             <DialogTitle >{title}</DialogTitle>
-            <DialogContent><Component /></DialogContent>
+            <DialogContent>{component}</DialogContent>
             <DialogActions>
               <Button onClick={() => _confirmDialog()} color="primary">
                 {confirmLabel}
@@ -130,7 +136,7 @@ export const MaterialProvider = ({ children }) => {
               </Button>
             </DialogActions>
           </>)
-          : <Component {...props} hideDialog={hideDialog} />
+          : (<Component {...props} hideDialog={hideDialog} />)
         }
 
       </Dialog>
