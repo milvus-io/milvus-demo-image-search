@@ -99,6 +99,7 @@ const MilvusGrid = props => {
         {!isLoading && (
           <>
             <Table
+              primaryKey={primaryKey}
               rows={rows}
               selected={selected}
               colDefinitions={colDefinitions}

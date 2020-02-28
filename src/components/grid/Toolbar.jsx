@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { lighten, fade, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
@@ -157,8 +156,6 @@ const Toolbar = props => {
           <ButtonGroup
             color={color}
             size="small"
-            color="primary"
-            fullWidth={false}
             aria-label="outlined button group"
           >
             {newConfig.map(c => {
@@ -169,15 +166,13 @@ const Toolbar = props => {
                   size="small"
                   className={classes.button}
                   disabled={c._disabled}
-                  onClick={ async e => {
+                  onClick={async e => {
                     await c.onClick(e, selected);
                     setSelected([]);
                   }}
                   startIcon={iconGetter(c.icon, c)}
                 >
-                  <Typography nowrap variant="button">
-                    {c.label}
-                  </Typography>
+                  <Typography variant="button">{c.label}</Typography>
                 </Button>
               );
 
@@ -189,7 +184,7 @@ const Toolbar = props => {
                   title={c._disabled ? c.disabledTooltip : c.tooltip}
                   key={c.icon + "tooltip"}
                 >
-                  <span>{btn}</span>
+                  <div>{btn}</div>
                 </Tooltip>
               ) : (
                 btn
