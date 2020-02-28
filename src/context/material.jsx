@@ -84,7 +84,7 @@ export const MaterialProvider = ({ children }) => {
   }
   const { open, type, params = {} } = dialog;
   const { title, component, confirm, confirmLabel = "", cancel, cancelLabel = "" } = params; // for notice type
-  const { props = {}, component: CustomComponent } = params; // for custom type
+  const { component: CustomComponent } = params; // for custom type
   const _confirmDialog = async () => {
     if (confirm) {
       await confirm()
@@ -98,7 +98,6 @@ export const MaterialProvider = ({ children }) => {
     hideDialog()
   }
   const hideDialog = () => {
-    console.log('hide dialog')
     setDialog(DefaultDialogConfigs)
   }
 
