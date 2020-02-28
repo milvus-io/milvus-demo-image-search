@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import MilvusGrid from "../../components/grid";
-
 import { useHistory } from "react-router-dom";
 import { Tab, Paper, Box } from "@material-ui/core";
+import CollectionIcon from "@material-ui/icons/GridOnSharp";
 
 import {
   Button,
@@ -232,9 +232,11 @@ const TableManage = props => {
 
   return (
     <div className={`${classes.root} table-wrapper`}>
-      <Paper className={classes.paper}>
+      <Paper className={classes.paper} elevation={3} >
         <Box p={2}>
           <MilvusGrid
+            title={'Collections'}
+            titleIcon={<CollectionIcon />}
             toolbarConfig={toolbarConfig}
             colDefinitions={colDefinitions}
             rows={rows}

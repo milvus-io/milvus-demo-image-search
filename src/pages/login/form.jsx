@@ -86,7 +86,6 @@ const LoginForm = (props) => {
       <div className={classes['mt-4']}>
         <Button variant="outlined" color="primary" className={classes['ml-2']} onClick={handleSubmit}>
           {buttonTrans.save}
-
         </Button>
       </div>
 

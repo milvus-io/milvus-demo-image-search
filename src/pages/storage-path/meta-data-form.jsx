@@ -70,7 +70,7 @@ const MetaDataForm = function (props) {
 
 
   return (
-    <form>
+    <form className={classes.formContainer}>
       <div className={classes.formItem} style={{ marginLeft: "8px" }}>
         <FormControl className={classes.formControl}>
           <InputLabel id="meta-data-type">{metaDataTrans.type}</InputLabel>
