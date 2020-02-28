@@ -14,6 +14,7 @@ export const httpContext = React.createContext({
   restartNotify: () => { },
   // data management api
   getCollections: () => { },
+  getCollectionByName: (collectionName) => { },
   createTable: () => { },
   deleteTable: () => { },
   createIndex: () => { },
@@ -124,6 +125,10 @@ export const HttpProvider = ({ children }) => {
 
   async function getCollections(params = {}) {
     const res = await axiosInstance.get("/tables", { params });
+    return res.data;
+  }
+  async function getCollectionByName(collectionName) {
+    const res = await axiosInstance.get(`/tables/${collectionName}`);
     return res.data;
   }
 
@@ -265,6 +270,7 @@ export const HttpProvider = ({ children }) => {
     searchTable: httpWrapper(searchTable),
     createPartition: httpWrapper(createPartition),
     getPartitions: httpWrapper(getPartitions),
+    getCollectionByName: httpWrapper(getCollectionByName),
     deletePartition: httpWrapper(deletePartition)
   }}>{children}</Provider>
 }
