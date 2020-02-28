@@ -4,7 +4,8 @@ import {
 
 const useStyles = makeStyles(theme => ({
   dialogContent: {
-    overflow: 'initial'
+    overflow: 'initial',
+    minWidth: '400px',
   },
   wrapper: {
     display: 'flex',
@@ -14,7 +15,8 @@ const useStyles = makeStyles(theme => ({
     whiteSpace: 'no-wrap',
   },
   column: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
+    whiteSpace: 'no-wrap',
   },
   gridRoot: {
     border: 'dashed 1px',

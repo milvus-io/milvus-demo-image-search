@@ -49,7 +49,7 @@ const TestCustomDialog = {
   open: true,
   type: 'custom',
   params: {
-    Component: ImportVectorToCollection
+    Component: CreatePartition
   },
 }
 const { Provider } = materialContext

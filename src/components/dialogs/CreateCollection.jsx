@@ -20,7 +20,7 @@ const CreateCollection = props => {
   return (
     <>
       <DialogTitle >{`Create Collection`}</DialogTitle>
-      <DialogContent>
+      <DialogContent classes={{ root: classes.DialogContent }}>
         <Grid container spacing={3}>
           <Grid item sm={4}>
             <div className={classes.wrapper}><span className={classes.column}>Collection Name</span> <FaQuestionCircle /></div>

@@ -15,8 +15,8 @@ const DeleteCollection = props => {
   }
   return (
     <>
-      <DialogTitle >{`Create Collection`}</DialogTitle>
-      <DialogContent>
+      <DialogTitle >{`Delete Collection`}</DialogTitle>
+      <DialogContent classes={{ root: classes.dialogContent }}>
         <Grid container spacing={3}>
           <Grid item sm={4}>
             <div className={classes.wrapper}><span className={classes.column}>Index Type</span> <FaQuestionCircle /></div>
