@@ -19,6 +19,20 @@ const theme = createMuiTheme({
   palette: {
     primary: blue,
   },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+  },
 });
 
 const HiddenDialog = {
@@ -63,7 +77,7 @@ export const MaterialProvider = ({ children }) => {
     message: "",
     type: "success"
   })
-  const [dialog, setDialog] = useState(TestCustomDialog);
+  const [dialog, setDialog] = useState(TestDialog);
 
   const handleClose = (e, reason) => {
     // only click x to close or auto hide.

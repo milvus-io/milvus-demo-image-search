@@ -143,13 +143,13 @@ const Toolbar = props => {
   const classes = useToolbarStyles();
 
   // remove hidden button
-  const newConfig = config.filter(c => !c.hidden);
+  const newConfig = config.filter(c => !c.hidden && c.icon !== 'search');
+  const searchConfig = config.filter(c => c.icon === "search")[0];
   newConfig.forEach(c => {
     c._disabled =
       typeof c.disabled === "function" ? c.disabled(selected) : c.disabled;
   });
 
-  const numSelected = selected.length;
   return (
     <>
       <Grid container spacing={2}>
@@ -162,24 +162,21 @@ const Toolbar = props => {
             aria-label="outlined button group"
           >
             {newConfig.map(c => {
-              const btn =
-                c.icon === "search" ? (
-                  iconGetter(c.icon, c)
-                ) : (
-                  <Button
-                    key={c.icon}
-                    variant="contained"
-                    size="small"
-                    className={classes.button}
-                    disabled={c._disabled}
-                    onClick={e => c.onClick(e, selected)}
-                    startIcon={iconGetter(c.icon, c)}
-                  >
-                    <Typography nowrap={true} variant="button">
-                      {c.label}
-                    </Typography>
-                  </Button>
-                );
+              const btn = (
+                <Button
+                  key={c.icon}
+                  variant="contained"
+                  size="small"
+                  className={classes.button}
+                  disabled={c._disabled}
+                  onClick={e => c.onClick(e, selected)}
+                  startIcon={iconGetter(c.icon, c)}
+                >
+                  <Typography nowrap variant="button">
+                    {c.label}
+                  </Typography>
+                </Button>
+              );
 
               const showTooltip =
                 c.tooltip || (c.disabledTooltip && c._disabled);
@@ -198,14 +195,7 @@ const Toolbar = props => {
           </ButtonGroup>
         </Grid>
         <Grid item xs={3}>
-          <Typography
-            className={classes.title}
-            color="inherit"
-            variant="subtitle1"
-            align="right"
-          >
-            {numSelected} selected of {total} items
-          </Typography>
+          {searchConfig && iconGetter("search", searchConfig)}
         </Grid>
       </Grid>
     </>

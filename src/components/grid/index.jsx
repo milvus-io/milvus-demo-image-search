@@ -3,8 +3,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import TablePagination from "@material-ui/core/TablePagination";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Typography from "@material-ui/core/Typography";
 import Toolbar from "./Toolbar";
 import Table from "./Table";
+import CollectionIcon from "@material-ui/icons/GridOnSharp";
 
 const userStyle = makeStyles(theme => ({
   loading: {
@@ -14,6 +16,17 @@ const userStyle = makeStyles(theme => ({
     justifyContent: "center",
     padding: theme.spacing(20),
     width: "100%"
+  },
+  titleIcon: {
+    verticalAlign: "-3px",
+    "& svg": {
+      fill: "#32363c"
+    }
+  },
+  tableTitle: {
+    "& h5": {
+      color: "#32363c"
+    }
   }
 }));
 
@@ -34,7 +47,9 @@ const MilvusGrid = props => {
     page = 0,
     rows = [],
     colDefinitions = [],
-    isLoading = false
+    isLoading = false,
+    title = "Table",
+    titleIcon = <CollectionIcon />
   } = props;
 
   const [selected, setSelected] = React.useState([]);
@@ -67,6 +82,11 @@ const MilvusGrid = props => {
 
   return (
     <Grid container spacing={3}>
+      <Grid item xs={12} className={classes.tableTitle}>
+        <Typography variant="h5">
+          <span className={classes.titleIcon}>{titleIcon}</span> {title}
+        </Typography>
+      </Grid>
       <Grid item xs={12}>
         <Toolbar
           config={toolbarConfig}
@@ -87,6 +107,7 @@ const MilvusGrid = props => {
             ></Table>
             <TablePagination
               component="div"
+              colSpan={3}
               count={rowCount}
               page={page}
               labelDisplayedRows={labelDisplayedRows}

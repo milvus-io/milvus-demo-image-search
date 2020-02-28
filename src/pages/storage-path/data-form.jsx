@@ -106,7 +106,7 @@ const NetworkForm = function (props) {
   }
 
   return (
-    <form>
+    <form className={classes.formContainer}>
       <div className={classes.formItem}>
         <TextField
           name="primary"
@@ -124,7 +124,7 @@ const NetworkForm = function (props) {
       </div>
       <p className={classes.desc}>{dataTrans.primaryTip}</p>
       <div className={`${classes.formItem} ${classes['mt-4']}`}>
-        <ul className="secondary-path">
+        <ul className="secondary-path" style={{marginBottom: 0}}>
           {
             form.secondary.map((v, i) => (
               <li key={`${v}${i}`} className={`${classes.formItem}`}>

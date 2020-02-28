@@ -18,7 +18,7 @@ const Login = props => {
         </Grid>
       </Grid>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
