@@ -4,7 +4,6 @@ import { Tab, Typography } from "@material-ui/core";
 import PaperWrapper from "../../components/page-wrapper";
 import TabPanel from "../../components/tab-panel";
 import MyTabs from "../../components/tab";
-
 import DataForm from "./data-form";
 import MetaDataForm from "./meta-data-form";
 import { usePageStyles } from "../../hooks/page";

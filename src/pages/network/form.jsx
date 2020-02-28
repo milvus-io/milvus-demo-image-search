@@ -83,13 +83,11 @@ const NetworkFrom = (props) => {
           helperText={error.port && `${networkTrans.port}${t('required')}`}
         />
       </div>
-
       <div className={classes['mt-4']}>
-        <Button variant="outlined" onClick={handleCancel}>{buttonTrans.cancel}</Button>
-        <Button variant="outlined" color="primary" className={classes['ml-2']} onClick={handleSubmit}>
+        <Button variant="outlined" color="primary"  onClick={handleSubmit}>
           {buttonTrans.save}
-
         </Button>
+        <Button variant="outlined" onClick={handleCancel}>{buttonTrans.cancel}</Button>
       </div>
 
     </form>

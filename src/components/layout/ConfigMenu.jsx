@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
@@ -29,8 +29,6 @@ const ConfigMenu = props => {
         const { path, label } = config;
         const route = `/configs/${path}`
         const isSelected = history.location.pathname === route;
-        console.log(route, history.location.pathname, isSelected)
-
         return (
           <MenuItem key={path} classes={{ root: isSelected ? classes.selected : "" }} onClick={() => history.push(route)}>{label}</MenuItem>
         )

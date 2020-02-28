@@ -48,20 +48,21 @@ const HashRouterWrapper = () => {
                         <Route path="/data/vector">
                           <VectorSearch></VectorSearch>
                         </Route>
-                        <Route path="/configs/storage">
-                          <StoragePath></StoragePath>
-                        </Route>
-                        <Route path="/configs/metrics">
-                          <MetricsPage></MetricsPage>
-                        </Route>
+
                         <Route path="/configs/network">
                           <NetworkPage></NetworkPage>
+                        </Route>
+                        <Route path="/configs/storage">
+                          <StoragePath></StoragePath>
                         </Route>
                         <Route path="/configs/advanced">
                           <AdvancedPage></AdvancedPage>
                         </Route>
                         <Route path="/configs/hardware">
                           <HardwarePage></HardwarePage>
+                        </Route>
+                        <Route path="/configs/metrics">
+                          <MetricsPage></MetricsPage>
                         </Route>
                         <Route path="/configs/others">
                           <OtherConfigsPage></OtherConfigsPage>
