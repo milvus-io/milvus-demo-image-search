@@ -1,4 +1,6 @@
-import { makeStyles } from '@material-ui/core'
+import {
+  makeStyles
+} from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -6,24 +8,11 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     backgroundColor: 'rgb(247, 249, 252)'
   },
-  header: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    padding: theme.spacing(2),
-    display: "flex",
-    alignItems: "center",
-    backgroundColor: "#fff",
-  },
   h2: {
     fontSize: "26px",
     fontWeight: "bold",
     margin: "0 10px 0 0",
   },
-  paper: {
-    marginTop: "80px"
-  }
 }));
 
 const dataPageStyles = makeStyles(theme => ({
@@ -47,4 +36,3 @@ export function useDataPageStyles() {
 export function usePageStyles() {
   return useStyles()
 }
-

@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useReducer, useContext } from 'react'
+import React, { useState } from 'react'
 import { Snackbar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { DialogActions, DialogContent, DialogTitle, Button, Dialog } from '@material-ui/core'
 import { blue } from '@material-ui/core/colors'
 import MuiAlert from '@material-ui/lab/Alert';
-
+import ImportVectorToCollection from '../components/dialogs/ImportVectorToCollection'
+import CreateCollection from '../components/dialogs/CreateCollection'
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -22,32 +23,33 @@ const theme = createMuiTheme({
 
 const HiddenDialog = {
   open: false,
+  type: 'notice',
   title: "",
   component: <></>,
-  confirm: {
-    label: '',
-    onConfirm: () => { },
-  },
-  cancle: {
-    label: '',
-    onCancel: () => { }
-  }
+  confirm: () => { },
+  cancel: () => { }
 }
 const TestDialog = {
   open: false,
+  type: 'notice', // notice | custom
   title: "Test Dialog",
-  component: <div onClick={() => console.log('xixiixiixiix')}><p>wahhhhhh</p><p>this is test dialog </p></div>,
-  confirm: {
-    label: '确定',
-    onConfirm: () => { console.log('dialog confirm') },
+  Component: <div onClick={() => console.log('xixiixiixiix')}><p>wahhhhhh</p><p>this is test dialog </p></div>,
+  confirmLabel: '确定',
+  confirm: () => { console.log('dialog confirm') },
+  cancelLabel: '取消',
+  cancel: () => { console.log('dialog cancel') },
+}
+const TestCustomDialog = {
+  open: true,
+  type: 'custom',
+  params: {
+    Component: ImportVectorToCollection
   },
-  cancle: {
-    label: '取消',
-    onCancel: () => { console.log('dialog cancle') }
-  }
 }
 const { Provider } = materialContext
-
+// Dialog has two type : notice | custom;
+// notice type mean it's a notice dialog you need to set props like title, content, actions 
+// custom type could have own state, you could set a complete component in dialog.
 export const MaterialProvider = ({ children }) => {
   const classes = makeStyles({
     paper: {
@@ -61,7 +63,7 @@ export const MaterialProvider = ({ children }) => {
     message: "",
     type: "success"
   })
-  const [dialog, setDialog] = useState(TestDialog);
+  const [dialog, setDialog] = useState(TestCustomDialog);
 
   const handleClose = (e, reason) => {
     // only click x to close or auto hide.
@@ -79,19 +81,23 @@ export const MaterialProvider = ({ children }) => {
       ...position
     })
   }
-  const { open, title, component, confirm = {}, cancle = {} } = dialog;
-  const _confirmDialog = () => {
-    if (confirm.onConfirm) {
-      confirm.onConfirm();
+  const { open, type, params = {} } = dialog;
+  const { Component } = params
+  const { title, confirm, confirmLabel = "", cancel, cancelLabel = "" } = params; // for notice type
+  const { props = {} } = params; // for custom type
+  const _confirmDialog = async () => {
+    if (confirm) {
+      await confirm()
     }
-    setDialog(HiddenDialog)
+    hideDialog()
   }
-  const _cancelDialog = () => {
-    if (cancle.onCancel) {
-      cancle.onCancel();
+  const _cancelDialog = async () => {
+    if (cancel) {
+      await cancel()
     }
-    setDialog(HiddenDialog)
+    hideDialog()
   }
+  const hideDialog = () => setDialog(HiddenDialog)
 
   return <Provider value={{
     openSnackBar,
@@ -110,19 +116,23 @@ export const MaterialProvider = ({ children }) => {
         </Alert>
       </Snackbar>
       {children}
-      <Dialog classes={{ paper: classes.paper }} open={open} onClose={() => { }}>
-        <DialogTitle >{title}</DialogTitle>
-        <DialogContent>
-          {component}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => _confirmDialog()} color="primary">
-            {confirm.label}
-          </Button>
-          <Button onClick={() => _cancelDialog()} color="primary">
-            {cancle.label}
-          </Button>
-        </DialogActions>
+      <Dialog classes={{ paper: classes.paper }} open={open} onClose={() => setDialog(HiddenDialog)}>
+        {type === 'notice'
+          ? (<>
+            <DialogTitle >{title}</DialogTitle>
+            <DialogContent><Component /></DialogContent>
+            <DialogActions>
+              <Button onClick={() => _confirmDialog()} color="primary">
+                {confirmLabel}
+              </Button>
+              <Button onClick={() => _cancelDialog()} color="primary">
+                {cancelLabel}
+              </Button>
+            </DialogActions>
+          </>)
+          : <Component {...props} hideDialog={hideDialog} />
+        }
+
       </Dialog>
     </ThemeProvider>
   </Provider>
