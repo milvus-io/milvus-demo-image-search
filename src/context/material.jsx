@@ -5,8 +5,10 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { DialogActions, DialogContent, DialogTitle, Button, Dialog } from '@material-ui/core'
 import { blue } from '@material-ui/core/colors'
 import MuiAlert from '@material-ui/lab/Alert';
-import ImportVectorToCollection from '../components/dialogs/ImportVectorToCollection'
+// import ImportVectorToCollection from '../components/dialogs/ImportVectorToCollection'
 import CreateCollection from '../components/dialogs/CreateCollection'
+// import CreatePartition from '../components/dialogs/CreatePartition'
+// import DeleteCollection from '../components/dialogs/DeleteCollection'
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -38,28 +40,32 @@ const theme = createMuiTheme({
 const HiddenDialog = {
   open: false,
   type: 'notice',
-  title: "",
-  component: <></>,
-  confirm: () => { },
-  cancel: () => { }
-}
-const TestDialog = {
-  open: false,
-  type: 'notice', // notice | custom
-  title: "Test Dialog",
-  Component: <div onClick={() => console.log('xixiixiixiix')}><p>wahhhhhh</p><p>this is test dialog </p></div>,
-  confirmLabel: '确定',
-  confirm: () => { console.log('dialog confirm') },
-  cancelLabel: '取消',
-  cancel: () => { console.log('dialog cancel') },
-}
-const TestCustomDialog = {
-  open: true,
-  type: 'custom',
   params: {
-    Component: ImportVectorToCollection
+    title: "",
+    component: <></>,
+    confirm: () => { },
+    cancel: () => { }
   },
 }
+// const TestDialog = {
+//   open: true,
+//   type: 'notice', // notice | custom
+//   params: {
+//     title: "Test Dialog",
+//     component: <div onClick={() => console.log('xixiixiixiix')}><p>wahhhhhh</p><p>this is test dialog </p></div>,
+//     confirmLabel: '确定',
+//     confirm: () => { console.log('dialog confirm') },
+//     cancelLabel: '取消',
+//     cancel: () => { console.log('dialog cancel') },
+//   },
+// }
+// const TestCustomDialog = {
+//   open: true,
+//   type: 'custom',
+//   params: {
+//     Component: CreateCollection
+//   },
+// }
 const { Provider } = materialContext
 // Dialog has two type : notice | custom;
 // notice type mean it's a notice dialog you need to set props like title, content, actions 
@@ -77,7 +83,7 @@ export const MaterialProvider = ({ children }) => {
     message: "",
     type: "success"
   })
-  const [dialog, setDialog] = useState(TestDialog);
+  const [dialog, setDialog] = useState(HiddenDialog);
 
   const handleClose = (e, reason) => {
     // only click x to close or auto hide.
@@ -96,9 +102,8 @@ export const MaterialProvider = ({ children }) => {
     })
   }
   const { open, type, params = {} } = dialog;
-  const { Component } = params
-  const { title, confirm, confirmLabel = "", cancel, cancelLabel = "" } = params; // for notice type
-  const { props = {} } = params; // for custom type
+  const { title, component, confirm, confirmLabel = "", cancel, cancelLabel = "" } = params; // for notice type
+  const { props = {}, Component } = params; // for custom type
   const _confirmDialog = async () => {
     if (confirm) {
       await confirm()
@@ -111,7 +116,10 @@ export const MaterialProvider = ({ children }) => {
     }
     hideDialog()
   }
-  const hideDialog = () => setDialog(HiddenDialog)
+  const hideDialog = () => {
+    console.log('hide dialog')
+    setDialog(HiddenDialog)
+  }
 
   return <Provider value={{
     openSnackBar,
@@ -134,7 +142,7 @@ export const MaterialProvider = ({ children }) => {
         {type === 'notice'
           ? (<>
             <DialogTitle >{title}</DialogTitle>
-            <DialogContent><Component /></DialogContent>
+            <DialogContent>{component}</DialogContent>
             <DialogActions>
               <Button onClick={() => _confirmDialog()} color="primary">
                 {confirmLabel}
@@ -144,7 +152,7 @@ export const MaterialProvider = ({ children }) => {
               </Button>
             </DialogActions>
           </>)
-          : <Component {...props} hideDialog={hideDialog} />
+          : (<Component {...props} hideDialog={hideDialog} />)
         }
 
       </Dialog>

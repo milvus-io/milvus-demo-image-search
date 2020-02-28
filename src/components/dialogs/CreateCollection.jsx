@@ -1,20 +1,12 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
+import useStyles from './Style'
+import { } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
 import { FaQuestionCircle } from 'react-icons/fa';
 import { Slider, Select, MenuItem, DialogActions, DialogContent, DialogTitle, Button } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField';
 const CreateCollection = props => {
-  const classes = makeStyles(theme => ({
-    wrapper: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-    },
-    column: {
-      marginRight: theme.spacing(1)
-    }
-  }))()
+  const classes = useStyles()
   const { hideDialog = () => { } } = props;
   const [params, setParams] = useState({
     name: '',
@@ -28,13 +20,13 @@ const CreateCollection = props => {
   return (
     <>
       <DialogTitle >{`Create Collection`}</DialogTitle>
-      <DialogContent>
+      <DialogContent classes={{ root: classes.DialogContent }}>
         <Grid container spacing={3}>
           <Grid item sm={4}>
             <div className={classes.wrapper}><span className={classes.column}>Collection Name</span> <FaQuestionCircle /></div>
           </Grid>
           <Grid item sm={8}>
-            <TextField value={params.name} onChange={e => setParams(params => ({ ...params, name: e.target.value }))} />
+            <TextField value={params.name} onChange={e => setParams({ ...params, name: e.target.value })} />
           </Grid>
           <Grid item sm={4}>
             <div className={classes.wrapper}><span className={classes.column}>Metric Type</span> <FaQuestionCircle /></div>
@@ -42,7 +34,7 @@ const CreateCollection = props => {
           <Grid item sm={8}>
             <Select
               value={params.type}
-              onChange={e => setParams(params => ({ ...params, type: e.target.value }))}
+              onChange={e => setParams({ ...params, type: e.target.value })}
             >
               <MenuItem value="">
                 <em>None</em>
@@ -55,15 +47,17 @@ const CreateCollection = props => {
           <Grid item sm={4}>
             <div className={classes.wrapper}><span className={classes.column}>Dimension</span> <FaQuestionCircle /></div>
           </Grid>
-          <Grid item sm={8}>
-            <Slider value={params.dimension} />
+          <Grid item sm={7}>
+            <Slider value={params.dimension} min={0} max={50000} onChange={(e, val) => setParams({ ...params, dimension: val })} />
           </Grid>
+          <Grid item sm={1}>{params.dimension}</Grid>
           <Grid item sm={4}>
             <div className={classes.wrapper}><span className={classes.column}>Index File Size</span> <FaQuestionCircle /></div>
           </Grid>
-          <Grid item sm={8}>
-            <Slider value={params.dimension} />
+          <Grid item sm={7}>
+            <Slider value={params.size} min={0} max={50000} onChange={(e, val) => setParams({ ...params, size: val })} />
           </Grid>
+          <Grid item sm={1}>{params.size}</Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
