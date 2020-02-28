@@ -43,25 +43,7 @@ const HiddenDialog = {
     cancel: () => { }
   },
 }
-// const TestDialog = {
-//   open: true,
-//   type: 'notice', // notice | custom
-//   params: {
-//     title: "Test Dialog",
-//     component: <div onClick={() => console.log('xixiixiixiix')}><p>wahhhhhh</p><p>this is test dialog </p></div>,
-//     confirmLabel: '确定',
-//     confirm: () => { console.log('dialog confirm') },
-//     cancelLabel: '取消',
-//     cancel: () => { console.log('dialog cancel') },
-//   },
-// }
-// const TestCustomDialog = {
-//   open: true,
-//   type: 'custom',
-//   params: {
-//     Component: CreateCollection
-//   },
-// }
+
 const { Provider } = materialContext
 // Dialog has two type : notice | custom;
 // notice type mean it's a notice dialog you need to set props like title, content, actions 
@@ -73,11 +55,11 @@ export const MaterialProvider = ({ children }) => {
     }
   })()
   const [snackBar, setSnackBar] = useState({
-    vertical: "top",
-    horizontal: "center",
     open: false,
+    type: "success",
     message: "",
-    type: "success"
+    vertical: "top",
+    horizontal: "center"
   })
   const [dialog, setDialog] = useState(HiddenDialog);
 
