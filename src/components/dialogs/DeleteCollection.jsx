@@ -7,10 +7,8 @@ const DeleteCollection = props => {
   const classes = useStyles()
   const { hideDialog = () => { } } = props;
   const [params, setParams] = useState({
-    name: '',
     type: '',
-    dimension: 0,
-    size: 0
+    nlist: 0,
   })
   const update = async () => {
     hideDialog()
@@ -40,7 +38,7 @@ const DeleteCollection = props => {
             <div className={classes.wrapper}><span className={classes.column}>nlist</span> <FaQuestionCircle /></div>
           </Grid>
           <Grid item sm={8}>
-            <Slider value={params.dimension} />
+            <Slider value={params.nlist} min={0} max={50000} onChange={(e, val) => setParams({ ...params, nlist: val })} />
           </Grid>
         </Grid>
       </DialogContent>

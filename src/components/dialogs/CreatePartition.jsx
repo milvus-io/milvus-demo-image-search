@@ -7,12 +7,7 @@ import TextField from '@material-ui/core/TextField';
 const CreatePartition = props => {
   const classes = useStyles()
   const { hideDialog = () => { } } = props;
-  const [params, setParams] = useState({
-    name: '',
-    type: '',
-    dimension: 0,
-    size: 0
-  })
+  const [tag, setTag] = useState('')
   const update = async () => {
     hideDialog()
   }
@@ -25,7 +20,7 @@ const CreatePartition = props => {
             <div className={classes.wrapper}><span className={classes.column}>Partition Tag</span> <FaQuestionCircle /></div>
           </Grid>
           <Grid item sm={8}>
-            <TextField value={params.name} onChange={e => setParams(params => ({ ...params, name: e.target.value }))} />
+            <TextField value={tag} onChange={e => setTag(e.target.value)} />
           </Grid>
         </Grid>
       </DialogContent>
