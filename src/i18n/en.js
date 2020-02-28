@@ -73,7 +73,9 @@ export default {
   },
   table: {
     create: "New Table",
-    index: "Update Index for",
+    index: "Create Index for",
+    indexType: "Index Type",
+    nlist: "nlist",
     saveSuccess: "Create Table Success",
     delete: "Delete Table Success",
     confirmDel: "Are you sure to delete table",
@@ -165,6 +167,7 @@ export default {
   },
   required: " is required",
   index: {
-    saveSuccess: "Create Index Success"
+    saveSuccess: "Create Index Success",
+    deleteSuccess: "Delete Index Success"
   }
 };

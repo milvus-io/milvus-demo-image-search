@@ -74,6 +74,8 @@ export default {
   table: {
     create: "新建表",
     index: "更新 Index 表",
+    indexType: "Index Type",
+    nlist: "nlist",
     saveSuccess: "表创建成功",
     delete: "删除表成功",
     confirmDel: "是否确认删除表",
@@ -166,6 +168,8 @@ export default {
   },
   required: " 是必填项",
   index: {
-    saveSuccess: "索引创建成功"
+    saveSuccess: "索引创建成功",
+    deleteSuccess: "Delete Index Success"
+
   }
 };
