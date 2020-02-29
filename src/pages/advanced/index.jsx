@@ -8,7 +8,7 @@ import WithTip from "components/with-tip";
 import { usePageStyles } from "../../hooks/page";
 import AdvancedForm from "./AdvancedForm";
 import PreloadTablesForm from "./PreloadTablesForm"
-
+import PerformanceTunning from "./PerformanceTunning"
 const Advanced = props => {
   const classes = usePageStyles();
   const { t } = useTranslation();
@@ -39,7 +39,7 @@ const Advanced = props => {
           <AdvancedForm></AdvancedForm>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <></>
+          <PerformanceTunning />
         </TabPanel>
         <TabPanel value={value} index={2}>
           <PreloadTablesForm />

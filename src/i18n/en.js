@@ -152,10 +152,21 @@ export default {
     insertDesc2: "If you want simultaneous inserting and searching of vector, it is recommended to enable this function.",
     blasDesc: "A Milvus performance tuning parameter. This value will be compared with 'nq' (the number of query vectors) to decide if OpenBLAS should be used. If nq >= Use Blas Threshold, OpenBLAS will be used. Search response times will be stable but the search speed will be slower; if nq < Use Blas Threshold, SSE will be used. The search speed will be faster but search response times will fluctuate. ",
     engin: "Engine ",
+
+    performance_tunning: {
+      use_blas_threshold: 'use_blas_threshold',
+      use_blas_threshold_desc_1: "A Milvus performance tuning parameter. The threshold value must be compared with nq to decide if the usage of OpenBLAS library will be triggered.",
+      use_blas_threshold_desc_2: "If nq >= use_blas_threshold , OpenBLAS will be used. The search response times do not fluctuate, but the search speed is relatively slow.",
+      use_blas_threshold_desc_3: "If nq < use_blas_threshold , SSE will be used. The search speed will be enhanced, however with slight fluctuation of search response times. The value should be >= 0.",
+
+      gpu_search_threshold: 'gpu_search_threshold',
+      gpu_search_threshold_desc1: "A Milvus performance tuning parameter. The threshold value must be compared with nq to decide if the search computation will be executed on GPUs only.",
+      gpu_search_threshold_desc2: "If nq >= gpu_search_threshold , the search computation will be executed on GPUs only.",
+      gpu_search_threshold_desc3: "If nq < gpu_search_threshold , the search computation will be executed on both CPUs and GPUs."
+    },
     preload_table: {
       title: 'Preload Table',
       desc: "preload data at startup, '*' means load all tables, empty value means no preload you can specify preload tables like this: table1,table2,table3",
-
     },
 
   },

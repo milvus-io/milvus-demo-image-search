@@ -17,31 +17,25 @@ const PreloadTablesForm = props => {
     },
     wrapper: {
       marginBottom: theme.spacing(2)
-    },
+    }
   }))()
   const { t } = useTranslation();
   const preload_table = t("advanced").preload_table;
   return (
     <div className={classes.root}>
-      <div className={classes.wrapper}>
-        <Typography variant="h5" component="h2" align="left">
-          {preload_table.title}
-        </Typography>
-      </div>
-      <div className={classes.wrapper}>
-        <Typography variant="p" component="h2" align="left">
-          {preload_table.desc}
-        </Typography>
-      </div>
+      <Typography variant="h5" component="h2" align="left" >
+        {preload_table.title}
+      </Typography>
+      <Typography variant="p" component="h2" align="left" paragraph>
+        {preload_table.desc}
+      </Typography>
       <div className={classes.wrapper}>
         <Grid item sm={4}>
-          <TextField fullWidth={true} />
+          <TextField fullWidth={true} size="small" variant="outlined" />
         </Grid>
       </div>
-      <div className={classes.wrapper}>
-        <Button variant="outlined" color="primary">Save</Button>
-        <Button>Cancle</Button>
-      </div>
+      <Button variant="outlined" color="primary">Save</Button>
+      <Button>Cancle</Button>
     </div>
   )
 }
