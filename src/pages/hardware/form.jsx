@@ -26,7 +26,7 @@ const HardWareForm = props => {
   return (
     <div>
       <div className={classes.wrapper}>
-        <Typography variant='h6' component='h2' paragraph>
+        <Typography variant='h6' component='p' paragraph>
           {hardware.search}
         </Typography>
         <Grid container spacing={3}>
@@ -71,7 +71,7 @@ const HardWareForm = props => {
         </Grid>
       </div>
       <div className={classes.wrapper}>
-        <Typography variant='h6' component='h2' paragraph>
+        <Typography variant='h6' component='p' paragraph>
           {hardware.index}
         </Typography>
         <Grid container spacing={3}>

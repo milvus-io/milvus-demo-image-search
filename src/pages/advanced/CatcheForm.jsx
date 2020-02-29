@@ -34,7 +34,7 @@ const AdvancedForm = props => {
     <div className={classes.root}>
       <Grid container>
         <Grid item sm={3} >
-          <Typography>{advancedTrans.cpu_capacity}</Typography>
+          <Typography >{advancedTrans.cpu_capacity}</Typography>
         </Grid>
         <Grid item sm={4} >
           <Slider value={6} min={1} max={16} />

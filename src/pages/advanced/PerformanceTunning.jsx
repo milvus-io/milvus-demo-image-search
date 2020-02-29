@@ -6,65 +6,56 @@ import { useTranslation } from "react-i18next";
 import { useFormStyles, useFormValidate } from "../../hooks/form";
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
-
+import FormActions from '../../components/common/FormActions'
 
 const PerformanceTunning = props => {
-  const classes = makeStyles(theme => ({
-    root: {
-      paddingTop: theme.spacing(2)
-    },
-    wrapper: {
-      marginBottom: theme.spacing(2)
-    },
-  }))()
+  const classes = useFormStyles()
   const { t } = useTranslation();
   const p_t = t("advanced").performance_tunning;
   return (
     <div className={classes.root}>
       <Grid container>
-        <Grid item sm={5}>
-          <Typography variant="h5" component="h2" align="left">
+        <Grid item sm={3}>
+          <Typography variant="h6" component="p" align="left">
             {p_t.use_blas_threshold}
           </Typography>
         </Grid>
-        <Grid item sm={2}>
-          <TextField fullWidth={true} variant="outlined" size="small"/>
+        <Grid item sm={1}>
+          <TextField fullWidth={true} variant="outlined" size="small" />
         </Grid>
       </Grid>
-      <Typography variant="p" component="h2" align="left" paragraph>
+      <Typography variant="caption" component="p" align="left" paragraph>
         {p_t.use_blas_threshold_desc_1}
       </Typography>
-      <Typography variant="p" component="h2" align="left" paragraph>
+      <Typography variant="caption" component="p" align="left" paragraph>
         {p_t.use_blas_threshold_desc_2}
       </Typography>
-      <Typography variant="p" component="h2" align="left" paragraph>
+      <Typography variant="caption" component="p" align="left" paragraph>
         {p_t.use_blas_threshold_desc_3}
       </Typography>
 
       <Grid container>
-        <Grid item sm={5}>
-          <Typography variant="h5" component="h2" align="left">
+        <Grid item sm={3}>
+          <Typography variant="h6" component="p" align="left">
             {p_t.gpu_search_threshold}
           </Typography>
         </Grid>
-        <Grid item sm={2}>
-          <TextField fullWidth={true} variant="outlined" size="small"/>
+        <Grid item sm={1}>
+          <TextField fullWidth={true} variant="outlined" size="small" />
         </Grid>
       </Grid>
-      <Typography variant="p" component="h2" align="left" paragraph>
+      <Typography variant="caption" component="p" align="left" paragraph>
         {p_t.gpu_search_threshold_desc1}
       </Typography>
-      <Typography variant="p" component="h2" align="left" paragraph>
+      <Typography variant="caption" component="p" align="left" paragraph>
         {p_t.gpu_search_threshold_desc2}
       </Typography>
-      <Typography variant="p" component="h2" align="left" paragraph>
+      <Typography variant="caption" component="p" align="left" paragraph>
         {p_t.gpu_search_threshold_desc3}
       </Typography>
+      <FormActions />
 
-      <Button variant="outlined" color="primary">Save</Button>
-      <Button>Cancle</Button>
     </div >
   )
 }
