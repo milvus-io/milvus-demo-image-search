@@ -1,11 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Select, MenuItem, FormControl, InputLabel, TextField, Button } from "@material-ui/core"
+import { MenuItem, FormControl, InputLabel } from "@material-ui/core"
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { materialContext } from '../../context/material'
 import { useTranslation } from "react-i18next";
 import { useFormStyles, useFormValidate } from '../../hooks/form'
 import { safetyGet } from '../../utils/helpers'
+import Select from '@material-ui/core/Select'
+import { FormTextField, FormSelect } from '../../components/common/FormTextComponents'
+import FormActions from '../../components/common/FormActions'
+import Grid from '@material-ui/core/Grid'
 
 const defaultForm = {
   type: "mysql",
@@ -25,7 +29,6 @@ const MetaDataForm = function (props) {
 
   const { t } = useTranslation();
   const metaDataTrans = t("storage").metadata;
-  const buttonTrans = t("button");
   const [form, setForm] = useState({ ...defaultForm })
   const [error, setError] = useState({})
 
@@ -70,82 +73,67 @@ const MetaDataForm = function (props) {
 
 
   return (
-    <form className={classes.formContainer}>
-      <div className={`${classes.formItem}`}>
-        <FormControl className={classes.formControl}>
-          <InputLabel id="meta-data-type">{metaDataTrans.type}</InputLabel>
-          <Select
-            name="type"
-            labelId="meta-data-type"
-            id="meta-data-type-select"
-            value={form.type}
-            onChange={handleChange}
-            className={classes.select}
-          >
-            <MenuItem value="mysql">Mysql</MenuItem>
-            <MenuItem value="sqlite">SQlite</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
-      <div className={`${classes.formItem} ${classes["mt-2"]}`}>
-        <TextField
-          name="host"
-          label={metaDataTrans.host}
-          value={form.host}
-          onBlur={() => { handleCheck(form.host, "host") }}
-          onChange={handleChange}
-          className={classes.textField}
-          placeholder="0.0.0.0"
-          error={error.host}
-          helperText={error.host && `${metaDataTrans.host}${t('required')}`}
-        />
-      </div>
-      <div className={`${classes.formItem} ${classes["mt-2"]}`}>
-        <TextField
-          name="port"
-          label={metaDataTrans.port}
-          value={form.port}
-          onBlur={() => { handleCheck(form.port, "port") }}
-          onChange={handleChange}
-          className={classes.textField}
-          placeholder="19121"
-          error={error.port}
-          helperText={error.port && `${metaDataTrans.port}${t('required')}`}
-        />
-      </div>
-      <div className={`${classes.formItem} ${classes["mt-2"]}`}>
-        <TextField
-          name="username"
-          label={metaDataTrans.username}
-          value={form.username}
-          onBlur={() => { handleCheck(form.username, "username") }}
-          onChange={handleChange}
-          className={classes.textField}
-          placeholder={metaDataTrans.username}
-          error={error.username}
-          helperText={error.username && `${metaDataTrans.username}${t('required')}`}
-        />
-      </div>
-      <div className={`${classes.formItem} ${classes["mt-2"]}`}>
-        <TextField
-          name="password"
-          label={metaDataTrans.password}
-          value={form.password}
-          onBlur={() => { handleCheck(form.password, "password") }}
-          onChange={handleChange}
-          className={classes.textField}
-          placeholder={metaDataTrans.password}
-          error={error.password}
-          helperText={error.password && `${metaDataTrans.password}${t('required')}`}
-        />
-      </div>
-      <div className={`${classes["mt-4"]} ${classes.action}`} style={{ marginBottom: "30px" }}>
-        <Button variant="outlined" color="primary" onClick={handleSubmit}>
-          {buttonTrans.save}
-        </Button>
-        <Button variant="outlined" onClick={handleCancel} className={classes['ml-2']}>{buttonTrans.cancel}</Button>
-      </div>
-    </form>
+    <>
+      <Grid container>
+        <Grid item sm={4}>
+          <FormControl className={classes.formControl}>
+            <InputLabel id="meta-data-type">{metaDataTrans.type}</InputLabel>
+            <Select
+              name="type"
+              labelId="meta-data-type"
+              id="meta-data-type-select"
+              value={form.type}
+              onChange={handleChange}
+            >
+              <MenuItem value="mysql">Mysql</MenuItem>
+              <MenuItem value="sqlite">SQlite</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+
+      <FormTextField
+        name="host"
+        label={metaDataTrans.host}
+        value={form.host}
+        onBlur={() => { handleCheck(form.host, "host") }}
+        onChange={handleChange}
+        placeholder="0.0.0.0"
+        error={error.host}
+        helperText={error.host && `${metaDataTrans.host}${t('required')}`}
+      />
+      <FormTextField
+        name="port"
+        label={metaDataTrans.port}
+        value={form.port}
+        onBlur={() => { handleCheck(form.port, "port") }}
+        onChange={handleChange}
+        placeholder="19121"
+        error={error.port}
+        helperText={error.port && `${metaDataTrans.port}${t('required')}`}
+      />
+      <FormTextField
+        name="username"
+        label={metaDataTrans.username}
+        value={form.username}
+        onBlur={() => { handleCheck(form.username, "username") }}
+        onChange={handleChange}
+        placeholder={metaDataTrans.username}
+        error={error.username}
+        helperText={error.username && `${metaDataTrans.username}${t('required')}`}
+      />
+      <FormTextField
+        name="password"
+        label={metaDataTrans.password}
+        value={form.password}
+        onBlur={() => { handleCheck(form.password, "password") }}
+        onChange={handleChange}
+        placeholder={metaDataTrans.password}
+        error={error.password}
+        helperText={error.password && `${metaDataTrans.password}${t('required')}`}
+      />
+      <FormActions />
+    </>
   );
 }
 

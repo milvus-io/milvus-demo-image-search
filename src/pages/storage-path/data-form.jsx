@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
-import { TextField, Button } from "@material-ui/core";
+import React, { useState, useContext, useEffect, useRef, Fragment } from "react";
 import { systemContext } from "../../context/system";
 import { httpContext } from "../../context/http";
 import { useTranslation } from "react-i18next";
@@ -10,8 +9,10 @@ import {
   AddCircleOutlineOutlined,
   RemoveCircleOutlineOutlined
 } from "@material-ui/icons";
+import Typography from '@material-ui/core/Typography'
+import Grid from "@material-ui/core/Grid"
 import { materialContext } from "../../context/material";
-import FormTextField from '../../components/common/FormTextField'
+import { FormTextField } from '../../components/common/FormTextComponents'
 import FormActions from '../../components/common/FormActions'
 
 const defaultForm = {
@@ -112,84 +113,93 @@ const DataForm = function (props) {
   };
 
   return (
-    <>
-      <FormTextField
-        name="primary"
-        ref={primaryRef}
-        label={dataTrans.primary}
-        value={form.primary}
-        onBlur={() => {
-          handleCheck(form.primary, "primary");
-        }}
-        onChange={handleChange}
-        className={classes.textField}
-        placeholder={dataTrans.primary}
-        error={error.primary}
-        helperText={error.primary && `${dataTrans.primary}${t("required")}`}
-      />
-      <FileCopyOutlined
-        type="copy"
-        className={classes.icon}
-        onClick={() => {
-          handleCopy(primaryRef.current.state.value);
-        }}
-      />
-      <p className={classes.desc}>{dataTrans.primaryTip}</p>
-      <div className={`${classes.formItem} ${classes["mt-4"]}`}>
-        <ul className="secondary-path" style={{ marginBottom: 0 }}>
-          {form.secondary.map((v, i) => (
-            <li key={`${v}${i}`} className={`${classes.formItem}`}>
-              <TextField
-                name="secondary"
-                autoFocus={editIndex === i}
-                label={dataTrans.second}
-                value={v || ""}
-                onChange={val => {
-                  handleSecondaryChange(val, i);
+    <div className={classes.root}>
+      <Typography variant="h6" component="p" paragraph>
+        {dataTrans.primary}
+      </Typography>
+      <Typography variant="caption" component="p">
+        {dataTrans.primaryTip}
+      </Typography>
+      <Grid container alignItems="center">
+        <FormTextField
+          name="primary"
+          ref={primaryRef}
+          label={dataTrans.primary}
+          value={form.primary}
+          onBlur={() => {
+            handleCheck(form.primary, "primary");
+          }}
+          onChange={handleChange}
+          placeholder={dataTrans.primary}
+          error={error.primary}
+          helperText={error.primary && `${dataTrans.primary}${t("required")}`}
+        />
+        <Grid item sm={3}>
+          <FileCopyOutlined
+            type="copy"
+            className={classes.icon}
+            onClick={() => {
+              handleCopy(primaryRef.current.state.value);
+            }}
+          />
+        </Grid>
+      </Grid>
+
+      <Typography variant="h6" component="p" paragraph>
+        {dataTrans.second}
+      </Typography>
+      <Typography variant="caption" component="p">
+        {dataTrans.secondTip}
+      </Typography>
+      {form.secondary.map((v, i) => (
+        <Grid container alignItems="center" key={i}>
+          <FormTextField
+            name="secondary"
+            autoFocus={editIndex === i}
+            label={dataTrans.second}
+            value={v || ""}
+            onChange={val => {
+              handleSecondaryChange(val, i);
+            }}
+            placeholder={dataTrans.second}
+            error={error.secondary}
+            helperText={
+              error.secondary && `${dataTrans.second}${t("required")}`
+            }
+          />
+          {i === 0 ? (
+            <Grid item sm={3}>
+              <FileCopyOutlined
+                className={classes.icon}
+                onClick={() => {
+                  handleCopy(v);
                 }}
-                className={classes.textField}
-                placeholder={dataTrans.second}
-                error={error.secondary}
-                helperText={
-                  error.secondary && `${dataTrans.second}${t("required")}`
-                }
               />
-              {i === 0 ? (
-                <>
-                  <FileCopyOutlined
-                    className={classes.icon}
-                    onClick={() => {
-                      handleCopy(v);
-                    }}
-                  />
-                  <AddCircleOutlineOutlined
-                    className={classes.icon}
-                    onClick={handleAddPath}
-                  ></AddCircleOutlineOutlined>
-                </>
-              ) : (
-                  <>
-                    <FileCopyOutlined
-                      className={classes.icon}
-                      onClick={() => {
-                        handleCopy(v);
-                      }}
-                    />
-                    <RemoveCircleOutlineOutlined
-                      className={classes.icon}
-                      onClick={() => {
-                        handleDeletePath(i);
-                      }}
-                    ></RemoveCircleOutlineOutlined>
-                  </>
-                )}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <p className={classes.desc}>{dataTrans.secondTip}</p>
+              <AddCircleOutlineOutlined
+                className={classes.icon}
+                onClick={handleAddPath}
+              ></AddCircleOutlineOutlined>
+            </Grid>
+          ) : (
+              <Grid item sm={3}>
+                <FileCopyOutlined
+                  className={classes.icon}
+                  onClick={() => {
+                    handleCopy(v);
+                  }}
+                />
+                <RemoveCircleOutlineOutlined
+                  className={classes.icon}
+                  onClick={() => {
+                    handleDeletePath(i);
+                  }}
+                ></RemoveCircleOutlineOutlined>
+              </Grid>
+            )}
+        </Grid>
+      ))}
       <FormActions />
-    </>
+    </div>
   );
 };
 

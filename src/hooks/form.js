@@ -6,21 +6,12 @@ import {
 } from "../utils/helpers";
 
 const useStyles = makeStyles(theme => ({
-  textField: {
-    width: "300px"
-  },
-  "ml-2": {
-    marginLeft: theme.spacing(2)
-  },
-  "mt-4": {
-    marginTop: theme.spacing(4)
+  root: {
+    paddingTop: theme.spacing(2),
   },
   formItem: {
     display: "flex",
     alignItems: "flex-end"
-  },
-  select: {
-    width: '300px'
   },
   desc: {
     fontSize: "14px",
@@ -29,16 +20,20 @@ const useStyles = makeStyles(theme => ({
   },
   icon: {
     marginLeft: theme.spacing(2),
-    cursor: "pointer"
+    marginBottom: theme.spacing(2),
+    cursor: "pointer",
+    fontSize: '2rem'
   },
   formControl: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    width: '100%',
   },
   action: {
     textAlign: 'left'
   },
-  gridItem:{
-    padding: `0px !important` ,
+  gridItem: {
+    padding: `0px !important`,
     textAlign: 'left'
   }
 }));

@@ -54,7 +54,6 @@ const CreateIndex = props => {
               defaultValue="FLAT"
               value={form.index_type}
               onChange={handleChange}
-              className={classes.select}
             >
               {
                 INDEX_TYPES.map(v => (
