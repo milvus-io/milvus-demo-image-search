@@ -63,9 +63,12 @@ export default {
     port: "Listening Port"
   },
   metrics: {
+    title: "Metrics",
+    tip: 'put tip here',
     enable: "Enabled",
     address: "Push Address",
-    port: "Push Port"
+    port: "Push Port",
+    gui: "GUI Address"
   },
   others: {
     logServer: "Log Server",
