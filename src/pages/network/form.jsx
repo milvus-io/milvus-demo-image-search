@@ -55,18 +55,16 @@ const NetworkFrom = (props) => {
   };
 
   return (
-    <form>
+    <>
       <FormTextField
         name="address"
         label={networkTrans.address}
         value={form.address}
         onBlur={() => { handleCheck(form.address, "address") }}
         onChange={handleChange}
-        className={classes.textField}
         placeholder={networkTrans.address}
         error={error.address}
         helperText={error.address && `${networkTrans.address}${t('required')}`}
-        variant='outlined'
       />
       <FormTextField
         name="port"
@@ -74,14 +72,12 @@ const NetworkFrom = (props) => {
         value={form.port}
         onBlur={() => { handleCheck(form.port, "port") }}
         onChange={handleChange}
-        className={classes.textField}
         placeholder={networkTrans.port}
         error={error.port}
         helperText={error.port && `${networkTrans.port}${t('required')}`}
-        variant='outlined'
       />
       <FormActions />
-    </form>
+    </>
 
   );
 }
