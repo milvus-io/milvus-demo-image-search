@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { DialogActions, DialogContent, DialogTitle, Button, Dialog } from '@material-ui/core'
 import { blue } from '@material-ui/core/colors'
+import { useTranslation } from "react-i18next";
+
 import MuiAlert from '@material-ui/lab/Alert';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -65,6 +67,8 @@ export const MaterialProvider = ({ children }) => {
     horizontal: "center"
   })
   const [dialog, setDialog] = useState(DefaultDialogConfigs);
+  const { t } = useTranslation();
+  const buttonTrans = t("button");
 
   const handleClose = (e, reason) => {
     // only click x to close or auto hide.
@@ -83,7 +87,7 @@ export const MaterialProvider = ({ children }) => {
     })
   }
   const { open, type, params = {} } = dialog;
-  const { title, component, confirm, confirmLabel = "", cancel, cancelLabel = "" } = params; // for notice type
+  const { title, component, confirm, confirmLabel = buttonTrans.confirm, cancel, cancelLabel = buttonTrans.cancel } = params; // for notice type
   const { component: CustomComponent } = params; // for custom type
   const _confirmDialog = async () => {
     if (confirm) {
@@ -126,11 +130,11 @@ export const MaterialProvider = ({ children }) => {
             <DialogTitle >{title}</DialogTitle>
             <DialogContent>{component}</DialogContent>
             <DialogActions>
-              <Button onClick={() => _confirmDialog()} color="primary">
-                {confirmLabel}
-              </Button>
               <Button onClick={() => _cancelDialog()} color="primary">
                 {cancelLabel}
+              </Button>
+              <Button onClick={() => _confirmDialog()} color="primary">
+                {confirmLabel}
               </Button>
             </DialogActions>
           </>)

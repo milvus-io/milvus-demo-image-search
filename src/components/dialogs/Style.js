@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
   upload: {
     textAlign: 'center',
   },
+  select: {
+    width: "211px"
+  }
 }))
 
 export default useStyles

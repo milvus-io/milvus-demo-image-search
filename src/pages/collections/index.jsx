@@ -7,8 +7,7 @@ import { useTranslation } from "react-i18next";
 import { httpContext } from "../../context/http";
 import { materialContext } from '../../context/material'
 import CreateCollection from '../../components/dialogs/CreateCollection'
-
-import "./index.less";
+import CreateIndex from '../../components/dialogs/CreateIndex'
 
 const PAGE_SIZE = 10;
 const Collections = props => {
@@ -17,7 +16,8 @@ const Collections = props => {
     deleteTable,
     searchTable,
     createTable,
-    currentAddress
+    currentAddress,
+    createIndex
   } = useContext(httpContext);
 
   const { setDialog, openSnackBar } = useContext(materialContext)
@@ -92,6 +92,15 @@ const Collections = props => {
     setCurrent(page);
   };
 
+  const deleteIndex = async (collectionName) => {
+    const res = await createIndex(collectionName, { index_type: "FLAT", nlist: 16384 })
+    console.log(res)
+    if (res && res.code === 0) {
+      saveSuccess()
+      openSnackBar(t('index').deleteSuccess)
+    }
+  }
+
 
   const colDefinitions = [
     {
@@ -157,15 +166,34 @@ const Collections = props => {
     {
       label: "Create Index",
       icon: "createIndex",
-      onClick: selected => console.log("one", selected),
-      disabled: selected => selected.length > 2,
+      onClick: (e, selected) => {
+        setDialog({
+          open: true,
+          type: 'custom',
+          params: {
+            component: <CreateIndex createIndex={createIndex} collectionInfo={selected[0]} saveSuccess={saveSuccess}></CreateIndex>,
+          }
+        })
+      },
+      disabled: selected => selected.length !== 1,
       disabledTooltip: "You can not create index on multiple collections"
     },
     {
       label: "Drop Index",
       icon: "dropIndex",
-      onClick: selected => console.log("one", selected),
-      disabled: false
+      onClick: (e, selected) => {
+        setDialog({
+          open: true,
+          type: 'notice',
+          params: {
+            title: `Do you want to delete index in ${selected[0].table_name}?`,
+            confirm: () => {
+              deleteIndex(selected[0].table_name)
+            }
+          }
+        })
+      },
+      disabled: selected => selected.length !== 1,
     },
     {
       label: "",

@@ -1,0 +1,66 @@
+import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import { FaNetworkWired, FaRegFolder } from "react-icons/fa";
+import { FiCpu } from "react-icons/fi";
+import { GiChart } from "react-icons/gi";
+import { GoNote, GoSettings } from "react-icons/go";
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: "100%",
+    maxWidth: 360
+  },
+  icon: {
+    minWidth: theme.spacing(5),
+    "& svg": {
+      width: 24,
+      height: 24,
+      fill: "#FFF"
+    }
+  },
+  item: {
+    paddingLeft: 0
+  }
+}));
+
+const Configs = [
+  { path: 'network', label: 'Network Access', icon: <FaNetworkWired /> },
+  { path: 'storage', label: "Storage Path", icon: <FaRegFolder /> },
+  { path: 'advanced', label: 'Advanced Settings', icon: <GoSettings /> },
+  { path: 'hardware', label: "Hardware Resources", icon: <FiCpu /> },
+  { path: 'metrics', label: "Metrics", icon: <GiChart /> },
+  { path: 'elk', label: "ELK", icon: <GoNote /> }
+]
+const ConfigMenu = props => {
+  const history = useHistory();
+  const classes = useStyles();
+
+  useEffect(() => {
+    history.push("/configs/storage");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return (
+    <div className={classes.root}>
+      <List component="nav" aria-label="main mailbox folders">
+        {Configs.map(config => {
+          const { path, label, icon } = config
+          return (
+            <ListItem button className={classes.item}>
+              <ListItemIcon className={classes.icon}>
+                {icon}
+              </ListItemIcon>
+              <ListItemText primary={label} />
+            </ListItem>
+          )
+        })}
+      </List>
+    </div>
+  );
+};
+
+export default ConfigMenu;

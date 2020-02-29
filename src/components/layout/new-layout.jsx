@@ -14,7 +14,7 @@ import MyTabs from '../../components/tab'
 import TabPanel from '../../components/tab-panel'
 import PopConfirm from '../../components/pop-confirm'
 import DataMenu from './data-menu'
-import ConfigMenu from './ConfigMenu'
+import ConfigMenu from './config-menu'
 import LoginMenu from './login-menu';
 
 const useStyles = makeStyles(theme => ({
