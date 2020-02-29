@@ -112,11 +112,12 @@ export default {
 
   },
   hardware: {
+    title: 'Hardware Resource',
+    search: "Enabled for Searching",
+    index: "Enabled for Building Index",
     saveSuccess: "Save Gpu Configs Success",
     enable: "Enable GPU",
     capacity: "GPU Cache Capacity (GB)",
-    search: "Enabled for Searching",
-    index: "Enabled for Building Index",
     searchAtLeastOne: "Need at least one GPU for searching",
     buildAtLeastOne: "Need at least one GPU for building index",
     cpuVersion: "Your milvus version is CPU version."

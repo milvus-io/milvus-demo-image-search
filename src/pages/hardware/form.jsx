@@ -1,251 +1,125 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Form, Switch, InputNumber, Button, message } from "antd";
+import Button from "@material-ui/core/Button";
+import Switch from '@material-ui/core/Switch';
+import Typography from "@material-ui/core/Typography"
+import { makeStyles } from '@material-ui/core/styles';
+import { FaMicrochip, FaBolt } from 'react-icons/fa'
+import Grid from '@material-ui/core/Grid';
 import { systemContext } from '../../context/system'
 import { httpContext } from '../../context/http'
 import { useTranslation } from "react-i18next";
 
-const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
-  const { form } = props;
-  const { systemInfos } = useContext(systemContext)
-  const { getHardwareConfig, updateHardwareConfig, currentAddress } = useContext(httpContext)
-  const { getFieldDecorator, resetFields, getFieldsValue } = form;
-  const [defalutValue, setDefaultValue] = useState({});
-  const [searchHardware, setSearchHardware] = useState([]);
-  const [defaultSearch, setDefaultSearch] = useState([]);
-  const [buildHardware, setBuildHardware] = useState([]);
-  const [defaultBuild, setDefaultBuild] = useState([]);
-  const [enable, setEnable] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(true);
-
+const HardWareForm = props => {
   const { t } = useTranslation();
-  const hardwareTrans = t("hardware");
-  const buttonTrans = t("button");
-
-  const currentSystemInfo = useMemo(() => {
-    return systemInfos[currentAddress] || {}
-  }, [systemInfos, currentAddress])
-  console.log(currentSystemInfo)
-  const SwitchItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 4 }
+  const hardware = t("hardware");
+  const classes = makeStyles(theme => ({
+    gridItem: {
+      display: "flex",
+      justifyContent: "start",
+      alignItems: "center"
     },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 20 }
+    wrapper: {
+      marginBottom: theme.spacing(2)
     }
-  };
-  const handleSearchSwitch = (checked, e) => {
-    const { value } = e.target.dataset;
-    const newSearch = checked
-      ? [...searchHardware, value]
-      : searchHardware.filter(v => v !== value);
-    setSearchHardware(newSearch);
-    setDisabled(checkSame());
-  };
-
-  const handleBuildSwitch = (checked, e) => {
-    const { value } = e.target.dataset;
-    const newBuild = checked
-      ? [...buildHardware, value]
-      : [...buildHardware.filter(v => v !== value)];
-    setBuildHardware(newBuild);
-  };
-  const checkSame = () => {
-    const values = getFieldsValue();
-    const isSame = Object.keys(values).every(
-      k => values[k] === defalutValue[k]
-    );
-    const isSearchSame =
-      searchHardware.length === defaultSearch.length &&
-      searchHardware.every(v => defaultSearch.includes(v));
-    const isBuildSame =
-      buildHardware.length === defaultBuild.length &&
-      buildHardware.every(v => defaultBuild.includes(v));
-
-    return isSame && isSearchSame && isBuildSame;
-  };
-  useEffect(() => {
-    setDisabled(checkSame());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [buildHardware, searchHardware, defaultSearch, defaultBuild, defalutValue]);
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    props.form.validateFields(async (err, values) => {
-      if (err) {
-        return;
-      }
-      if (!searchHardware.length) {
-        message.error(hardwareTrans.searchAtLeastOne);
-        return;
-      }
-      if (!buildHardware.length) {
-        message.error(hardwareTrans.buildAtLeastOne);
-        return;
-      }
-      setLoading(true);
-      const data = {
-        ...values,
-        search_resources: [...searchHardware],
-        build_index_resources: [...buildHardware]
-      };
-      try {
-        const res = await updateHardwareConfig(data);
-        if (res.code === 0) {
-          message.success(hardwareTrans.saveSuccess);
-          setDefaultValue(values);
-          setDefaultBuild(buildHardware);
-          setDefaultSearch(searchHardware);
-        }
-      } finally {
-        setLoading(false);
-      }
-    });
-  };
-
-  const handleSwitch = val => {
-    resetFields();
-
-    if (val) {
-      !searchHardware.length
-        ? setSearchHardware([
-          currentSystemInfo.gpuList ? currentSystemInfo.gpuList[0] : ""
-        ])
-        : setSearchHardware(defaultSearch);
-      !buildHardware.length
-        ? setBuildHardware([
-          currentSystemInfo.gpuList ? currentSystemInfo.gpuList[0] : ""
-        ])
-        : setBuildHardware(defaultBuild);
-    }
-
-    setEnable(val);
-    requestAnimationFrame(() => {
-      setDisabled(checkSame());
-    });
-  };
-
-  const handleNumberChange = val => {
-    const regx = /^[0-9]*$/;
-    if (!regx.test(val)) {
-      setDisabled(true);
-      return;
-    }
-    requestAnimationFrame(() => {
-      setDisabled(checkSame());
-    });
-  };
-
-  const fetchData = async () => {
-    const res = await Promise.all([
-      getHardwareConfig(),
-    ]);
-    const {
-      build_index_resources: buildVal,
-      search_resources: searchVal,
-      enable
-    } = res[0] || {};
-
-    setBuildHardware(buildVal || []);
-    setDefaultBuild(buildVal || []);
-
-    setSearchHardware(searchVal || []);
-    setDefaultSearch(searchVal || []);
-
-    setEnable(!!enable);
-    setDefaultValue(res[0] || {});
-  }
-
-  const handleCancel = () => {
-    fetchData();
-    resetFields();
-  };
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentAddress]);
-
+  }))()
   return (
-    <Form layout="vertical" style={{ marginTop: "40px", maxWidth: "600px" }}>
-      <Form.Item label={hardwareTrans.enable} {...SwitchItemLayout}>
-        {getFieldDecorator("enable", {
-          valuePropName: "checked",
-          initialValue: defalutValue.enable
-        })(<Switch onChange={handleSwitch}></Switch>)}
-      </Form.Item>
-      {enable ? (
-        <>
-          <Form.Item label={hardwareTrans.capacity}>
-            {getFieldDecorator("cache_capacity", {
-              initialValue: defalutValue.cache_capacity || 1,
-              rules: [
-                {
-                  required: true,
-                  message: `${hardwareTrans.capacity} ${t("required")}`
-                }
-              ]
-            })(
-              <InputNumber
-                min={1}
-                max={currentSystemInfo.gpuMemory}
-                onChange={handleNumberChange}
-              />
-            )}
-            <span className="ml-10">{`[1 , ${currentSystemInfo.gpuMemory} ] GB`}</span>
-          </Form.Item>
+    <div>
+      <div className={classes.wrapper}>
+        <Typography variant='h6' component='p' paragraph>
+          {hardware.search}
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+            <FaMicrochip />CPU
+        </Grid>
+          <Grid item xs={4}>
+            <Switch checked={true} onChange={() => { }} value="gilad" />
+          </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+            <FaBolt />GPU0
+        </Grid>
+          <Grid item xs={4}>
+            <Switch checked={true} onChange={() => { }} value="gilad" />
+          </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+            <FaBolt />GPU1
+        </Grid>
+          <Grid item xs={4}>
+            <Switch checked={true} onChange={() => { }} value="gilad" />
+          </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+            <FaBolt />GPU2
+        </Grid>
+          <Grid item xs={4}>
+            <Switch checked={true} onChange={() => { }} value="gilad" />
+          </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+            <FaBolt />GPU3
+        </Grid>
+          <Grid item xs={4}>
+            <Switch checked={true} onChange={() => { }} value="gilad" />
+          </Grid>
+        </Grid>
+      </div>
+      <div className={classes.wrapper}>
 
-          <Form.Item label={hardwareTrans.search}>
-            <ol>
-              {currentSystemInfo.gpuList &&
-                currentSystemInfo.gpuList.map((v, index) => (
-                  <li key={index}>
-                    <Switch
-                      checked={searchHardware.includes(v)}
-                      data-value={v}
-                      onChange={handleSearchSwitch}
-                    />
-                    <span className="txt">{v}</span>
-                  </li>
-                ))}
-            </ol>
-          </Form.Item>
+        <Typography variant='h6' component='p' paragraph>
+          {hardware.index}
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+            <FaMicrochip />CPU
+        </Grid>
+          <Grid item xs={4}>
+            <Switch checked={true} onChange={() => { }} value="gilad" />
+          </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+            <FaBolt />GPU0
+        </Grid>
+          <Grid item xs={4}>
+            <Switch checked={true} onChange={() => { }} value="gilad" />
+          </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+            <FaBolt />GPU1
+        </Grid>
+          <Grid item xs={4}>
+            <Switch checked={true} onChange={() => { }} value="gilad" />
+          </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+            <FaBolt />GPU2
+        </Grid>
+          <Grid item xs={4}>
+            <Switch checked={true} onChange={() => { }} value="gilad" />
+          </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+            <FaBolt />GPU3
+        </Grid>
+          <Grid item xs={4}>
+            <Switch checked={true} onChange={() => { }} value="gilad" />
+          </Grid>
+        </Grid>
+      </div>
+      <Button variant="outlined">Save</Button>
+      <Button>Cancel</Button>
 
-          <Form.Item label={hardwareTrans.index}>
-            <ol>
-              {currentSystemInfo.gpuList &&
-                currentSystemInfo.gpuList.map((v, index) => (
-                  <li key={index}>
-                    <Switch
-                      checked={buildHardware.includes(v)}
-                      data-value={v}
-                      onChange={handleBuildSwitch}
-                    />
-                    <span className="txt">{v}</span>
-                  </li>
-                ))}
-            </ol>
-          </Form.Item>
-        </>
-      ) : null}
-
-      <Form.Item label=" " colon={false}>
-        <Button className=" mr-10" onClick={handleCancel}>
-          {buttonTrans.cancel}
-        </Button>
-        <Button
-          type={disabled ? "diabled" : "primary"}
-          onClick={handleSubmit}
-          loading={loading}
-          disabled={disabled}
-        >
-          {buttonTrans.save}
-        </Button>
-      </Form.Item>
-    </Form>
+    </div>
   );
-});
+};
 
-export default AdvancedForm;
+export default HardWareForm;
