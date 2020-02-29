@@ -7,6 +7,7 @@ import { useFormStyles, useFormValidate } from "../../hooks/form";
 import Grid from '@material-ui/core/Grid'
 import Slider from '@material-ui/core/Slider'
 import Divider from '@material-ui/core/Divider'
+import Button from '@material-ui/core/Button'
 import Switch from '@material-ui/core/Switch'
 const AdvancedForm = props => {
   const { systemInfos } = useContext(systemContext)
@@ -31,7 +32,6 @@ const AdvancedForm = props => {
     <form>
       <div style={{ marginTop: theme.spacing(1), padding: theme.spacing(2) }}>
         <Grid container spacing={3}>
-
           <Grid item sm={3} classes={{ root: classes.gridItem }}>
             <span>{advancedTrans.cpu_capacity}</span>
           </Grid>
@@ -59,8 +59,6 @@ const AdvancedForm = props => {
           <Grid item sm={12}>
             <Divider />
           </Grid>
-
-
           <Grid item sm={3} classes={{ root: classes.gridItem }}>
             <span>{advancedTrans.gpu_capacity}</span>
           </Grid>
@@ -100,7 +98,7 @@ const AdvancedForm = props => {
           </Grid>
 
           <Grid item sm={3} classes={{ root: classes.gridItem }}>
-            <span style={{ padding: theme.spacing(1) }}>{advancedTrans.insert_buffer_size}</span>
+            <span>{advancedTrans.insert_buffer_size}</span>
           </Grid>
           <Grid item sm={6} classes={{ root: classes.gridItem }}>
             <Slider value={6} min={1} max={16} />
@@ -112,7 +110,17 @@ const AdvancedForm = props => {
             {advancedTrans.insert_buffer_size_desc}
           </Grid>
         </Grid>
-
+        <div>
+          <Button
+            loading={loading}
+            type="primary"
+          >
+            {buttonTrans.update}
+          </Button>
+          <Button className=" mr-10" >
+            {buttonTrans.cancel}
+          </Button>
+        </div>
       </div>
     </form>
 

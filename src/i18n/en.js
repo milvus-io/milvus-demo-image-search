@@ -151,7 +151,13 @@ export default {
     insertDesc1: "Whether to load inserted data into cache immediately for hot query. If you want to simultaneously insert and query vectors, it's recommended to enable this function. ",
     insertDesc2: "If you want simultaneous inserting and searching of vector, it is recommended to enable this function.",
     blasDesc: "A Milvus performance tuning parameter. This value will be compared with 'nq' (the number of query vectors) to decide if OpenBLAS should be used. If nq >= Use Blas Threshold, OpenBLAS will be used. Search response times will be stable but the search speed will be slower; if nq < Use Blas Threshold, SSE will be used. The search speed will be faster but search response times will fluctuate. ",
-    engin: "Engine "
+    engin: "Engine ",
+    preload_table: {
+      title: 'Preload Table',
+      desc: "preload data at startup, '*' means load all tables, empty value means no preload you can specify preload tables like this: table1,table2,table3",
+
+    },
+
   },
   vector: {
     tName: "Table Name",

@@ -6,7 +6,8 @@ import TabPanel from "../../components/tab-panel";
 import MyTabs from "../../components/tab";
 import WithTip from "components/with-tip";
 import { usePageStyles } from "../../hooks/page";
-import AdvancedForm from "./form";
+import AdvancedForm from "./AdvancedForm";
+import PreloadTablesForm from "./PreloadTablesForm"
 
 const Advanced = props => {
   const classes = usePageStyles();
@@ -39,6 +40,9 @@ const Advanced = props => {
         </TabPanel>
         <TabPanel value={value} index={1}>
           <></>
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <PreloadTablesForm />
         </TabPanel>
       </PaperWrapper>
     </div>
