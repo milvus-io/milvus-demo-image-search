@@ -1,9 +1,9 @@
 import React from "react";
-import Grid from '@material-ui/core/Grid'
 import { useTranslation } from "react-i18next";
 import NetworkForm from './form';
 import PaperWrapper from '../../components/page-wrapper'
 import { usePageStyles } from '../../hooks/page'
+import WithTip from "components/with-tip";
 
 const Network = props => {
   const classes = usePageStyles()
@@ -12,16 +12,13 @@ const Network = props => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
+      <PaperWrapper className={classes.paper}>
+        <div className={classes.titleContainer}>
           <h2 className={classes.h2}>{configTrans.network}</h2>
-        </Grid>
-        <Grid item xs={6}>
-          <PaperWrapper className={classes.paper}>
-            <NetworkForm></NetworkForm>
-          </PaperWrapper>
-        </Grid>
-      </Grid>
+          <WithTip title={t("restartNotify")} placement="right"></WithTip>
+        </div>
+        <NetworkForm></NetworkForm>
+      </PaperWrapper>
     </div>
   );
 };

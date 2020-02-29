@@ -24,7 +24,7 @@ const Network = props => {
       <PaperWrapper className={classes.paper}>
         <div className={classes.titleContainer}>
           <Typography variant={"h5"}>{configTrans.storage}</Typography>
-          <WithTip text={t("restartNotify")}></WithTip>
+          <WithTip title={t("restartNotify")} placement="right"></WithTip>
         </div>
         <MyTabs
           value={value}

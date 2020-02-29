@@ -56,8 +56,8 @@ const NetworkFrom = (props) => {
   };
 
   return (
-    <form className={classes.root}>
-      <div>
+    <form>
+      <div className={classes.formItem}>
         <TextField
           name="address"
           label={networkTrans.address}
@@ -70,7 +70,7 @@ const NetworkFrom = (props) => {
           helperText={error.address && `${networkTrans.address}${t('required')}`}
         />
       </div>
-      <div className={classes['mt-4']}>
+      <div className={classes.formItem}>
         <TextField
           name="port"
           label={networkTrans.port}
@@ -83,13 +83,12 @@ const NetworkFrom = (props) => {
           helperText={error.port && `${networkTrans.port}${t('required')}`}
         />
       </div>
-      <div className={classes['mt-4']}>
-        <Button variant="outlined" color="primary"  onClick={handleSubmit}>
+      <div className={`${classes["mt-4"]} ${classes.action}`} style={{ marginBottom: "30px" }}>
+        <Button variant="outlined" color="primary" onClick={handleSubmit}>
           {buttonTrans.save}
         </Button>
         <Button variant="outlined" onClick={handleCancel}>{buttonTrans.cancel}</Button>
       </div>
-
     </form>
 
   );
