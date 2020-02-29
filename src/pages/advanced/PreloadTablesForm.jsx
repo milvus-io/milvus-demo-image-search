@@ -6,8 +6,9 @@ import { useTranslation } from "react-i18next";
 import { useFormStyles, useFormValidate } from "../../hooks/form";
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
+
+import { FormTextField } from '../../components/common/FormTextComponents'
+import FormActions from '../../components/common/FormActions'
 
 
 const PreloadTablesForm = props => {
@@ -23,19 +24,14 @@ const PreloadTablesForm = props => {
   const preload_table = t("advanced").preload_table;
   return (
     <div className={classes.root}>
-      <Typography variant="h5" component="h2" align="left" >
+      <Typography variant="h6" component="p" align="left" >
         {preload_table.title}
       </Typography>
-      <Typography variant="p" component="h2" align="left" paragraph>
+      <Typography variant="caption" component="p" align="left" paragraph>
         {preload_table.desc}
       </Typography>
-      <div className={classes.wrapper}>
-        <Grid item sm={4}>
-          <TextField fullWidth={true} size="small" variant="outlined" />
-        </Grid>
-      </div>
-      <Button variant="outlined" color="primary">Save</Button>
-      <Button>Cancle</Button>
+      <FormTextField label="tables" />
+      <FormActions />
     </div>
   )
 }
