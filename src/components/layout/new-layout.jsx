@@ -121,10 +121,7 @@ const Layout = props => {
   useEffect(() => {
 
     const path = history.location.pathname
-    if (!currentAddress && !path.includes('/login')) {
-      history.push('/login')
-      return
-    }
+
     if (path.includes('/login')) {
       setFisrstMenu('login')
     }

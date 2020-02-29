@@ -21,6 +21,8 @@ const DataMenu = props => {
   const { currentRoute } = props
 
   const fetchCollections = async () => {
+    console.log('---fetch ---- collections')
+
     const res = await getCollections()
     const { tables: collections = [], count = 0 } = res || {}
     const data = collections.map((col, i) => {
@@ -46,24 +48,31 @@ const DataMenu = props => {
 
   }
 
-
-
   useEffect(() => {
     if (!currentAddress) return
+    console.log('in---currentaddress')
     fetchCollections()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentAddress, refresh])
+  }, [currentAddress])
+
+  useEffect(() => {
+    if (!refresh) return
+    console.log('in----refresh', refresh)
+    fetchCollections()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refresh])
 
   // when in collection / partition page . if we dont havt partition data , fetch it
   useEffect(() => {
     const { page, collectionName } = currentRoute
     const target = collections.find(col => col.label === collectionName)
-    const hasPartition = target && target.children && target.children.some(child => child.icon === AiOutlineTable)
+    const hasPartition = target && target.loaded
     const needFetchPartition = !hasPartition && (page === 'collection' || page === 'partition')
+    console.log("in---useeffect", collections)
     needFetchPartition && fetchPartitions(collectionName)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [collections])
+  }, [JSON.stringify(collections)])
 
   // set menu active and expand status by url
   useEffect(() => {
@@ -94,6 +103,7 @@ const DataMenu = props => {
   }, [currentRoute, collections])
 
   const fetchPartitions = async (collectionName) => {
+    console.log("fetch----partition")
     const target = collections.find(col => col.label === collectionName)
 
     // already fetch partitions

@@ -31,16 +31,7 @@ const LoginMenu = props => {
       cursor: 'pointer'
     }
   }))()
-  const history = useHistory()
   const { t } = useTranslation();
-
-  useEffect(() => {
-    if (currentAddress) {
-      history.push('/data/collections')
-
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentAddress])
 
   const handleConnect = (e) => {
     const { url } = e.currentTarget.dataset
