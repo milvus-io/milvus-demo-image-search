@@ -1,19 +1,23 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Form, Switch, InputNumber, Button, message } from "antd";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
-
-const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
-  const { form } = props;
+import { useFormStyles, useFormValidate } from "../../hooks/form";
+import Grid from '@material-ui/core/Grid'
+import Slider from '@material-ui/core/Slider'
+import Divider from '@material-ui/core/Divider'
+import Switch from '@material-ui/core/Switch'
+const AdvancedForm = props => {
   const { systemInfos } = useContext(systemContext)
+  const theme = useTheme()
+  const classes = useFormStyles();
   const {
     getAdvancedConfig,
     updateAdvancedConfig,
     getHardwareType,
     currentAddress
   } = useContext(httpContext)
-  const { getFieldDecorator, resetFields, getFieldsValue } = form;
   const [oldValue, setOldValue] = useState({});
   const [hardwareType, setHardwareType] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,183 +27,96 @@ const AdvancedForm = Form.create({ name: "advanced-form" })(function (props) {
   const advancedTrans = t("advanced");
   const buttonTrans = t("button");
 
-  const currentSystemInfo = useMemo(() => {
-    return systemInfos[currentAddress] || {}
-  }, [systemInfos, currentAddress])
-  const SwitchItemLayout = {
-    labelCol: {
-      xs: { span: 24 },
-      sm: { span: 8 }
-    },
-    wrapperCol: {
-      xs: { span: 24 },
-      sm: { span: 16 }
-    }
-  };
-  const handleSubmit = e => {
-    e.preventDefault();
-    props.form.validateFields(async (err, values) => {
-      if (err) {
-        return;
-      }
-      setLoading(true);
-      try {
-        const res = await updateAdvancedConfig(values);
-        if (res.code === 0) {
-          message.success(advancedTrans.saveSuccess);
-          setOldValue(values);
-          handleFormChange();
-        }
-      } finally {
-        setLoading(false);
-      }
-    });
-  };
-
-  const handleCancel = async () => {
-    resetFields();
-    setDisabled(true);
-  };
-
-  const handleFormChange = async (changedVal, key) => {
-    const regx = /^[0-9]*$/;
-    requestAnimationFrame(() => {
-      let values = getFieldsValue();
-      const isSame = Object.keys(values).every(
-        k => values[k] === oldValue[k]
-      );
-      switch (key) {
-        case "cpu_cache_capacity":
-        case "use_blas_threshold":
-        case "gpu_search_threshold":
-          const isValid = regx.test(changedVal);
-          setDisabled(!isValid || isSame);
-          break;
-        case "cache_insert_data":
-          setDisabled(isSame);
-          break;
-
-        default:
-          setDisabled(true);
-          return;
-      }
-    });
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await Promise.all([
-        getAdvancedConfig(),
-        getHardwareType()
-      ]);
-      props.form.setFieldsValue(res[0] ? { ...res[0] } : {})
-      setOldValue(res[0] || {});
-      setHardwareType(res[1]);
-    };
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getAdvancedConfig, getHardwareType, currentAddress]);
-
   return (
-    <Form layout="vertical" style={{ maxWidth: "400px" }}>
-      {/* <h1 className="title">{advancedTrans.cacheSetting}</h1> */}
-      <Form.Item label={`${advancedTrans.capacity} (GB)`}>
-        {getFieldDecorator("cpu_cache_capacity", {
-          rules: [
-            {
-              required: true,
-              message: `${advancedTrans.capacity}${t("required")}`
-            }
-          ]
-        })(
-          <div className="item-wrapper">
-            <InputNumber
-              min={1}
-              max={currentSystemInfo.cpuMemory > 2 ? currentSystemInfo.cpuMemory - 1 : 1}
-              onChange={val => {
-                handleFormChange(val, "cpu_cache_capacity");
-              }}
-            />
-            <span className="ml-10 tip">{`[1, ${currentSystemInfo.cpuMemory ||
-              1}) GB`}</span>
-          </div>
+    <form>
+      <div style={{ marginTop: theme.spacing(1), padding: theme.spacing(2) }}>
+        <Grid container spacing={3}>
 
-        )}
+          <Grid item sm={3} classes={{ root: classes.gridItem }}>
+            <span>{advancedTrans.cpu_capacity}</span>
+          </Grid>
+          <Grid item sm={4} classes={{ root: classes.gridItem }}>
+            <Slider value={6} min={1} max={16} />
+          </Grid>
+          <Grid item sm={3} classes={{ root: classes.gridItem }}>
+            <span style={{ padding: theme.spacing(1) }}>6GB</span>
+          </Grid>
+          <Grid item sm={12} classes={{ root: classes.gridItem }}>
+            <span style={{ marginBottom: theme.spacing(1) }}>{advancedTrans.cpu_capacity_desc}</span>
+          </Grid>
+          <Grid item sm={3} classes={{ root: classes.gridItem }}>
+            <span >{advancedTrans.cpu_threshold}</span>
+          </Grid>
+          <Grid item sm={4} classes={{ root: classes.gridItem }}>
+            <Slider value={6} min={1} max={16} />
+          </Grid>
+          <Grid item sm={3} classes={{ root: classes.gridItem }}>
+            <span style={{ padding: theme.spacing(1) }}>6%</span>
+          </Grid>
+          <Grid item sm={12} classes={{ root: classes.gridItem }}>
+            {advancedTrans.cpu_threshold_desc}
+          </Grid>
+          <Grid item sm={12}>
+            <Divider />
+          </Grid>
 
-      </Form.Item>
-      <p className="desc">{advancedTrans.capacityDesc1}</p>
-      {/* <p className="desc">{advancedTrans.capacityDesc2}</p> */}
 
-      <Form.Item label={advancedTrans.insert} {...SwitchItemLayout} style={{ padding: 0 }}>
-        {getFieldDecorator("cache_insert_data", {
-          valuePropName: "checked",
-        })(
-          <Switch
-            onChange={val => {
-              handleFormChange(val, "cache_insert_data");
-            }}
-          />
-        )}
-      </Form.Item>
-      <p className="desc">{advancedTrans.insertDesc1}</p>
-      {/* <p className="desc">{advancedTrans.insertDesc2}</p> */}
+          <Grid item sm={3} classes={{ root: classes.gridItem }}>
+            <span>{advancedTrans.gpu_capacity}</span>
+          </Grid>
+          <Grid item sm={4} classes={{ root: classes.gridItem }}>
+            <Slider value={6} min={1} max={16} />
+          </Grid>
+          <Grid item sm={3} classes={{ root: classes.gridItem }}>
+            <span style={{ padding: theme.spacing(1) }}>6%</span>
+          </Grid>
+          <Grid item sm={12} classes={{ root: classes.gridItem }}>
+            {advancedTrans.gpu_capacity_desc}
+          </Grid>
+          <Grid item sm={3} classes={{ root: classes.gridItem }}>
+            <span >{advancedTrans.gpu_threshold}</span>
+          </Grid>
+          <Grid item sm={4} classes={{ root: classes.gridItem }}>
+            <Slider value={6} min={1} max={16} />
+          </Grid>
+          <Grid item sm={3} classes={{ root: classes.gridItem }}>
+            <span style={{ padding: theme.spacing(1) }}>6%</span>
+          </Grid>
+          <Grid item sm={12} classes={{ root: classes.gridItem }}>
+            {advancedTrans.gpu_threshold_desc}
+          </Grid>
+          <Grid item sm={12}>
+            <Divider />
+          </Grid>
 
-      <h1 className="title">{advancedTrans.enginSetting}</h1>
+          <Grid item sm={3} classes={{ root: classes.gridItem }}>
+            {advancedTrans.catch_insert_data}
+          </Grid>
+          <Grid item sm={3} classes={{ root: classes.gridItem }}>
+            <Switch />
+          </Grid>
+          <Grid item sm={12} classes={{ root: classes.gridItem }}>
+            {advancedTrans.catch_insert_data_desc}
+          </Grid>
 
-      <Form.Item label={advancedTrans.blasThreshold}>
-        {getFieldDecorator("use_blas_threshold", {
-          rules: [
-            {
-              required: true,
-              message: `${advancedTrans.blasThreshold}${t("required")}`
-            }
-          ]
-        })(
-          <InputNumber
-            min={1}
-            onChange={val => {
-              handleFormChange(val, "use_blas_threshold");
-            }}
-          />
-        )}
-      </Form.Item>
-      <p className="desc">{advancedTrans.blasDesc}</p>
+          <Grid item sm={3} classes={{ root: classes.gridItem }}>
+            <span style={{ padding: theme.spacing(1) }}>{advancedTrans.insert_buffer_size}</span>
+          </Grid>
+          <Grid item sm={6} classes={{ root: classes.gridItem }}>
+            <Slider value={6} min={1} max={16} />
+          </Grid>
+          <Grid item sm={3} classes={{ root: classes.gridItem }}>
+            <span style={{ padding: theme.spacing(1) }}>6%</span>
+          </Grid>
+          <Grid item sm={12} classes={{ root: classes.gridItem }}>
+            {advancedTrans.insert_buffer_size_desc}
+          </Grid>
+        </Grid>
 
-      {hardwareType === "GPU" && (
-        <Form.Item label={advancedTrans.gpuThreshold}>
-          {getFieldDecorator("gpu_search_threshold", {
-            rules: [
-              {
-                required: true,
-                message: `${advancedTrans.gpuThreshold}${t("required")}`
-              }
-            ]
-          })(
-            <InputNumber
-              min={1}
-              onChange={val => {
-                handleFormChange(val, "gpu_search_threshold");
-              }}
-            />
-          )}
-        </Form.Item>
-      )}
+      </div>
+    </form>
 
-      <Form.Item label=" " colon={false}>
-        <Button className=" mr-10" onClick={handleCancel}>
-          {buttonTrans.cancel}
-        </Button>
-        <Button
-          type={disabled ? "diabled" : "primary"}
-          onClick={handleSubmit}
-          loading={loading}
-          disabled={disabled}
-        >
-          {buttonTrans.save}
-        </Button>
-      </Form.Item>
-    </Form>
   );
-});
+};
 
 export default AdvancedForm;

@@ -36,6 +36,10 @@ const useStyles = makeStyles(theme => ({
   },
   action: {
     textAlign: 'left'
+  },
+  gridItem:{
+    padding: `0px !important` ,
+    textAlign: 'left'
   }
 }));
 
