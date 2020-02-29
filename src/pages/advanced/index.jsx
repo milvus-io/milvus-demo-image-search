@@ -6,7 +6,7 @@ import TabPanel from "../../components/tab-panel";
 import MyTabs from "../../components/tab";
 import WithTip from "components/with-tip";
 import { usePageStyles } from "../../hooks/page";
-import AdvancedForm from "./AdvancedForm";
+import CatcheForm from "./CatcheForm";
 import PreloadTablesForm from "./PreloadTablesForm"
 import PerformanceTunning from "./PerformanceTunning"
 const Advanced = props => {
@@ -36,7 +36,7 @@ const Advanced = props => {
           <Tab label={advancedTrans.tableSetting} />
         </MyTabs>
         <TabPanel value={value} index={0}>
-          <AdvancedForm></AdvancedForm>
+          <CatcheForm></CatcheForm>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <PerformanceTunning />
