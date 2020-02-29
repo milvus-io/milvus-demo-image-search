@@ -8,6 +8,9 @@ import Switch from '@material-ui/core/Switch'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 import Button from '@material-ui/core/Button'
+import { FormTextField } from '../../components/common/FormTextComponents'
+import FormActions from '../../components/common/FormActions'
+
 const MetricForm = props => {
   const classes = makeStyles(theme => ({
     gridItem: {
@@ -37,18 +40,10 @@ const MetricForm = props => {
         label={metrics.enable}
         labelPlacement="start"
       />
-      <Grid item classes={{ item: classes.gridItem }} xs={6}>
-        <TextField fullWidth label={metrics.address} variant="outlined" />
-      </Grid>
-      <Grid item classes={{ item: classes.gridItem }} xs={6}>
-        <TextField fullWidth label={metrics.port} variant="outlined" />
-      </Grid>
-      <Grid item classes={{ item: classes.gridItem }} xs={6}>
-        <TextField fullWidth label={metrics.gui} variant="outlined" />
-      </Grid>
-      <Button variant="outlined">save</Button>
-      <Button variant="outlined">cancel</Button>
-
+      <FormTextField label={metrics.address} />
+      <FormTextField label={metrics.port} />
+      <FormTextField label={metrics.gui} />
+      <FormActions />
     </>
   )
 };

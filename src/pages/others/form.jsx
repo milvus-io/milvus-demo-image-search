@@ -1,13 +1,13 @@
-import React, { useMemo, useContext } from "react";
+import React, {  useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 import FormControlLabel from "@material-ui/core/FormControlLabel"
 import Switch from '@material-ui/core/Switch'
-import Grid from "@material-ui/core/Grid"
-import Button from "@material-ui/core/Button"
-import TextField from '@material-ui/core/TextField'
+import { FormTextField } from '../../components/common/FormTextComponents'
+import FormActions from '../../components/common/FormActions'
+
 import { UPDATE } from "../../consts";
 const NetworkForm = props => {
   const classes = makeStyles(theme => ({
@@ -37,12 +37,8 @@ const NetworkForm = props => {
         label={others.enable}
         labelPlacement="start"
       />
-      <Grid item classes={{ item: classes.gridItem }} xs={6}>
-        <TextField fullWidth label={others.address} variant="outlined" />
-      </Grid>
-      <Button variant="outlined">save</Button>
-      <Button variant="outlined">cancel</Button>
-
+      <FormTextField label={others.address} />
+      <FormActions />
     </>
   )
 };

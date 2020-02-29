@@ -9,15 +9,6 @@ const useStyles = makeStyles(theme => ({
   root: {
     paddingTop: theme.spacing(2),
   },
-  formItem: {
-    display: "flex",
-    alignItems: "flex-end"
-  },
-  desc: {
-    fontSize: "14px",
-    color: "#B0B0B9",
-    maxWidth: "500px"
-  },
   icon: {
     marginLeft: theme.spacing(2),
     marginBottom: theme.spacing(2),
@@ -29,9 +20,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(2),
     width: '100%',
   },
-  action: {
-    textAlign: 'left'
-  },
+
   gridItem: {
     padding: `0px !important`,
     textAlign: 'left'

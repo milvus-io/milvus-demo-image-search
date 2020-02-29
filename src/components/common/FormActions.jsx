@@ -10,7 +10,8 @@ const FormActions = props => {
       minWidth: '90px'
     },
     save: {
-      marginRight: theme.spacing(2)
+      marginRight: theme.spacing(2),
+      color: theme.palette.primary.main
     }
   }))()
   return (

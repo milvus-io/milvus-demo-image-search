@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import { systemContext } from '../../context/system'
 import { httpContext } from '../../context/http'
 import { useTranslation } from "react-i18next";
+import FormActions from '../../components/common/FormActions'
 
 const HardWareForm = props => {
   const { t } = useTranslation();
@@ -70,7 +71,6 @@ const HardWareForm = props => {
         </Grid>
       </div>
       <div className={classes.wrapper}>
-
         <Typography variant='h6' component='p' paragraph>
           {hardware.index}
         </Typography>
@@ -115,9 +115,7 @@ const HardWareForm = props => {
           </Grid>
         </Grid>
       </div>
-      <Button variant="outlined">Save</Button>
-      <Button>Cancel</Button>
-
+      <FormActions />
     </div>
   );
 };

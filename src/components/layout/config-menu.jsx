@@ -45,7 +45,9 @@ const ConfigMenu = props => {
   const classes = useStyles();
 
   useEffect(() => {
-    history.push("/configs/storage");
+    if (history.location.pathname === '/configs') {
+      history.push("/configs/storage");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
