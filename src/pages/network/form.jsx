@@ -4,7 +4,7 @@ import { httpContext } from "../../context/http"
 import { materialContext } from '../../context/material'
 import { useTranslation } from "react-i18next";
 import { useFormStyles, useFormValidate } from '../../hooks/form'
-import FormTextField from '../../components/common/FormTextField'
+import { FormTextField } from '../../components/common/FormTextComponents'
 import FormActions from '../../components/common/FormActions'
 const defaultForm = { address: "", port: "" }
 

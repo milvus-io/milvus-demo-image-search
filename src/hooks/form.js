@@ -19,9 +19,6 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     alignItems: "flex-end"
   },
-  select: {
-    width: '300px'
-  },
   desc: {
     fontSize: "14px",
     color: "#B0B0B9",
@@ -32,13 +29,15 @@ const useStyles = makeStyles(theme => ({
     cursor: "pointer"
   },
   formControl: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    width: '100%',
   },
   action: {
     textAlign: 'left'
   },
-  gridItem:{
-    padding: `0px !important` ,
+  gridItem: {
+    padding: `0px !important`,
     textAlign: 'left'
   }
 }));
