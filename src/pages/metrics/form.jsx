@@ -1,9 +1,23 @@
 import React, { useMemo, useState, useContext } from "react";
-import { Form, Switch, Button, message, Input } from "antd";
 import { systemContext } from '../../context/system'
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from '@material-ui/core/TextField'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Grid from '@material-ui/core/Grid'
+import Switch from '@material-ui/core/Switch'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
-const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
+import Button from '@material-ui/core/Button'
+const MetricForm = props => {
+  const classes = makeStyles(theme => ({
+    gridItem: {
+      marginBottom: theme.spacing(2)
+    },
+    formControlLabel: {
+      marginBottom: theme.spacing(2),
+      marginLeft: `0 !important`
+    },
+  }))()
   const { form } = props;
   const { metricConfig } = useContext(systemContext)
   const {
@@ -11,105 +25,32 @@ const NetworkForm = Form.create({ name: "advanced-form" })(function (props) {
     setMilvusConfig,
     restartNotify
   } = useContext(httpContext)
-  const { getFieldDecorator, resetFields } = form;
-  const [loading, setLoading] = useState(false);
-
   const { t } = useTranslation();
-  const metricsTrans = t("metrics");
-  const buttonTrans = t("button");
-
-  const { enable_monitor, address, port } = useMemo(() => {
-    return metricConfig[currentAddress] || {}
-  }, [currentAddress, metricConfig])
-
-  const formItemLayout = {
-    layout: "vertical"
-  };
-  const handleSubmit = e => {
-    e.preventDefault();
-    props.form.validateFields(async (err, values) => {
-      if (err) {
-        return;
-      }
-      setLoading(true);
-      try {
-        const res = await setMilvusConfig({ metric_config: values })
-        if (res.code === 0) {
-          message.success(t("submitSuccess"));
-          restartNotify()
-        }
-      } finally {
-        setLoading(false);
-      }
-    });
-  };
-
-  const handleCancel = async () => {
-    resetFields();
-  };
-
+  const metrics = t("metrics");
 
   return (
-    <Form {...formItemLayout} style={{ maxWidth: "400px" }}>
+    <>
+      <FormControlLabel
+        classes={{ root: classes.formControlLabel }}
+        value="start"
+        control={<Switch color="primary" />}
+        label={metrics.enable}
+        labelPlacement="start"
+      />
+      <Grid item classes={{ item: classes.gridItem }} xs={6}>
+        <TextField fullWidth label={metrics.address} variant="outlined" />
+      </Grid>
+      <Grid item classes={{ item: classes.gridItem }} xs={6}>
+        <TextField fullWidth label={metrics.port} variant="outlined" />
+      </Grid>
+      <Grid item classes={{ item: classes.gridItem }} xs={6}>
+        <TextField fullWidth label={metrics.gui} variant="outlined" />
+      </Grid>
+      <Button variant="outlined">save</Button>
+      <Button variant="outlined">cancel</Button>
 
-      <Form.Item label={metricsTrans.enable}
-        labelCol={{
-          xs: { span: 24 },
-          sm: { span: 4 }
-        }}
-        wrapperCol={{
-          xs: { span: 24 },
-          sm: { span: 20 }
-        }}
-      >
-        {getFieldDecorator("enable_monitor", {
-          valuePropName: "checked",
-          initialValue: String(enable_monitor) === "true"
-        })(
-          <Switch />
-        )}
-      </Form.Item>
+    </>
+  )
+};
 
-      <Form.Item label={metricsTrans.address}>
-        {getFieldDecorator("address", {
-          initialValue: address,
-          rules: [
-            {
-              required: true,
-              message: `${metricsTrans.address}${t('required')}`
-            }
-          ]
-        })(<Input placeholder="0.0.0.0" />)}
-      </Form.Item>
-
-      <Form.Item label={metricsTrans.port}>
-        {getFieldDecorator("port", {
-          initialValue: port,
-          rules: [
-            {
-              required: true,
-              message: `${metricsTrans.port}${t('required')}`
-            }
-          ]
-        })(<Input placeholder={metricsTrans.port} />)}
-      </Form.Item>
-
-
-
-      <Form.Item label=" " >
-        <Button className=" mr-10" onClick={handleCancel}>
-          {buttonTrans.cancel}
-        </Button>
-        <Button
-          type="primary"
-          onClick={handleSubmit}
-          loading={loading}
-        >
-          {buttonTrans.save}
-        </Button>
-      </Form.Item>
-    </Form>
-  );
-});
-
-export default NetworkForm;
+export default MetricForm;
