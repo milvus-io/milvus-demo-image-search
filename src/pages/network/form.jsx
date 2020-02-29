@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { TextField, Button } from '@material-ui/core'
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { materialContext } from '../../context/material'
 import { useTranslation } from "react-i18next";
 import { useFormStyles, useFormValidate } from '../../hooks/form'
-
+import FormTextField from '../../components/common/FormTextField'
+import FormActions from '../../components/common/FormActions'
 const defaultForm = { address: "", port: "" }
 
 const NetworkFrom = (props) => {
@@ -25,7 +25,6 @@ const NetworkFrom = (props) => {
 
   const { t } = useTranslation();
   const networkTrans = t("network");
-  const buttonTrans = t("button");
 
   useEffect(() => {
     const currentConfig = serverConfig[currentAddress] || {}
@@ -57,38 +56,31 @@ const NetworkFrom = (props) => {
 
   return (
     <form>
-      <div className={classes.formItem}>
-        <TextField
-          name="address"
-          label={networkTrans.address}
-          value={form.address}
-          onBlur={() => { handleCheck(form.address, "address") }}
-          onChange={handleChange}
-          className={classes.textField}
-          placeholder={networkTrans.address}
-          error={error.address}
-          helperText={error.address && `${networkTrans.address}${t('required')}`}
-        />
-      </div>
-      <div className={classes.formItem}>
-        <TextField
-          name="port"
-          label={networkTrans.port}
-          value={form.port}
-          onBlur={() => { handleCheck(form.port, "port") }}
-          onChange={handleChange}
-          className={classes.textField}
-          placeholder={networkTrans.port}
-          error={error.port}
-          helperText={error.port && `${networkTrans.port}${t('required')}`}
-        />
-      </div>
-      <div className={`${classes["mt-4"]} ${classes.action}`} style={{ marginBottom: "30px" }}>
-        <Button variant="outlined" color="primary" onClick={handleSubmit}>
-          {buttonTrans.save}
-        </Button>
-        <Button variant="outlined" onClick={handleCancel}>{buttonTrans.cancel}</Button>
-      </div>
+      <FormTextField
+        name="address"
+        label={networkTrans.address}
+        value={form.address}
+        onBlur={() => { handleCheck(form.address, "address") }}
+        onChange={handleChange}
+        className={classes.textField}
+        placeholder={networkTrans.address}
+        error={error.address}
+        helperText={error.address && `${networkTrans.address}${t('required')}`}
+        variant='outlined'
+      />
+      <FormTextField
+        name="port"
+        label={networkTrans.port}
+        value={form.port}
+        onBlur={() => { handleCheck(form.port, "port") }}
+        onChange={handleChange}
+        className={classes.textField}
+        placeholder={networkTrans.port}
+        error={error.port}
+        helperText={error.port && `${networkTrans.port}${t('required')}`}
+        variant='outlined'
+      />
+      <FormActions />
     </form>
 
   );

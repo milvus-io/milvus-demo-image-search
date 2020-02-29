@@ -71,6 +71,9 @@ export default {
     gui: "GUI Address"
   },
   others: {
+    tip: "other's tip",
+    enable: "Enabled",
+    address: "Address",
     logServer: "Log Server",
     pmServer: "Performance Monitor Server"
   },

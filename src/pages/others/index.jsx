@@ -1,20 +1,26 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import OthersForm from './form';
-import "./index.less";
-
+import { usePageStyles } from "../../hooks/page";
+import Typography from '@material-ui/core/Typography';
+import WithTip from "components/with-tip";
+import OthersForm from "./form";
+import PaperWrapper from "../../components/page-wrapper";
 
 const Others = props => {
   const { t } = useTranslation();
-  const configTrans = t("config");
-
+  const classes = usePageStyles();
+  const others = t("others");
+  const configTrans = t('config')
   return (
-    <div className="others-wrapper">
-      <div className="header">
-        <h2>{configTrans.others}</h2>
-      </div>
-      <OthersForm></OthersForm>
-    </div>
+    <div className={classes.root}>
+      <PaperWrapper className={classes.paper}>
+        <div className={classes.titleContainer}>
+          <Typography variant={"h5"}>{configTrans.others}</Typography>
+          <WithTip title={others.tip}></WithTip>
+        </div>
+        <OthersForm></OthersForm>
+      </PaperWrapper>
+    </div >
   );
 };
 

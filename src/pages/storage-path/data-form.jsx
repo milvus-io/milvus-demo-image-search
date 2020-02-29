@@ -11,6 +11,8 @@ import {
   RemoveCircleOutlineOutlined
 } from "@material-ui/icons";
 import { materialContext } from "../../context/material";
+import FormTextField from '../../components/common/FormTextField'
+import FormActions from '../../components/common/FormActions'
 
 const defaultForm = {
   primary: "",
@@ -38,7 +40,6 @@ const DataForm = function (props) {
   const primaryRef = useRef(null);
   const { t } = useTranslation();
   const dataTrans = t("storage").data;
-  const buttonTrans = t("button");
 
   useEffect(() => {
     const currentConfig = storageConfig[currentAddress] || {};
@@ -111,30 +112,28 @@ const DataForm = function (props) {
   };
 
   return (
-    <form>
-      <div className={classes.formItem}>
-        <TextField
-          name="primary"
-          ref={primaryRef}
-          label={dataTrans.primary}
-          value={form.primary}
-          onBlur={() => {
-            handleCheck(form.primary, "primary");
-          }}
-          onChange={handleChange}
-          className={classes.textField}
-          placeholder={dataTrans.primary}
-          error={error.primary}
-          helperText={error.primary && `${dataTrans.primary}${t("required")}`}
-        />
-        <FileCopyOutlined
-          type="copy"
-          className={classes.icon}
-          onClick={() => {
-            handleCopy(primaryRef.current.state.value);
-          }}
-        />
-      </div>
+    <>
+      <FormTextField
+        name="primary"
+        ref={primaryRef}
+        label={dataTrans.primary}
+        value={form.primary}
+        onBlur={() => {
+          handleCheck(form.primary, "primary");
+        }}
+        onChange={handleChange}
+        className={classes.textField}
+        placeholder={dataTrans.primary}
+        error={error.primary}
+        helperText={error.primary && `${dataTrans.primary}${t("required")}`}
+      />
+      <FileCopyOutlined
+        type="copy"
+        className={classes.icon}
+        onClick={() => {
+          handleCopy(primaryRef.current.state.value);
+        }}
+      />
       <p className={classes.desc}>{dataTrans.primaryTip}</p>
       <div className={`${classes.formItem} ${classes["mt-4"]}`}>
         <ul className="secondary-path" style={{ marginBottom: 0 }}>
@@ -189,21 +188,8 @@ const DataForm = function (props) {
         </ul>
       </div>
       <p className={classes.desc}>{dataTrans.secondTip}</p>
-      <div className={`${classes["mt-4"]}${classes.action}`} style={{ marginBottom: "30px" }}>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={handleSubmit}
-        >
-          {buttonTrans.save}
-        </Button>
-        <Button variant="outlined" onClick={handleCancel}
-          className={classes["ml-2"]}
-        >
-          {buttonTrans.cancel}
-        </Button>
-      </div>
-    </form>
+      <FormActions />
+    </>
   );
 };
 

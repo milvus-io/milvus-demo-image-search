@@ -38,7 +38,7 @@ const Configs = [
   { path: 'advanced', label: 'Advanced Settings', icon: <GoSettings /> },
   { path: 'hardware', label: "Hardware Resources", icon: <FiCpu /> },
   { path: 'metrics', label: "Metrics", icon: <GiChart /> },
-  { path: 'elk', label: "ELK", icon: <GoNote /> }
+  { path: 'others', label: "ELK", icon: <GoNote /> }
 ]
 const ConfigMenu = props => {
   const history = useHistory();

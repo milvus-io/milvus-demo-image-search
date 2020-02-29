@@ -35,7 +35,6 @@ const Network = props => {
           <Tab label={storageTrans.data.title} />
           <Tab label={storageTrans.metadata.title} />
         </MyTabs>
-
         <TabPanel value={value} index={0}>
           <DataForm></DataForm>
         </TabPanel>
