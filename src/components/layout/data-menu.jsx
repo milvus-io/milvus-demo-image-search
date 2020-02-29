@@ -9,12 +9,16 @@ import { parseObjectToAssignKey, generateId } from '../../utils/helpers'
 import { useHistory } from 'react-router-dom'
 
 const DataMenu = props => {
-  const histroy = useHistory()
+  const history = useHistory()
   const { getCollections, currentAddress, getPartitions } = useContext(httpContext)
-  const { setRefresh } = useContext(dataManagementContext)
+  const { setRefresh, refresh } = useContext(dataManagementContext)
 
   const [collections, setCollections] = useState([])
   const [total, setToltal] = useState(0)
+  const [treeExpanded, setTreeExpanded] = useState(['1'])
+  const [treeActiveId, setTreeActiveId] = useState('')
+
+  const { currentRoute } = props
 
   const fetchCollections = async () => {
     const res = await getCollections()
@@ -28,7 +32,7 @@ const DataMenu = props => {
         disabled: true
       }))
       return {
-        label: table_name,
+        label: sliceWord(table_name),
         value: "",
         children,
         id: generateId(),
@@ -37,18 +41,61 @@ const DataMenu = props => {
       }
     })
     setToltal(count)
-    setCollections(data)
+    setCollections(v => data)
     setRefresh(false)
+
   }
+
+
+
   useEffect(() => {
     if (!currentAddress) return
-
     fetchCollections()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentAddress])
+  }, [currentAddress, refresh])
+
+  // when in collection / partition page . if we dont havt partition data , fetch it
+  useEffect(() => {
+    const { page, collectionName } = currentRoute
+    const target = collections.find(col => col.label === collectionName)
+    const hasPartition = target && target.children && target.children.some(child => child.icon === AiOutlineTable)
+    const needFetchPartition = !hasPartition && (page === 'collection' || page === 'partition')
+    needFetchPartition && fetchPartitions(collectionName)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collections])
+
+  // set menu active and expand status by url
+  useEffect(() => {
+    const { page, collectionName, partitionTag } = currentRoute
+    const target = collections.find(col => col.label === collectionName)
+    switch (page) {
+      case 'collections':
+        setTreeExpanded(['1'])
+        setTreeActiveId('1')
+        break
+      case 'collection':
+        if (target) {
+          setTreeExpanded(['1', target.id])
+          setTreeActiveId(target.id)
+        }
+        break;
+      case 'partition':
+        const partitionTarget = target && target.children && target.children.find(child => child.label === partitionTag)
+        if (partitionTarget) {
+          setTreeExpanded(['1', target.id])
+          setTreeActiveId(partitionTarget.id)
+        }
+        break
+      default:
+        break;
+    }
+
+  }, [currentRoute, collections])
 
   const fetchPartitions = async (collectionName) => {
     const target = collections.find(col => col.label === collectionName)
+
     // already fetch partitions
     if (!target || target.loaded) {
       return
@@ -56,7 +103,7 @@ const DataMenu = props => {
     const res = await getPartitions(collectionName)
     const { partitions } = res
     const data = partitions.map(v => {
-      const label = v.partition_tag
+      const label = sliceWord(v.partition_tag)
       return {
         label,
         value: "",
@@ -77,15 +124,25 @@ const DataMenu = props => {
   }
   const handleMenuClick = (url, collectionName, id) => {
     id !== '1' && fetchPartitions(collectionName)
-    url && histroy.push(url)
+    url && history.push(url)
   }
   const handleRefresh = () => {
     setRefresh(true)
     fetchCollections()
   }
+  const sliceWord = (text, length = 12) => text.length > length ? `${text.slice(0, length)}...` : text
   return (
     <div>
-      <TreeView data={collections} total={total} handleMenuClick={handleMenuClick} handleRefresh={handleRefresh}></TreeView>
+      <TreeView
+        data={collections}
+        total={total}
+        handleMenuClick={handleMenuClick}
+        handleRefresh={handleRefresh}
+        expanded={treeExpanded}
+        setExpanded={setTreeExpanded}
+        activeId={treeActiveId}
+        setActiveId={setTreeActiveId}
+      ></TreeView>
     </div>
   )
 }

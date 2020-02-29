@@ -54,6 +54,7 @@ export const HttpProvider = ({ children }) => {
   axiosInstance.interceptors.response.use(
     function (res) {
       // Do something with res data
+      console.log(res)
       if (res.data && res.data.code === 400) {
         openSnackBar(res.data.data.msg, 'error')
         return res;
@@ -64,7 +65,6 @@ export const HttpProvider = ({ children }) => {
       if (hasError) {
         return Promise.reject(error);
       }
-
       if (error.response && error.response.data) {
         const { message: errMsg } = error.response.data;
         errMsg && openSnackBar(errMsg, 'error')

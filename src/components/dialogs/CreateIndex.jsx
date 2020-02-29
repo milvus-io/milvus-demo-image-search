@@ -73,13 +73,14 @@ const CreateIndex = props => {
         </Grid>
       </DialogContent>
       <DialogActions>
+        <Button variant="outlined" onClick={() => update()} color="primary">
+          {buttonTrans.save}
+        </Button>
 
         <Button variant="outlined" onClick={() => hideDialog()} color="primary">
           {buttonTrans.cancel}
         </Button>
-        <Button variant="outlined" onClick={() => update()} color="primary">
-          {buttonTrans.save}
-        </Button>
+
       </DialogActions>
     </>)
 }

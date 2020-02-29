@@ -2,6 +2,7 @@ import React from 'react'
 import Layout from "components/layout/new-layout";
 import Collections from "pages/collections";
 import PartitionPage from "pages/partition";
+import VectorsPage from "./pages/vectors"
 import Login from 'pages/login/index'
 import NetworkPage from "pages/network";
 import MetricsPage from "pages/metrics";
@@ -42,7 +43,7 @@ const HashRouterWrapper = () => {
                         </Route>
 
                         <Route path="/data/collections/:collectionName/partitions/:partitionTag">
-                          <PartitionPage></PartitionPage>
+                          <VectorsPage></VectorsPage>
                         </Route>
 
                         <Route path="/data/vector">

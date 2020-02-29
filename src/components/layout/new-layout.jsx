@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { makeStyles, Tab } from "@material-ui/core";
 import { Home, Settings, Storage, ExitToApp } from '@material-ui/icons';
 import { useTranslation } from "react-i18next";
-import { useRouteMatch } from 'react-router-dom'
+import { useRouteMatch, useHistory } from 'react-router-dom'
 import Logo from '../../assets/imgs/logo.svg'
 import { KEYS } from '../../reducers/data-management'
 import { httpContext } from "../../context/http"
@@ -74,6 +74,7 @@ const useStyles = makeStyles(theme => ({
 
 const Layout = props => {
   const classes = useStyles();
+  const history = useHistory()
   const { t } = useTranslation();
   const { currentAddress, setCurrentAddress } = useContext(httpContext)
   const { milvusAddress, setMilvusAddress } = useContext(systemContext)
@@ -81,7 +82,7 @@ const Layout = props => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [firstMenu, setFisrstMenu] = useState('data')
   const [tabValue, setTabValue] = useState(0)
-  const [tabName, setTabName] = useState("")
+  const [currentRoute, setCurrentRoute] = useState({})
 
   const collectionMatch = useRouteMatch("/data/collections/:collectionName");
   const partitionMatch = useRouteMatch(
@@ -89,25 +90,60 @@ const Layout = props => {
   );
   const collectionsMatch = useRouteMatch("/data/collections");
 
+  const effections = [JSON.stringify(collectionMatch), JSON.stringify(collectionMatch), JSON.stringify(partitionMatch)]
   useEffect(() => {
     const { isExact, params } = collectionMatch || {};
     const { isExact: isPartition, params: partitionParams } =
       partitionMatch || {};
     const { isExact: isCollections } = collectionsMatch || {};
     if (isExact) {
-      setTabName(params.collectionName);
+      setCurrentRoute({
+        page: "collection",
+        collectionName: params.collectionName
+      })
     }
     if (isPartition) {
-      setTabName(partitionParams.partitionTag);
+      setCurrentRoute({
+        page: "partition",
+        collectionName: partitionParams.collectionName,
+        partitionTag: partitionParams.partitionTag
+      })
     }
     if (isCollections) {
-      setTabName("collections");
+      setCurrentRoute({
+        page: "collections",
+      })
     }
-  }, [partitionMatch, collectionMatch, collectionsMatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(effections)]);
+
+  // active first menu by url
+  useEffect(() => {
+
+    const path = history.location.pathname
+    if (!currentAddress && !path.includes('/login')) {
+      history.push('/login')
+      return
+    }
+    if (path.includes('/login')) {
+      setFisrstMenu('login')
+    }
+    if (path.includes('/data')) {
+      setFisrstMenu('data')
+    }
+    if (path.includes('/config')) {
+      setFisrstMenu('config')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history.location.pathname])
+
 
   const handleFirstMenuChange = e => {
     const name = e.currentTarget.dataset.name;
     setFisrstMenu(name);
+    if (name === 'data') {
+      history.push('/data/collections')
+    }
   };
 
   const handleExit = e => {
@@ -131,10 +167,7 @@ const Layout = props => {
 
   const handleLogout = () => {
     if (currentAddress) {
-      const copyAddress = cloneObj(milvusAddress);
-      delete copyAddress[currentAddress];
-      const addresses = Object.keys(copyAddress);
-      setCurrentAddress(addresses.length ? addresses[0] : "");
+      setCurrentAddress("");
       setMilvusAddress({
         type: DISCONNECT,
         payload: {
@@ -148,6 +181,7 @@ const Layout = props => {
           keys: [KEYS.table, KEYS.vectorSearch]
         }
       });
+      history.push('/login')
     }
     setAnchorEl(null);
   };
@@ -213,7 +247,7 @@ const Layout = props => {
           <LoginMenu></LoginMenu>
         )}
         {firstMenu === "data" && (
-          <DataMenu></DataMenu>
+          <DataMenu currentRoute={currentRoute}></DataMenu>
         )}
         {
           firstMenu !== "login" && firstMenu !== "data" && (

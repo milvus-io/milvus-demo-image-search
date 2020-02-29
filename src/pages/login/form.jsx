@@ -3,6 +3,7 @@ import { TextField, Button } from '@material-ui/core'
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
+import { useHistory } from 'react-router-dom'
 import { useFormStyles, useFormValidate } from '../../hooks/form'
 import { ADD } from '../../consts'
 import { useConnectMilvus } from '../../hooks'
@@ -13,6 +14,7 @@ axios.defaults.timeout = 2000
 const defaultForm = { host: "", port: "19121" }
 
 const LoginForm = (props) => {
+  const history = useHistory()
   const connectMilvus = useConnectMilvus()
   const [form, setForm] = useState({ ...defaultForm })
   const [error, setError] = useState({})
@@ -50,7 +52,6 @@ const LoginForm = (props) => {
       url,
       connected: true
     })
-
   };
 
   return (
@@ -83,7 +84,7 @@ const LoginForm = (props) => {
       </div>
 
       <div className={classes['mt-4']}>
-        <Button variant="outlined" color="primary"  onClick={handleSubmit}>
+        <Button variant="outlined" color="primary" onClick={handleSubmit}>
           {buttonTrans.save}
         </Button>
       </div>

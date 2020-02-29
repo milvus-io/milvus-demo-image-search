@@ -3,12 +3,16 @@ import { makeStyles } from '@material-ui/styles'
 import { FaDatabase } from 'react-icons/fa'
 import { useHistory } from 'react-router-dom'
 import { systemContext } from '../../context/system'
+import { httpContext } from '../../context/http'
+
 import { useTranslation } from "react-i18next";
 import { useConnectMilvus } from '../../hooks'
 import { UPDATE } from '../../consts'
 
 const LoginMenu = props => {
   const { milvusAddress } = useContext(systemContext)
+  const { currentAddress } = useContext(httpContext)
+
   const connectMilvus = useConnectMilvus()
 
   const classes = makeStyles(theme => ({
@@ -31,9 +35,12 @@ const LoginMenu = props => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    history.push('/login')
+    if (currentAddress) {
+      history.push('/data/collections')
+
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [currentAddress])
 
   const handleConnect = (e) => {
     const { url } = e.currentTarget.dataset

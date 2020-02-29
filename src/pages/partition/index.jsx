@@ -3,17 +3,21 @@ import { useParams } from 'react-router-dom'
 import { useTranslation } from "react-i18next";
 import { httpContext } from '../../context/http'
 import { materialContext } from '../../context/material'
+import { dataManagementContext } from '../../context/data-management'
+
 import PageWrapper from '../../components/page-wrapper'
 import MilvusGrid from "../../components/grid";
 import CreatePartition from '../../components/dialogs/CreatePartition'
 import { useDataPageStyles } from "../../hooks/page";
 
 
-const PAGE_SIZE = 2;
+const PAGE_SIZE = 10;
 const Partitions = props => {
   const classes = useDataPageStyles()
   const { getPartitions, getCollectionByName, deletePartition, currentAddress, createPartition } = useContext(httpContext)
   const { openSnackBar, setDialog } = useContext(materialContext)
+  const { setRefresh } = useContext(dataManagementContext)
+
   const { collectionName } = useParams()
   const { t } = useTranslation();
   const partitionTrans = t("partition");
@@ -39,17 +43,18 @@ const Partitions = props => {
           ...v,
           ...collections
         })))
-        setCount(res.count || 10);
+        setCount(res.count || 100);
       }
 
     } catch (e) {
       console.log(e)
-      // when toggle currentaddress . table name may not exist in diff milvus.
-      // handleBack()
+    } finally {
+      setRefresh(false)
     }
   }
 
   const saveSuccess = () => {
+    setRefresh(true)
     getFirstPage();
     setCurrent(0);
   };
@@ -73,10 +78,23 @@ const Partitions = props => {
   }, [offset, currentAddress]);
 
   const handleDelete = async (e, selected) => {
-    await deletePartition(collectionName, selected[0].partition_tag);
+    const res = await Promise.all(selected.map(async (v, i) => {
+      try {
+        return await deletePartition(collectionName, v.partition_tag);
+      } catch (error) {
+        return error.response
+      }
+    }));
+    setRefresh(true)
+    const errorMsg = res.filter(v => v)
     getFirstPage();
     setCurrent(0);
-    openSnackBar(partitionTrans.delete)
+    if (errorMsg.length) {
+      openSnackBar(errorMsg[0].data.message || 'Some Patitions Fail', 'error')
+    } else {
+      openSnackBar(partitionTrans.delete)
+    }
+
   };
 
   const colDefinitions = [

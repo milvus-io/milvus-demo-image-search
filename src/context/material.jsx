@@ -3,7 +3,7 @@ import { Snackbar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { DialogActions, DialogContent, DialogTitle, Button, Dialog } from '@material-ui/core'
-import { blue } from '@material-ui/core/colors'
+import { blue, green } from '@material-ui/core/colors'
 import { useTranslation } from "react-i18next";
 
 import MuiAlert from '@material-ui/lab/Alert';
@@ -21,6 +21,7 @@ export const materialContext = React.createContext({
 const theme = createMuiTheme({
   palette: {
     primary: blue,
+    secondary: green
   },
   typography: {
     fontFamily: [

@@ -29,15 +29,12 @@ const useStyles = makeStyles(theme => ({
  */
 const StyledTreeView = props => {
   const classes = useStyles();
-  const { data, total, handleMenuClick, handleRefresh } = props
-  const [activeId, setAcitveId] = useState('')
-  const [expanded, setExpanded] = useState(['1'])
+  const { data, total, handleMenuClick, handleRefresh, expanded, setExpanded, activeId, setAcitveId } = props
   const handleClick = (nodeId, url, name) => {
-    setAcitveId(nodeId || '')
+    // setAcitveId(nodeId || '')
     handleMenuClick(url, name, nodeId)
   }
-
-
+  console.log(data)
   const generateTreeItem = (data) => {
     return data.map(v => {
       const comp = <StyledTreeItem
@@ -60,7 +57,7 @@ const StyledTreeView = props => {
   }
 
   const handleNodeToggle = (e, nodeIds) => {
-
+    console.log(nodeIds)
     const copy = nodeIds.filter((v, i) => {
       // the newer
       if (i === 0) {
@@ -73,7 +70,7 @@ const StyledTreeView = props => {
       // the older
       return false
     })
-    setExpanded(copy)
+    setExpanded(copy.length ? copy : ['1'])
   }
 
   return (

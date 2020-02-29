@@ -1,17 +1,17 @@
 import { useContext, } from 'react'
 
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import { UPDATE, ADD } from '../consts'
 import { httpContext } from '../context/http'
 import { systemContext } from '../context/system'
 import { materialContext } from '../context/material'
-
 
 import axios from 'axios'
 
 axios.defaults.timeout = 2000
 
 export function useConnectMilvus() {
+  const history = useHistory()
   const { setCurrentAddress } = useContext(httpContext)
   const { setMilvusAddress } = useContext(systemContext)
   const { openSnackBar } = useContext(materialContext)
@@ -44,6 +44,7 @@ export function useConnectMilvus() {
           default:
             return
         }
+        history.push('/data/collections')
         setCurrentAddress(url)
       }
     } catch (error) {

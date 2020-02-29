@@ -5,6 +5,8 @@ import CollectionIcon from "@material-ui/icons/GridOnSharp";
 import { useDataPageStyles } from "../../hooks/page";
 import { useTranslation } from "react-i18next";
 import { httpContext } from "../../context/http";
+import { dataManagementContext } from "../../context/data-management";
+
 import { materialContext } from '../../context/material'
 import CreateCollection from '../../components/dialogs/CreateCollection'
 import CreateIndex from '../../components/dialogs/CreateIndex'
@@ -21,6 +23,7 @@ const Collections = props => {
   } = useContext(httpContext);
 
   const { setDialog, openSnackBar } = useContext(materialContext)
+  const { setRefresh } = useContext(dataManagementContext)
   const classes = useDataPageStyles();
   const { t } = useTranslation();
   const tableTrans = t("table");
@@ -37,10 +40,24 @@ const Collections = props => {
   //   setRecord(record);
   // };
   const handleDelete = async (e, selected) => {
-    await deleteTable(selected[0].table_name);
+    const res = await Promise.all(selected.map(async (v, i) => {
+      try {
+        return await deleteTable(v.table_name)
+
+      } catch (error) {
+        return error.response
+      }
+    }));
+    const errorMsg = res.filter(v => v)
+    console.log(res)
     getFirstPage();
     setCurrent(0);
-    openSnackBar(tableTrans.delete)
+    if (errorMsg.length) {
+      openSnackBar(errorMsg[0].data.message || 'Some Table Fail', 'error')
+    } else {
+      openSnackBar(tableTrans.delete)
+    }
+    setRefresh(true)
   };
   const fetchData = async () => {
     const res = await getCollections({ offset, page_size: PAGE_SIZE });
@@ -51,10 +68,12 @@ const Collections = props => {
       })))
 
       setCount(res.count);
+      setRefresh(false)
     }
   };
 
   const saveSuccess = txt => {
+    setRefresh(true)
     getFirstPage();
     setCurrent(0);
   };
@@ -73,9 +92,7 @@ const Collections = props => {
       return;
     }
     const res = (await searchTable(name)) || {};
-
     setData([{ ...res, key: res.table_name }])
-
     setCount(1);
   };
 
@@ -136,14 +153,14 @@ const Collections = props => {
   ];
 
   const toolbarConfig = [
-    {
-      label: "",
-      icon: "refresh",
-      onClick: () => {
-        console.log();
-      },
-      disabled: false
-    },
+    // {
+    //   label: "",
+    //   icon: "refresh",
+    //   onClick: () => {
+    //     console.log();
+    //   },
+    //   disabled: false
+    // },
     {
       label: "Create",
       icon: "create",
