@@ -6,7 +6,6 @@ import WithTip from "components/with-tip";
 import MetricsForm from "./form";
 import PaperWrapper from "../../components/page-wrapper";
 
-
 const Mertrics = props => {
   const { t } = useTranslation();
   const classes = usePageStyles();
