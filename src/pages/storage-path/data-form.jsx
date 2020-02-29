@@ -17,7 +17,7 @@ const defaultForm = {
   secondary: []
 };
 
-const NetworkForm = function (props) {
+const DataForm = function (props) {
   const { storageConfig } = useContext(systemContext);
   const { currentAddress, setMilvusConfig, restartNotify } = useContext(
     httpContext
@@ -207,4 +207,4 @@ const NetworkForm = function (props) {
   );
 };
 
-export default NetworkForm;
+export default DataForm;
