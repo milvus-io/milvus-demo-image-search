@@ -1,17 +1,11 @@
 import React from "react";
 import HashRouter from './Router';
-import { message } from "antd";
 import { DataManagementProvider } from './context/data-management'
 import { SystemProvider } from './context/system'
 import { HttpProvider } from './context/http'
 import { MaterialProvider } from './context/material'
 import "./app.less";
 import "./assets/scss/reset.less"
-
-message.config({
-  duration: 2,
-  maxCount: 1
-});
 
 /**
  *  SystemProvider will always on top. The currenAddress means selected milvus ip.

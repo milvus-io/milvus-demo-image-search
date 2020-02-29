@@ -139,12 +139,11 @@ const MetaDataForm = function (props) {
           helperText={error.password && `${metaDataTrans.password}${t('required')}`}
         />
       </div>
-
-      <div className={classes['mt-4']} >
-        <Button variant="outlined" onClick={handleCancel}>{buttonTrans.cancel}</Button>
-        <Button variant="outlined" color="primary" className={classes['ml-2']} onClick={handleSubmit}>
+      <div className={`${classes["mt-4"]} ${classes.action}`} style={{ marginBottom: "30px" }}>
+        <Button variant="outlined" color="primary" onClick={handleSubmit}>
           {buttonTrans.save}
         </Button>
+        <Button variant="outlined" onClick={handleCancel} className={classes['ml-2']}>{buttonTrans.cancel}</Button>
       </div>
     </form>
   );

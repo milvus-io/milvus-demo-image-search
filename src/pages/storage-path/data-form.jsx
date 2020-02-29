@@ -17,7 +17,7 @@ const defaultForm = {
   secondary: []
 };
 
-const NetworkForm = function(props) {
+const NetworkForm = function (props) {
   const { storageConfig } = useContext(systemContext);
   const { currentAddress, setMilvusConfig, restartNotify } = useContext(
     httpContext
@@ -111,7 +111,7 @@ const NetworkForm = function(props) {
   };
 
   return (
-    <form className={classes.formContainer}>
+    <form>
       <div className={classes.formItem}>
         <TextField
           name="primary"
@@ -169,37 +169,38 @@ const NetworkForm = function(props) {
                   ></AddCircleOutlineOutlined>
                 </>
               ) : (
-                <>
-                  <FileCopyOutlined
-                    className={classes.icon}
-                    onClick={() => {
-                      handleCopy(v);
-                    }}
-                  />
-                  <RemoveCircleOutlineOutlined
-                    className={classes.icon}
-                    onClick={() => {
-                      handleDeletePath(i);
-                    }}
-                  ></RemoveCircleOutlineOutlined>
-                </>
-              )}
+                  <>
+                    <FileCopyOutlined
+                      className={classes.icon}
+                      onClick={() => {
+                        handleCopy(v);
+                      }}
+                    />
+                    <RemoveCircleOutlineOutlined
+                      className={classes.icon}
+                      onClick={() => {
+                        handleDeletePath(i);
+                      }}
+                    ></RemoveCircleOutlineOutlined>
+                  </>
+                )}
             </li>
           ))}
         </ul>
       </div>
       <p className={classes.desc}>{dataTrans.secondTip}</p>
-      <div className={classes["mt-4"]} style={{ marginBottom: "30px" }}>
-        <Button variant="outlined" onClick={handleCancel}>
-          {buttonTrans.cancel}
-        </Button>
+      <div className={`${classes["mt-4"]}${classes.action}`} style={{ marginBottom: "30px" }}>
         <Button
           variant="outlined"
           color="primary"
-          className={classes["ml-2"]}
           onClick={handleSubmit}
         >
           {buttonTrans.save}
+        </Button>
+        <Button variant="outlined" onClick={handleCancel}
+          className={classes["ml-2"]}
+        >
+          {buttonTrans.cancel}
         </Button>
       </div>
     </form>

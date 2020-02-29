@@ -1,16 +1,13 @@
 import React from "react";
-import { Icon, Tooltip } from "antd";
-import "./index.less";
+import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
+import { FaQuestionCircle } from 'react-icons/fa';
 const WithTip = props => {
-  const { text, label } = props;
-
+  const { title, placement = 'right' } = props;
   return (
-    <div className="tip-wrapper">
-      <span className="label">{label}</span>
-      <Tooltip placement="right" title={text} trigger="click">
-        <Icon type="question-circle" theme="filled" />
-      </Tooltip>
-    </div>
+    <Tooltip title={title} placement={placement} >
+      <Button><FaQuestionCircle /></Button>
+    </Tooltip>
   );
 };
 

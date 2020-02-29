@@ -60,11 +60,11 @@ export const MaterialProvider = ({ children }) => {
     }
   })()
   const [snackBar, setSnackBar] = useState({
-    vertical: "top",
-    horizontal: "center",
     open: false,
+    type: "success",
     message: "",
-    type: "success"
+    vertical: "top",
+    horizontal: "center"
   })
   const [dialog, setDialog] = useState(DefaultDialogConfigs);
   const { t } = useTranslation();
@@ -102,7 +102,6 @@ export const MaterialProvider = ({ children }) => {
     hideDialog()
   }
   const hideDialog = () => {
-    console.log('hide dialog')
     setDialog(DefaultDialogConfigs)
   }
 

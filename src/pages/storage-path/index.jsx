@@ -4,7 +4,6 @@ import { Tab, Typography } from "@material-ui/core";
 import PaperWrapper from "../../components/page-wrapper";
 import TabPanel from "../../components/tab-panel";
 import MyTabs from "../../components/tab";
-
 import DataForm from "./data-form";
 import MetaDataForm from "./meta-data-form";
 import { usePageStyles } from "../../hooks/page";
@@ -25,7 +24,7 @@ const Network = props => {
       <PaperWrapper className={classes.paper}>
         <div className={classes.titleContainer}>
           <Typography variant={"h5"}>{configTrans.storage}</Typography>
-          <WithTip text={t("restartNotify")}></WithTip>
+          <WithTip title={t("restartNotify")} placement="right"></WithTip>
         </div>
         <MyTabs
           value={value}

@@ -45,14 +45,6 @@ const useStyles = makeStyles(theme => ({
       width: "120px"
     }
   },
-  menu: {
-    padding: theme.spacing(2),
-    height: "calc(100vh - 117px)",
-    overflowY: "auto",
-    backgroundColor: "rgb(35, 47, 62)",
-    fontSize: "14px",
-    fontWeight: 400
-  },
   logoutWrapper: {
     display: "flex",
     alignItems: "center",
@@ -215,19 +207,19 @@ const Layout = props => {
               text={`${t("disconnect")}${currentAddress}?`}
             ></PopConfirm>
           }
-
-
           <ExitToApp className="icon" onClick={handleExit}></ExitToApp>
         </div>
-        <div className={classes.menu}>
-          {firstMenu === "login" ? (
-            <LoginMenu></LoginMenu>
-          ) : firstMenu === "data" ? (
-            <DataMenu></DataMenu>
-          ) : (
-                <ConfigMenu></ConfigMenu>
-              )}
-        </div>
+        {firstMenu === "login" && (
+          <LoginMenu></LoginMenu>
+        )}
+        {firstMenu === "data" && (
+          <DataMenu></DataMenu>
+        )}
+        {
+          firstMenu !== "login" && firstMenu !== "data" && (
+            <ConfigMenu></ConfigMenu>
+          )
+        }
       </div>
       <div className={classes.content}>{props.children}</div>
       {/* <div className={classes.content}>

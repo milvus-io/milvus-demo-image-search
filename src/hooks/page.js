@@ -1,10 +1,17 @@
-import { makeStyles } from "@material-ui/core";
+import {
+  makeStyles
+} from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   root: {
     height: "100vh",
     padding: theme.spacing(2),
     backgroundColor: "#F4F4F4"
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
   },
   titleContainer: {
     display: "flex",

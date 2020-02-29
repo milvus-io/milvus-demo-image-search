@@ -1,5 +1,9 @@
-import { makeStyles } from "@material-ui/core";
-import { validateEmpty } from "../utils/helpers";
+import {
+  makeStyles
+} from "@material-ui/core";
+import {
+  validateEmpty
+} from "../utils/helpers";
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -11,7 +15,6 @@ const useStyles = makeStyles(theme => ({
   "mt-4": {
     marginTop: theme.spacing(4)
   },
-  formContainer: {},
   formItem: {
     display: "flex",
     alignItems: "flex-end"
@@ -30,6 +33,13 @@ const useStyles = makeStyles(theme => ({
   },
   formControl: {
     marginTop: theme.spacing(2)
+  },
+  action: {
+    textAlign: 'left'
+  },
+  gridItem:{
+    padding: `0px !important` ,
+    textAlign: 'left'
   }
 }));
 
@@ -44,7 +54,10 @@ export function useFormValidate(form, setForm, setError) {
     return Object.keys(form)
       .map(key => {
         if (!validateEmpty(form[key])) {
-          setError(v => ({ ...v, [key]: true }));
+          setError(v => ({
+            ...v,
+            [key]: true
+          }));
           return false;
         }
         return true;
@@ -53,7 +66,10 @@ export function useFormValidate(form, setForm, setError) {
   };
 
   const handleCheck = (val, key) => {
-    setError(v => ({ ...v, [key]: !validateEmpty(val) }));
+    setError(v => ({
+      ...v,
+      [key]: !validateEmpty(val)
+    }));
   };
 
   // if value is string we can use it
@@ -68,5 +84,9 @@ export function useFormValidate(form, setForm, setError) {
     });
   };
 
-  return { validateForm, handleCheck, handleChange };
+  return {
+    validateForm,
+    handleCheck,
+    handleChange
+  };
 }

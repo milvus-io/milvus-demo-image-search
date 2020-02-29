@@ -13,7 +13,8 @@ import { GoNote, GoSettings } from "react-icons/go";
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
-    maxWidth: 360
+    maxWidth: 360,
+    padding: theme.spacing(2)
   },
   icon: {
     minWidth: theme.spacing(5),
@@ -25,9 +26,20 @@ const useStyles = makeStyles(theme => ({
   },
   item: {
     paddingLeft: 0
+  },
+  selected: {
+    color: theme.palette.primary.main
   }
 }));
 
+const Configs = [
+  { path: 'network', label: 'Network Access', icon: <FaNetworkWired /> },
+  { path: 'storage', label: "Storage Path", icon: <FaRegFolder /> },
+  { path: 'advanced', label: 'Advanced Settings', icon: <GoSettings /> },
+  { path: 'hardware', label: "Hardware Resources", icon: <FiCpu /> },
+  { path: 'metrics', label: "Metrics", icon: <GiChart /> },
+  { path: 'elk', label: "ELK", icon: <GoNote /> }
+]
 const ConfigMenu = props => {
   const history = useHistory();
   const classes = useStyles();
@@ -39,46 +51,19 @@ const ConfigMenu = props => {
   return (
     <div className={classes.root}>
       <List component="nav" aria-label="main mailbox folders">
-        <ListItem button className={classes.item}>
-          <ListItemIcon className={classes.icon}>
-            <FaNetworkWired />
-          </ListItemIcon>
-          <ListItemText primary="Network Access" />
-        </ListItem>
-        <ListItem button className={classes.item}>
-          <ListItemIcon className={classes.icon}>
-            <FaRegFolder />
-          </ListItemIcon>
-          <ListItemText primary="Storage Path" />
-        </ListItem>
-
-        <ListItem button className={classes.item}>
-          <ListItemIcon className={classes.icon}>
-            <GoSettings />
-          </ListItemIcon>
-          <ListItemText primary="Advanced Settings" />
-        </ListItem>
-
-        <ListItem button className={classes.item}>
-          <ListItemIcon className={classes.icon}>
-            <FiCpu />
-          </ListItemIcon>
-          <ListItemText primary="Hardware Resources" />
-        </ListItem>
-
-        <ListItem button className={classes.item}>
-          <ListItemIcon className={classes.icon}>
-            <GiChart />
-          </ListItemIcon>
-          <ListItemText primary="Metrics" />
-        </ListItem>
-
-        <ListItem button className={classes.item}>
-          <ListItemIcon className={classes.icon}>
-            <GoNote />
-          </ListItemIcon>
-          <ListItemText primary="ELK" />
-        </ListItem>
+        {Configs.map(config => {
+          const { path, label, icon } = config
+          const route = `/configs/${path}`
+          const isSelected = history.location.pathname === route;
+          return (
+            <ListItem key={path} button className={classes.item} classes={{ root: isSelected ? classes.selected : "" }} onClick={() => history.push(route)}>
+              <ListItemIcon className={classes.icon}>
+                {icon}
+              </ListItemIcon>
+              <ListItemText primary={label} />
+            </ListItem>
+          )
+        })}
       </List>
     </div>
   );
