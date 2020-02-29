@@ -15,10 +15,8 @@ const useStyles = makeStyles(theme => ({
 export const FormTextField = props => {
   const classes = useStyles()
   return (
-    <Grid container>
-      <Grid sm={4} item>
-        <TextField fullWidth classes={{ root: classes.root }} {...props} variant="outlined" />
-      </Grid>
+    <Grid sm={4} item>
+      <TextField fullWidth classes={{ root: classes.root }} {...props} variant="outlined" />
     </Grid>
   )
 }
@@ -26,10 +24,8 @@ export const FormTextField = props => {
 export const FormSelect = props => {
   const classes = useStyles()
   return (
-    <Grid container>
-      <Grid sm={4} item>
-        <Select classes={{ root: `${classes.root} ${classes.fullWidth}` }} {...props} />
-      </Grid>
+    <Grid sm={4} item>
+      <Select classes={{ root: `${classes.root} ${classes.fullWidth}` }} {...props} />
     </Grid>
   )
 }
