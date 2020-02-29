@@ -34,25 +34,25 @@ const AdvancedForm = props => {
     <div className={classes.root}>
       <Grid container>
         <Grid item sm={3} >
-          <span>{advancedTrans.cpu_capacity}</span>
+          <Typography>{advancedTrans.cpu_capacity}</Typography>
         </Grid>
         <Grid item sm={4} >
           <Slider value={6} min={1} max={16} />
         </Grid>
-        <Grid item sm={3} >
-          <span style={{ padding: theme.spacing(1) }}>6GB</span>
+        <Grid item sm={1} >
+          <Typography varient="p" component="p" align="center">6GB</Typography>
         </Grid>
         <Grid item sm={12}>
           <Typography paragraph variant="caption" component="p" >{advancedTrans.cpu_capacity_desc}</Typography>
         </Grid>
         <Grid item sm={3} >
-          <span >{advancedTrans.cpu_threshold}</span>
+          <Typography >{advancedTrans.cpu_threshold}</Typography>
         </Grid>
         <Grid item sm={4} >
           <Slider value={6} min={1} max={16} />
         </Grid>
-        <Grid item sm={3} >
-          <span style={{ padding: theme.spacing(1) }}>6%</span>
+        <Grid item sm={1} >
+          <Typography varient="p" component="p" align="center">6%</Typography>
         </Grid>
         <Grid item sm={12} >
           <Typography paragraph variant="caption" component="p" >{advancedTrans.cpu_threshold_desc}</Typography>
@@ -61,25 +61,25 @@ const AdvancedForm = props => {
           <FormDivider />
         </Grid>
         <Grid item sm={3} >
-          <span>{advancedTrans.gpu_capacity}</span>
+          <Typography>{advancedTrans.gpu_capacity}</Typography>
         </Grid>
         <Grid item sm={4} >
           <Slider value={6} min={1} max={16} />
         </Grid>
-        <Grid item sm={3} >
-          <span style={{ padding: theme.spacing(1) }}>6%</span>
+        <Grid item sm={1} >
+          <Typography varient="p" component="p" align="center">6%</Typography>
         </Grid>
         <Grid item sm={12} >
           <Typography paragraph variant="caption" component="p" >{advancedTrans.gpu_capacity_desc}</Typography>
         </Grid>
         <Grid item sm={3} >
-          <span >{advancedTrans.gpu_threshold}</span>
+          <Typography >{advancedTrans.gpu_threshold}</Typography>
         </Grid>
         <Grid item sm={4} >
           <Slider value={6} min={1} max={16} />
         </Grid>
-        <Grid item sm={3} >
-          <span style={{ padding: theme.spacing(1) }}>6%</span>
+        <Grid item sm={1} >
+          <Typography varient="p" component="p" align="center">6%</Typography>
         </Grid>
         <Grid item sm={12} >
           <Typography paragraph variant="caption" component="p" >{advancedTrans.gpu_threshold_desc}</Typography>
@@ -99,13 +99,13 @@ const AdvancedForm = props => {
         </Grid>
 
         <Grid item sm={3} >
-          <span>{advancedTrans.insert_buffer_size}</span>
+          <Typography>{advancedTrans.insert_buffer_size}</Typography>
         </Grid>
         <Grid item sm={6} >
           <Slider value={6} min={1} max={16} />
         </Grid>
-        <Grid item sm={3} >
-          <span style={{ padding: theme.spacing(1) }}>6%</span>
+        <Grid item sm={1} >
+          <Typography varient="p" component="p" align="center">6%</Typography>
         </Grid>
         <Grid item sm={12} >
           <Typography paragraph variant="caption" component="p" >{advancedTrans.insert_buffer_size_desc}</Typography>
