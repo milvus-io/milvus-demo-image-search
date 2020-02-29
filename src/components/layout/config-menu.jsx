@@ -13,7 +13,8 @@ import { GoNote, GoSettings } from "react-icons/go";
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
-    maxWidth: 360
+    maxWidth: 360,
+    padding: theme.spacing(2)
   },
   icon: {
     minWidth: theme.spacing(5),
@@ -25,6 +26,9 @@ const useStyles = makeStyles(theme => ({
   },
   item: {
     paddingLeft: 0
+  },
+  selected: {
+    color: theme.palette.primary.main
   }
 }));
 
@@ -49,8 +53,10 @@ const ConfigMenu = props => {
       <List component="nav" aria-label="main mailbox folders">
         {Configs.map(config => {
           const { path, label, icon } = config
+          const route = `/configs/${path}`
+          const isSelected = history.location.pathname === route;
           return (
-            <ListItem button className={classes.item}>
+            <ListItem key={path} button className={classes.item} classes={{ root: isSelected ? classes.selected : "" }} onClick={() => history.push(route)}>
               <ListItemIcon className={classes.icon}>
                 {icon}
               </ListItemIcon>
