@@ -11,8 +11,8 @@ const useStyles = makeStyles(theme => ({
   },
   icon: {
     marginLeft: theme.spacing(2),
-    marginBottom: theme.spacing(2),
     cursor: "pointer",
+    fontSize: '1rem'
   },
   formControl: {
     marginTop: theme.spacing(2),

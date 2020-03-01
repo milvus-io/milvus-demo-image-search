@@ -15,9 +15,10 @@ const useStyles = makeStyles(theme => ({
 }))
 export const FormTextField = props => {
   const classes = useStyles()
+  const { marginBottom = true } = props
   return (
     <Grid sm={4} item>
-      <TextField fullWidth classes={{ root: classes.root }} {...props}  />
+      <TextField fullWidth classes={{ root: marginBottom ? classes.root : "" }} {...props} />
     </Grid>
   )
 }
