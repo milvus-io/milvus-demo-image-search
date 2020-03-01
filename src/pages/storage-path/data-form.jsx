@@ -1,4 +1,10 @@
-import React, { useState, useContext, useEffect, useRef, Fragment } from "react";
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+  Fragment
+} from "react";
 import { systemContext } from "../../context/system";
 import { httpContext } from "../../context/http";
 import { useTranslation } from "react-i18next";
@@ -9,18 +15,18 @@ import {
   AddCircleOutlineOutlined,
   RemoveCircleOutlineOutlined
 } from "@material-ui/icons";
-import Typography from '@material-ui/core/Typography'
-import Grid from "@material-ui/core/Grid"
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
 import { materialContext } from "../../context/material";
-import { FormTextField } from '../../components/common/FormTextComponents'
-import FormActions from '../../components/common/FormActions'
+import { FormTextField } from "../../components/common/FormTextComponents";
+import FormActions from "../../components/common/FormActions";
 
 const defaultForm = {
   primary: "",
   secondary: []
 };
 
-const DataForm = function (props) {
+const DataForm = function(props) {
   const { storageConfig } = useContext(systemContext);
   const { currentAddress, setMilvusConfig, restartNotify } = useContext(
     httpContext
@@ -114,13 +120,7 @@ const DataForm = function (props) {
 
   return (
     <div className={classes.root}>
-      <Typography variant="h6" component="p" paragraph>
-        {dataTrans.primary}
-      </Typography>
-      <Typography variant="caption" component="p">
-        {dataTrans.primaryTip}
-      </Typography>
-      <Grid container alignItems="center">
+      <Grid container alignItems="center" className={classes.part}>
         <FormTextField
           name="primary"
           ref={primaryRef}
@@ -143,14 +143,13 @@ const DataForm = function (props) {
             }}
           />
         </Grid>
+        <Grid item sm={12}>
+          <Typography variant="caption" component="p">
+            {dataTrans.primaryTip}
+          </Typography>
+        </Grid>
       </Grid>
 
-      <Typography variant="h6" component="p" paragraph>
-        {dataTrans.second}
-      </Typography>
-      <Typography variant="caption" component="p">
-        {dataTrans.secondTip}
-      </Typography>
       {form.secondary.map((v, i) => (
         <Grid container alignItems="center" key={i}>
           <FormTextField
@@ -181,23 +180,29 @@ const DataForm = function (props) {
               ></AddCircleOutlineOutlined>
             </Grid>
           ) : (
-              <Grid item sm={3}>
-                <FileCopyOutlined
-                  className={classes.icon}
-                  onClick={() => {
-                    handleCopy(v);
-                  }}
-                />
-                <RemoveCircleOutlineOutlined
-                  className={classes.icon}
-                  onClick={() => {
-                    handleDeletePath(i);
-                  }}
-                ></RemoveCircleOutlineOutlined>
-              </Grid>
-            )}
+            <Grid item sm={3}>
+              <FileCopyOutlined
+                className={classes.icon}
+                onClick={() => {
+                  handleCopy(v);
+                }}
+              />
+              <RemoveCircleOutlineOutlined
+                className={classes.icon}
+                onClick={() => {
+                  handleDeletePath(i);
+                }}
+              ></RemoveCircleOutlineOutlined>
+            </Grid>
+          )}
+          <Grid item sm={12}>
+          <Typography variant="caption" component="p">
+            {dataTrans.secondTip}
+          </Typography>
+        </Grid>
         </Grid>
       ))}
+ 
       <FormActions save={handleSubmit} cancel={handleCancel} />
     </div>
   );
