@@ -26,7 +26,7 @@ const defaultForm = {
   secondary: []
 };
 
-const DataForm = function(props) {
+const DataForm = function (props) {
   const { storageConfig } = useContext(systemContext);
   const { currentAddress, setMilvusConfig, restartNotify } = useContext(
     httpContext
@@ -120,9 +120,10 @@ const DataForm = function(props) {
 
   return (
     <div className={classes.root}>
-      <Grid container alignItems="center" className={classes.part}>
+      <Grid container alignItems="flex-end" className={classes.part}>
         <FormTextField
           name="primary"
+          marginBottom={false}
           ref={primaryRef}
           label={dataTrans.primary}
           value={form.primary}
@@ -151,8 +152,9 @@ const DataForm = function(props) {
       </Grid>
 
       {form.secondary.map((v, i) => (
-        <Grid container alignItems="center" key={i}>
+        <Grid container alignItems="flex-end" key={i}>
           <FormTextField
+            marginBottom={false}
             name="secondary"
             autoFocus={editIndex === i}
             label={dataTrans.second}
@@ -180,29 +182,29 @@ const DataForm = function(props) {
               ></AddCircleOutlineOutlined>
             </Grid>
           ) : (
-            <Grid item sm={3}>
-              <FileCopyOutlined
-                className={classes.icon}
-                onClick={() => {
-                  handleCopy(v);
-                }}
-              />
-              <RemoveCircleOutlineOutlined
-                className={classes.icon}
-                onClick={() => {
-                  handleDeletePath(i);
-                }}
-              ></RemoveCircleOutlineOutlined>
-            </Grid>
-          )}
+              <Grid item sm={3}>
+                <FileCopyOutlined
+                  className={classes.icon}
+                  onClick={() => {
+                    handleCopy(v);
+                  }}
+                />
+                <RemoveCircleOutlineOutlined
+                  className={classes.icon}
+                  onClick={() => {
+                    handleDeletePath(i);
+                  }}
+                ></RemoveCircleOutlineOutlined>
+              </Grid>
+            )}
           <Grid item sm={12}>
-          <Typography variant="caption" component="p">
-            {dataTrans.secondTip}
-          </Typography>
-        </Grid>
+            <Typography variant="caption" component="p">
+              {dataTrans.secondTip}
+            </Typography>
+          </Grid>
         </Grid>
       ))}
- 
+
       <FormActions save={handleSubmit} cancel={handleCancel} />
     </div>
   );
