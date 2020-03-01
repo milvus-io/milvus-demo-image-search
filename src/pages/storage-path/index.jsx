@@ -11,7 +11,7 @@ import WithTip from "components/with-tip";
 
 const Network = props => {
   const classes = usePageStyles();
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(0);
   const { t } = useTranslation();
   const configTrans = t("config");
   const storageTrans = t("storage");
