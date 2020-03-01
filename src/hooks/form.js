@@ -13,7 +13,6 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(2),
     marginBottom: theme.spacing(2),
     cursor: "pointer",
-    fontSize: '2rem'
   },
   formControl: {
     marginTop: theme.spacing(2),
@@ -24,6 +23,9 @@ const useStyles = makeStyles(theme => ({
   gridItem: {
     padding: `0px !important`,
     textAlign: 'left'
+  },
+  part: {
+    marginBottom: theme.spacing(4)
   }
 }));
 
