@@ -77,7 +77,7 @@ const LoginForm = (props) => {
         error={error.port}
         helperText={error.port && `${loginTrans.port}${t('required')}`}
       />
-      <FormActions save={handleSubmit} />
+      <FormActions save={handleSubmit} confirmLabel={buttonTrans.connect} />
     </>
   );
 }

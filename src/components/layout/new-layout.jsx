@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { makeStyles, Tab } from "@material-ui/core";
+import { makeStyles, Tab, Divider } from "@material-ui/core";
 import { Home, Settings, Storage, ExitToApp } from '@material-ui/icons';
 import { useTranslation } from "react-i18next";
 import { useRouteMatch, useHistory } from 'react-router-dom'
@@ -243,6 +243,7 @@ const Layout = props => {
           }
           <ExitToApp className="icon" onClick={handleExit}></ExitToApp>
         </div>
+        <Divider />
         {firstMenu === "login" && (
           <LoginMenu></LoginMenu>
         )}
