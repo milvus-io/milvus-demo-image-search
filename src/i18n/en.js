@@ -196,7 +196,8 @@ export default {
     reset: "Reset",
     update: "Update",
     search: "Search",
-    confirm: "Confirm"
+    confirm: "Confirm",
+    connect: "Connect"
   },
   required: " is required",
   index: {
