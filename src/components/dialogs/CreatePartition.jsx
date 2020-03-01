@@ -1,13 +1,11 @@
 import React, { useState, useContext } from 'react';
 import useStyles from './Style'
 import Grid from '@material-ui/core/Grid';
-import { FaQuestionCircle } from 'react-icons/fa';
 import { DialogActions, DialogContent, DialogTitle, Button, Typography } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField';
 import { useFormValidate } from '../../hooks/form'
 import { useTranslation } from "react-i18next";
 import { materialContext } from '../../context/material'
-import { generateId } from '../../utils/helpers'
 const CreatePartition = props => {
   const classes = useStyles()
   const [form, setForm] = useState({ partition_tag: "" })
@@ -24,7 +22,7 @@ const CreatePartition = props => {
     if (!isValid) {
       return
     }
-    const res = await createPartition(collectionName, { ...form, partition_name: generateId() })
+    const res = await createPartition(collectionName, { ...form })
     if (res && res.code === 0) {
       openSnackBar(partitionTrans.saveSuccess)
       saveSuccess()
