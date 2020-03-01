@@ -15,17 +15,10 @@ const PreloadTablesForm = props => {
   const preload_table = t("advanced").preload_table;
   return (
     <div className={classes.root}>
-      <Grid container>
-        <Grid item sm={12}>
-          <Typography variant="h6" component="p" align="left" >
-            {preload_table.title}
-          </Typography>
-        </Grid>
-      </Grid>
+      <FormTextField label={preload_table.title} />
       <Typography variant="caption" component="p" align="left" paragraph>
         {preload_table.desc}
       </Typography>
-      <FormTextField label="tables" />
       <FormActions />
     </div>
   )

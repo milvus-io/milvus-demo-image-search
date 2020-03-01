@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import MilvusGrid from "../../components/grid";
 import { Paper, Box } from "@material-ui/core";
+import PaperWrapper from "../../components/page-wrapper";
 import CollectionIcon from "@material-ui/icons/GridOnSharp";
 import { useDataPageStyles } from "../../hooks/page";
 import { useTranslation } from "react-i18next";
@@ -237,8 +238,8 @@ const Collections = props => {
   const rows = data || [];
 
   return (
-    <div className={`${classes.root} table-wrapper`}>
-      <Paper className={classes.paper} elevation={3} >
+    <div className={`${classes.root}`}>
+      <PaperWrapper className={classes.paper} >
         <Box p={2}>
           <MilvusGrid
             title={dataManageTrans.collections}
@@ -254,7 +255,7 @@ const Collections = props => {
             isLoading={false}
           ></MilvusGrid>
         </Box>
-      </Paper>
+      </PaperWrapper>
     </div>
   );
 };

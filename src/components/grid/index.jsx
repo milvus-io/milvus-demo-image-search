@@ -84,7 +84,7 @@ const MilvusGrid = props => {
     <Grid container spacing={3}>
       <Grid item xs={12} className={classes.tableTitle}>
         <Typography variant="h5">
-          <span className={classes.titleIcon}>{titleIcon}</span> {title}
+          {/* <span className={classes.titleIcon}>{titleIcon}</span> {title} */}{title}
         </Typography>
       </Grid>
       <Grid item xs={12}>
