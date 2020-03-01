@@ -19,7 +19,7 @@ const FormActions = props => {
   }))()
   return (
     <Grid container classes={{ container: classes.gridContainer }}>
-      <Button classes={{ root: `${classes.root} ${classes.save}` }} variant="outlined" onClick={() => save()}>Save</Button>
+      <Button classes={{ root: `${classes.root} ${classes.save}` }} variant="outlined" onClick={(e) => save(e)}>Save</Button>
       <Button classes={{ root: classes.root }} variant="outlined" onClick={() => cancel()}>Cancel</Button>
     </Grid>
   )

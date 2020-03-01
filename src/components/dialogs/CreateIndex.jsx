@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import useStyles from './Style'
 import Grid from '@material-ui/core/Grid';
-import { DialogActions, DialogContent, DialogTitle, Select, MenuItem, Button, Slider } from '@material-ui/core'
+import { DialogActions, DialogContent, DialogTitle, Select, MenuItem, Button, FormControl, Slider, Typography } from '@material-ui/core'
 import { useFormValidate } from '../../hooks/form'
 import { useTranslation } from "react-i18next";
 import { materialContext } from '../../context/material'
@@ -43,40 +43,54 @@ const CreateIndex = props => {
       <DialogTitle >{tableTrans.index} {collectionInfo.table_name}</DialogTitle>
       <DialogContent classes={{ root: classes.dialogContent }}>
         <Grid container spacing={3}>
-          <Grid item sm={4}>
+          {/* <Grid item sm={4}>
             <div className={classes.wrapper}><span className={classes.column}>{tableTrans.indexType}</span></div>
+          </Grid> */}
+          <Grid item sm={12}>
+            <Typography className={classes.label}>{tableTrans.indexType}</Typography>
           </Grid>
-          <Grid item sm={8}>
-            <Select
-              name="index_type"
-              labelId="index-type"
-              id="index-type-select"
-              defaultValue="FLAT"
-              value={form.index_type}
-              onChange={handleChange}
-            >
-              {
-                INDEX_TYPES.map(v => (
-                  <MenuItem value={v}>{v}</MenuItem>
-                ))
-              }
-            </Select>
+          <Grid item sm={12}>
+            <FormControl variant="outlined" className={classes.formControl} style={{ width: "100%" }}>
+
+              <Select
+                name="index_type"
+                labelId="index-type"
+                id="index-type-select"
+                defaultValue="FLAT"
+                value={form.index_type}
+                onChange={handleChange}
+              >
+                {
+                  INDEX_TYPES.map(v => (
+                    <MenuItem value={v}>{v}</MenuItem>
+                  ))
+                }
+              </Select>
+            </FormControl>
           </Grid>
-          <Grid item sm={4}>
+          {/* <Grid item sm={4}>
             <div className={classes.wrapper}><span className={classes.column}>{tableTrans.nlist}</span> </div>
+          </Grid> */}
+          <Grid item sm={12}>
+            <Typography className={classes.label}>{tableTrans.nlist}</Typography>
           </Grid>
-          <Grid item sm={6}>
-            <Slider name="nlist" value={form.nlist} min={1} max={20000} onChange={(e, val) => setForm({ ...form, nlist: val })} />
+          <Grid item sm={12}>
+            <Slider
+              name="nlist"
+              value={form.nlist}
+              min={1}
+              max={20000}
+              valueLabelDisplay="auto"
+              onChange={(e, val) => setForm({ ...form, nlist: val })} />
           </Grid>
-          <Grid item sm={2}>{form.nlist}</Grid>
         </Grid>
       </DialogContent>
-      <DialogActions>
+      <DialogActions classes={{ root: classes.action }}>
         <Button variant="outlined" onClick={() => update()} color="primary">
           {buttonTrans.save}
         </Button>
 
-        <Button variant="outlined" onClick={() => hideDialog()} color="primary">
+        <Button variant="outlined" onClick={() => hideDialog()} color="default">
           {buttonTrans.cancel}
         </Button>
 

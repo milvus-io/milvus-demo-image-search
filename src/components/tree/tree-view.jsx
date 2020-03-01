@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
  */
 const StyledTreeView = props => {
   const classes = useStyles();
-  const { data, total, handleMenuClick, handleRefresh, expanded, setExpanded, activeId, setAcitveId } = props
+  const { data, total, handleMenuClick, handleRefresh, expanded, setExpanded, activeId, loading = false } = props
   const handleClick = (nodeId, url, name) => {
     // setAcitveId(nodeId || '')
     handleMenuClick(url, name, nodeId)
@@ -93,9 +93,9 @@ const StyledTreeView = props => {
         url="/data/collections?tabName=collections"
       >
         {
-          data.length
-            ? generateTreeItem(data)
-            : (<div className={classes.loadingWrapper}><CircularProgress size={30}></CircularProgress></div>)
+          loading
+            ? (<div className={classes.loadingWrapper}><CircularProgress size={30}></CircularProgress></div>)
+            : generateTreeItem(data)
         }
       </StyledTreeItem>
     </TreeView>

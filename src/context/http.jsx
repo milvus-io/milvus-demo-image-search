@@ -100,7 +100,7 @@ export const HttpProvider = ({ children }) => {
         }
         timer = setTimeout(async () => {
           const res = await getMilvusConfigs()
-          const { restart_required } = res.reply
+          const { restart_required } = res
           if (restart_required) {
             restartNotify()
           }

@@ -76,7 +76,7 @@ const NetworkFrom = (props) => {
         error={error.port}
         helperText={error.port && `${networkTrans.port}${t('required')}`}
       />
-      <FormActions />
+      <FormActions save={handleSubmit} cancel={handleCancel} />
     </>
 
   );

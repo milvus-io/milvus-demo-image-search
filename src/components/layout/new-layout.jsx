@@ -141,6 +141,9 @@ const Layout = props => {
     if (name === 'data') {
       history.push('/data/collections')
     }
+    if (name === 'login') {
+      history.push('/login')
+    }
   };
 
   const handleExit = e => {

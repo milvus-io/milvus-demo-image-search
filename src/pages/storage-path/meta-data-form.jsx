@@ -132,7 +132,7 @@ const MetaDataForm = function (props) {
         error={error.password}
         helperText={error.password && `${metaDataTrans.password}${t('required')}`}
       />
-      <FormActions />
+      <FormActions save={handleSubmit} cancel={handleCancel} />
     </>
   );
 }

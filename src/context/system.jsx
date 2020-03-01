@@ -67,7 +67,7 @@ export const SystemProvider = ({ children }) => {
         getMilvusConfigs()
       ]);
       setSystemInfos(v => ({ ...v, [currentAddress]: { ...res[0] } }));
-      const { storage_config = {}, server_config = {}, db_config = {}, metric_config = {}, restart_required = false } = res[1] ? res[1].reply || {} : {}
+      const { storage_config = {}, server_config = {}, db_config = {}, metric_config = {}, restart_required = false } = res[1] || {}
       const backendUrl = db_config.backend_url
       const dbConfig = getInfosFromUrl(backendUrl)
       setStorageConfig(v => ({ ...v, [currentAddress]: { ...storage_config } }))

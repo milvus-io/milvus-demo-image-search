@@ -198,7 +198,7 @@ const DataForm = function (props) {
             )}
         </Grid>
       ))}
-      <FormActions />
+      <FormActions save={handleSubmit} cancel={handleCancel} />
     </div>
   );
 };

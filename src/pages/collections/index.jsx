@@ -176,7 +176,18 @@ const Collections = props => {
     {
       label: "Delete",
       icon: "delete",
-      onClick: handleDelete,
+      onClick: (e, selected) => {
+        setDialog({
+          open: true,
+          type: 'notice',
+          params: {
+            title: `Do you want to delete collections ?`,
+            confirm: () => {
+              handleDelete(e, selected)
+            }
+          }
+        })
+      },
       disabled: selected => selected.length === 0,
       disabledTooltip: "You can not delete this"
     },

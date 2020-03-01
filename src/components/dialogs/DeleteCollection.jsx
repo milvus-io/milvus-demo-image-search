@@ -42,7 +42,7 @@ const DeleteCollection = props => {
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions>
+      <DialogActions classes={{ root: classes.action }}>
         <Button variant="outlined" onClick={() => update()} color="primary">
           {`update`}
         </Button>

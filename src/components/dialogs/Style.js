@@ -5,7 +5,7 @@ import {
 const useStyles = makeStyles(theme => ({
   dialogContent: {
     overflow: 'initial',
-    minWidth: '400px',
+    width: "400px"
   },
   wrapper: {
     display: 'flex',
@@ -28,6 +28,21 @@ const useStyles = makeStyles(theme => ({
   },
   select: {
     width: "211px"
+  },
+  action: {
+    padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`
+  },
+  textField: {
+    width: "100%",
+    '& > .MuiFormHelperText-root': {
+      visibility: "hidden"
+    },
+    '& .Mui-error': {
+      visibility: "visible"
+    }
+  },
+  label: {
+    opacity: 0.6
   }
 }))
 

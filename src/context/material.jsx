@@ -130,18 +130,18 @@ export const MaterialProvider = ({ children }) => {
           ? (<>
             <DialogTitle >{title}</DialogTitle>
             <DialogContent>{component}</DialogContent>
+
             <DialogActions>
-              <Button onClick={() => _cancelDialog()} color="primary">
-                {cancelLabel}
-              </Button>
               <Button onClick={() => _confirmDialog()} color="primary">
                 {confirmLabel}
+              </Button>
+              <Button onClick={() => _cancelDialog()} color="default">
+                {cancelLabel}
               </Button>
             </DialogActions>
           </>)
           : CustomComponent
         }
-
       </Dialog>
     </ThemeProvider>
   </Provider>

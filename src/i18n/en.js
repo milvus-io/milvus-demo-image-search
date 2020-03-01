@@ -78,7 +78,7 @@ export default {
     pmServer: "Performance Monitor Server"
   },
   table: {
-    create: "New Table",
+    create: "Create Collection",
     index: "Create Index for",
     indexType: "Index Type",
     nlist: "nlist",
@@ -105,7 +105,7 @@ export default {
   },
   partition: {
     tip: "Please search partitions by table name.",
-    create: "New Partition",
+    create: "Create Partition",
     saveSuccess: "Create Partition Success",
     delete: "Delete Partition Success",
     confirmDel: "Are you sure to delete partition",
