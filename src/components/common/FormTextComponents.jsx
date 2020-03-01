@@ -17,7 +17,7 @@ export const FormTextField = props => {
   const classes = useStyles()
   return (
     <Grid sm={4} item>
-      <TextField fullWidth classes={{ root: classes.root }} {...props} variant="outlined" />
+      <TextField fullWidth classes={{ root: classes.root }} {...props}  />
     </Grid>
   )
 }
