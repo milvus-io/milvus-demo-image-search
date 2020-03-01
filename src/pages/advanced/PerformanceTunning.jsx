@@ -6,14 +6,16 @@ import { useFormStyles, useFormValidate } from "../../hooks/form";
 import Typography from '@material-ui/core/Typography'
 import { FormTextField } from '../../components/common/FormTextComponents'
 import FormActions from '../../components/common/FormActions'
-
+import Grid from '@material-ui/core/Grid'
 const PerformanceTunning = props => {
   const classes = useFormStyles()
   const { t } = useTranslation();
   const p_t = t("advanced").performance_tunning;
   return (
     <div className={classes.root}>
-      <FormTextField fullWidth={true} label={p_t.use_blas_threshold} />
+      <Grid container>
+        <FormTextField fullWidth={true} label={p_t.use_blas_threshold} />
+      </Grid>
       <Typography variant="caption" component="p" align="left" paragraph>
         {p_t.use_blas_threshold_desc_1}
       </Typography>

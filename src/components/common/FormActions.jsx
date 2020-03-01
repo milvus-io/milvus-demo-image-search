@@ -6,6 +6,9 @@ import Grid from '@material-ui/core/Grid';
 const FormActions = props => {
   const { save = () => { }, cancel = () => { } } = props;
   const classes = makeStyles(theme => ({
+    gridContainer: {
+      paddingTop: theme.spacing(2)
+    },
     root: {
       minWidth: '90px'
     },
@@ -15,7 +18,7 @@ const FormActions = props => {
     }
   }))()
   return (
-    <Grid container>
+    <Grid container classes={{ container: classes.gridContainer }}>
       <Button classes={{ root: `${classes.root} ${classes.save}` }} variant="outlined" onClick={() => save()}>Save</Button>
       <Button classes={{ root: classes.root }} variant="outlined" onClick={() => cancel()}>Cancel</Button>
     </Grid>

@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { TextField, Button } from '@material-ui/core'
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
@@ -8,6 +7,8 @@ import { useFormStyles, useFormValidate } from '../../hooks/form'
 import { ADD } from '../../consts'
 import { useConnectMilvus } from '../../hooks'
 import axios from 'axios'
+import { FormTextField } from '../../components/common/FormTextComponents'
+import FormActions from '../../components/common/FormActions'
 
 axios.defaults.timeout = 2000
 
@@ -55,42 +56,29 @@ const LoginForm = (props) => {
   };
 
   return (
-    <form className={classes.root}>
-      <div>
-        <TextField
-          name="host"
-          label={loginTrans.host}
-          value={form.host}
-          onBlur={() => { handleCheck(form.host, "host") }}
-          onChange={handleChange}
-          className={classes.textField}
-          placeholder='0.0.0.0'
-          error={error.host}
-          helperText={error.host && `${loginTrans.host}${t('required')}`}
-        />
-      </div>
-      <div className={classes['mt-4']}>
-        <TextField
-          name="port"
-          label={loginTrans.port}
-          value={form.port}
-          onBlur={() => { handleCheck(form.port, "port") }}
-          onChange={handleChange}
-          className={classes.textField}
-          placeholder='19121'
-          error={error.port}
-          helperText={error.port && `${loginTrans.port}${t('required')}`}
-        />
-      </div>
-
-      <div className={classes['mt-4']}>
-        <Button variant="outlined" color="primary" onClick={handleSubmit}>
-          {buttonTrans.save}
-        </Button>
-      </div>
-
-    </form>
-
+    <>
+      <FormTextField
+        name="host"
+        label={loginTrans.host}
+        value={form.host}
+        onBlur={() => { handleCheck(form.host, "host") }}
+        onChange={handleChange}
+        placeholder='0.0.0.0'
+        error={error.host}
+        helperText={error.host && `${loginTrans.host}${t('required')}`}
+      />
+      <FormTextField
+        name="port"
+        label={loginTrans.port}
+        value={form.port}
+        onBlur={() => { handleCheck(form.port, "port") }}
+        onChange={handleChange}
+        placeholder='19121'
+        error={error.port}
+        helperText={error.port && `${loginTrans.port}${t('required')}`}
+      />
+      <FormActions />
+    </>
   );
 }
 export default LoginForm

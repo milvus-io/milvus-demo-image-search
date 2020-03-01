@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import Button from "@material-ui/core/Button";
 import Switch from '@material-ui/core/Switch';
 import Typography from "@material-ui/core/Typography"
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { FaMicrochip, FaBolt } from 'react-icons/fa'
 import Grid from '@material-ui/core/Grid';
 import { systemContext } from '../../context/system'
@@ -21,8 +20,10 @@ const HardWareForm = props => {
     },
     wrapper: {
       marginBottom: theme.spacing(2)
-    }
+    },
   }))()
+  const theme = useTheme()
+  const marginRight = { marginRight: theme.spacing(1) }
   return (
     <div>
       <div className={classes.wrapper}>
@@ -31,7 +32,7 @@ const HardWareForm = props => {
         </Typography>
         <Grid container spacing={3}>
           <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
-            <FaMicrochip />CPU
+            <FaMicrochip style={{ ...marginRight }} />CPU
         </Grid>
           <Grid item xs={4}>
             <Switch checked={true} onChange={() => { }} value="gilad" />
@@ -39,7 +40,7 @@ const HardWareForm = props => {
         </Grid>
         <Grid container spacing={3}>
           <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
-            <FaBolt />GPU0
+            <FaBolt style={{ ...marginRight }} />GPU0
         </Grid>
           <Grid item xs={4}>
             <Switch checked={true} onChange={() => { }} value="gilad" />
@@ -47,7 +48,7 @@ const HardWareForm = props => {
         </Grid>
         <Grid container spacing={3}>
           <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
-            <FaBolt />GPU1
+            <FaBolt style={{ ...marginRight }} />GPU1
         </Grid>
           <Grid item xs={4}>
             <Switch checked={true} onChange={() => { }} value="gilad" />
@@ -55,7 +56,7 @@ const HardWareForm = props => {
         </Grid>
         <Grid container spacing={3}>
           <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
-            <FaBolt />GPU2
+            <FaBolt style={{ ...marginRight }} />GPU2
         </Grid>
           <Grid item xs={4}>
             <Switch checked={true} onChange={() => { }} value="gilad" />
@@ -63,7 +64,7 @@ const HardWareForm = props => {
         </Grid>
         <Grid container spacing={3}>
           <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
-            <FaBolt />GPU3
+            <FaBolt style={{ ...marginRight }} />GPU3
         </Grid>
           <Grid item xs={4}>
             <Switch checked={true} onChange={() => { }} value="gilad" />
@@ -76,7 +77,7 @@ const HardWareForm = props => {
         </Typography>
         <Grid container spacing={3}>
           <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
-            <FaMicrochip />CPU
+            <FaMicrochip style={{ ...marginRight }} />CPU
         </Grid>
           <Grid item xs={4}>
             <Switch checked={true} onChange={() => { }} value="gilad" />
@@ -84,7 +85,7 @@ const HardWareForm = props => {
         </Grid>
         <Grid container spacing={3}>
           <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
-            <FaBolt />GPU0
+            <FaBolt style={{ ...marginRight }} />GPU0
         </Grid>
           <Grid item xs={4}>
             <Switch checked={true} onChange={() => { }} value="gilad" />
@@ -92,7 +93,7 @@ const HardWareForm = props => {
         </Grid>
         <Grid container spacing={3}>
           <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
-            <FaBolt />GPU1
+            <FaBolt style={{ ...marginRight }} />GPU1
         </Grid>
           <Grid item xs={4}>
             <Switch checked={true} onChange={() => { }} value="gilad" />
@@ -100,7 +101,7 @@ const HardWareForm = props => {
         </Grid>
         <Grid container spacing={3}>
           <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
-            <FaBolt />GPU2
+            <FaBolt style={{ ...marginRight }} />GPU2
         </Grid>
           <Grid item xs={4}>
             <Switch checked={true} onChange={() => { }} value="gilad" />
@@ -108,7 +109,7 @@ const HardWareForm = props => {
         </Grid>
         <Grid container spacing={3}>
           <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
-            <FaBolt />GPU3
+            <FaBolt style={{ ...marginRight }} />GPU3
         </Grid>
           <Grid item xs={4}>
             <Switch checked={true} onChange={() => { }} value="gilad" />
