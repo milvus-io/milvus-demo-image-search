@@ -34,7 +34,6 @@ const StyledTreeView = props => {
     // setAcitveId(nodeId || '')
     handleMenuClick(url, name, nodeId)
   }
-  console.log(data)
   const generateTreeItem = (data) => {
     return data.map(v => {
       const comp = <StyledTreeItem

@@ -31,7 +31,7 @@ export const SystemProvider = ({ children }) => {
   const [metricConfig, setMetricConfig] = useState({})
 
   const [milvusAddress, setMilvusAddress] = useReducer(MilvusReducer, {});
-  const { currentAddress, setCurrentAddress, getSystemConfig, getMilvusConfigs, restartNotify } = useContext(httpContext)
+  const { currentAddress, setCurrentAddress, getSystemConfig, getMilvusConfigs, restartNotify, getHardwareType } = useContext(httpContext)
 
 
   const getInfosFromUrl = (url) => {
@@ -64,9 +64,10 @@ export const SystemProvider = ({ children }) => {
     const fetchData = async () => {
       const res = await Promise.all([
         getSystemConfig(),
-        getMilvusConfigs()
+        getMilvusConfigs(),
+        getHardwareType()
       ]);
-      setSystemInfos(v => ({ ...v, [currentAddress]: { ...res[0] } }));
+      setSystemInfos(v => ({ ...v, [currentAddress]: { ...res[0], hardwareType: res[2] } }));
       const { storage_config = {}, server_config = {}, db_config = {}, metric_config = {}, restart_required = false } = res[1] || {}
       const backendUrl = db_config.backend_url
       const dbConfig = getInfosFromUrl(backendUrl)
