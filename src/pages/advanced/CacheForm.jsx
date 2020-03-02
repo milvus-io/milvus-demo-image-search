@@ -16,13 +16,13 @@ const Range_GPU_Threshold = { min: 0, max: 1 }
 const Insert_Buffer_Size = { min: 0, max: 1 }
 
 const AdvancedForm = props => {
-  const { systemInfos, serverConfig } = useContext(systemContext);
+  const { systemInfos = {}, serverConfig } = useContext(systemContext);
   const classes = useFormStyles();
   const {
-    currentAddress,
+    currentAddress = "",
     getMilvusConfigs
   } = useContext(httpContext);
-  const { hardwareType, cpuMemory } = systemInfos[currentAddress]
+  const { hardwareType = "CPU", cpuMemory = 5 } = systemInfos[currentAddress]
   const [settings, setSettings] = useState({})
   const {
     cpu_cache_capacity = Range_CPU_Capacity.min,
@@ -39,12 +39,12 @@ const AdvancedForm = props => {
   useEffect(() => {
     const initSetting = async () => {
       const allConfigs = await getMilvusConfigs();
-      const { cache_config } = allConfigs || {};
+      const { cache_config = {} } = allConfigs || {};
       const _cache_config = allConfigs ? {
         ...cache_config,
-        cpu_cache_capacity: Number(cache_config.cpu_cache_capacity),
-        cpu_cache_threshold: Number(cache_config.cpu_cache_threshold),
-        insert_buffer_size: Number(cache_config.insert_buffer_size),
+        cpu_cache_capacity: Number(cache_config.cpu_cache_capacity) || 5,
+        cpu_cache_threshold: Number(cache_config.cpu_cache_threshold) || 0.5,
+        insert_buffer_size: Number(cache_config.insert_buffer_size) || 0.5,
       } : {}
       setSettings({ ...settings, ..._cache_config })
     }
