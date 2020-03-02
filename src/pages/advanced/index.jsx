@@ -6,7 +6,7 @@ import TabPanel from "../../components/tab-panel";
 import MyTabs from "../../components/tab";
 import WithTip from "components/with-tip";
 import { usePageStyles } from "../../hooks/page";
-import CatcheForm from "./CatcheForm";
+import CatcheForm from "./CacheForm";
 import PreloadTablesForm from "./PreloadTablesForm"
 import PerformanceTunning from "./PerformanceTunning"
 const Advanced = props => {

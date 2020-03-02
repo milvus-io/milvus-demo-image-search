@@ -187,7 +187,7 @@ export const HttpProvider = ({ children }) => {
     const res = await axiosInstance.put("/config/gpu_resources", data);
     return res.data;
   }
-
+  // get and set all milsvus config, do not use other interface
   async function setMilvusConfig(data) {
     const res = await axiosInstance.put("/system/config", data);
     return res.data
@@ -215,7 +215,7 @@ export const HttpProvider = ({ children }) => {
     //   }
     // }
   }
-
+  // All system config get by this like CPU, GPU
   async function getSystemConfig() {
     const res = await axiosInstance.get("/devices");
     // res.data = { "cpu": { "memory": 31 }, "gpus": { "GPU0": { "memory": 7 }, "GPU1": { "memory": 10 } } }
@@ -239,7 +239,7 @@ export const HttpProvider = ({ children }) => {
       cpuMemory
     };
   }
-
+  // 
   async function getHardwareType() {
     const res = await axiosInstance.get("/system/mode");
     // return "CPU";
