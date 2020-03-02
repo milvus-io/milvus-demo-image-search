@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import Breadcrumbs from '@material-ui/core/Breadcrumbs'
 import TablePagination from "@material-ui/core/TablePagination";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
@@ -37,7 +38,7 @@ const MilvusGrid = props => {
     rowsPerPage = 5,
     primaryKey = "id",
     toolbarConfig = [],
-    onSelectChanged = () => {},
+    onSelectChanged = () => { },
     onChangePage = (e, nextPageNum) => {
       console.log("nextPageNum", nextPageNum);
     },
@@ -83,9 +84,16 @@ const MilvusGrid = props => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} className={classes.tableTitle}>
-        <Typography variant="h5">
-          {/* <span className={classes.titleIcon}>{titleIcon}</span> {title} */}{title}
-        </Typography>
+        <Breadcrumbs separator="›" aria-label="breadcrumb">
+          {
+            title.map(v => (
+              <Typography key={v} variant="h6" color="textPrimary">{v}</Typography>
+            ))
+          }
+        </Breadcrumbs>
+        {/* <Typography variant="h5">
+          <span className={classes.titleIcon}>{titleIcon}</span> {title}{title}
+        </Typography> */}
       </Grid>
       <Grid item xs={12}>
         <Toolbar

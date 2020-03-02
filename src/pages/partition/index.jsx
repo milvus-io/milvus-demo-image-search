@@ -80,7 +80,7 @@ const Partitions = props => {
   const handleDelete = async (e, selected) => {
     const res = await Promise.all(selected.map(async (v, i) => {
       try {
-        return await deletePartition(collectionName, v.partition_tag);
+        return await deletePartition(collectionName, { partition_tag: v.partition_tag });
       } catch (error) {
         return error.response
       }
@@ -179,7 +179,7 @@ const Partitions = props => {
           onChangePage={handlePageChange}
           primaryKey="partition_tag"
           isLoading={false}
-          title={`${collectionName} > Partitions`}
+          title={[collectionName, 'Partitions']}
         ></MilvusGrid>
       </PageWrapper>
     </div>

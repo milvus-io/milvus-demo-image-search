@@ -242,7 +242,7 @@ const Collections = props => {
       <PaperWrapper className={classes.paper} >
         <Box p={2}>
           <MilvusGrid
-            title={dataManageTrans.collections}
+            title={[dataManageTrans.collections]}
             titleIcon={<CollectionIcon />}
             toolbarConfig={toolbarConfig}
             colDefinitions={colDefinitions}

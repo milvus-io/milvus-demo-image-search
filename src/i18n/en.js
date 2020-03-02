@@ -178,6 +178,9 @@ export default {
 
   },
   vector: {
+    import: "Import Vector to ",
+    importSuccess: "Import Success",
+    vector: "Vector",
     tName: "Table Name",
     tTop: "TopK",
     tNprobe: "Nprobe",
@@ -188,6 +191,9 @@ export default {
       tTop: "The top k most similar results of each query vector. ",
       tNprobe: "Number of queried vector buckets. Nprobe affects search precision. The greater the value, the more precise the result, yet the slower the search speed.",
       tQuery: "One target vector to be searched in the table. It must be the float data type, with the same dimension as that defined for the table."
+    },
+    error: {
+      fileType: "Only allow .csv file for now."
     }
   },
   button: {
@@ -197,7 +203,8 @@ export default {
     update: "Update",
     search: "Search",
     confirm: "Confirm",
-    connect: "Connect"
+    connect: "Connect",
+    import: "Import"
   },
   required: " is required",
   index: {

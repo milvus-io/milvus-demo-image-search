@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 const defaultForm = {
   table_name: '',
   metric_type: 'L2',
-  dimension: 1024,
+  dimension: 4,
   index_file_size: 1024
 }
 

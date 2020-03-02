@@ -23,6 +23,9 @@ export const httpContext = React.createContext({
   getPartitions: (tableName, params) => { },
   createPartition: () => { },
   deletePartition: () => { },
+  getSegments: (collectionName, params) => { },
+  addVectors: (collectionName, data) => { },
+  getVectors: (collectionName, segementName, params) => { },
   // config api
   getAdvancedConfig: () => { },
   getHardwareConfig: () => { },
@@ -161,10 +164,24 @@ export const HttpProvider = ({ children }) => {
     return res.data
   }
 
-  async function deletePartition(tableName, tag) {
-    const res = await axiosInstance.delete(`/tables/${tableName}/partitions/${tag}`)
+  async function deletePartition(tableName, data) {
+    const res = await axiosInstance.delete(`/tables/${tableName}/partitions`, { data })
     return res.data
   }
+
+  async function getSegments(collectionName, params) {
+    const res = await axiosInstance.get(`/tables/${collectionName}/segments`, { params })
+    return res.data
+  }
+  async function addVectors(collectionName, data) {
+    const res = await axiosInstance.post(`/tables/${collectionName}/vectors`, data)
+    return res.data
+  }
+  async function getVectors(collectionName, segementName, params) {
+    const res = await axiosInstance.get(`/tables/${collectionName}/segments/${segementName}/vectors`, { params })
+    return res.data
+  }
+
   // ------- Data Management End ----------
 
   // ------- config Api Start ----------
@@ -270,6 +287,9 @@ export const HttpProvider = ({ children }) => {
     createPartition: httpWrapper(createPartition),
     getPartitions: httpWrapper(getPartitions),
     getCollectionByName: httpWrapper(getCollectionByName),
-    deletePartition: httpWrapper(deletePartition)
+    deletePartition: httpWrapper(deletePartition),
+    getSegments: httpWrapper(getSegments),
+    addVectors: httpWrapper(addVectors),
+    getVectors: httpWrapper(getVectors)
   }}>{children}</Provider>
 }

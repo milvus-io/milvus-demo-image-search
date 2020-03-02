@@ -48,3 +48,5 @@ export const parseObjectToAssignKey = (obj, key1, key2) => {
     }
   })
 }
+
+export const sliceWord = (text, length = 12) => text.length > length ? `${text.slice(0, length)}...` : text;

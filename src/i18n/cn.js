@@ -143,11 +143,13 @@ export default {
   },
 
   vector: {
+    import: "Import Vector to ",
+    importSuccess: "Import Success",
+    vector: "Vector",
     tName: "表名",
     tTop: "TopK",
     tNprobe: "Nprobe",
     tQuery: "目标向量",
-
     distance: "距离",
     search: "搜索栏显示",
     tips: {
@@ -156,6 +158,9 @@ export default {
         "查询所涉及的向量类的个数。Nprobe 影响查询精度。数值越大，精度越高，但查询速度更慢。",
       tQuery:
         "要搜索的一条目标向量，必须为浮点数据类型，其维度需要和表中定义的维度一致。"
+    },
+    error: {
+      fileType: "Only allow .csv file for now."
     }
   },
   button: {
@@ -164,7 +169,9 @@ export default {
     reset: "重置",
     update: "更新",
     search: "搜索",
-    confirm: "确认"
+    confirm: "确认",
+    import: "导入"
+
   },
   required: " 是必填项",
   index: {

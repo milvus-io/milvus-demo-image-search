@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useParams } from 'react-router-dom'
 import { useTranslation } from "react-i18next";
 import { httpContext } from '../../context/http'
@@ -7,38 +7,49 @@ import { dataManagementContext } from '../../context/data-management'
 
 import PageWrapper from '../../components/page-wrapper'
 import MilvusGrid from "../../components/grid";
-import CreatePartition from '../../components/dialogs/CreatePartition'
+import ImportVectors from '../../components/dialogs/ImportVectorToCollection'
 import { useDataPageStyles } from "../../hooks/page";
-
+import { sliceWord } from '../../utils/helpers'
 
 const PAGE_SIZE = 10;
 const Vectors = props => {
   const classes = useDataPageStyles()
-  const { getPartitions, getCollectionByName, deletePartition, currentAddress, createPartition } = useContext(httpContext)
+  const { currentAddress, getSegments, addVectors, getVectors } = useContext(httpContext)
   const { openSnackBar, setDialog } = useContext(materialContext)
   const { setRefresh } = useContext(dataManagementContext)
 
-  const { partitionTag } = useParams()
+  const { collectionName, partitionTag } = useParams()
   const { t } = useTranslation();
   const vectorTrans = t("vector");
   const tableTrans = t("table");
 
   const [data, setData] = useState([])
-  const [offset, setOffset] = useState(0);
+  const [vectorOffset, setVectorOffset] = useState(0); // only for one segment
+  const [segments, setSegments] = useState([])
+  const [currentSegmentIndex, setCurrentSegmentIndex] = useState(0)
   const [count, setCount] = useState(0); // total count for pagination
   const [current, setCurrent] = useState(0); // current page for pagination
+  const [direction, setDirection] = useState("next")
+  const [segementStartPage, setSegementStartPage] = useState([0])
 
-  // const fetchData = async () => {
-  //   if (!currentAddress) return
-  //   try {
-
-
-  //   } catch (e) {
-  //     console.log(e)
-  //   } finally {
-  //     setRefresh(false)
-  //   }
-  // }
+  const fetchSegments = async () => {
+    if (!currentAddress) return
+    try {
+      const res = await getSegments(collectionName, { offset: 0, partition_tag: partitionTag, page_size: PAGE_SIZE })
+      const firstSegment = res.segments[0]
+      console.log(res)
+      setSegments(res.segments || [])
+      setCount(res.segments.reduce((pre, cur) => pre + cur.count, 0)) // get all vectors count
+      if (firstSegment) {
+        setCurrentSegmentIndex(0)
+        setVectorOffset(firstSegment.count - PAGE_SIZE > 0 ? firstSegment.count - PAGE_SIZE : 0)
+      }
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setRefresh(false)
+    }
+  }
 
   // const saveSuccess = () => {
   //   setRefresh(true)
@@ -46,24 +57,61 @@ const Vectors = props => {
   //   setCurrent(0);
   // };
 
-  // const getFirstPage = () => {
-  //   if (offset === 0) {
-  //     fetchData();
-  //   } else {
-  //     setOffset(0);
-  //   }
-  // };
-
-  const handlePageChange = (e, page) => {
-    setOffset(page * PAGE_SIZE);
-    setCurrent(page);
+  const getFirstPage = () => {
+    setCurrent(0)
+    setCurrentSegmentIndex(0)
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [offset, currentAddress]);
 
+
+  useEffect(() => {
+    fetchSegments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentAddress]);
+
+  const { count: currentTotal, segment_name: segmentName } = useMemo(() => {
+    return segments[currentSegmentIndex] || {}
+  }, [segments, currentSegmentIndex])
+
+  const fetchVectors = async () => {
+    const offset = vectorOffset < 0 ? 0 : vectorOffset
+    const pageSize = vectorOffset < 0 ? PAGE_SIZE + vectorOffset : PAGE_SIZE
+    const res = await getVectors(collectionName, segmentName, { offset, page_size: pageSize })
+    const vectors = res.vectors || []
+    setData(v => {
+      const newVectors = vectors.map(v => ({
+        ...v,
+        vector: sliceWord(JSON.stringify(v.vector))
+      }))
+      return v.length < PAGE_SIZE ? [...v, ...newVectors] : newVectors
+    })
+    const nextIndex = direction === 'next' ? currentSegmentIndex + 1 : currentSegmentIndex - 1
+    const nextSegment = segments[nextIndex]
+
+    if (vectorOffset < 0 && nextSegment) {
+      setCurrentSegmentIndex(nextIndex)
+      setVectorOffset(v => nextSegment.count + vectorOffset)
+      setSegementStartPage(v => {
+        const copy = [...v]
+        copy[nextIndex] = current
+        return copy
+      })
+    }
+  }
+
+
+  useEffect(() => {
+    if (!segmentName) return
+    fetchVectors()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vectorOffset])
+
+  const handlePageChange = (e, page) => {
+    const offset = currentTotal - (page + 1 - segementStartPage[currentSegmentIndex]) * PAGE_SIZE
+    setVectorOffset(offset);
+    setDirection(page > current ? 'next' : "prev")
+    setCurrent(page);
+  };
   // const handleDelete = async (e, selected) => {
   //   const res = await Promise.all(selected.map(async (v, i) => {
   //     try {
@@ -84,6 +132,15 @@ const Vectors = props => {
 
   // };
 
+  const handleAddVectors = async (vectors) => {
+    await addVectors(collectionName, {
+      partition_tag: partitionTag,
+      vectors
+    })
+    openSnackBar(vectorTrans.importSuccess)
+
+  }
+
   const colDefinitions = [
     {
       id: "id",
@@ -91,27 +148,26 @@ const Vectors = props => {
       disablePadding: true,
       label: 'ID'
     },
-
     {
-      id: "distance",
-      numeric: true,
+      id: "vector",
+      numeric: false,
       disablePadding: true,
-      label: vectorTrans.distance
+      label: vectorTrans.vector
     },
-
   ];
 
   const toolbarConfig = [
     {
-      label: "Create",
+      label: "Import vectors",
       icon: "create",
-      // onClick: () => setDialog({
-      //   open: true,
-      //   type: 'custom',
-      //   params: {
-      //     component: <CreatePartition createPartition={createPartition} saveSuccess={saveSuccess} collectionName={collectionName}></CreatePartition>,
-      //   }
-      // }),
+      // onClick: handleAddVectors,
+      onClick: () => setDialog({
+        open: true,
+        type: 'custom',
+        params: {
+          component: <ImportVectors importVectors={handleAddVectors} partitionTag={partitionTag}></ImportVectors>
+        }
+      }),
       disabled: selected => selected.length > 2
     },
     {
@@ -146,9 +202,9 @@ const Vectors = props => {
           rowCount={count}
           page={current}
           onChangePage={handlePageChange}
-          primaryKey="partition_tag"
+          primaryKey="id"
           isLoading={false}
-          title={`${partitionTag} > Vectors`}
+          title={[collectionName, partitionTag, 'Vectors']}
         ></MilvusGrid>
       </PageWrapper>
     </div>

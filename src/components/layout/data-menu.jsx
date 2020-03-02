@@ -6,7 +6,7 @@ import { dataManagementContext } from "../../context/data-management";
 
 import { IoIosSettings } from "react-icons/io";
 import { AiOutlineTable } from "react-icons/ai";
-import { parseObjectToAssignKey, generateId } from "../../utils/helpers";
+import { parseObjectToAssignKey, generateId, sliceWord } from "../../utils/helpers";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
@@ -155,8 +155,7 @@ const DataMenu = props => {
     setRefresh(true);
     fetchCollections();
   };
-  const sliceWord = (text, length = 12) =>
-    text.length > length ? `${text.slice(0, length)}...` : text;
+
   return (
     <div className={classes.root}>
       <TreeView
