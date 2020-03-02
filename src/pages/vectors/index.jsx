@@ -148,7 +148,7 @@ const Vectors = props => {
           onChangePage={handlePageChange}
           primaryKey="partition_tag"
           isLoading={false}
-          title={partitionTag}
+          title={`${partitionTag} > Vectors`}
         ></MilvusGrid>
       </PageWrapper>
     </div>

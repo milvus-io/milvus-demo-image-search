@@ -190,7 +190,7 @@ const Collections = props => {
         })
       },
       disabled: selected => selected.length === 0,
-      disabledTooltip: "You can not delete this"
+      disabledTooltip: "You can not delete this item"
     },
     {
       label: "Create Index",

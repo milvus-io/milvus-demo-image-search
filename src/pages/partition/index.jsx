@@ -149,8 +149,8 @@ const Partitions = props => {
       label: "Delete",
       icon: "delete",
       onClick: handleDelete,
-      disabled: selected => selected.length === 0,
-      disabledTooltip: "You can not delete this"
+      disabled: selected => selected.length === 0 || selected.some(s => s.partition_tag === '_default'),
+      disabledTooltip: "You can not delete this item"
     },
     // {
     //   label: "",
@@ -179,7 +179,7 @@ const Partitions = props => {
           onChangePage={handlePageChange}
           primaryKey="partition_tag"
           isLoading={false}
-          title={collectionName}
+          title={`${collectionName} > Partitions`}
         ></MilvusGrid>
       </PageWrapper>
     </div>
