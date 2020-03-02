@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
     maxWidth: 360,
-    padding: theme.spacing(2)
+    paddingLeft: theme.spacing(2)
   },
   icon: {
     minWidth: theme.spacing(5),
