@@ -6,7 +6,7 @@ import { useFormValidate } from '../../hooks/form'
 import { useTranslation } from "react-i18next";
 import { materialContext } from '../../context/material'
 
-const INDEX_TYPES = ["FLAT", "IVFFLAT", "IVFSQ8", "IVFSQ8H", "IVFPQ"];
+const INDEX_TYPES = ["IVFFLAT", "IVFSQ8", "IVFSQ8H", "IVFPQ"];
 
 const CreateIndex = props => {
   const classes = useStyles()
@@ -56,8 +56,8 @@ const CreateIndex = props => {
                 name="index_type"
                 labelId="index-type"
                 id="index-type-select"
-                defaultValue="FLAT"
-                value={form.index_type}
+                defaultValue={INDEX_TYPES[0]}
+                value={form.index_type === 'FLAT' ? INDEX_TYPES[0] : form.index_type}
                 onChange={handleChange}
               >
                 {

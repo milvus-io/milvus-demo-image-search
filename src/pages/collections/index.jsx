@@ -222,7 +222,7 @@ const Collections = props => {
           }
         })
       },
-      disabled: selected => selected.length !== 1,
+      disabled: selected => selected.length !== 1 || selected[0].index === 'FLAT',
     },
     {
       label: "",
