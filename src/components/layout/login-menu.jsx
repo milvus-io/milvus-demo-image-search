@@ -17,7 +17,7 @@ const LoginMenu = props => {
 
   const classes = makeStyles(theme => ({
     root: {
-      paddingLeft: theme.spacing(2),
+      padding: theme.spacing(2),
       '& > h3': {
         color: "#fff",
         fontSize: "20px"
