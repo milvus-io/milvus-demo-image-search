@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 // import { systemContext } from '../../context/system'
 // import { httpContext } from "../../context/http"
@@ -7,9 +7,26 @@ import FormControlLabel from "@material-ui/core/FormControlLabel"
 import Switch from '@material-ui/core/Switch'
 import { FormTextField } from '../../components/common/FormTextComponents'
 import FormActions from '../../components/common/FormActions'
+import { systemContext } from '../../context/system'
+import { httpContext } from '../../context/http'
 
+import { materialContext } from '../../context/material'
+
+import { useFormValidate } from '../../hooks/form'
+import { UPDATE } from '../../consts'
 // import { UPDATE } from "../../consts";
-const NetworkForm = props => {
+const OthersForm = props => {
+  const { setMilvusAddress, milvusAddress } = useContext(systemContext)
+  const { currentAddress } = useContext(httpContext)
+
+  const { openSnackBar } = useContext(materialContext)
+
+  const [form, setForm] = useState({
+    enable: false,
+    address: ""
+  })
+  const { handleChange } = useFormValidate(form, setForm)
+
   const classes = makeStyles(theme => ({
     gridItem: {
       marginBottom: theme.spacing(2)
@@ -19,28 +36,52 @@ const NetworkForm = props => {
       marginLeft: `0 !important`
     },
   }))()
-  // const { metricConfig } = useContext(systemContext)
-  // const {
-  //   currentAddress,
-  //   setMilvusConfig,
-  //   restartNotify
-  // } = useContext(httpContext)
+
   const { t } = useTranslation();
   const others = t("others");
 
+  useEffect(() => {
+    const { elk = {} } = milvusAddress[currentAddress] || {}
+    setForm({
+      enable: elk.enable || false,
+      address: elk.address || ''
+    })
+  }, [milvusAddress, currentAddress])
+
+  const handleSwitch = () => {
+    setForm(v => ({
+      ...v,
+      enable: !v.enable
+    }))
+  }
+  const handleSubmit = () => {
+    setMilvusAddress({
+      type: UPDATE,
+      payload: {
+        id: currentAddress,
+        values: {
+          elk: {
+            enable: form.enable,
+            address: form.address
+          }
+        }
+      }
+    })
+    openSnackBar(t('submitSuccess'))
+  }
   return (
     <>
       <FormControlLabel
         classes={{ root: classes.formControlLabel }}
         value="start"
-        control={<Switch color="primary" />}
+        control={<Switch name="enable" checked={form.enable} onChange={handleSwitch} color="primary" />}
         label={others.enable}
         labelPlacement="start"
       />
-      <FormTextField label={others.address} />
-      <FormActions />
+      <FormTextField name="address" label={others.address} value={form.address} onChange={handleChange} />
+      <FormActions save={handleSubmit} />
     </>
   )
 };
 
-export default NetworkForm;
+export default OthersForm;

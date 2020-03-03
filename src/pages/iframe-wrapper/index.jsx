@@ -1,27 +1,29 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react'
 import { systemContext } from '../../context/system'
 import { httpContext } from '../../context/http'
-import { useHistory } from 'react-router-dom'
 
 const IframeWrapper = props => {
-  const history = useHistory()
   const { milvusAddress } = useContext(systemContext)
   const { currentAddress } = useContext(httpContext)
   const [url, setUrl] = useState("")
-  const { logServer, pmServer } = useMemo(() => {
+  const { type } = props
+  const { metrics = {}, elk = {} } = useMemo(() => {
     return milvusAddress[currentAddress] || {}
   }, [currentAddress, milvusAddress])
 
   useEffect(() => {
-    if (history.location.pathname.includes('logs')) {
-      console.log(logServer)
-      setUrl(logServer)
-    } else {
-      setUrl(pmServer)
+    switch (type) {
+      case 'elk':
+        setUrl(elk.address)
+        break
+      case 'metrics':
+        setUrl(metrics.address)
+        break
+      default:
+        return
     }
-  }, [history.location.pathname, logServer, milvusAddress, pmServer])
 
-  console.log(url)
+  }, [metrics, elk, type])
   return (
     <iframe
       title="Ifram for milvus "
