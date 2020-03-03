@@ -22,7 +22,7 @@ const DataMenu = props => {
   const { getCollections, currentAddress, getPartitions } = useContext(
     httpContext
   );
-  const { setRefresh, refresh } = useContext(dataManagementContext);
+  const { setRefresh, refresh, setAllCollections, allCollections, setCurrentPartitions } = useContext(dataManagementContext);
 
   const [collections, setCollections] = useState([]);
   const [total, setToltal] = useState(0);
@@ -34,7 +34,7 @@ const DataMenu = props => {
   const fetchCollections = async () => {
     console.log("---fetch ---- collections");
 
-    const res = await getCollections();
+    const res = await getCollections({ all_required: true });
     const { tables: collections = [], count = 0 } = res || {};
     const data = collections.map((col, i) => {
       const { table_name, ...others } = col;
@@ -43,7 +43,7 @@ const DataMenu = props => {
           ...v,
           id: generateId(),
           icon: IoIosSettings,
-          disabled: true
+          disabled: true,
         })
       );
       return {
@@ -52,24 +52,25 @@ const DataMenu = props => {
         children,
         id: generateId(),
         icon: AiOutlineTable,
+        dimension: col.dimension || 0,
         url: `/data/collections/${table_name}`
       };
     });
     setToltal(count);
     setCollections(v => data);
+    setAllCollections(collections)
     setRefresh(false);
   };
 
   useEffect(() => {
     if (!currentAddress) return;
-    console.log("in---currentaddress");
     fetchCollections();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress]);
 
+  // when right content crud collection/index/partion will refresh the menu
   useEffect(() => {
     if (!refresh) return;
-    console.log("in----refresh", refresh);
     fetchCollections();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
@@ -81,7 +82,6 @@ const DataMenu = props => {
     const hasPartition = target && target.loaded;
     const needFetchPartition =
       !hasPartition && (page === "collection" || page === "partition");
-    console.log("in---useeffect", collections);
     needFetchPartition && fetchPartitions(collectionName);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,6 +91,7 @@ const DataMenu = props => {
   useEffect(() => {
     const { page, collectionName, partitionTag } = currentRoute;
     const target = collections.find(col => col.label === collectionName);
+    console.log(page)
     switch (page) {
       case "collections":
         setTreeExpanded(["1"]);
@@ -125,7 +126,7 @@ const DataMenu = props => {
     if (!target || target.loaded) {
       return;
     }
-    const res = await getPartitions(collectionName);
+    const res = await getPartitions(collectionName, { all_required: true });
     const { partitions } = res;
     const data = partitions.map(v => {
       const label = sliceWord(v.partition_tag);
@@ -134,7 +135,7 @@ const DataMenu = props => {
         value: "",
         id: generateId(),
         icon: AiOutlineTable,
-        url: `/data/collections/${collectionName}/partitions/${label}`
+        url: `/data/collections/${collectionName}/partitions/${label}?dimension=${target.dimension}`
       };
     });
     setCollections(collections => {
@@ -146,6 +147,11 @@ const DataMenu = props => {
         return col;
       });
     });
+    const parent = allCollections.find(v => v.table_name === collectionName) || []
+    setCurrentPartitions(partitions.map(v => ({
+      ...v,
+      ...parent
+    })))
   };
   const handleMenuClick = (url, collectionName, id) => {
     id !== "1" && fetchPartitions(collectionName);

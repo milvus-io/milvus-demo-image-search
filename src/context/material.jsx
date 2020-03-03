@@ -65,7 +65,8 @@ export const MaterialProvider = ({ children }) => {
     type: "success",
     message: "",
     vertical: "top",
-    horizontal: "center"
+    horizontal: "center",
+    autoHideDuration: 2000
   })
   const [dialog, setDialog] = useState(DefaultDialogConfigs);
   const { t } = useTranslation();
@@ -78,12 +79,12 @@ export const MaterialProvider = ({ children }) => {
     }
     setSnackBar(v => ({ ...v, open: false }))
   };
-  const openSnackBar = (message, type = "success", duration = 2000, position = { vertical: "top", horizontal: "center" }) => {
+  const openSnackBar = (message, type = "success", autoHideDuration = 2000, position = { vertical: "top", horizontal: "center" }) => {
     setSnackBar({
       open: true,
       message,
       type,
-      duration,
+      autoHideDuration,
       ...position
     })
   }
@@ -118,7 +119,7 @@ export const MaterialProvider = ({ children }) => {
         key={`${snackBar.vertical}${snackBar.horizontal}`}
         open={snackBar.open}
         onClose={handleClose}
-        autoHideDuration={snackBar.duration}
+        autoHideDuration={snackBar.autoHideDuration}
       >
         <Alert onClose={handleClose} severity={snackBar.type}>
           {snackBar.message}

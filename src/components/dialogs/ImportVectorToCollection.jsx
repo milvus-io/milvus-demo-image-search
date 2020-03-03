@@ -9,7 +9,7 @@ const ImportVectorToCollection = props => {
   const classes = useStyles()
   const { t } = useTranslation()
   const vectorTrans = t('vector')
-  const { importVectors = () => { }, partitionTag, } = props;
+  const { importVectors = () => { }, partitionTag, dimension } = props;
   const Input = useRef(null)
   const { openSnackBar, hideDialog } = useContext(materialContext)
 
@@ -63,7 +63,7 @@ const ImportVectorToCollection = props => {
             </div>
           </Grid>
           <Grid item xs={12}>
-            <p className={classes.upload}>Please make sure the csv you upload contains 4096 dimensions vectors</p>
+            <p className={classes.upload}>{`Please make sure the csv you upload contains ${dimension} dimensions vectors`}</p>
           </Grid>
         </Grid>
       </DialogContent>

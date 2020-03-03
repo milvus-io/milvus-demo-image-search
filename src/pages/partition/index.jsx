@@ -16,7 +16,7 @@ const Partitions = props => {
   const classes = useDataPageStyles()
   const { getPartitions, getCollectionByName, deletePartition, currentAddress, createPartition } = useContext(httpContext)
   const { openSnackBar, setDialog } = useContext(materialContext)
-  const { setRefresh } = useContext(dataManagementContext)
+  const { setRefresh, currentPartitions } = useContext(dataManagementContext)
 
   const { collectionName } = useParams()
   const { t } = useTranslation();
@@ -28,43 +28,16 @@ const Partitions = props => {
   const [count, setCount] = useState(0); // total count for pagination
   const [current, setCurrent] = useState(0); // current page for pagination
 
-  /**
-   *  for now we just take the table from params
-   *  so the fecthData(xxx) will igonre
-   */
-  const fetchData = async () => {
-    if (!currentAddress) return
-    try {
-      const res = await Promise.all([getPartitions(collectionName, { offset, page_size: PAGE_SIZE }), getCollectionByName(collectionName)]);
-      const partitions = res[0] && res[0].partitions
-      const collections = res[1] || {}
-      if (partitions) {
-        setData(partitions.map(v => ({
-          ...v,
-          ...collections
-        })))
-        setCount(res.count || 100);
-      }
 
-    } catch (e) {
-      console.log(e)
-    } finally {
-      setRefresh(false)
-    }
-  }
+  useEffect(() => {
+    setData(currentPartitions.slice(offset, PAGE_SIZE + offset))
+    setCount(currentPartitions.length)
+  }, [currentPartitions, offset])
 
   const saveSuccess = () => {
     setRefresh(true)
-    getFirstPage();
     setCurrent(0);
-  };
-
-  const getFirstPage = () => {
-    if (offset === 0) {
-      fetchData();
-    } else {
-      setOffset(0);
-    }
+    setOffset(0)
   };
 
   const handlePageChange = (e, page) => {
@@ -72,10 +45,6 @@ const Partitions = props => {
     setCurrent(page);
   };
 
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offset, currentAddress]);
 
   const handleDelete = async (e, selected) => {
     const res = await Promise.all(selected.map(async (v, i) => {
@@ -85,16 +54,14 @@ const Partitions = props => {
         return error.response
       }
     }));
-    setRefresh(true)
     const errorMsg = res.filter(v => v)
-    getFirstPage();
-    setCurrent(0);
+
     if (errorMsg.length) {
       openSnackBar(errorMsg[0].data.message || 'Some Patitions Fail', 'error')
     } else {
       openSnackBar(partitionTrans.delete)
     }
-
+    saveSuccess()
   };
 
   const colDefinitions = [
@@ -150,7 +117,7 @@ const Partitions = props => {
       icon: "delete",
       onClick: handleDelete,
       disabled: selected => selected.length === 0 || selected.some(s => s.partition_tag === '_default'),
-      disabledTooltip: "You can not delete this item"
+      disabledTooltip: "default partition cant be deleted"
     },
     // {
     //   label: "",

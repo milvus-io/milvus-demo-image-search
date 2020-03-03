@@ -90,7 +90,7 @@ const Layout = props => {
   );
   const collectionsMatch = useRouteMatch("/data/collections");
 
-  const effections = [JSON.stringify(collectionMatch), JSON.stringify(collectionMatch), JSON.stringify(partitionMatch)]
+  const effections = [JSON.stringify(collectionsMatch), JSON.stringify(collectionMatch), JSON.stringify(partitionMatch)]
   useEffect(() => {
     const { isExact, params } = collectionMatch || {};
     const { isExact: isPartition, params: partitionParams } =
@@ -143,6 +143,9 @@ const Layout = props => {
     }
     if (name === 'login') {
       history.push('/login')
+    }
+    if (name === 'config') {
+      history.push('/configs/network')
     }
   };
 

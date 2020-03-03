@@ -15,16 +15,14 @@ import CreateIndex from '../../components/dialogs/CreateIndex'
 const PAGE_SIZE = 10;
 const Collections = props => {
   const {
-    getCollections,
     deleteTable,
     searchTable,
     createTable,
-    currentAddress,
     createIndex
   } = useContext(httpContext);
 
   const { setDialog, openSnackBar } = useContext(materialContext)
-  const { setRefresh } = useContext(dataManagementContext)
+  const { setRefresh, allCollections } = useContext(dataManagementContext)
   const classes = useDataPageStyles();
   const { t } = useTranslation();
   const tableTrans = t("table");
@@ -34,12 +32,8 @@ const Collections = props => {
   const [offset, setOffset] = useState(0);
   const [count, setCount] = useState(0);
   const [current, setCurrent] = useState(0);
+  const [isSearch, setIsSearch] = useState(false);
 
-  // const handleAddIndex = record => {
-  //   setType("index");
-  //   setVisible(true);
-  //   setRecord(record);
-  // };
   const handleDelete = async (e, selected) => {
     const res = await Promise.all(selected.map(async (v, i) => {
       try {
@@ -50,59 +44,41 @@ const Collections = props => {
       }
     }));
     const errorMsg = res.filter(v => v)
-    console.log(res)
-    getFirstPage();
-    setCurrent(0);
+
     if (errorMsg.length) {
       openSnackBar(errorMsg[0].data.message || 'Some Table Fail', 'error')
     } else {
       openSnackBar(tableTrans.delete)
     }
-    setRefresh(true)
-  };
-  const fetchData = async () => {
-    const res = await getCollections({ offset, page_size: PAGE_SIZE });
-    if (res && res.tables) {
-      setData(res.tables.map(v => ({
-        ...v,
-        key: v.table_name
-      })))
-
-      setCount(res.count);
-      setRefresh(false)
-    }
+    saveSuccess()
   };
 
   const saveSuccess = txt => {
     setRefresh(true)
-    getFirstPage();
+    setOffset(0)
     setCurrent(0);
   };
 
   useEffect(() => {
-    if (!currentAddress) return
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offset, currentAddress]);
+    if (isSearch) {
+      return
+    }
+    setData(allCollections.slice(offset, PAGE_SIZE + offset))
+    setCount(allCollections.length)
+  }, [allCollections, offset, isSearch])
 
   const handleSearch = async name => {
-    console.log(name)
     setCurrent(0);
     if (!name) {
-      getFirstPage();
+      setOffset(0)
+      setIsSearch(false)
       return;
     }
     const res = (await searchTable(name)) || {};
     setData([{ ...res, key: res.table_name }])
     setCount(1);
-  };
+    setIsSearch(true)
 
-  const getFirstPage = () => {
-    if (offset === 0) {
-      fetchData();
-    } else {
-      setOffset(0);
-    }
   };
 
   const handlePageChange = async (e, page) => {
@@ -236,7 +212,7 @@ const Collections = props => {
   ];
 
   const rows = data || [];
-
+  console.log(rows)
   return (
     <div className={`${classes.root}`}>
       <PaperWrapper className={classes.paper} >

@@ -75,7 +75,7 @@ const DataForm = function (props) {
     });
     if (res.code === 0) {
       openSnackBar(t("submitSuccess"));
-      restartNotify();
+      // restartNotify();
     }
   };
 

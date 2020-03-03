@@ -9,11 +9,13 @@ import PageWrapper from '../../components/page-wrapper'
 import MilvusGrid from "../../components/grid";
 import ImportVectors from '../../components/dialogs/ImportVectorToCollection'
 import { useDataPageStyles } from "../../hooks/page";
+import { useQuery } from '../../hooks'
 import { sliceWord } from '../../utils/helpers'
 
 const PAGE_SIZE = 10;
 const Vectors = props => {
   const classes = useDataPageStyles()
+  const query = useQuery()
   const { currentAddress, getSegments, addVectors, getVectors } = useContext(httpContext)
   const { openSnackBar, setDialog } = useContext(materialContext)
   const { setRefresh } = useContext(dataManagementContext)
@@ -40,10 +42,8 @@ const Vectors = props => {
       console.log(res)
       setSegments(res.segments || [])
       setCount(res.segments.reduce((pre, cur) => pre + cur.count, 0)) // get all vectors count
-      if (firstSegment) {
-        setCurrentSegmentIndex(0)
-        setVectorOffset(firstSegment.count - PAGE_SIZE > 0 ? firstSegment.count - PAGE_SIZE : 0)
-      }
+      setCurrentSegmentIndex(0)
+      setVectorOffset(firstSegment.count || 0 - PAGE_SIZE > 0 ? firstSegment.count - PAGE_SIZE : 0)
     } catch (e) {
       console.log(e)
     } finally {
@@ -137,7 +137,11 @@ const Vectors = props => {
       partition_tag: partitionTag,
       vectors
     })
-    openSnackBar(vectorTrans.importSuccess)
+    setTimeout(() => {
+      openSnackBar(vectorTrans.importSuccess)
+      fetchSegments()
+      setCurrent(0)
+    }, 1000)
 
   }
 
@@ -155,7 +159,7 @@ const Vectors = props => {
       label: vectorTrans.vector
     },
   ];
-
+  const dimension = query.get('dimension')
   const toolbarConfig = [
     {
       label: "Import vectors",
@@ -165,7 +169,7 @@ const Vectors = props => {
         open: true,
         type: 'custom',
         params: {
-          component: <ImportVectors importVectors={handleAddVectors} partitionTag={partitionTag}></ImportVectors>
+          component: <ImportVectors dimension={dimension} importVectors={handleAddVectors} partitionTag={partitionTag}></ImportVectors>
         }
       }),
       disabled: selected => selected.length > 2

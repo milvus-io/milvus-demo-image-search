@@ -89,7 +89,7 @@ const StyledTreeView = props => {
         activeId={activeId}
         propsClick={handleClick}
         propsRefresh={handleRefresh}
-        url="/data/collections?tabName=collections"
+        url="/data/collections"
       >
         {
           loading

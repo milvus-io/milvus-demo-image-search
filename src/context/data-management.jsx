@@ -6,7 +6,11 @@ export const dataManagementContext = React.createContext({
   dataManagement: {},
   setDataManagement: () => { },
   refresh: false,
-  setRefresh: (refresh) => { }
+  setRefresh: (refresh) => { },
+  allCollections: [],
+  setAllCollections: (collections) => { },
+  currentPartitions: [],
+  setCurrentPartitions: (partitions) => { }
 })
 
 
@@ -14,6 +18,8 @@ const { Provider } = dataManagementContext
 
 export const DataManagementProvider = ({ children }) => {
   const [refresh, setRefresh] = useState(false)
+  const [allCollections, setAllCollections] = useState([])
+  const [currentPartitions, setCurrentPartitions] = useState([])
   const { currentAddress } = useContext(httpContext)
   const [dataManagement, setDataManagement] = useReducer(DataManagementReducer, {
     /**
@@ -57,5 +63,14 @@ export const DataManagementProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress])
 
-  return <Provider value={{ dataManagement, setDataManagement, refresh, setRefresh }}>{children}</Provider>
+  return <Provider value={{
+    dataManagement,
+    setDataManagement,
+    refresh,
+    setRefresh,
+    allCollections,
+    setAllCollections,
+    currentPartitions,
+    setCurrentPartitions
+  }}>{children}</Provider>
 }
