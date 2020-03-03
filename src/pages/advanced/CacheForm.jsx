@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { systemContext } from "../../context/system";
 import { httpContext } from "../../context/http";
+import { materialContext } from '../../context/material'
 import { useTranslation } from "react-i18next";
-import { useFormStyles, useFormValidate } from "../../hooks/form";
+import { useFormStyles } from "../../hooks/form";
 import Grid from "@material-ui/core/Grid";
 import Slider from "@material-ui/core/Slider";
 import Switch from "@material-ui/core/Switch";
@@ -14,10 +15,13 @@ const Insert_Buffer_Size = { min: 0, max: 1 }
 
 const AdvancedForm = props => {
   const { systemInfos = {}, serverConfig } = useContext(systemContext);
+  const { openSnackBar } = useContext(materialContext)
   const classes = useFormStyles();
   const {
     currentAddress = "",
-    getMilvusConfigs
+    getMilvusConfigs,
+    setMilvusConfig,
+    restartNotify
   } = useContext(httpContext);
   const { hardwareType = "CPU", cpuMemory = 5 } = systemInfos[currentAddress] || {}
   const [settings, setSettings] = useState({})
@@ -34,8 +38,14 @@ const AdvancedForm = props => {
   const advancedTrans = t("advanced");
 
   // TODO: save settings to server
-  const saveSettings = async () => {
-
+  const saveSettings = async e => {
+    // add form valid check
+    setMilvusConfig(settings).then(res => {
+      if (res.code === 0) {
+        openSnackBar(t('submitSuccess'))
+        restartNotify()
+      }
+    })
   }
   useEffect(() => {
     const initSetting = async () => {

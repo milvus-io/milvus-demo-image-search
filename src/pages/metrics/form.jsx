@@ -1,13 +1,10 @@
 import React, { useMemo, useState, useContext } from "react";
 import { systemContext } from '../../context/system'
 import { makeStyles } from "@material-ui/core/styles";
-import TextField from '@material-ui/core/TextField'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Grid from '@material-ui/core/Grid'
 import Switch from '@material-ui/core/Switch'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
-import Button from '@material-ui/core/Button'
 import { FormTextField } from '../../components/common/FormTextComponents'
 import FormActions from '../../components/common/FormActions'
 
@@ -21,13 +18,13 @@ const MetricForm = props => {
       marginLeft: `0 !important`
     },
   }))()
-  const { form } = props;
-  const { metricConfig } = useContext(systemContext)
-  const {
-    currentAddress,
-    setMilvusConfig,
-    restartNotify
-  } = useContext(httpContext)
+  // const { form } = props;
+  // const { metricConfig } = useContext(systemContext)
+  // const {
+  //   currentAddress,
+  //   setMilvusConfig,
+  //   restartNotify
+  // } = useContext(httpContext)
   const { t } = useTranslation();
   const metrics = t("metrics");
 

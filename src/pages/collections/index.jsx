@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext, useMemo } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import MilvusGrid from "../../components/grid";
-import { Paper, Box } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import PaperWrapper from "../../components/page-wrapper";
 import CollectionIcon from "@material-ui/icons/GridOnSharp";
 import { useDataPageStyles } from "../../hooks/page";
