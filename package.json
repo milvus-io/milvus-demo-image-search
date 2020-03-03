@@ -32,6 +32,7 @@
     "react-transition-group": "^4.3.0"
   },
   "devDependencies": {
+    "csv-writer": "^1.6.0",
     "electron": "^7.1.7",
     "electron-builder": "^22.2.0"
   },
