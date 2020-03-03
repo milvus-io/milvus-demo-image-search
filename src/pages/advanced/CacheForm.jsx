@@ -9,10 +9,7 @@ import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
 import FormActions from "../../components/common/FormActions";
 
-const Range_CPU_Capacity = { min: 1, max: 16 }
-const Range_CPU_Threshold = { min: 0, max: 1 }
-const Range_GPU_Capacity = { min: 1, max: 16 }
-const Range_GPU_Threshold = { min: 0, max: 1 }
+const Range_Threshold = { min: 0, max: 1 }
 const Insert_Buffer_Size = { min: 0, max: 1 }
 
 const AdvancedForm = props => {
@@ -22,12 +19,12 @@ const AdvancedForm = props => {
     currentAddress = "",
     getMilvusConfigs
   } = useContext(httpContext);
-  const { hardwareType = "CPU", cpuMemory = 5 } = systemInfos[currentAddress]
+  const { hardwareType = "CPU", cpuMemory = 5 } = systemInfos[currentAddress] || {}
   const [settings, setSettings] = useState({})
   const {
-    cpu_cache_capacity = Range_CPU_Capacity.min,
+    cpu_cache_capacity = 1,
     cpu_cache_threshold = 0.5,
-    gpu_capacity = Range_GPU_Capacity.min,
+    gpu_capacity = 1,
     gpu_threshold = 0.5,
     catch_insert_data = true,
     insert_buffer_size = .5
@@ -36,6 +33,10 @@ const AdvancedForm = props => {
   const { t } = useTranslation();
   const advancedTrans = t("advanced");
 
+  // TODO: save settings to server
+  const saveSettings = async () => {
+
+  }
   useEffect(() => {
     const initSetting = async () => {
       const allConfigs = await getMilvusConfigs();
@@ -73,7 +74,7 @@ const AdvancedForm = props => {
           <Typography>{advancedTrans.cpu_threshold}</Typography>
         </Grid>
         <Grid item sm={4}>
-          <Slider value={cpu_cache_threshold} min={Range_CPU_Threshold.min} max={Range_CPU_Threshold.max} step={0.01} onChange={(e, val) => setSettings({ ...settings, cpu_cache_threshold: val.toFixed(2) })} />
+          <Slider value={cpu_cache_threshold} min={Range_Threshold.min} max={Range_Threshold.max} step={0.01} onChange={(e, val) => setSettings({ ...settings, cpu_cache_threshold: val.toFixed(2) })} />
         </Grid>
         <Grid item sm={1}>
           <Typography varient="p" component="p" align="center">
@@ -108,7 +109,7 @@ const AdvancedForm = props => {
             <Typography>{advancedTrans.gpu_threshold}</Typography>
           </Grid>
           <Grid item sm={4}>
-            <Slider value={gpu_threshold} step={0.01} min={Range_GPU_Threshold.min} max={Range_GPU_Threshold.max} onChange={(e, val) => setSettings({ ...settings, gpu_threshold: val })} />
+            <Slider value={gpu_threshold} step={0.01} min={Range_Threshold.min} max={Range_Threshold.max} onChange={(e, val) => setSettings({ ...settings, gpu_threshold: val })} />
           </Grid>
           <Grid item sm={1}>
             <Typography varient="p" component="p" align="center">
@@ -157,7 +158,7 @@ const AdvancedForm = props => {
           </Typography>
         </Grid>
       </Grid>
-      <FormActions />
+      <FormActions save={saveSettings} />
     </div>
   );
 };
