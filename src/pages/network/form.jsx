@@ -42,7 +42,7 @@ const NetworkFrom = (props) => {
       return
     }
     const res = await setMilvusConfig({ server_config: { ...form } })
-    if (res.code === 0) {
+    if (res && res.code === 0) {
       openSnackBar(t('submitSuccess'))
       restartNotify()
     }

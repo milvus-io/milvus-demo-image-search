@@ -1,6 +1,6 @@
 import React, { useState, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Table, Switch } from "antd";
+import { Table } from "antd";
 import SearchForm from "./search-form";
 import "./index.less";
 import { dataManagementContext } from "../../context/data-management";

@@ -13,7 +13,7 @@ import FormActions from "../../components/common/FormActions";
 const Range_Threshold = { min: 0, max: 1 }
 const Insert_Buffer_Size = { min: 0, max: 1 }
 
-const AdvancedForm = props => {
+const CacheForm = props => {
   const { systemInfos = {}, serverConfig } = useContext(systemContext);
   const { openSnackBar } = useContext(materialContext)
   const classes = useFormStyles();
@@ -37,10 +37,10 @@ const AdvancedForm = props => {
   const { t } = useTranslation();
   const advancedTrans = t("advanced");
 
-  // TODO: save settings to server
-  const saveSettings = async e => {
+  const saveSettings = async () => {
     // add form valid check
     setMilvusConfig(settings).then(res => {
+      // TODO: no useful response from API at the moment
       if (res.code === 0) {
         openSnackBar(t('submitSuccess'))
         restartNotify()
@@ -60,7 +60,9 @@ const AdvancedForm = props => {
       setSettings({ ...settings, ..._cache_config })
     }
     initSetting()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress, serverConfig])
+
   return (
     <div className={classes.root}>
       <Grid container className={classes.part}>
@@ -97,7 +99,7 @@ const AdvancedForm = props => {
           </Typography>
         </Grid>
       </Grid>
-      {hardwareType === "GUP" && (
+      {hardwareType === "GPU" && (
         <Grid container className={classes.part}>
           <Grid item sm={3}>
             <Typography>{advancedTrans.gpu_capacity}</Typography>
@@ -173,4 +175,4 @@ const AdvancedForm = props => {
   );
 };
 
-export default AdvancedForm;
+export default CacheForm;

@@ -1,9 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { materialContext } from '../../context/material'
-import { useFormValidate, useFormStyles } from '../../hooks/form'
+import { useFormValidate } from '../../hooks/form'
 import useStyles from './Style'
 import Grid from '@material-ui/core/Grid';
-import { FaQuestionCircle } from 'react-icons/fa';
 import { Slider, Select, MenuItem, DialogActions, DialogContent, DialogTitle, Button, Typography, FormControl } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField';
 import { useTranslation } from "react-i18next";
@@ -24,7 +23,6 @@ const CreateCollection = props => {
   const { hideDialog, openSnackBar } = useContext(materialContext)
   const { t } = useTranslation();
   const tableTrans = t("table");
-  const tipsTrans = tableTrans.tips;
   const buttonTrans = t("button");
   const { createTable, saveSuccess } = props
 

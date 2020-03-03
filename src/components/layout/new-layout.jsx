@@ -77,7 +77,7 @@ const Layout = props => {
   const history = useHistory()
   const { t } = useTranslation();
   const { currentAddress, setCurrentAddress } = useContext(httpContext)
-  const { milvusAddress, setMilvusAddress } = useContext(systemContext)
+  const { setMilvusAddress } = useContext(systemContext)
   const { setDataManagement } = useContext(dataManagementContext)
   const [anchorEl, setAnchorEl] = useState(null)
   const [firstMenu, setFisrstMenu] = useState('data')
