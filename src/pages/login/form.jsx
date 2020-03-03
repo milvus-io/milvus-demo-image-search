@@ -2,8 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
-import { useHistory } from 'react-router-dom'
-import { useFormStyles, useFormValidate } from '../../hooks/form'
+import { useFormValidate } from '../../hooks/form'
 import { ADD } from '../../consts'
 import { useConnectMilvus } from '../../hooks'
 import axios from 'axios'
@@ -15,12 +14,10 @@ axios.defaults.timeout = 2000
 const defaultForm = { host: "", port: "19121" }
 
 const LoginForm = (props) => {
-  const history = useHistory()
   const connectMilvus = useConnectMilvus()
   const [form, setForm] = useState({ ...defaultForm })
   const [error, setError] = useState({})
 
-  const classes = useFormStyles();
   const { validateForm, handleCheck, handleChange } = useFormValidate(form, setForm, setError)
 
   const { milvusAddress } = useContext(systemContext)

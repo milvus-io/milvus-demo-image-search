@@ -131,7 +131,7 @@ export default {
   advanced: {
     cacheSetting: "Caches ",
     performanceSetting: "Performance Tunning",
-    tableSetting: "Tables",
+    tableSetting: "Collections",
 
     cpu_capacity: "CPU Cache Capacity",
     cpu_threshold: "CPU Cache Threshold",
@@ -172,8 +172,8 @@ export default {
       gpu_search_threshold_desc3: "If nq < gpu_search_threshold , the search computation will be executed on both CPUs and GPUs."
     },
     preload_table: {
-      title: 'Preload Table',
-      desc: "preload data at startup, '*' means load all tables, empty value means no preload you can specify preload tables like this: table1,table2,table3",
+      title: 'Preload Collection',
+      desc: "preload data at startup, '*' means load all tables, empty value means no preload you can specify preload tables like this: collection1,collection2,collection3",
     },
 
   },

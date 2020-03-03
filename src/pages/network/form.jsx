@@ -3,7 +3,7 @@ import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { materialContext } from '../../context/material'
 import { useTranslation } from "react-i18next";
-import { useFormStyles, useFormValidate } from '../../hooks/form'
+import { useFormValidate } from '../../hooks/form'
 import { FormTextField } from '../../components/common/FormTextComponents'
 import FormActions from '../../components/common/FormActions'
 const defaultForm = { address: "", port: "" }
@@ -12,7 +12,6 @@ const NetworkFrom = (props) => {
   const [form, setForm] = useState({ ...defaultForm })
   const [error, setError] = useState({})
 
-  const classes = useFormStyles();
   const { validateForm, handleCheck, handleChange } = useFormValidate(form, setForm, setError)
 
   const { serverConfig } = useContext(systemContext)

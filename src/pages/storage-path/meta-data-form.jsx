@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useFormStyles, useFormValidate } from '../../hooks/form'
 import { safetyGet } from '../../utils/helpers'
 import Select from '@material-ui/core/Select'
-import { FormTextField, FormSelect } from '../../components/common/FormTextComponents'
+import { FormTextField } from '../../components/common/FormTextComponents'
 import FormActions from '../../components/common/FormActions'
 import Grid from '@material-ui/core/Grid'
 
