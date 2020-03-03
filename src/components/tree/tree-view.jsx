@@ -2,8 +2,8 @@ import React from 'react';
 import { makeStyles, CircularProgress } from '@material-ui/core';
 import { TreeView } from '@material-ui/lab';
 import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
-import { AiOutlineTable } from 'react-icons/ai'
 import { IoMdRefresh } from 'react-icons/io'
+import { MdStorage } from 'react-icons/md';
 
 import StyledTreeItem from './tree-item'
 
@@ -85,7 +85,7 @@ const StyledTreeView = props => {
         nodeId="1"
         labelText={`Collections(${total})`}
         labelRefresh={IoMdRefresh}
-        labelIcon={AiOutlineTable}
+        labelIcon={MdStorage}
         activeId={activeId}
         propsClick={handleClick}
         propsRefresh={handleRefresh}

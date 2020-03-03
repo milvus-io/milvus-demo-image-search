@@ -3,10 +3,20 @@ import TreeView from "../tree/tree-view";
 import { makeStyles } from "@material-ui/core/styles";
 import { httpContext } from "../../context/http";
 import { dataManagementContext } from "../../context/data-management";
-
-import { IoIosSettings } from "react-icons/io";
-import { AiOutlineTable } from "react-icons/ai";
-import { parseObjectToAssignKey, generateId, sliceWord } from "../../utils/helpers";
+import {
+  IoIosSettings,
+  IoMdFlash,
+  IoLogoBuffer,
+  IoIosCube
+} from "react-icons/io";
+import { FiGrid, FiHardDrive, FiDatabase } from "react-icons/fi";
+import { MdCallMade } from "react-icons/md";
+import { AiOutlineNumber } from "react-icons/ai";
+import {
+  parseObjectToAssignKey,
+  generateId,
+  sliceWord
+} from "../../utils/helpers";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
@@ -22,7 +32,13 @@ const DataMenu = props => {
   const { getCollections, currentAddress, getPartitions } = useContext(
     httpContext
   );
-  const { setRefresh, refresh, setAllCollections, allCollections, setCurrentPartitions } = useContext(dataManagementContext);
+  const {
+    setRefresh,
+    refresh,
+    setAllCollections,
+    allCollections,
+    setCurrentPartitions
+  } = useContext(dataManagementContext);
 
   const [collections, setCollections] = useState([]);
   const [total, setToltal] = useState(0);
@@ -30,6 +46,15 @@ const DataMenu = props => {
   const [treeActiveId, setTreeActiveId] = useState("");
 
   const { currentRoute } = props;
+
+  const propertiesIconMap = {
+    dimension: IoIosCube,
+    metric_type: MdCallMade,
+    count: AiOutlineNumber,
+    index: IoMdFlash,
+    nlist: IoLogoBuffer,
+    index_file_size: FiHardDrive
+  };
 
   const fetchCollections = async () => {
     console.log("---fetch ---- collections");
@@ -42,8 +67,8 @@ const DataMenu = props => {
         v => ({
           ...v,
           id: generateId(),
-          icon: IoIosSettings,
-          disabled: true,
+          icon: propertiesIconMap[v.label] || IoIosSettings,
+          disabled: true
         })
       );
       return {
@@ -51,14 +76,14 @@ const DataMenu = props => {
         value: "",
         children,
         id: generateId(),
-        icon: AiOutlineTable,
+        icon: FiDatabase,
         dimension: col.dimension || 0,
         url: `/data/collections/${table_name}`
       };
     });
     setToltal(count);
     setCollections(v => data);
-    setAllCollections(collections)
+    setAllCollections(collections);
     setRefresh(false);
   };
 
@@ -91,7 +116,7 @@ const DataMenu = props => {
   useEffect(() => {
     const { page, collectionName, partitionTag } = currentRoute;
     const target = collections.find(col => col.label === collectionName);
-    console.log(page)
+    console.log(page);
     switch (page) {
       case "collections":
         setTreeExpanded(["1"]);
@@ -134,7 +159,7 @@ const DataMenu = props => {
         label,
         value: "",
         id: generateId(),
-        icon: AiOutlineTable,
+        icon: FiGrid,
         url: `/data/collections/${collectionName}/partitions/${label}?dimension=${target.dimension}`
       };
     });
@@ -147,11 +172,14 @@ const DataMenu = props => {
         return col;
       });
     });
-    const parent = allCollections.find(v => v.table_name === collectionName) || []
-    setCurrentPartitions(partitions.map(v => ({
-      ...v,
-      ...parent
-    })))
+    const parent =
+      allCollections.find(v => v.table_name === collectionName) || [];
+    setCurrentPartitions(
+      partitions.map(v => ({
+        ...v,
+        ...parent
+      }))
+    );
   };
   const handleMenuClick = (url, collectionName, id) => {
     id !== "1" && fetchPartitions(collectionName);

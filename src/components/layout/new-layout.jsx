@@ -1,6 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { makeStyles, Tab, Divider } from "@material-ui/core";
-import { Home, Settings, Storage, ExitToApp } from '@material-ui/icons';
+import { makeStyles, Divider } from "@material-ui/core";
+import { Settings, ExitToApp } from '@material-ui/icons';
+import { AiOutlineHome } from 'react-icons/ai';
+import { MdStorage } from 'react-icons/md';
+
 import { useTranslation } from "react-i18next";
 import { useRouteMatch, useHistory } from 'react-router-dom'
 import Logo from '../../assets/imgs/logo.svg'
@@ -9,9 +12,6 @@ import { httpContext } from "../../context/http"
 import { dataManagementContext } from "../../context/data-management"
 import { systemContext } from "../../context/system"
 import { CLIENT_HISTORY, DELETE_MUTIPLE, DISCONNECT, INIT } from '../../consts';
-import { cloneObj } from '../../utils/helpers'
-import MyTabs from '../../components/tab'
-import TabPanel from '../../components/tab-panel'
 import PopConfirm from '../../components/pop-confirm'
 import DataMenu from './data-menu'
 import ConfigMenu from './config-menu'
@@ -81,7 +81,6 @@ const Layout = props => {
   const { setDataManagement } = useContext(dataManagementContext)
   const [anchorEl, setAnchorEl] = useState(null)
   const [firstMenu, setFisrstMenu] = useState('data')
-  const [tabValue, setTabValue] = useState(0)
   const [currentRoute, setCurrentRoute] = useState({})
 
   const collectionMatch = useRouteMatch("/data/collections/:collectionName");
@@ -189,11 +188,6 @@ const Layout = props => {
     setAnchorEl(null);
   };
 
-  const handleTabChange = (event, newValue) => {
-    console.log(newValue);
-    setTabValue(newValue);
-  };
-
   useEffect(() => {
     try {
       let clients = window.localStorage.getItem(CLIENT_HISTORY) || {};
@@ -209,18 +203,18 @@ const Layout = props => {
   return (
     <div className={classes.root}>
       <div className={classes.left}>
-        <Home
+        <AiOutlineHome
           data-name="login"
           className={`${classes.icon} ${firstMenu === "login" &&
             classes.active}`}
           onClick={handleFirstMenuChange}
-        ></Home>
-        <Storage
+        ></AiOutlineHome>
+        <MdStorage
           data-name="data"
           className={`${classes.icon} ${firstMenu === "data" &&
             classes.active}`}
           onClick={handleFirstMenuChange}
-        ></Storage>
+        ></MdStorage>
         <Settings
           data-name="config"
           className={`${classes.icon} ${firstMenu === "config" &&
@@ -260,38 +254,6 @@ const Layout = props => {
         }
       </div>
       <div className={classes.content}>{props.children}</div>
-      {/* <div className={classes.content}>
-        <Paper square>
-          {firstMenu === "data" ? (
-            <>
-              <MyTabs
-                value={tabValue}
-                indicatorColor="primary"
-                textColor="primary"
-                onChange={handleTabChange}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  zIndex: 10
-                }}
-              >
-                <Tab label={tabName} />
-                <Tab label="search" />
-              </MyTabs>
-              <TabPanel value={tabValue} index={0}>
-                {props.children}
-              </TabPanel>
-              <TabPanel value={tabValue} index={1}>
-                Seach page
-              </TabPanel>
-            </>
-          ) : (
-            props.children
-          )}
-        </Paper>
-      </div> */}
     </div>
   );
 };
