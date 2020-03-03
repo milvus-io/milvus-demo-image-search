@@ -55,12 +55,12 @@ const MilvusGrid = props => {
 
   const [selected, setSelected] = React.useState([]);
   const _isSelected = row => {
-    console.log("row selected test", row[primaryKey]);
+    // console.log("row selected test", row[primaryKey]);
     return selected.some(s => s[primaryKey] === row[primaryKey]);
   };
 
   const _onSelected = (event, row) => {
-    console.log(row);
+    console.log('selected', {row});
     let newSelected = [].concat(selected);
     if (_isSelected(row)) {
       newSelected = newSelected.filter(s => s[primaryKey] !== row[primaryKey]);

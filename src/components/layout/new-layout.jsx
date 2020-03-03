@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useMemo } from 'react'
 import { makeStyles, Divider } from "@material-ui/core";
 import { Settings, ExitToApp } from '@material-ui/icons';
 import { AiOutlineHome } from 'react-icons/ai';
@@ -16,6 +16,8 @@ import PopConfirm from '../../components/pop-confirm'
 import DataMenu from './data-menu'
 import ConfigMenu from './config-menu'
 import LoginMenu from './login-menu';
+import IframeMenu from './iframe-menu'
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -133,6 +135,9 @@ const Layout = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history.location.pathname])
 
+  const { metrics = {}, elk = {} } = useMemo(() => {
+    return milvusAddress[currentAddress] || {}
+  }, [currentAddress, milvusAddress])
 
   const handleFirstMenuChange = e => {
     const name = e.currentTarget.dataset.name;
@@ -146,6 +151,10 @@ const Layout = props => {
     if (name === 'config') {
       history.push('/configs/network')
     }
+    if (name === 'iframe') {
+      history.push('/iframe')
+    }
+
   };
 
   const handleExit = e => {
@@ -154,18 +163,6 @@ const Layout = props => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  // const handleAdd = () => {
-  //   setMilvusAddress({
-  //     type: ADD,
-  //     payload: {
-  //       id: '127.0.0.1:19121',
-  //       values: {
-  //         connected: true
-  //       }
-  //     }
-  //   })
-  // }
 
   const handleLogout = () => {
     if (currentAddress) {
@@ -221,6 +218,17 @@ const Layout = props => {
             classes.active}`}
           onClick={handleFirstMenuChange}
         ></Settings>
+        {
+          ((elk.enable && elk.address) || (metrics.enable && metrics.address)) && <Settings
+            data-name="iframe"
+            className={`${classes.icon} ${firstMenu === "iframe" &&
+              classes.active}`}
+            onClick={handleFirstMenuChange}
+          ></Settings>
+        }
+
+
+
       </div>
       <div className={classes.menuWrapper}>
         <div className="logo-wrapper">
@@ -248,8 +256,13 @@ const Layout = props => {
           <DataMenu currentRoute={currentRoute}></DataMenu>
         )}
         {
-          firstMenu !== "login" && firstMenu !== "data" && (
+          firstMenu === "config" && (
             <ConfigMenu></ConfigMenu>
+          )
+        }
+        {
+          firstMenu === "iframe" && (
+            <IframeMenu metrics={metrics} elk={elk}></IframeMenu>
           )
         }
       </div>
