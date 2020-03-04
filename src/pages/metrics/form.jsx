@@ -13,15 +13,12 @@ import { useFormValidate } from '../../hooks/form'
 import { UPDATE } from '../../consts'
 
 const MetricForm = props => {
-  const { setMilvusAddress, milvusAddress } = useContext(systemContext)
+  const { setMilvusAddress, milvusAddress, milvusConfigs } = useContext(systemContext)
   const { currentAddress } = useContext(httpContext)
   const { openSnackBar } = useContext(materialContext)
-
-  const [form, setForm] = useState({
-    enable: false,
-    gui: ""
-  })
-  const { handleChange } = useFormValidate(form, setForm)
+  const [isFormChange, setIsformChange] = useState(false)
+  const [metricsSetting, setMetricsSetting] = useState({})
+  const { handleChange } = useFormValidate(metricsSetting, setMetricsSetting)
 
   const classes = makeStyles(theme => ({
     gridItem: {
@@ -35,21 +32,19 @@ const MetricForm = props => {
   const { t } = useTranslation();
   const metrics = t("metrics");
 
-  useEffect(() => {
-    const { metrics = {} } = milvusAddress[currentAddress] || {}
-    setForm({
-      enable: metrics.enable || false,
-      gui: metrics.address || ''
-    })
-  }, [milvusAddress, currentAddress])
-
-  const handleSwitch = () => {
-    setForm(v => ({
-      ...v,
-      enable: !v.enable
-    }))
+  const handleSwitch = e => {
+    setIsformChange(true)
+    setMetricsSetting({ ...metricsSetting, enable_monitor: e.target.checked });
   }
 
+  const changePort = e => {
+    setIsformChange(true)
+    setMetricsSetting({ ...metricsSetting, port: e.target.value })
+  }
+  const changeAddress = e => {
+    setIsformChange(true)
+    setMetricsSetting({ ...metricsSetting, address: e.target.value })
+  }
   const handleSubmit = () => {
     setMilvusAddress({
       type: UPDATE,
@@ -57,27 +52,40 @@ const MetricForm = props => {
         id: currentAddress,
         values: {
           metrics: {
-            enable: form.enable,
-            address: form.gui
+            enable: metricsSetting.enable_monitor,
+            address: metricsSetting.address
           }
         }
       }
     })
     openSnackBar(t('submitSuccess'))
   }
+  const reset = () => {
+    const { metric_config = {} } = milvusConfigs || {}
+    setMetricsSetting({
+      address: metric_config.address || "",
+      port: metric_config.port || "",
+      enable_monitor: metric_config.enable_monitor || false,
+    })
+  }
+  useEffect(() => {
+    reset()
+    //eslint-disable-next-line
+  }, [milvusAddress, currentAddress])
+
   return (
     <>
       <FormControlLabel
         classes={{ root: classes.formControlLabel }}
         value="start"
-        control={<Switch name="enable" checked={form.enable} onChange={handleSwitch} color="primary" />}
+        control={<Switch name="enable" checked={metricsSetting.enable_monitor} onChange={handleSwitch} color="primary" />}
         label={metrics.enable}
         labelPlacement="start"
       />
-      <FormTextField label={metrics.address} />
-      <FormTextField label={metrics.port} />
-      <FormTextField label={metrics.gui} name="gui" value={form.gui} onChange={handleChange} />
-      <FormActions save={handleSubmit} />
+      <FormTextField label={metrics.address} value={metricsSetting.address} onChange={changeAddress} />
+      <FormTextField label={metrics.port} value={metricsSetting.port} onChange={changePort} />
+      <FormTextField label={metrics.gui} name="gui" value={metricsSetting.gui} onChange={handleChange} />
+      <FormActions save={handleSubmit} cancel={reset} disableCancel={!isFormChange} />
     </>
   )
 };
