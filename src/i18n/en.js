@@ -144,10 +144,10 @@ export default {
     gpu_capacity_desc: "The size of the GPU memory for caching data for faster query. The size must be less than the total GPU memory size.	",
     gpu_threshold_desc: "The percentage of data that can be kept in the GPU memory when the GPU cache is full. For example, the default value indicates that 85% of data stored in the GPU cache doesn't need to be discarded. The value should be 0 - 1.",
 
-    catch_insert_data: 'catch_insert_data',
+    catch_insert_data: 'Cache Insert Data',
     catch_insert_data_desc: "If set to true , the inserted data will be loaded into the cache immediately for hot query. If you want simultaneous inserting and searching of vector, it is recommended to enable this function.	",
 
-    insert_buffer_size: 'insert_buffer_size',
+    insert_buffer_size: 'Insert Buffer Size',
     insert_buffer_size_desc: "maximum insert buffer size allowed, must be a positive integer sum of insert_buffer_size and cpu_cache_capacity cannot exceed total memory",
 
     saveSuccess: "Update Configs Success",
@@ -161,12 +161,12 @@ export default {
     engin: "Engine ",
 
     performance_tunning: {
-      use_blas_threshold: 'use_blas_threshold',
+      use_blas_threshold: 'Use Blas Threshold',
       use_blas_threshold_desc_1: "A Milvus performance tuning parameter. The threshold value must be compared with nq to decide if the usage of OpenBLAS library will be triggered.",
       use_blas_threshold_desc_2: "If nq >= use_blas_threshold , OpenBLAS will be used. The search response times do not fluctuate, but the search speed is relatively slow.",
       use_blas_threshold_desc_3: "If nq < use_blas_threshold , SSE will be used. The search speed will be enhanced, however with slight fluctuation of search response times. The value should be >= 0.",
 
-      gpu_search_threshold: 'gpu_search_threshold',
+      gpu_search_threshold: 'Gpu Search Threshold',
       gpu_search_threshold_desc1: "A Milvus performance tuning parameter. The threshold value must be compared with nq to decide if the search computation will be executed on GPUs only.",
       gpu_search_threshold_desc2: "If nq >= gpu_search_threshold , the search computation will be executed on GPUs only.",
       gpu_search_threshold_desc3: "If nq < gpu_search_threshold , the search computation will be executed on both CPUs and GPUs."

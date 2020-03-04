@@ -62,13 +62,15 @@ export const SystemProvider = ({ children }) => {
     if (!currentAddress) return
 
     const fetchData = async () => {
+      //TODO: what if reject?
       const res = await Promise.all([
         getSystemConfig(),
         getMilvusConfigs(),
         getHardwareType()
       ]);
-      setMilvusConfigs(res[1])
-      setSystemInfos(v => ({ ...v, [currentAddress]: { ...res[0], hardwareType: res[2] } }));
+      const [currSystemConfig, currMilvusConfigs, currHardwareType] = res
+      setMilvusConfigs(currMilvusConfigs)
+      setSystemInfos(v => ({ ...v, [currentAddress]: { ...currSystemConfig, hardwareType: currHardwareType } }));
       const { storage_config = {}, server_config = {}, db_config = {}, metric_config = {}, restart_required = false } = res[1] || {}
       const backendUrl = db_config.backend_url
       const dbConfig = getInfosFromUrl(backendUrl)
@@ -80,7 +82,7 @@ export const SystemProvider = ({ children }) => {
         restartNotify()
       }
     };
-    console.log("sytem in")
+    console.info("sytem in")
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress]);
