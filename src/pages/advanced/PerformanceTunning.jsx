@@ -41,9 +41,13 @@ const PerformanceTunning = props => {
       }
     })
   }
-  useEffect(() => {
+  const resetPerformance = () => {
     const { engine_config = {} } = milvusConfigs
     setPerformanceSetting({ use_blas_threshold: engine_config.use_blas_threshold || "", gpu_search_threshold: engine_config.gpu_search_threshold || "" })
+
+  }
+  useEffect(() => {
+    resetPerformance()
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress, serverConfig])
 
@@ -75,7 +79,7 @@ const PerformanceTunning = props => {
         </Typography>
       </>)}
 
-      <FormActions save={savePerformance} />
+      <FormActions save={savePerformance} cancel={resetPerformance} />
     </div >
   )
 }

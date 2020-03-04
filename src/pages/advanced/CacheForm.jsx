@@ -29,9 +29,9 @@ const CacheForm = props => {
     cpu_cache_threshold = 0.5,
     gpu_capacity = 1,
     gpu_threshold = 0.5,
-    catch_insert_data = true,
+    catch_insert_data = false,
     insert_buffer_size = .5
-  } = settings
+  } = settings;
 
   const { t } = useTranslation();
   const advancedTrans = t("advanced");
@@ -46,15 +46,20 @@ const CacheForm = props => {
       }
     })
   }
-  useEffect(() => {
+  //TODO: switch reset not work
+  const resetSettings = () => {
     const { cache_config = {} } = milvusConfigs;
     const _cache_config = {
       ...cache_config,
       cpu_cache_capacity: Number(cache_config.cpu_cache_capacity) || 5,
       cpu_cache_threshold: Number(cache_config.cpu_cache_threshold) || 0.5,
       insert_buffer_size: Number(cache_config.insert_buffer_size) || 0.5,
+      cache_insert_data: cache_config.cache_insert_data === 'true' || false
     }
-    setSettings({ ...settings, ..._cache_config })
+    setSettings(settings => ({ ...settings, ..._cache_config }))
+  }
+  useEffect(() => {
+    resetSettings()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress, serverConfig])
 
@@ -165,7 +170,7 @@ const CacheForm = props => {
           </Typography>
         </Grid>
       </Grid>
-      <FormActions save={saveSettings} />
+      <FormActions save={saveSettings} cancel={resetSettings} />
     </div>
   );
 };

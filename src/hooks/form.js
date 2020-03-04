@@ -8,6 +8,7 @@ import {
 const useStyles = makeStyles(theme => ({
   root: {
     paddingTop: theme.spacing(2),
+    maxWidth: '800px'
   },
   icon: {
     marginLeft: theme.spacing(2),

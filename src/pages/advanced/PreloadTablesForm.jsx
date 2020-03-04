@@ -30,10 +30,13 @@ const PreloadTablesForm = props => {
       }
     })
   }
-
-  useEffect(() => {
+  const resetPreload = () => {
     const { db_config = {} } = milvusConfigs
     setPreload(db_config.preload_table || "")
+  }
+
+  useEffect(() => {
+    resetPreload()
     // eslint-disable-next-line
   }, [currentAddress, serverConfig])
 
@@ -43,7 +46,7 @@ const PreloadTablesForm = props => {
       <Typography variant="caption" component="p" align="left" paragraph>
         {preload_table.desc}
       </Typography>
-      <FormActions save={savePreload} />
+      <FormActions save={savePreload} cancel={resetPreload} />
     </div>
   )
 }
