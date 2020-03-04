@@ -28,7 +28,8 @@ const IframeWrapper = props => {
     <iframe
       title="Ifram for milvus "
       width="100%"
-      height="700px"
+      height={window.innerHeight + 'px'}
+      style={{ background: "#fff" }}
       src={url}>
     </iframe>
   )

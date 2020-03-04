@@ -132,6 +132,9 @@ const Layout = props => {
     if (path.includes('/config')) {
       setFisrstMenu('config')
     }
+    if (path.includes('/integration')) {
+      setFisrstMenu('integration')
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history.location.pathname])
 
@@ -151,8 +154,15 @@ const Layout = props => {
     if (name === 'config') {
       history.push('/configs/network')
     }
-    if (name === 'iframe') {
-      history.push('/iframe')
+    if (name === 'integration') {
+      if (elk.enable && elk.address) {
+        history.push('/integration/elk')
+        return
+      }
+      if (metrics.enable && metrics.address) {
+        history.push('/integration/metrics')
+        return
+      }
     }
 
   };
@@ -220,8 +230,8 @@ const Layout = props => {
         ></Settings>
         {
           ((elk.enable && elk.address) || (metrics.enable && metrics.address)) && <Settings
-            data-name="iframe"
-            className={`${classes.icon} ${firstMenu === "iframe" &&
+            data-name="integration"
+            className={`${classes.icon} ${firstMenu === "integration" &&
               classes.active}`}
             onClick={handleFirstMenuChange}
           ></Settings>
@@ -261,7 +271,7 @@ const Layout = props => {
           )
         }
         {
-          firstMenu === "iframe" && (
+          firstMenu === "integration" && (
             <IframeMenu metrics={metrics} elk={elk}></IframeMenu>
           )
         }

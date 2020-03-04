@@ -26,7 +26,11 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: 0
   },
   selected: {
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
+    "& svg": {
+
+      fill: theme.palette.primary.main
+    }
   }
 }));
 
@@ -38,11 +42,11 @@ const ConfigMenu = props => {
   useEffect(() => {
     const effectConfigs = []
     if (elk.enable && elk.address) {
-      effectConfigs.push({ path: '/elk', label: "ELK GUI", icon: <GoNote /> })
+      effectConfigs.push({ path: '/integration/elk', label: "ELK GUI", icon: <GoNote /> })
     }
 
     if (metrics.enable && metrics.address) {
-      effectConfigs.push({ path: '/metrics', label: "Metrics GUI", icon: <GiChart /> })
+      effectConfigs.push({ path: '/integration/metrics', label: "Metrics GUI", icon: <GiChart /> })
     }
     setConfigs(effectConfigs)
   }, [elk, metrics])
@@ -56,7 +60,7 @@ const ConfigMenu = props => {
           const isSelected = history.location.pathname === route;
           return (
             <ListItem key={path} button className={classes.item} classes={{ root: isSelected ? classes.selected : "" }} onClick={() => history.push(route)}>
-              <ListItemIcon className={classes.icon}>
+              <ListItemIcon className={classes.icon} >
                 {icon}
               </ListItemIcon>
               <ListItemText primary={label} />

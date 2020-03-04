@@ -28,7 +28,10 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: 0
   },
   selected: {
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
+    "& svg": {
+      fill: theme.palette.primary.main
+    }
   }
 }));
 
