@@ -16,7 +16,6 @@ const HardWareForm = props => {
   const {
     currentAddress = "",
     getHardwareConfig,
-    updateHardwareConfig
   } = useContext(httpContext);
   const { hardwareType = "CPU", gpuList = [] } = systemInfos[currentAddress] || {}
   const [isFormChange, setIsformChange] = useState(false)
@@ -36,6 +35,15 @@ const HardWareForm = props => {
   const marginRight = { marginRight: theme.spacing(1) }
   const isCPU = hardwareType === 'CPU'
 
+  const changeGPUSearch = (e, gpu_name) => {
+    setIsformChange(true);
+    setSearchResources(e.target.checked ? [...search_resources, gpu_name] : search_resources.filter(b => b !== gpu_name))
+  }
+  const changeGPUIndex = (e, gpu_name) => {
+    setIsformChange(true);
+    setBuildIndexResources(e.target.checked ? [...build_index_resources, gpu_name] : build_index_resources.filter(b => b !== gpu_name))
+  }
+
   const save = async () => { }
   const reset = () => {
 
@@ -47,7 +55,7 @@ const HardWareForm = props => {
       setSearchResources(result.search_resources)
       setBuildIndexResources(result.build_index_resources);
     }
-    if (isCPU) {
+    if (!isCPU) {
       _getHardwareConfig()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -59,7 +67,7 @@ const HardWareForm = props => {
           {hardware.search}
         </Typography>
         <Grid container spacing={3}>
-          <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+          <Grid classes={{ item: classes.gridItem }} item xs={4}>
             <FaMicrochip style={{ ...marginRight }} />CPU
           </Grid>
           <Grid item xs={4}>
@@ -70,11 +78,11 @@ const HardWareForm = props => {
           gpuList.map(gpu_name => {
             return (
               <Grid container spacing={3} key={gpu_name}>
-                <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+                <Grid classes={{ item: classes.gridItem }} item xs={4}>
                   <FaBolt style={{ ...marginRight }} />{gpu_name}
                 </Grid>
                 <Grid item xs={4}>
-                  <Switch color='primary' checked={!!search_resources.find(s => s === gpu_name)} onChange={e => setSearchResources(e.target.checked ? [...search_resources, gpu_name] : search_resources.filter(b => b !== gpu_name))} />
+                  <Switch color='primary' checked={!!search_resources.find(s => s === gpu_name) || false} onChange={e => changeGPUSearch(e, gpu_name)} />
                 </Grid>
               </Grid>
             )
@@ -86,7 +94,7 @@ const HardWareForm = props => {
           {hardware.index}
         </Typography>
         <Grid container spacing={3}>
-          <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+          <Grid classes={{ item: classes.gridItem }} item xs={4} >
             <FaMicrochip style={{ ...marginRight }} />CPU
         </Grid>
           <Grid item xs={4}>
@@ -97,11 +105,11 @@ const HardWareForm = props => {
           {gpuList.map(gpu_name => {
             return (
               <Grid container spacing={3} key={gpu_name}>
-                <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
+                <Grid classes={{ item: classes.gridItem }} item xs={4} >
                   <FaBolt style={{ ...marginRight }} />{gpu_name}
                 </Grid>
                 <Grid item xs={4}>
-                  <Switch color='primary' checked={!!search_resources.find(s => s === gpu_name)} onChange={e => setBuildIndexResources(e.target.checked ? [...build_index_resources, gpu_name] : build_index_resources.filter(b => b !== gpu_name))} />
+                  <Switch color='primary' checked={!!search_resources.find(s => s === gpu_name) || false} onChange={e => changeGPUIndex(e, gpu_name)} />
                 </Grid>
               </Grid>
             )
