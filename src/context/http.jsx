@@ -26,6 +26,7 @@ export const httpContext = React.createContext({
   getSegments: (collectionName, params) => { },
   addVectors: (collectionName, data) => { },
   getVectors: (collectionName, segementName, params) => { },
+  deleteVectors: (collectionName, data) => { },
   // config api
   getAdvancedConfig: () => { },
   getHardwareConfig: () => { },
@@ -180,6 +181,11 @@ export const HttpProvider = ({ children }) => {
     return res.data
   }
 
+  async function deleteVectors(collectionName, data) {
+    const res = await axiosInstance.put(`/tables/${collectionName}/vectors`, data);
+    return res.data;
+  }
+
   // ------- Data Management End ----------
 
   // ------- config Api Start ----------
@@ -288,6 +294,7 @@ export const HttpProvider = ({ children }) => {
     deletePartition: httpWrapper(deletePartition),
     getSegments: httpWrapper(getSegments),
     addVectors: httpWrapper(addVectors),
-    getVectors: httpWrapper(getVectors)
+    getVectors: httpWrapper(getVectors),
+    deleteVectors: httpWrapper(deleteVectors)
   }}>{children}</Provider>
 }

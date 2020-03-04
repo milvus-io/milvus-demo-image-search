@@ -123,7 +123,7 @@ const Partitions = props => {
             params: {
               title: `Do you want to delete ${
                 selected.length === 1 ? `this item` : `these items`
-              }?`,
+                }?`,
               confirm: async () => {
                 await handleDelete(e, selected);
                 resolve(true);
@@ -131,18 +131,10 @@ const Partitions = props => {
             }
           });
         });
-      },      disabled: selected => selected.length === 0 || selected.some(s => s.partition_tag === '_default'),
+      },
+      disabled: selected => selected.length === 0 || selected.some(s => s.partition_tag === '_default'),
       disabledTooltip: "Nothing can be deleted"
     },
-    // {
-    //   label: "",
-    //   icon: "search",
-    //   searchText: "",
-    //   onSearch: text => console.log("search value is", text),
-    //   onClear: () => {
-    //     console.log("clear clear");
-    //   }
-    // }
   ];
 
   const rows = data || [];

@@ -2,9 +2,6 @@ import React, { useState, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from '../../hooks'
 import SearchForm from "./search-form";
-import { dataManagementContext } from "../../context/data-management";
-import { httpContext } from "../../context/http";
-import { KEYS } from "../../reducers/data-management";
 import { PARTITION_TAG, COLLECTION_NAME } from "../../consts";
 import MilvusGrid from "../../components/grid";
 import { useDataPageStyles } from "../../hooks/page";
@@ -18,17 +15,8 @@ const VectorSearch = props => {
   const vectorTrans = t("vector");
 
   const [data, setData] = useState([])
-  const [count, setCount] = useState(0); // total count for pagination
-  const [current, setCurrent] = useState(0); // current page for pagination
-  const [offset, setOffset] = useState(0);
-  const { currentAddress } = useContext(httpContext);
-
-
   const searchSuccess = data => {
     setData(data)
-  };
-  const handleCancel = () => {
-    console.log('cancel')
   };
 
   // const handlePageChange = (e, page) => {
@@ -67,7 +55,7 @@ const VectorSearch = props => {
           rowCount={rows.length}
           primaryKey="id"
           isLoading={false}
-          title={[collectionName, partitionTag, dataManageTrans.vector]}
+          title={[dataManageTrans.vector]}
           searchForm={<SearchForm collectionName={collectionName} partitionTag={partitionTag} searchSuccess={searchSuccess}></SearchForm>}
         ></MilvusGrid>
       </PageWrapper>

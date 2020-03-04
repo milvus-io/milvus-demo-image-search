@@ -1,17 +1,20 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { systemContext } from '../../context/system'
+import { dataManagementContext } from '../../context/data-management'
 import { httpContext } from "../../context/http"
 import { materialContext } from '../../context/material'
 import { useTranslation } from "react-i18next";
 import { useFormValidate } from '../../hooks/form'
+import { useQuery } from '../../hooks'
+import { COLLECTION_NAME } from '../../consts'
 import { FormTextField } from '../../components/common/FormTextComponents'
-import FormActions from '../../components/common/FormActions'
-import { Grid, IconButton, TextareaAutosize } from '@material-ui/core'
+import { Grid, IconButton, Select, MenuItem, InputLabel } from '@material-ui/core'
 import SearchIcon from "@material-ui/icons/Search";
+import WithTip from '../../components/with-tip'
 
-const defaultForm = { topk: 2, nprobe: 16, vectors: '' }
+const defaultForm = { topk: 2, nprobe: 16, vectors: '', collectionName: "" }
 
 const NetworkFrom = (props) => {
+  const query = useQuery()
   const [form, setForm] = useState({ ...defaultForm })
   const [error, setError] = useState({})
 
@@ -19,10 +22,10 @@ const NetworkFrom = (props) => {
 
   const { openSnackBar } = useContext(materialContext)
   const { searchVectors } = useContext(httpContext)
+  const { allCollections } = useContext(dataManagementContext)
 
   const { t } = useTranslation();
   const vectorTrans = t("vector");
-  const buttonTrans = t("button");
   const tipsTrans = vectorTrans.tips;
   const { searchSuccess, collectionName, partitionTag } = props
 
@@ -53,12 +56,51 @@ const NetworkFrom = (props) => {
     searchSuccess(res.result[0] || []);
   };
 
+  useEffect(() => {
+    if (form.collectionName) {
+      return
+    }
+    const collectionName =
+      query.get(COLLECTION_NAME)
+        ? query.get(COLLECTION_NAME)
+        : (allCollections[0] ? allCollections[0].table_name : "")
+    console.log(collectionName)
+    setForm(v => ({
+      ...v,
+      collectionName
+    }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allCollections])
+
   return (
     <Grid container spacing={1} style={{ maxWidth: "1000px" }}>
+      <Grid item sm={3} >
+        <InputLabel htmlFor="collection-name">Collection Name</InputLabel>
+        <Select
+          name="collectionName"
+          value={form.collectionName}
+          onChange={handleChange}
+          inputProps={{
+            name: 'collectionName',
+            id: 'collection-name',
+          }}
+          style={{ width: "100%" }}
+        >
+          {
+            allCollections.map(v => (
+              <MenuItem key={v.table_name} value={v.table_name}>{v.table_name}({v.dimension})</MenuItem>
+            ))
+          }
+        </Select>
+      </Grid >
       <FormTextField
         name="topk"
         type="number"
-        label={vectorTrans.tTop}
+        sm={3}
+        label={<>
+          <span>{vectorTrans.tTop}</span>
+          <WithTip title={tipsTrans.tTop} placement="bottom"></WithTip>
+        </>}
         value={form.topk}
         onBlur={() => { handleCheck(form.topk, "topk") }}
         onChange={handleChange}
@@ -70,7 +112,11 @@ const NetworkFrom = (props) => {
       <FormTextField
         name="nprobe"
         type="number"
-        label={vectorTrans.tNprobe}
+        sm={3}
+        label={<>
+          <span>{vectorTrans.tNprobe}</span>
+          <WithTip title={tipsTrans.tNprobe} placement="bottom"></WithTip>
+        </>}
         value={form.nprobe}
         onBlur={() => { handleCheck(form.nprobe, "nprobe") }}
         onChange={handleChange}
@@ -82,7 +128,10 @@ const NetworkFrom = (props) => {
       <FormTextField
         name="vectors"
         sm={8}
-        label={vectorTrans.tQuery}
+        label={<>
+          <span>{vectorTrans.tQuery}</span>
+          <WithTip title={tipsTrans.tQuery} placement="bottom"></WithTip>
+        </>}
         value={form.vectors}
         onBlur={() => { handleCheck(form.vectors, "vectors") }}
         onChange={handleChange}

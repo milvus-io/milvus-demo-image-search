@@ -2,6 +2,7 @@ export default {
   lang: "en",
   restartNotify: "Config will become effective after milvus restart. ",
   submitSuccess: "Submit Success",
+  deleteSuccess: "Delete Success",
   copySuccess: "Copy Success",
   disconnect: "Are you sure disconnect with ",
   connectTitle: "Connect Milvus",
@@ -35,7 +36,7 @@ export default {
     title: "Data Management",
     collections: "Collections",
     partition: "Partition",
-    vector: "Vector Search"
+    vector: "Vector Similarity Search "
   },
   storage: {
     data: {
@@ -82,11 +83,11 @@ export default {
     index: "Create Index for",
     indexType: "Index Type",
     nlist: "nlist",
-    saveSuccess: "Create Table Success",
-    delete: "Delete Table Success",
-    confirmDel: "Are you sure to delete table",
-    deleteTable: "Delete Table",
-    searchTxt: "Table Name",
+    saveSuccess: "Create Collection Success",
+    delete: "Delete Collection Success",
+    confirmDel: "Are you sure to delete collection",
+    deleteTable: "Delete Collection",
+    searchTxt: "Collection Name",
     updateIndex: "Update Index",
     partitions: "Patitions",
     tName: "Name",
@@ -96,24 +97,24 @@ export default {
     tAction: "Action",
     fileSize: "Index File Size (MB)",
     error: {
-      name: "Table Name is required"
+      name: "Collection Name is required"
     },
     tips: {
-      name: "The name of the table to create, which must be unique within its database. Begin a table name with a letter or an underscore (_) . Subsequent characters can be letters, underscores, numbers (0-9). The entire length can not exceed 255 characters.",
+      name: "The name of the collection to create, which must be unique within its database. Begin a collection name with a letter or an underscore (_) . Subsequent characters can be letters, underscores, numbers (0-9). The entire length can not exceed 255 characters.",
       fileSize: "Threshold value that triggers index building for raw data files. Index creation is controlled by the size of raw data files specified in this parameter, with a default of 1024 MB. Data files with smaller sizes will not have indexes built. "
     }
   },
   partition: {
-    tip: "Please search partitions by table name.",
+    tip: "Please search partitions by collection name.",
     create: "Create Partition",
     saveSuccess: "Create Partition Success",
     delete: "Delete Partition Success",
     confirmDel: "Are you sure to delete partition",
     deletePartition: "Delete Partition",
-    searchTxt: "Table Name",
+    searchTxt: "Collection Name",
     tag: "Partition Tag",
     name: "Partition Name",
-    tableName: "Table Name",
+    tableName: "Collection Name",
     action: "Action ",
 
   },
@@ -173,7 +174,7 @@ export default {
     },
     preload_table: {
       title: 'Preload Collection',
-      desc: "preload data at startup, '*' means load all tables, empty value means no preload you can specify preload tables like this: collection1,collection2,collection3",
+      desc: "preload data at startup, '*' means load all collections, empty value means no preload you can specify preload collections like this: collection1,collection2,collection3",
     },
 
   },
@@ -181,7 +182,7 @@ export default {
     import: "Import Vector to ",
     importSuccess: "Import Success",
     vector: "Vector",
-    tName: "Table Name",
+    tName: "Collection Name",
     tTop: "TopK",
     tNprobe: "Nprobe",
     tQuery: "Query Vector",
@@ -190,7 +191,7 @@ export default {
     tips: {
       tTop: "The top k most similar results of each query vector. ",
       tNprobe: "Number of queried vector buckets. Nprobe affects search precision. The greater the value, the more precise the result, yet the slower the search speed.",
-      tQuery: "One target vector to be searched in the table. It must be the float data type, with the same dimension as that defined for the table."
+      tQuery: "One target vector to be searched in the collection. It must be the float data type, with the same dimension as that defined for the collection."
     },
     error: {
       fileType: "Only allow .csv file for now."
@@ -209,6 +210,6 @@ export default {
   required: " is required",
   index: {
     saveSuccess: "Create Index Success",
-    deleteSuccess: "Delete Index Success"
+    deleteSuccess: "Delete Index Success",
   }
 };

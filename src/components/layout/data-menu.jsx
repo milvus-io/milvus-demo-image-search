@@ -186,10 +186,10 @@ const DataMenu = props => {
         value: "",
         id: generateId(),
         icon: FiGrid,
-        iconBtn: SearchIcon,
-        needHover: true,
+        // iconBtn: SearchIcon,
+        // needHover: true,
         url: `/data/collections/${collectionName}/partitions/${label}?dimension=${target.dimension}`,
-        searchUrl: `/data/search?collectionName=${collectionName}&partitionTag=${label}`
+        // searchUrl: `/data/search?collectionName=${collectionName}&partitionTag=${label}`
       };
     });
     setCollections(collections => {

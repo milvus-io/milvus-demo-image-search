@@ -16,7 +16,7 @@ const PAGE_SIZE = 10;
 const Vectors = props => {
   const classes = useDataPageStyles()
   const query = useQuery()
-  const { currentAddress, getSegments, addVectors, getVectors } = useContext(httpContext)
+  const { currentAddress, getSegments, addVectors, getVectors, deleteVectors } = useContext(httpContext)
   const { openSnackBar, setDialog } = useContext(materialContext)
   const { setRefresh } = useContext(dataManagementContext)
 
@@ -61,8 +61,6 @@ const Vectors = props => {
     setCurrent(0)
     setCurrentSegmentIndex(0)
   };
-
-
 
   useEffect(() => {
     fetchSegments();
@@ -112,25 +110,15 @@ const Vectors = props => {
     setDirection(page > current ? 'next' : "prev")
     setCurrent(page);
   };
-  // const handleDelete = async (e, selected) => {
-  //   const res = await Promise.all(selected.map(async (v, i) => {
-  //     try {
-  //       return await deletePartition(collectionName, v.partition_tag);
-  //     } catch (error) {
-  //       return error.response
-  //     }
-  //   }));
-  //   setRefresh(true)
-  //   const errorMsg = res.filter(v => v)
-  //   getFirstPage();
-  //   setCurrent(0);
-  //   if (errorMsg.length) {
-  //     openSnackBar(errorMsg[0].data.message || 'Some Patitions Fail', 'error')
-  //   } else {
-  //     openSnackBar(partitionTrans.delete)
-  //   }
 
-  // };
+  const handleDelete = async (e, selected) => {
+    const ids = selected.map(v => v.id)
+    await deleteVectors(collectionName, { delete: { ids } })
+    fetchSegments()
+    setCurrent(0);
+    openSnackBar(t('deleteSuccess'))
+
+  };
 
   const handleAddVectors = async (vectors) => {
     await addVectors(collectionName, {
@@ -177,7 +165,7 @@ const Vectors = props => {
     {
       label: "Delete",
       icon: "delete",
-      // onClick: handleDelete,
+      onClick: handleDelete,
       disabled: selected => selected.length === 0,
       disabledTooltip: "You can not delete this"
     },

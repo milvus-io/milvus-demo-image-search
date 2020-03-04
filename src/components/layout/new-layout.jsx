@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useMemo } from 'react'
-import { makeStyles, Divider } from "@material-ui/core";
-import { Settings, ExitToApp } from '@material-ui/icons';
+import { Divider } from "@material-ui/core";
+import { Settings, ExitToApp, SearchOutlined } from '@material-ui/icons';
 import { AiOutlineHome } from 'react-icons/ai';
 import { MdStorage } from 'react-icons/md';
 
@@ -17,62 +17,7 @@ import DataMenu from './data-menu'
 import ConfigMenu from './config-menu'
 import LoginMenu from './login-menu';
 import IframeMenu from './iframe-menu'
-
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: "flex"
-  },
-  left: {
-    display: "flex",
-    flexDirection: "column",
-    padding: `${theme.spacing(8)}px ${theme.spacing(1)}px`,
-    height: "100vh",
-    backgroundColor: "rgb(27, 36, 48)"
-  },
-  icon: {
-    marginBottom: theme.spacing(4),
-    fontSize: "30px",
-    fill: "rgb(238, 238, 238)"
-  },
-  active: {
-    fill: theme.palette.primary.main
-  },
-  menuWrapper: {
-    flex: " 0 0 270px",
-    backgroundColor: "rgb(35, 47, 62)",
-    color: "rgb(238, 238, 238)",
-    "& .logo-wrapper": {
-      padding: `${theme.spacing(2)}px 0 0 ${theme.spacing(2)}px`,
-      width: "120px"
-    }
-  },
-  logoutWrapper: {
-    display: "flex",
-    alignItems: "center",
-    padding: theme.spacing(2),
-    "& .circle": {
-      display: "inline-block",
-      width: "10px",
-      height: "10px",
-      borderRadius: "50%",
-      background: theme.palette.success.main
-    },
-    "& > span": {
-      marginRight: theme.spacing(2),
-      fontWeight: "bold"
-    },
-    "& .icon": {
-      cursor: "pointer"
-    }
-  },
-  content: {
-    position: "relative",
-    flex: 1,
-    height: "100vh",
-    overflowY: "scroll"
-  }
-}));
+import useStyles from './style'
 
 const Layout = props => {
   const classes = useStyles();
@@ -140,6 +85,9 @@ const Layout = props => {
     if (path.includes('/config')) {
       setFisrstMenu('config')
     }
+    if (path.includes('/data/search')) {
+      setFisrstMenu('search')
+    }
     if (path.includes('/integration')) {
       setFisrstMenu('integration')
     }
@@ -161,6 +109,9 @@ const Layout = props => {
     }
     if (name === 'config') {
       history.push('/configs/network')
+    }
+    if (name === 'search') {
+      history.push('/data/search')
     }
     if (name === 'integration') {
       if (elk.enable && elk.address) {
@@ -236,6 +187,12 @@ const Layout = props => {
             classes.active}`}
           onClick={handleFirstMenuChange}
         ></Settings>
+        <SearchOutlined
+          data-name="search"
+          className={`${classes.icon} ${firstMenu === "search" &&
+            classes.active}`}
+          onClick={handleFirstMenuChange}
+        ></SearchOutlined>
         {
           ((elk.enable && elk.address) || (metrics.enable && metrics.address)) && <Settings
             data-name="integration"
@@ -244,6 +201,7 @@ const Layout = props => {
             onClick={handleFirstMenuChange}
           ></Settings>
         }
+
 
 
 
@@ -267,22 +225,25 @@ const Layout = props => {
           <ExitToApp className="icon" onClick={handleExit}></ExitToApp>
         </div>
         <Divider />
-        {firstMenu === "login" && (
-          <LoginMenu></LoginMenu>
-        )}
-        {firstMenu === "data" && (
-          <DataMenu currentRoute={currentRoute}></DataMenu>
-        )}
-        {
-          firstMenu === "config" && (
-            <ConfigMenu></ConfigMenu>
-          )
-        }
-        {
-          firstMenu === "integration" && (
-            <IframeMenu metrics={metrics} elk={elk}></IframeMenu>
-          )
-        }
+        <div className={classes.menuContent}>
+          {firstMenu === "login" && (
+            <LoginMenu></LoginMenu>
+          )}
+          {['data', 'search'].includes(firstMenu) && (
+            <DataMenu currentRoute={currentRoute}></DataMenu>
+          )}
+          {
+            firstMenu === "config" && (
+              <ConfigMenu></ConfigMenu>
+            )
+          }
+          {
+            firstMenu === "integration" && (
+              <IframeMenu metrics={metrics} elk={elk}></IframeMenu>
+            )
+          }
+        </div>
+
       </div>
       <div className={classes.content}>{props.children}</div>
     </div>
