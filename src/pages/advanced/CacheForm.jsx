@@ -14,12 +14,11 @@ const Range_Threshold = { min: 0, max: 1 }
 const Insert_Buffer_Size = { min: 0, max: 1 }
 
 const CacheForm = props => {
-  const { systemInfos = {}, serverConfig } = useContext(systemContext);
+  const { systemInfos = {}, serverConfig, milvusConfigs = {} } = useContext(systemContext);
   const { openSnackBar } = useContext(materialContext)
   const classes = useFormStyles();
   const {
     currentAddress = "",
-    getMilvusConfigs,
     setMilvusConfig,
     restartNotify
   } = useContext(httpContext);
@@ -48,18 +47,14 @@ const CacheForm = props => {
     })
   }
   useEffect(() => {
-    const initSetting = async () => {
-      const allConfigs = await getMilvusConfigs();
-      const { cache_config = {} } = allConfigs || {};
-      const _cache_config = allConfigs ? {
-        ...cache_config,
-        cpu_cache_capacity: Number(cache_config.cpu_cache_capacity) || 5,
-        cpu_cache_threshold: Number(cache_config.cpu_cache_threshold) || 0.5,
-        insert_buffer_size: Number(cache_config.insert_buffer_size) || 0.5,
-      } : {}
-      setSettings({ ...settings, ..._cache_config })
+    const { cache_config = {} } = milvusConfigs;
+    const _cache_config = {
+      ...cache_config,
+      cpu_cache_capacity: Number(cache_config.cpu_cache_capacity) || 5,
+      cpu_cache_threshold: Number(cache_config.cpu_cache_threshold) || 0.5,
+      insert_buffer_size: Number(cache_config.insert_buffer_size) || 0.5,
     }
-    initSetting()
+    setSettings({ ...settings, ..._cache_config })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress, serverConfig])
 

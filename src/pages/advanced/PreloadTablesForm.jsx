@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { materialContext } from '../../context/material'
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
@@ -14,18 +14,16 @@ const PreloadTablesForm = props => {
   const { t } = useTranslation();
   const preload_table = t("advanced").preload_table;
   const { openSnackBar } = useContext(materialContext)
-  const { serverConfig } = useContext(systemContext);
+  const { serverConfig, milvusConfigs = {} } = useContext(systemContext);
   const {
     currentAddress = "",
-    getMilvusConfigs,
     setMilvusConfig,
     restartNotify
   } = useContext(httpContext);
-  const configsContainer = useRef(null);
 
   const savePreload = async () => {
-    const currSettings = { ...configsContainer.current, db_config: { ...configsContainer.current.db_config, preload_table: preload } }
-    setMilvusConfig(currSettings).then(res => {
+    const newMilvusConfigs = { ...milvusConfigs, db_config: { ...milvusConfigs.db_config, preload_table: preload } }
+    setMilvusConfig(newMilvusConfigs).then(res => {
       if (res.code === 0) {
         openSnackBar(t('submitSuccess'))
         restartNotify()
@@ -34,13 +32,9 @@ const PreloadTablesForm = props => {
   }
 
   useEffect(() => {
-    const initSetting = async () => {
-      const allConfigs = await getMilvusConfigs();
-      const { db_config = {} } = allConfigs || {}
-      configsContainer.current = allConfigs || {}
-      setPreload(db_config.preload_table || "")
-    }
-    initSetting()
+    const { db_config = {} } = milvusConfigs
+    setPreload(db_config.preload_table || "")
+    // eslint-disable-next-line
   }, [currentAddress, serverConfig])
 
   return (

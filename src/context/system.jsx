@@ -29,7 +29,7 @@ export const SystemProvider = ({ children }) => {
   const [dbConfig, setDbConifg] = useState({})
   const [serverConfig, setServerConfig] = useState({})
   const [metricConfig, setMetricConfig] = useState({})
-
+  const [milvusConfigs, setMilvusConfigs] = useState({})
   const [milvusAddress, setMilvusAddress] = useReducer(MilvusReducer, {});
   const { currentAddress, setCurrentAddress, getSystemConfig, getMilvusConfigs, restartNotify, getHardwareType } = useContext(httpContext)
 
@@ -67,6 +67,7 @@ export const SystemProvider = ({ children }) => {
         getMilvusConfigs(),
         getHardwareType()
       ]);
+      setMilvusConfigs(res[1])
       setSystemInfos(v => ({ ...v, [currentAddress]: { ...res[0], hardwareType: res[2] } }));
       const { storage_config = {}, server_config = {}, db_config = {}, metric_config = {}, restart_required = false } = res[1] || {}
       const backendUrl = db_config.backend_url
@@ -91,6 +92,7 @@ export const SystemProvider = ({ children }) => {
     metricConfig,
     dbConfig,
     milvusAddress,
-    setMilvusAddress
+    setMilvusAddress,
+    milvusConfigs
   }}>{children}</Provider>
 }
