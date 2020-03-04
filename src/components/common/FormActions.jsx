@@ -7,7 +7,13 @@ import Grid from '@material-ui/core/Grid';
 const FormActions = props => {
   const { t } = useTranslation();
   const button = t("button");
-  const { save = () => { }, cancel = () => { }, confirmLabel = button.save, cancelLabel = button.cancel } = props;
+  const {
+    save = () => { },
+    cancel = () => { },
+    confirmLabel = button.save,
+    cancelLabel = button.cancel,
+    disableCancel = false
+  } = props;
   const classes = makeStyles(theme => ({
     gridContainer: {
       paddingTop: theme.spacing(2)
@@ -23,8 +29,8 @@ const FormActions = props => {
   return (
     <Grid container classes={{ container: classes.gridContainer }}>
       <Button classes={{ root: `${classes.root} ${classes.save}` }} variant="outlined" onClick={(e) => save(e)}>{confirmLabel}</Button>
-      <Button classes={{ root: classes.root }} variant="outlined" onClick={() => cancel()}>{cancelLabel}</Button>
-    </Grid>
+      <Button classes={{ root: classes.root }} variant="outlined" onClick={() => cancel()} disabled={disableCancel}>{cancelLabel}</Button>
+    </Grid >
   )
 }
 

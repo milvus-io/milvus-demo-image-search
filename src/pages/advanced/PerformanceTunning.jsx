@@ -24,6 +24,7 @@ const PerformanceTunning = props => {
   const { hardwareType = "CPU" } = systemInfos[currentAddress] || {}
   const { t } = useTranslation();
   const p_t = t("advanced").performance_tunning;
+  const [isFormChange, setIsformChange] = useState(false)
 
   const savePerformance = async () => {
     const currSettings = {
@@ -38,13 +39,14 @@ const PerformanceTunning = props => {
       if (res.code === 0) {
         openSnackBar(t('submitSuccess'))
         restartNotify()
+        setIsformChange(false)
       }
     })
   }
   const resetPerformance = () => {
     const { engine_config = {} } = milvusConfigs
     setPerformanceSetting({ use_blas_threshold: engine_config.use_blas_threshold || "", gpu_search_threshold: engine_config.gpu_search_threshold || "" })
-
+    setIsformChange(false)
   }
   useEffect(() => {
     resetPerformance()
@@ -55,7 +57,7 @@ const PerformanceTunning = props => {
   return (
     <div className={classes.root}>
       <Grid container>
-        <FormTextField fullWidth={true} label={p_t.use_blas_threshold} value={performanceSetting.use_blas_threshold} onChange={e => setPerformanceSetting({ ...performanceSetting, use_blas_threshold: e.target.value })} />
+        <FormTextField fullWidth={true} label={p_t.use_blas_threshold} value={performanceSetting.use_blas_threshold} onChange={e => { setIsformChange(true); setPerformanceSetting({ ...performanceSetting, use_blas_threshold: e.target.value }) }} />
       </Grid>
       <Typography variant="caption" component="p" align="left" paragraph>
         {p_t.use_blas_threshold_desc_1}
@@ -67,7 +69,7 @@ const PerformanceTunning = props => {
         {p_t.use_blas_threshold_desc_3}
       </Typography>
       {hardwareType === "GPU" && (<>
-        <FormTextField label={p_t.gpu_search_threshold} value={performanceSetting.gpu_search_threshold} onChange={e => setPerformanceSetting({ ...performanceSetting, gpu_search_threshold: e.target.value })} />
+        <FormTextField label={p_t.gpu_search_threshold} value={performanceSetting.gpu_search_threshold} onChange={e => { setIsformChange(true); setPerformanceSetting({ ...performanceSetting, gpu_search_threshold: e.target.value }) }} />
         <Typography variant="caption" component="p" align="left" paragraph>
           {p_t.gpu_search_threshold_desc1}
         </Typography>
@@ -79,7 +81,7 @@ const PerformanceTunning = props => {
         </Typography>
       </>)}
 
-      <FormActions save={savePerformance} cancel={resetPerformance} />
+      <FormActions save={savePerformance} cancel={resetPerformance} disableCancel={!isFormChange} />
     </div >
   )
 }

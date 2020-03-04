@@ -8,9 +8,10 @@ import Typography from '@material-ui/core/Typography'
 import { FormTextField } from '../../components/common/FormTextComponents'
 import FormActions from '../../components/common/FormActions'
 
-const PreloadTablesForm = props => {
+const PreloadCollectionsForm = props => {
   const classes = useFormStyles()
   const [preload, setPreload] = useState('')
+  const [isFormChange, setIsformChange] = useState(false)
   const { t } = useTranslation();
   const preload_table = t("advanced").preload_table;
   const { openSnackBar } = useContext(materialContext)
@@ -27,12 +28,14 @@ const PreloadTablesForm = props => {
       if (res.code === 0) {
         openSnackBar(t('submitSuccess'))
         restartNotify()
+        setIsformChange(false)
       }
     })
   }
   const resetPreload = () => {
     const { db_config = {} } = milvusConfigs
     setPreload(db_config.preload_table || "")
+    setIsformChange(false)
   }
 
   useEffect(() => {
@@ -42,13 +45,15 @@ const PreloadTablesForm = props => {
 
   return (
     <div className={classes.root}>
-      <FormTextField label={preload_table.title} value={preload} onChange={e => setPreload(e.target.value)} />
+      <FormTextField label={preload_table.title} value={preload} onChange={e => {
+        setPreload(e.target.value); setIsformChange(true)
+      }} />
       <Typography variant="caption" component="p" align="left" paragraph>
         {preload_table.desc}
       </Typography>
-      <FormActions save={savePreload} cancel={resetPreload} />
+      <FormActions save={savePreload} cancel={resetPreload} disableCancel={!isFormChange} />
     </div>
   )
 }
 
-export default PreloadTablesForm
+export default PreloadCollectionsForm
