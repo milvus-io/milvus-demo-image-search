@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Switch from '@material-ui/core/Switch';
 import Typography from "@material-ui/core/Typography"
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -19,7 +19,9 @@ const HardWareForm = props => {
     updateHardwareConfig
   } = useContext(httpContext);
   const { hardwareType = "CPU", gpuList = [] } = systemInfos[currentAddress] || {}
-
+  const [isFormChange, setIsformChange] = useState(false)
+  const [search_resources, setSearchResources] = useState([]);
+  const [build_index_resources, setBuildIndexResources] = useState([])
   const classes = makeStyles(theme => ({
     gridItem: {
       display: "flex",
@@ -32,14 +34,22 @@ const HardWareForm = props => {
   }))()
   const theme = useTheme()
   const marginRight = { marginRight: theme.spacing(1) }
+  const isCPU = hardwareType === 'CPU'
+
+  const save = async () => { }
+  const reset = () => {
+
+  }
   useEffect(() => {
     const _getHardwareConfig = async () => {
+      // {"enable":true,"cache_capacity":1,"search_resources":["GPU0"],"build_index_resources":["GPU0"]}
       const result = await getHardwareConfig();
-      if (result) {
-
-      }
+      setSearchResources(result.search_resources)
+      setBuildIndexResources(result.build_index_resources);
     }
-    _getHardwareConfig()
+    if (isCPU) {
+      _getHardwareConfig()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (
@@ -53,18 +63,18 @@ const HardWareForm = props => {
             <FaMicrochip style={{ ...marginRight }} />CPU
           </Grid>
           <Grid item xs={4}>
-            <Switch color='primary' checked={true} onChange={() => { }} value="gilad" />
+            <Switch color='primary' checked={true} />
           </Grid>
         </Grid>
-        {hardwareType === "GPU" && (<>{
+        {!isCPU && (<>{
           gpuList.map(gpu_name => {
             return (
               <Grid container spacing={3} key={gpu_name}>
                 <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
-                  <FaBolt style={{ ...marginRight }} />{`GPU_${gpu_name}`}
+                  <FaBolt style={{ ...marginRight }} />{gpu_name}
                 </Grid>
                 <Grid item xs={4}>
-                  <Switch color='primary' checked={true} onChange={() => { }} value="gilad" />
+                  <Switch color='primary' checked={!!search_resources.find(s => s === gpu_name)} onChange={e => setSearchResources(e.target.checked ? [...search_resources, gpu_name] : search_resources.filter(b => b !== gpu_name))} />
                 </Grid>
               </Grid>
             )
@@ -80,18 +90,18 @@ const HardWareForm = props => {
             <FaMicrochip style={{ ...marginRight }} />CPU
         </Grid>
           <Grid item xs={4}>
-            <Switch color='primary' checked={true} onChange={() => { }} value="gilad" />
+            <Switch color='primary' checked={true} />
           </Grid>
         </Grid>
-        {hardwareType === "GPU" && (<>
+        {!isCPU && (<>
           {gpuList.map(gpu_name => {
             return (
               <Grid container spacing={3} key={gpu_name}>
                 <Grid classes={{ item: classes.gridItem }} item xs={4} alignItems='center' justify='center'>
-                  <FaBolt style={{ ...marginRight }} />{`GPU_${gpu_name}`}
+                  <FaBolt style={{ ...marginRight }} />{gpu_name}
                 </Grid>
                 <Grid item xs={4}>
-                  <Switch color='primary' checked={true} onChange={() => { }} value="gilad" />
+                  <Switch color='primary' checked={!!search_resources.find(s => s === gpu_name)} onChange={e => setBuildIndexResources(e.target.checked ? [...build_index_resources, gpu_name] : build_index_resources.filter(b => b !== gpu_name))} />
                 </Grid>
               </Grid>
             )
@@ -99,7 +109,7 @@ const HardWareForm = props => {
         </>)
         }
       </div>
-      <FormActions />
+      <FormActions save={save} cancel={reset} disableCancel={!isFormChange} />
     </div>
   );
 };
