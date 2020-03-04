@@ -184,7 +184,7 @@ const Toolbar = props => {
                   title={c._disabled ? c.disabledTooltip : c.tooltip}
                   key={c.icon + "tooltip"}
                 >
-                  <div>{btn}</div>
+                  <div disablefocusripple="true">{btn}</div>
                 </Tooltip>
               ) : (
                 btn

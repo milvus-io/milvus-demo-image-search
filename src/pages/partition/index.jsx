@@ -101,7 +101,7 @@ const Partitions = props => {
 
   const toolbarConfig = [
     {
-      label: "Create",
+      label: "Create Patition",
       icon: "create",
       onClick: () => setDialog({
         open: true,
@@ -115,9 +115,24 @@ const Partitions = props => {
     {
       label: "Delete",
       icon: "delete",
-      onClick: handleDelete,
-      disabled: selected => selected.length === 0 || selected.some(s => s.partition_tag === '_default'),
-      disabledTooltip: "default partition cant be deleted"
+      onClick: (e, selected) => {
+        return new Promise(resolve => {
+          setDialog({
+            open: true,
+            type: "notice",
+            params: {
+              title: `Do you want to delete ${
+                selected.length === 1 ? `this item` : `these items`
+              }?`,
+              confirm: async () => {
+                await handleDelete(e, selected);
+                resolve(true);
+              }
+            }
+          });
+        });
+      },      disabled: selected => selected.length === 0 || selected.some(s => s.partition_tag === '_default'),
+      disabledTooltip: "Nothing can be deleted"
     },
     // {
     //   label: "",
