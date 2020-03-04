@@ -55,22 +55,21 @@ const NetworkFrom = (props) => {
 
     searchSuccess(res.result[0] || []);
   };
-
+  const queryCollectionName = query.get(COLLECTION_NAME)
   useEffect(() => {
-    if (form.collectionName) {
+    if (queryCollectionName && queryCollectionName === form.collectionName) {
       return
     }
     const collectionName =
-      query.get(COLLECTION_NAME)
-        ? query.get(COLLECTION_NAME)
+      queryCollectionName
+        ? queryCollectionName
         : (allCollections[0] ? allCollections[0].table_name : "")
-    console.log(collectionName)
     setForm(v => ({
       ...v,
       collectionName
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allCollections])
+  }, [allCollections, queryCollectionName])
 
   return (
     <Grid container spacing={1} style={{ maxWidth: "1000px" }}>
