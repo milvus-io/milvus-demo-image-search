@@ -3,7 +3,6 @@ import React, {
   useContext,
   useEffect,
   useRef,
-  Fragment
 } from "react";
 import { systemContext } from "../../context/system";
 import { httpContext } from "../../context/http";
@@ -28,7 +27,7 @@ const defaultForm = {
 
 const DataForm = function (props) {
   const { storageConfig } = useContext(systemContext);
-  const { currentAddress, setMilvusConfig, restartNotify } = useContext(
+  const { currentAddress, setMilvusConfig } = useContext(
     httpContext
   );
   const { openSnackBar } = useContext(materialContext);

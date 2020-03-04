@@ -2,7 +2,7 @@ import React, { useRef, useContext } from 'react';
 import useStyles from './Style'
 import Grid from '@material-ui/core/Grid';
 import { FaUpload } from 'react-icons/fa';
-import { DialogActions, DialogContent, DialogTitle, Button } from '@material-ui/core'
+import { DialogActions, DialogContent, DialogTitle } from '@material-ui/core'
 import { materialContext } from '../../context/material'
 import { useTranslation } from 'react-i18next'
 const ImportVectorToCollection = props => {
