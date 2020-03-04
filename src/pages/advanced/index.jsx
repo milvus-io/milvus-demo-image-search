@@ -7,7 +7,7 @@ import MyTabs from "../../components/tab";
 import WithTip from "components/with-tip";
 import { usePageStyles } from "../../hooks/page";
 import CatcheForm from "./CacheForm";
-import PreloadTablesForm from "./PreloadTablesForm"
+import PreloadCollectionsForm from "./PreloadCollectionsForm"
 import PerformanceTunning from "./PerformanceTunning"
 const Advanced = props => {
   const classes = usePageStyles();
@@ -43,7 +43,7 @@ const Advanced = props => {
           <PerformanceTunning />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <PreloadTablesForm />
+          <PreloadCollectionsForm />
         </TabPanel>
       </PaperWrapper>
     </div>

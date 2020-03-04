@@ -31,7 +31,7 @@ const DataForm = function (props) {
     httpContext
   );
   const { openSnackBar } = useContext(materialContext);
-
+  const [isFormChange, setIsformChange] = useState(false)
   const [form, setForm] = useState({ ...defaultForm });
   const [error, setError] = useState({});
 
@@ -47,14 +47,6 @@ const DataForm = function (props) {
   const { t } = useTranslation();
   const dataTrans = t("storage").data;
 
-  useEffect(() => {
-    const currentConfig = storageConfig[currentAddress] || {};
-    const secondaryPath = currentConfig.secondary_path;
-    setForm({
-      primary: currentConfig.primary_path || "",
-      secondary: secondaryPath ? secondaryPath.split(",") : [""]
-    });
-  }, [storageConfig, currentAddress]);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -74,22 +66,30 @@ const DataForm = function (props) {
     });
     if (res.code === 0) {
       openSnackBar(t("submitSuccess"));
+      setIsformChange(false);
       // restartNotify();
     }
   };
 
   const handleCancel = () => {
-    setForm({ ...defaultForm });
-    setError({});
+    const currentConfig = storageConfig[currentAddress] || {};
+    const secondaryPath = currentConfig.secondary_path;
+    setForm({
+      primary: currentConfig.primary_path || "",
+      secondary: secondaryPath ? secondaryPath.split(",") : [""]
+    });
+    setIsformChange(false)
   };
 
   const handleAddPath = () => {
+    setIsformChange(true)
     setForm(v => ({
       ...v,
       secondary: [...v.secondary, ""]
     }));
   };
   const handleDeletePath = index => {
+    setIsformChange(true)
     setForm(v => {
       const copy = [...v.secondary];
       copy.splice(index, 1);
@@ -103,6 +103,7 @@ const DataForm = function (props) {
   const handleSecondaryChange = (e, index) => {
     console.log(e.currentTarget.value, index);
     const value = e.currentTarget.value;
+    setIsformChange(true)
     setForm(v => {
       const copy = [...v.secondary];
       copy.splice(index, 1, value);
@@ -116,6 +117,11 @@ const DataForm = function (props) {
   const handleCopy = value => {
     clipboard(value, t("copySuccess"));
   };
+
+  useEffect(() => {
+    handleCancel()
+    //eslint-disable-next-line
+  }, [storageConfig, currentAddress]);
 
   return (
     <div className={classes.root}>
@@ -204,7 +210,7 @@ const DataForm = function (props) {
         </Grid>
       ))}
 
-      <FormActions save={handleSubmit} cancel={handleCancel} />
+      <FormActions save={handleSubmit} cancel={handleCancel} disableCancel={!isFormChange} />
     </div>
   );
 };

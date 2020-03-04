@@ -11,7 +11,7 @@ const defaultForm = { address: "", port: "" }
 const NetworkFrom = (props) => {
   const [form, setForm] = useState({ ...defaultForm })
   const [error, setError] = useState({})
-
+  const [isFormChange, setIsformChange] = useState(false)
   const { validateForm, handleCheck, handleChange } = useFormValidate(form, setForm, setError)
 
   const { serverConfig } = useContext(systemContext)
@@ -25,15 +25,6 @@ const NetworkFrom = (props) => {
   const { t } = useTranslation();
   const networkTrans = t("network");
 
-  useEffect(() => {
-    const currentConfig = serverConfig[currentAddress] || {}
-    setForm({
-      address: currentConfig.address || "",
-      port: currentConfig.port || ""
-    })
-  }, [currentAddress, serverConfig])
-
-
   const handleSubmit = async e => {
     e.preventDefault();
     const isValid = validateForm()
@@ -44,14 +35,24 @@ const NetworkFrom = (props) => {
     const res = await setMilvusConfig({ server_config: { ...form } })
     if (res && res.code === 0) {
       openSnackBar(t('submitSuccess'))
+      setIsformChange(false);
       restartNotify()
     }
   };
 
-  const handleCancel = async () => {
-    setForm({ ...defaultForm })
-    setError({})
+  const handleCancel = () => {
+    const currentConfig = serverConfig[currentAddress] || {}
+    setForm({
+      address: currentConfig.address || "",
+      port: currentConfig.port || ""
+    })
+    setIsformChange(false)
   };
+
+  useEffect(() => {
+    handleCancel()
+  }, [currentAddress, serverConfig])
+
 
   return (
     <>
@@ -60,7 +61,7 @@ const NetworkFrom = (props) => {
         label={networkTrans.address}
         value={form.address}
         onBlur={() => { handleCheck(form.address, "address") }}
-        onChange={handleChange}
+        onChange={e => { handleChange(e); setIsformChange(true) }}
         placeholder={networkTrans.address}
         error={error.address}
         helperText={error.address && `${networkTrans.address}${t('required')}`}
@@ -70,12 +71,12 @@ const NetworkFrom = (props) => {
         label={networkTrans.port}
         value={form.port}
         onBlur={() => { handleCheck(form.port, "port") }}
-        onChange={handleChange}
+        onChange={e => { handleChange(e); setIsformChange(true) }}
         placeholder={networkTrans.port}
         error={error.port}
         helperText={error.port && `${networkTrans.port}${t('required')}`}
       />
-      <FormActions save={handleSubmit} cancel={handleCancel} />
+      <FormActions save={handleSubmit} cancel={handleCancel} disableCancel={!isFormChange} />
     </>
 
   );

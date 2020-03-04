@@ -24,6 +24,7 @@ const CacheForm = props => {
   } = useContext(httpContext);
   const { hardwareType = "CPU", cpuMemory = 5 } = systemInfos[currentAddress] || {}
   const [settings, setSettings] = useState({})
+  const [isFormChange, setIsformChange] = useState(false)
   const {
     cpu_cache_capacity = 1,
     cpu_cache_threshold = 0.5,
@@ -42,7 +43,8 @@ const CacheForm = props => {
       // TODO: no useful response from API at the moment
       if (res.code === 0) {
         openSnackBar(t('submitSuccess'))
-        restartNotify()
+        restartNotify();
+        setIsformChange(false)
       }
     })
   }
@@ -57,7 +59,14 @@ const CacheForm = props => {
       cache_insert_data: cache_config.cache_insert_data === 'true' || false
     }
     setSettings(settings => ({ ...settings, ..._cache_config }))
+    setIsformChange(false)
   }
+
+  const _setSettings = params => {
+    setIsformChange(true);
+    setSettings(params)
+  }
+
   useEffect(() => {
     resetSettings()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +79,7 @@ const CacheForm = props => {
           <Typography>{advancedTrans.cpu_capacity}</Typography>
         </Grid>
         <Grid item sm={4}>
-          <Slider value={cpu_cache_capacity} min={0} max={Number(cpuMemory)} onChange={(e, val) => setSettings({ ...settings, cpu_cache_capacity: val })} />
+          <Slider value={cpu_cache_capacity} min={0} max={Number(cpuMemory)} onChange={(e, val) => _setSettings({ ...settings, cpu_cache_capacity: val })} />
         </Grid>
         <Grid item sm={1}>
           <Typography varient="p" component="p" align="center">
@@ -86,7 +95,7 @@ const CacheForm = props => {
           <Typography>{advancedTrans.cpu_threshold}</Typography>
         </Grid>
         <Grid item sm={4}>
-          <Slider value={cpu_cache_threshold} min={Range_Threshold.min} max={Range_Threshold.max} step={0.01} onChange={(e, val) => setSettings({ ...settings, cpu_cache_threshold: val.toFixed(2) })} />
+          <Slider value={cpu_cache_threshold} min={Range_Threshold.min} max={Range_Threshold.max} step={0.01} onChange={(e, val) => _setSettings({ ...settings, cpu_cache_threshold: val.toFixed(2) })} />
         </Grid>
         <Grid item sm={1}>
           <Typography varient="p" component="p" align="center">
@@ -105,7 +114,7 @@ const CacheForm = props => {
             <Typography>{advancedTrans.gpu_capacity}</Typography>
           </Grid>
           <Grid item sm={4}>
-            <Slider value={gpu_capacity} min={0} max={systemInfos.gpuMemory} onChange={(e, val) => setSettings({ ...settings, gpu_capacity: val })} />
+            <Slider value={gpu_capacity} min={0} max={systemInfos.gpuMemory} onChange={(e, val) => _setSettings({ ...settings, gpu_capacity: val })} />
           </Grid>
           <Grid item sm={1}>
             <Typography varient="p" component="p" align="center">
@@ -121,7 +130,7 @@ const CacheForm = props => {
             <Typography>{advancedTrans.gpu_threshold}</Typography>
           </Grid>
           <Grid item sm={4}>
-            <Slider value={gpu_threshold} step={0.01} min={Range_Threshold.min} max={Range_Threshold.max} onChange={(e, val) => setSettings({ ...settings, gpu_threshold: val })} />
+            <Slider value={gpu_threshold} step={0.01} min={Range_Threshold.min} max={Range_Threshold.max} onChange={(e, val) => _setSettings({ ...settings, gpu_threshold: val })} />
           </Grid>
           <Grid item sm={1}>
             <Typography varient="p" component="p" align="center">
@@ -142,7 +151,7 @@ const CacheForm = props => {
         <Grid item sm={3}>
           <Switch
             checked={catch_insert_data}
-            onChange={e => setSettings({ ...settings, catch_insert_data: e.target.checked })}
+            onChange={e => _setSettings({ ...settings, catch_insert_data: e.target.checked })}
             color="primary"
           />
         </Grid>
@@ -157,7 +166,7 @@ const CacheForm = props => {
         </Grid>
         {/* TODO:  where to get insert_buffer_size ?*/}
         <Grid item sm={6}>
-          <Slider value={insert_buffer_size} step={0.01} min={Insert_Buffer_Size.min} max={Insert_Buffer_Size.max} onChange={(e, val) => setSettings({ ...settings, insert_buffer_size: val })} />
+          <Slider value={insert_buffer_size} step={0.01} min={Insert_Buffer_Size.min} max={Insert_Buffer_Size.max} onChange={(e, val) => _setSettings({ ...settings, insert_buffer_size: val })} />
         </Grid>
         <Grid item sm={1}>
           <Typography varient="p" component="p" align="center">
@@ -170,7 +179,7 @@ const CacheForm = props => {
           </Typography>
         </Grid>
       </Grid>
-      <FormActions save={saveSettings} cancel={resetSettings} />
+      <FormActions save={saveSettings} cancel={resetSettings} disableCancel={!isFormChange} />
     </div>
   );
 };
