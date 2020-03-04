@@ -30,7 +30,7 @@ const CacheForm = props => {
     cpu_cache_threshold = 0.5,
     gpu_capacity = 1,
     gpu_threshold = 0.5,
-    catch_insert_data = false,
+    cache_insert_data = false,
     insert_buffer_size = .5
   } = settings;
 
@@ -150,8 +150,8 @@ const CacheForm = props => {
         </Grid>
         <Grid item sm={3}>
           <Switch
-            checked={catch_insert_data}
-            onChange={e => _setSettings({ ...settings, catch_insert_data: e.target.checked })}
+            checked={cache_insert_data}
+            onChange={e => _setSettings({ ...settings, cache_insert_data: e.target.checked })}
             color="primary"
           />
         </Grid>
