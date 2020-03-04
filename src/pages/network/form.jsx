@@ -51,6 +51,7 @@ const NetworkFrom = (props) => {
 
   useEffect(() => {
     handleCancel()
+    // eslint-disable-next-line
   }, [currentAddress, serverConfig])
 
 
