@@ -1,103 +1,76 @@
 import React, { useState, useContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Table } from "antd";
+import { useQuery } from '../../hooks'
 import SearchForm from "./search-form";
-import "./index.less";
 import { dataManagementContext } from "../../context/data-management";
 import { httpContext } from "../../context/http";
 import { KEYS } from "../../reducers/data-management";
-import { UPDATE } from "../../consts";
+import { PARTITION_TAG, COLLECTION_NAME } from "../../consts";
+import MilvusGrid from "../../components/grid";
+import { useDataPageStyles } from "../../hooks/page";
+import PageWrapper from '../../components/page-wrapper'
+
 const VectorSearch = props => {
+  const classes = useDataPageStyles()
+  const query = useQuery()
   const { t } = useTranslation();
   const dataManageTrans = t("dataManage");
   const vectorTrans = t("vector");
-  const [showSearch, setShowSearch] = useState(true);
-  const { currentAddress } = useContext(httpContext);
-  const { dataManagement, setDataManagement } = useContext(
-    dataManagementContext
-  );
 
-  const { data, formInit } = useMemo(() => {
-    const { data = null, formInit = {} } =
-      dataManagement[KEYS.vectorSearch][currentAddress] || {};
-    console.log("in", dataManagement);
-    return { data, formInit };
-  }, [dataManagement, currentAddress]);
-  console.log(data, formInit);
-  const columns = [
-    {
-      title: "ID",
-      dataIndex: "id"
-    },
-    {
-      title: vectorTrans.distance,
-      dataIndex: "distance"
-    }
-  ];
+  const [data, setData] = useState([])
+  const [count, setCount] = useState(0); // total count for pagination
+  const [current, setCurrent] = useState(0); // current page for pagination
+  const [offset, setOffset] = useState(0);
+  const { currentAddress } = useContext(httpContext);
+
+
   const searchSuccess = data => {
-    setDataManagement({
-      type: UPDATE,
-      payload: {
-        key: KEYS.vectorSearch,
-        id: currentAddress,
-        value: { data }
-      }
-    });
+    setData(data)
   };
   const handleCancel = () => {
-    setDataManagement({
-      type: UPDATE,
-      payload: {
-        key: KEYS.vectorSearch,
-        id: currentAddress,
-        value: { data: null }
-      }
-    });
+    console.log('cancel')
   };
-  const setFormInit = data => {
-    setDataManagement({
-      type: UPDATE,
-      payload: {
-        key: KEYS.vectorSearch,
-        id: currentAddress,
-        value: { formInit: { ...data } }
-      }
-    });
-  };
-  const toggleSearch = () => {
-    setShowSearch(!showSearch);
-  };
+
+  // const handlePageChange = (e, page) => {
+  //   setOffset(page * PAGE_SIZE);
+  //   setCurrent(page);
+  // };
+
+  const colDefinitions = [
+    {
+      id: "id",
+      numeric: false,
+      disablePadding: true,
+      label: 'ID'
+    },
+
+    {
+      id: "distance",
+      numeric: false,
+      disablePadding: true,
+      label: vectorTrans.distance
+    },
+
+  ];
+  const rows = data || [];
+
+  const collectionName = query.get(COLLECTION_NAME) || ''
+  const partitionTag = query.get(PARTITION_TAG) || ''
 
   return (
-    <div className="vector-wrapper">
-      <div className="header">
-        <h2>{dataManageTrans.vector}</h2>
-      </div>
-      {/* <div style={{ marginTop: "20px" }}>
-        <span className="mr-10">{vectorTrans.search}</span>
-        <Switch checked={showSearch} onChange={toggleSearch}></Switch>
-      </div> */}
-
-      <div>
-        <SearchForm
-          showSearch={showSearch}
-          handleCancel={handleCancel}
-          searchSuccess={searchSuccess}
-          formInit={formInit}
-          setFormInit={setFormInit}
-        ></SearchForm>
-      </div>
-
-      {data && (
-        <Table
-          size="middle"
-          rowKey={record => record.id}
-          columns={columns}
-          pagination={false}
-          className="table-wrapper"
-          dataSource={data}
-        />
-      )}
+    <div className={classes.root}>
+      <PageWrapper>
+        <MilvusGrid
+          colDefinitions={colDefinitions}
+          rows={rows}
+          rowsPerPage={rows.length}
+          rowCount={rows.length}
+          primaryKey="id"
+          isLoading={false}
+          title={[collectionName, partitionTag, dataManageTrans.vector]}
+          searchForm={<SearchForm collectionName={collectionName} partitionTag={partitionTag} searchSuccess={searchSuccess}></SearchForm>}
+        ></MilvusGrid>
+      </PageWrapper>
     </div>
   );
 };

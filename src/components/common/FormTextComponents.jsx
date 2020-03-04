@@ -12,13 +12,22 @@ const useStyles = makeStyles(theme => ({
   fullWidth: {
     width: '100%'
   },
+  textField: {
+    width: "100%",
+    '& > .MuiFormHelperText-root': {
+      visibility: "hidden"
+    },
+    '& .Mui-error': {
+      visibility: "visible"
+    }
+  },
 }))
 export const FormTextField = props => {
   const classes = useStyles()
-  const { marginBottom = true } = props
+  const { needMarginBottom = true, sm = 4, className = '', } = props
   return (
-    <Grid sm={4} item>
-      <TextField fullWidth classes={{ root: marginBottom ? classes.root : "" }} {...props} />
+    <Grid sm={sm} item>
+      <TextField fullWidth className={`${classes.textField} ${className}`} classes={{ root: needMarginBottom ? classes.root : "" }} {...props} />
     </Grid>
   )
 }

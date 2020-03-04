@@ -61,7 +61,7 @@ const CreateCollection = props => {
               placeholder={'Collection Name'}
               error={error.table_name}
               variant="outlined"
-              helperText={error.table_name && `${tableTrans.tName}${t('required')}`}
+              helperText={`${tableTrans.tName}${t('required')}`}
             />
           </Grid>
 

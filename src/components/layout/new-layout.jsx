@@ -90,6 +90,8 @@ const Layout = props => {
     "/data/collections/:collectionName/partitions/:partitionTag"
   );
   const collectionsMatch = useRouteMatch("/data/collections");
+  const searchMatch = useRouteMatch("/data/search");
+
 
   const effections = [JSON.stringify(collectionsMatch), JSON.stringify(collectionMatch), JSON.stringify(partitionMatch)]
   useEffect(() => {
@@ -97,6 +99,7 @@ const Layout = props => {
     const { isExact: isPartition, params: partitionParams } =
       partitionMatch || {};
     const { isExact: isCollections } = collectionsMatch || {};
+    const { isExact: isSearch } = searchMatch || {}
     if (isExact) {
       setCurrentRoute({
         page: "collection",
@@ -113,6 +116,11 @@ const Layout = props => {
     if (isCollections) {
       setCurrentRoute({
         page: "collections",
+      })
+    }
+    if (isSearch) {
+      setCurrentRoute({
+        page: "search",
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
