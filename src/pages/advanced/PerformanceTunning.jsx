@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { materialContext } from '../../context/material'
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
@@ -11,10 +11,9 @@ import Grid from '@material-ui/core/Grid'
 const PerformanceTunning = props => {
   const classes = useFormStyles()
   const { openSnackBar } = useContext(materialContext)
-  const { systemInfos = {}, serverConfig } = useContext(systemContext);
+  const { systemInfos = {}, serverConfig, milvusConfigs = {} } = useContext(systemContext);
   const {
     currentAddress = "",
-    getMilvusConfigs,
     setMilvusConfig,
     restartNotify
   } = useContext(httpContext);
@@ -26,13 +25,11 @@ const PerformanceTunning = props => {
   const { t } = useTranslation();
   const p_t = t("advanced").performance_tunning;
 
-  const configsContainer = useRef(null);
-
   const savePerformance = async () => {
     const currSettings = {
-      ...configsContainer.current,
+      ...milvusConfigs,
       engine_config: {
-        ...configsContainer.current.engine_config,
+        ...milvusConfigs.engine_config,
         use_blas_threshold: performanceSetting.use_blas_threshold,
         gpu_search_threshold: performanceSetting.gpu_search_threshold
       }
@@ -45,13 +42,9 @@ const PerformanceTunning = props => {
     })
   }
   useEffect(() => {
-    const initSetting = async () => {
-      const allConfigs = await getMilvusConfigs();
-      const { engine_config = {} } = allConfigs || {}
-      configsContainer.current = allConfigs || {}
-      setPerformanceSetting({ use_blas_threshold: engine_config.use_blas_threshold || "", gpu_search_threshold: engine_config.gpu_search_threshold || "" })
-    }
-    initSetting()
+    const { engine_config = {} } = milvusConfigs
+    setPerformanceSetting({ use_blas_threshold: engine_config.use_blas_threshold || "", gpu_search_threshold: engine_config.gpu_search_threshold || "" })
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress, serverConfig])
 
 
