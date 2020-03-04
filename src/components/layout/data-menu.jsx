@@ -18,6 +18,9 @@ import {
   sliceWord
 } from "../../utils/helpers";
 import { useHistory } from "react-router-dom";
+import SearchIcon from "@material-ui/icons/Search";
+import { useQuery } from '../../hooks'
+import { PARTITION_TAG, COLLECTION_NAME } from '../../consts'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 const DataMenu = props => {
   const classes = useStyles();
   const history = useHistory();
+  const query = useQuery()
   const { getCollections, currentAddress, getPartitions } = useContext(
     httpContext
   );
@@ -57,7 +61,6 @@ const DataMenu = props => {
   };
 
   const fetchCollections = async () => {
-    console.log("---fetch ---- collections");
 
     const res = await getCollections({ all_required: true });
     const { tables: collections = [], count = 0 } = res || {};
@@ -78,12 +81,15 @@ const DataMenu = props => {
         id: generateId(),
         icon: FiDatabase,
         dimension: col.dimension || 0,
-        url: `/data/collections/${table_name}`
+        iconBtn: SearchIcon,
+        needHover: true,
+        url: `/data/collections/${table_name}`,
+        searchUrl: `/data/search?collectionName=${table_name}`
       };
     });
-    setToltal(count);
-    setCollections(v => data);
     setAllCollections(collections);
+    setToltal(count);
+    setCollections(data);
     setRefresh(false);
   };
 
@@ -106,11 +112,13 @@ const DataMenu = props => {
     const target = collections.find(col => col.label === collectionName);
     const hasPartition = target && target.loaded;
     const needFetchPartition =
-      !hasPartition && (page === "collection" || page === "partition");
-    needFetchPartition && fetchPartitions(collectionName);
+      !hasPartition && (page === "collection" || page === "partition" || (page === 'search'));
+
+    needFetchPartition && fetchPartitions(page === 'search' ? query.get(COLLECTION_NAME) : collectionName);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(collections)]);
+
 
   // set menu active and expand status by url
   useEffect(() => {
@@ -118,7 +126,24 @@ const DataMenu = props => {
     const target = collections.find(col => col.label === collectionName);
     console.log(page);
     switch (page) {
+      case 'search':
+        const searchCollectionName = query.get(COLLECTION_NAME)
+        const searchPartitionTag = query.get(PARTITION_TAG)
+        const searchTarget = collections.find(col => col.label === searchCollectionName);
+        console.log(searchCollectionName)
+        const searchPartitionTarget =
+          searchTarget &&
+          searchTarget.children &&
+          searchTarget.children.find(child => child.label === searchPartitionTag);
+        if (searchPartitionTarget) {
+          setTreeExpanded(["1", searchTarget.id]);
+          setTreeActiveId(searchPartitionTarget.id);
+        } else {
+          setTreeActiveId(searchTarget ? searchTarget.id : '1');
+        }
+        break
       case "collections":
+        // collections id is 1 , hard code
         setTreeExpanded(["1"]);
         setTreeActiveId("1");
         break;
@@ -141,6 +166,7 @@ const DataMenu = props => {
       default:
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentRoute, collections]);
 
   const fetchPartitions = async collectionName => {
@@ -160,7 +186,10 @@ const DataMenu = props => {
         value: "",
         id: generateId(),
         icon: FiGrid,
-        url: `/data/collections/${collectionName}/partitions/${label}?dimension=${target.dimension}`
+        iconBtn: SearchIcon,
+        needHover: true,
+        url: `/data/collections/${collectionName}/partitions/${label}?dimension=${target.dimension}`,
+        searchUrl: `/data/search?collectionName=${collectionName}&partitionTag=${label}`
       };
     });
     setCollections(collections => {
@@ -174,6 +203,8 @@ const DataMenu = props => {
     });
     const parent =
       allCollections.find(v => v.table_name === collectionName) || [];
+    console.log(allCollections)
+    // partitions page will use it.
     setCurrentPartitions(
       partitions.map(v => ({
         ...v,
@@ -189,6 +220,10 @@ const DataMenu = props => {
     setRefresh(true);
     fetchCollections();
   };
+  const handleSearchVectors = (url, id) => {
+    url && history.push(url)
+    setTreeActiveId(id);
+  }
 
   return (
     <div className={classes.root}>
@@ -197,6 +232,7 @@ const DataMenu = props => {
         total={total}
         handleMenuClick={handleMenuClick}
         handleRefresh={handleRefresh}
+        handleSearchVectors={handleSearchVectors}
         expanded={treeExpanded}
         setExpanded={setTreeExpanded}
         activeId={treeActiveId}

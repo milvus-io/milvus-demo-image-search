@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
  */
 const StyledTreeView = props => {
   const classes = useStyles();
-  const { data, total, handleMenuClick, handleRefresh, expanded, setExpanded, activeId, loading = false } = props
+  const { data, total, handleMenuClick, handleRefresh = () => { }, handleSearchVectors = () => { }, expanded, setExpanded, activeId, loading = false } = props
   const handleClick = (nodeId, url, name) => {
     // setAcitveId(nodeId || '')
     handleMenuClick(url, name, nodeId)
@@ -44,8 +44,12 @@ const StyledTreeView = props => {
         labelInfo={v.value}
         disabled={v.disabled}
         url={v.url}
+        searchUrl={v.searchUrl}
         propsClick={handleClick}
         activeId={activeId}
+        iconBtn={v.iconBtn || false}
+        needHover={v.needHover || false}
+        propsIconBtnClick={handleSearchVectors}
       >
         {
           v.children && v.children.length && generateTreeItem(v.children)
@@ -84,11 +88,12 @@ const StyledTreeView = props => {
       <StyledTreeItem
         nodeId="1"
         labelText={`Collections(${total})`}
-        labelRefresh={IoMdRefresh}
+        iconBtn={IoMdRefresh}
         labelIcon={MdStorage}
         activeId={activeId}
         propsClick={handleClick}
-        propsRefresh={handleRefresh}
+        propsIconBtnClick={handleRefresh}
+        needHover={true}
         url="/data/collections"
       >
         {

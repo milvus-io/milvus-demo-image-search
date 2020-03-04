@@ -1,6 +1,6 @@
 
-import React, { useRef } from 'react';
-import { makeStyles, Typography } from '@material-ui/core';
+import React, { useRef, useState } from 'react';
+import { makeStyles, Typography, IconButton } from '@material-ui/core';
 import { TreeItem } from '@material-ui/lab';
 const useTreeItemStyles = makeStyles(theme => ({
   root: {
@@ -65,23 +65,41 @@ const useTreeItemStyles = makeStyles(theme => ({
     fontWeight: 'inherit',
     flexGrow: 1,
   },
+  iconBtn: {
+    width: "20px",
+    height: "20px"
+  }
 }));
 function StyledTreeItem(props) {
   const classes = useTreeItemStyles();
-  const { labelText, labelIcon: LabelIcon, url, labelInfo, propsClick, propsRefresh, disabled, activeId, nodeId, labelRefresh: LabelRefresh, ...other } = props;
+  const { labelText, labelIcon: LabelIcon, url, searchUrl, labelInfo, propsClick = () => { }, propsIconBtnClick = () => { }, disabled, activeId, nodeId, iconBtn: IconBtn, needHover = false, ...other } = props;
   const itemRef = useRef(null)
+  const iconBtnRef = useRef(null)
+  const [isHover, setIsHover] = useState(false)
   const handleClick = e => {
     const { id, url, name } = itemRef.current.dataset
     propsClick(id, url, name)
   }
-  const handleRefresh = () => {
-    propsRefresh()
+  const handleIconBtnClick = (e) => {
+    e.stopPropagation()
+    const { searchurl, id } = itemRef.current.dataset
+    propsIconBtnClick(searchurl, id)
   }
+
+  const handleMouseEnter = () => {
+    setIsHover(true)
+  }
+
+  const handleMouseLeave = () => {
+    setIsHover(false)
+  }
+  const showIconBtn = needHover ? isHover : true
+
   return (
     <TreeItem
       ref={itemRef}
       label={
-        <div className={classes.labelRoot}>
+        <div className={classes.labelRoot} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
           <LabelIcon color="inherit" className={classes.labelIcon} />
           <Typography variant="body2" className={classes.labelText}>
             {labelText}
@@ -90,7 +108,10 @@ function StyledTreeItem(props) {
             {labelInfo}
           </Typography>
           {
-            LabelRefresh && <LabelRefresh onClick={handleRefresh}></LabelRefresh>
+            showIconBtn && IconBtn &&
+            <IconButton onClick={handleIconBtnClick} color="inherit" aria-label="refresh data" component="span" size="small" className={classes.iconBtn}>
+              <IconBtn ref={iconBtnRef}></IconBtn>
+            </IconButton>
           }
         </div>
       }
@@ -100,6 +121,7 @@ function StyledTreeItem(props) {
       }}
       data-id={nodeId}
       data-url={url}
+      data-searchurl={searchUrl}
       data-name={labelText}
       nodeId={nodeId}
       classes={{

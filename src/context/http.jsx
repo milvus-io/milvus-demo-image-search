@@ -19,7 +19,7 @@ export const httpContext = React.createContext({
   deleteTable: () => { },
   createIndex: () => { },
   searchTable: () => { },
-  searchVectors: () => { },
+  searchVectors: (collectionName, data) => { },
   getPartitions: (tableName, params) => { },
   createPartition: () => { },
   deletePartition: () => { },
@@ -118,10 +118,8 @@ export const HttpProvider = ({ children }) => {
 
   // ------- Data Management Start ----------
 
-  async function searchVectors(data = {}) {
-    const copyData = JSON.parse(JSON.stringify(data));
-    delete copyData.tableName;
-    const res = await axiosInstance.put(`/tables/${data.tableName}/vectors`, copyData);
+  async function searchVectors(collectionName, data = {}) {
+    const res = await axiosInstance.put(`/tables/${collectionName}/vectors`, data);
     return res.data;
   }
 

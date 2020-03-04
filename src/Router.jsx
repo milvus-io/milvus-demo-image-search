@@ -46,7 +46,8 @@ const HashRouterWrapper = () => {
                           <VectorsPage></VectorsPage>
                         </Route>
 
-                        <Route path="/data/vector">
+                        {/* we use query to pass collectionName and partitiontag */}
+                        <Route path="/data/search">
                           <VectorSearch></VectorSearch>
                         </Route>
 

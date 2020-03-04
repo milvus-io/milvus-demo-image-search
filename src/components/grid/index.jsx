@@ -50,7 +50,8 @@ const MilvusGrid = props => {
     colDefinitions = [],
     isLoading = false,
     title = "Table",
-    titleIcon = <CollectionIcon />
+    titleIcon = <CollectionIcon />,
+    searchForm
   } = props;
 
   const [selected, setSelected] = React.useState([]);
@@ -60,7 +61,7 @@ const MilvusGrid = props => {
   };
 
   const _onSelected = (event, row) => {
-    console.log('selected', {row});
+    console.log('selected', { row });
     let newSelected = [].concat(selected);
     if (_isSelected(row)) {
       newSelected = newSelected.filter(s => s[primaryKey] !== row[primaryKey]);
@@ -87,7 +88,7 @@ const MilvusGrid = props => {
         <Breadcrumbs separator="›" aria-label="breadcrumb">
           {
             title.map(v => (
-              <Typography key={v} variant="h6" color="textPrimary">{v}</Typography>
+              v && <Typography key={v} variant="h6" color="textPrimary">{v}</Typography>
             ))
           }
         </Breadcrumbs>
@@ -95,6 +96,12 @@ const MilvusGrid = props => {
           <span className={classes.titleIcon}>{titleIcon}</span> {title}{title}
         </Typography> */}
       </Grid>
+      {
+        searchForm && <Grid item xs={12}>
+          {searchForm}
+        </Grid>
+      }
+
       <Grid item xs={12}>
         <Toolbar
           config={toolbarConfig}
