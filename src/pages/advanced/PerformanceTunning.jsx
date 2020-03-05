@@ -22,23 +22,24 @@ const PerformanceTunning = props => {
     gpu_search_threshold: ""
   })
   const { hardwareType = "CPU" } = systemInfos[currentAddress] || {}
+  const isCPU = hardwareType === "CPU"
   const { t } = useTranslation();
   const p_t = t("advanced").performance_tunning;
   const [isFormChange, setIsformChange] = useState(false)
 
   const savePerformance = async () => {
     const currSettings = {
-      ...milvusConfigs,
       engine_config: {
-        ...milvusConfigs.engine_config,
-        use_blas_threshold: performanceSetting.use_blas_threshold,
-        gpu_search_threshold: performanceSetting.gpu_search_threshold
+        use_blas_threshold: performanceSetting.use_blas_threshold || 1100,
+        gpu_search_threshold: performanceSetting.gpu_search_threshold || 1000
       }
+    }
+    if (isCPU) {
+      delete currSettings.engine_config.gpu_search_threshold
     }
     setMilvusConfig(currSettings).then(res => {
       if (res.code === 0) {
         openSnackBar(t('submitSuccess'))
-        restartNotify()
         setIsformChange(false)
       }
     })
@@ -68,7 +69,8 @@ const PerformanceTunning = props => {
       <Typography variant="caption" component="p" align="left" paragraph>
         {p_t.use_blas_threshold_desc_3}
       </Typography>
-      {hardwareType === "GPU" && (<>
+      {!isCPU && (<>
+
         <FormTextField label={p_t.gpu_search_threshold} value={performanceSetting.gpu_search_threshold} onChange={e => { setIsformChange(true); setPerformanceSetting({ ...performanceSetting, gpu_search_threshold: e.target.value }) }} />
         <Typography variant="caption" component="p" align="left" paragraph>
           {p_t.gpu_search_threshold_desc1}
