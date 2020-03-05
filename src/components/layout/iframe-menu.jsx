@@ -42,11 +42,11 @@ const ConfigMenu = props => {
   useEffect(() => {
     const effectConfigs = []
     if (elk.enable && elk.address) {
-      effectConfigs.push({ path: '/integration/elk', label: "ELK GUI", icon: <GoNote /> })
+      effectConfigs.push({ path: '/intergration/elk', label: "ELK GUI", icon: <GoNote /> })
     }
 
     if (metrics.enable && metrics.address) {
-      effectConfigs.push({ path: '/integration/metrics', label: "Metrics GUI", icon: <GiChart /> })
+      effectConfigs.push({ path: '/intergration/metrics', label: "Metrics GUI", icon: <GiChart /> })
     }
     setConfigs(effectConfigs)
   }, [elk, metrics])

@@ -23,7 +23,13 @@ const PreloadCollectionsForm = props => {
   } = useContext(httpContext);
 
   const savePreload = async () => {
-    const newMilvusConfigs = { ...milvusConfigs, db_config: { ...milvusConfigs.db_config, preload_table: preload } }
+    const newMilvusConfigs = {
+      db_config: {
+        auto_flush_interval: milvusConfigs.db_config.auto_flush_interval,
+        backend_url: milvusConfigs.db_config.backend_url,
+        preload_table: preload
+      }
+    }
     setMilvusConfig(newMilvusConfigs).then(res => {
       if (res.code === 0) {
         openSnackBar(t('submitSuccess'))

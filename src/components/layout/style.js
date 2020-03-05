@@ -1,4 +1,6 @@
-import { makeStyles } from "@material-ui/core";
+import {
+  makeStyles
+} from "@material-ui/core";
 
 const scrollStyle = {
   '&::-webkit-scrollbar': {
@@ -37,7 +39,11 @@ const useStyles = makeStyles(theme => ({
   icon: {
     marginBottom: theme.spacing(4),
     fontSize: "30px",
-    fill: "rgb(238, 238, 238)"
+    fill: "rgb(238, 238, 238)",
+    cursor: "pointer",
+    '&:hover': {
+      border: `solid 1px ${theme.palette.primary.main} `
+    }
   },
   active: {
     fill: theme.palette.primary.main

@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 // import { systemContext } from '../../context/system'
 // import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
@@ -16,19 +15,25 @@ const OthersForm = props => {
   const { currentAddress } = useContext(httpContext)
   const { openSnackBar } = useContext(materialContext)
   const [form, setForm] = useState({
-    Integration: "",
+    intergration: "",
     address: ""
   })
+  const [isFormChange, setIsformChange] = useState(false)
 
   const { t } = useTranslation();
   // const others = t("others");
 
-  useEffect(() => {
+  const reset = () => {
+    setIsformChange(false)
     const { elk = {} } = milvusAddress[currentAddress] || {}
     setForm({
       enable: elk.enable || false,
       address: elk.address || ''
     })
+  }
+  useEffect(() => {
+    reset()
+    //eslint-disable-next-line
   }, [milvusAddress, currentAddress])
 
   const handleSubmit = () => {
@@ -38,7 +43,7 @@ const OthersForm = props => {
         id: currentAddress,
         values: {
           elk: {
-            enable: form.enable,
+            intergration: form.intergration,
             address: form.address
           }
         }
@@ -49,9 +54,9 @@ const OthersForm = props => {
   //TODO: not sure relations between gui and address
   return (
     <>
-      <FormTextField label={"Integration"} value={form.Integration || ""} onChange={e => setForm({ ...form, Integration: e.target.value })} />
-      <FormTextField label={"Prometheus"} value={form.address || ""} onChange={e => setForm({ ...form, Prometheus: e.target.value })} />
-      <FormActions save={handleSubmit} />
+      <FormTextField label={"ELK"} value={form.intergration || ""} onChange={e => { setForm({ ...form, intergration: e.target.value }); setIsformChange(true) }} />
+      <FormTextField label={"Prometheus"} value={form.address || ""} onChange={e => { setForm({ ...form, address: e.target.value }); setIsformChange(true) }} />
+      <FormActions save={handleSubmit} cancel={reset} disableCancel={!isFormChange} />
     </>
   )
 };

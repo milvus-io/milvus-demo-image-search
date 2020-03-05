@@ -8,7 +8,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { FaNetworkWired, FaRegFolder } from "react-icons/fa";
 import { FiCpu } from "react-icons/fi";
 import { GiChart } from "react-icons/gi";
-import { GoNote, GoSettings } from "react-icons/go";
+import { GoSettings } from "react-icons/go";
+import { FaCubes } from "react-icons/fa";
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,9 +41,9 @@ const Configs = [
   { path: 'network', label: 'Network Access', icon: <FaNetworkWired /> },
   { path: 'storage', label: "Storage Path", icon: <FaRegFolder /> },
   { path: 'advanced', label: 'Advanced Settings', icon: <GoSettings /> },
-  { path: 'hardware', label: "Hardware Resources", icon: <FiCpu /> },
+  { path: 'hardware', label: "Hardware Acceleration", icon: <FiCpu /> },
   { path: 'metrics', label: "Metrics", icon: <GiChart /> },
-  { path: 'others', label: "ELK", icon: <GoNote /> }
+  { path: 'others', label: "intergration", icon: <FaCubes /> }
 ]
 const ConfigMenu = props => {
   const history = useHistory();

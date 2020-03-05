@@ -30,7 +30,7 @@ export default {
     advanced: "Advanced Settings",
     hardware: "Hardware Resources",
     metrics: "Metrics",
-    others: "Others"
+    others: "Intergration"
   },
   dataManage: {
     title: "Data Management",

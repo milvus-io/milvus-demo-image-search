@@ -91,8 +91,8 @@ const Layout = props => {
     if (path.includes("/data/search")) {
       setFisrstMenu("search");
     }
-    if (path.includes("/integration")) {
-      setFisrstMenu("integration");
+    if (path.includes("/intergration")) {
+      setFisrstMenu("intergration");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history.location.pathname]);
@@ -116,13 +116,13 @@ const Layout = props => {
     if (name === "search") {
       history.push("/data/search");
     }
-    if (name === "integration") {
+    if (name === "intergration") {
       if (elk.enable && elk.address) {
-        history.push("/integration/elk");
+        history.push("/intergration/elk");
         return;
       }
       if (metrics.enable && metrics.address) {
-        history.push("/integration/metrics");
+        history.push("/intergration/metrics");
         return;
       }
     }
@@ -176,34 +176,34 @@ const Layout = props => {
           className={`${classes.icon} ${firstMenu === "login" &&
             classes.active}`}
           onClick={handleFirstMenuChange}
-        ></AiOutlineHome>
+        />
         <MdStorage
           data-name="data"
           className={`${classes.icon} ${firstMenu === "data" &&
             classes.active}`}
           onClick={handleFirstMenuChange}
-        ></MdStorage>
-        <Settings
-          data-name="config"
-          className={`${classes.icon} ${firstMenu === "config" &&
-            classes.active}`}
-          onClick={handleFirstMenuChange}
-        ></Settings>
+        />
         <SearchOutlined
           data-name="search"
           className={`${classes.icon} ${firstMenu === "search" &&
             classes.active}`}
           onClick={handleFirstMenuChange}
-        ></SearchOutlined>
+        />
         {((elk.enable && elk.address) ||
           (metrics.enable && metrics.address)) && (
             <FaCubes
-              data-name="integration"
-              className={`${classes.icon} ${firstMenu === "integration" &&
+              data-name="intergration"
+              className={`${classes.icon} ${firstMenu === "intergration" &&
                 classes.active}`}
               onClick={handleFirstMenuChange}
             ></FaCubes>
           )}
+        <Settings
+          data-name="config"
+          className={`${classes.icon} ${firstMenu === "config" &&
+            classes.active}`}
+          onClick={handleFirstMenuChange}
+        />
       </div>
       <div className={classes.menuWrapper}>
         <div className="logo-wrapper">
@@ -230,7 +230,7 @@ const Layout = props => {
             <DataMenu currentRoute={currentRoute}></DataMenu>
           )}
           {firstMenu === "config" && <ConfigMenu></ConfigMenu>}
-          {firstMenu === "integration" && (
+          {firstMenu === "intergration" && (
             <IframeMenu metrics={metrics} elk={elk}></IframeMenu>
           )}
         </div>
