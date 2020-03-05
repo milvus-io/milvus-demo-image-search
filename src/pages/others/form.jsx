@@ -43,7 +43,7 @@ const OthersForm = props => {
         id: currentAddress,
         values: {
           elk: {
-            enable: form.enable,
+            intergration: form.intergration,
             address: form.address
           }
         }

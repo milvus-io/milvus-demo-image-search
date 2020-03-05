@@ -18,7 +18,7 @@ const HardWareForm = props => {
     currentAddress = "",
     getHardwareConfig,
   } = useContext(httpContext);
-  const { hardwareType = "CPU", gpuList = [], gpuMemory } = systemInfos[currentAddress] || {}
+  const { hardwareType = "CPU", gpuList = [] } = systemInfos[currentAddress] || {}
   const [isFormChange, setIsformChange] = useState(false)
   const [search_resources, setSearchResources] = useState([]);
   const [build_index_resources, setBuildIndexResources] = useState([])
