@@ -145,6 +145,8 @@ const NetworkFrom = (props) => {
       <Grid item sm={4}>
         <Button
           onClick={handleSubmit}
+          variant="outlined"
+          size="small"
           color="primary"
         >
           Search

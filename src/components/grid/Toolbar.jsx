@@ -60,7 +60,7 @@ const useSearchStyles = makeStyles(theme => ({
 }));
 const Search = props => {
   const classes = useSearchStyles();
-  const { searchText = "", onClear = () => {}, onSearch = () => {} } = props;
+  const { searchText = "", onClear = () => { }, onSearch = () => { } } = props;
   const [searchValue, setSearchValue] = React.useState(searchText);
   const searched = searchValue !== "";
   return (
@@ -111,13 +111,13 @@ const useToolbarStyles = makeStyles(theme => ({
   highlight:
     theme.palette.type === "light"
       ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-        }
+        color: theme.palette.secondary.main,
+        backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+      }
       : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark
-        },
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.secondary.dark
+      },
   title: {
     flex: "1 1 100%"
   }
@@ -187,8 +187,8 @@ const Toolbar = props => {
                   <div disablefocusripple="true">{btn}</div>
                 </Tooltip>
               ) : (
-                btn
-              );
+                  btn
+                );
             })}
           </ButtonGroup>
         </Grid>

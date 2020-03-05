@@ -176,7 +176,7 @@ const Vectors = props => {
           component: <ImportVectors dimension={dimension} importVectors={handleAddVectors} partitionTag={partitionTag}></ImportVectors>
         }
       }),
-      disabled: selected => selected.length > 2
+      disabled: false
     },
     {
       label: "Delete",
