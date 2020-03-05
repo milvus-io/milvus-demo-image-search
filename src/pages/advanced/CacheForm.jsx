@@ -19,14 +19,12 @@ const CacheForm = props => {
   const {
     currentAddress = "",
     setMilvusConfig,
-    restartNotify
   } = useContext(httpContext);
   const { hardwareType = "CPU", cpuMemory = 5 } = systemInfos[currentAddress] || {}
   const [settings, setSettings] = useState({})
   const [isFormChange, setIsformChange] = useState(false)
   const {
     cpu_cache_capacity = 1,
-    cpu_cache_threshold = 0.5,
     gpu_capacity = 1,
     gpu_threshold = 0.5,
     cache_insert_data = false,
@@ -37,23 +35,19 @@ const CacheForm = props => {
   const advancedTrans = t("advanced");
 
   const saveSettings = async () => {
-    // add form valid check
-    setMilvusConfig(settings).then(res => {
-      // TODO: no useful response from API at the moment
+    delete settings.cpu_cache_threshold
+    setMilvusConfig({ cache_config: settings }).then(res => {
       if (res.code === 0) {
         openSnackBar(t('submitSuccess'))
-        restartNotify();
         setIsformChange(false)
       }
     })
   }
-  //TODO: switch reset not work
   const resetSettings = () => {
     const { cache_config = {} } = milvusConfigs;
     const _cache_config = {
       ...cache_config,
       cpu_cache_capacity: Number(cache_config.cpu_cache_capacity) || 5,
-      cpu_cache_threshold: Number(cache_config.cpu_cache_threshold) || 0.5,
       insert_buffer_size: Number(cache_config.insert_buffer_size) || 0.5,
       cache_insert_data: cache_config.cache_insert_data === 'true' || false
     }
@@ -78,7 +72,7 @@ const CacheForm = props => {
           <Typography>{advancedTrans.cpu_capacity}</Typography>
         </Grid>
         <Grid item sm={4}>
-          <Slider value={cpu_cache_capacity} min={1} max={Number(cpuMemory)} onChange={(e, val) => _setSettings({ ...settings, cpu_cache_capacity: val })} />
+          <Slider value={cpu_cache_capacity} min={1} max={Number(cpuMemory)} onChange={(e, val) => _setSettings({ ...settings, cpu_cache_capacity: Math.min(val, cpuMemory - insert_buffer_size) })} />
         </Grid>
         <Grid item sm={1}>
           <Typography varient="p" component="p" align="center">
@@ -88,22 +82,6 @@ const CacheForm = props => {
         <Grid item sm={12}>
           <Typography paragraph variant="caption" component="p">
             {advancedTrans.cpu_capacity_desc}
-          </Typography>
-        </Grid>
-        <Grid item sm={3}>
-          <Typography>{advancedTrans.cpu_threshold}</Typography>
-        </Grid>
-        <Grid item sm={4}>
-          <Slider value={cpu_cache_threshold} min={Range_Threshold.min} max={Range_Threshold.max} step={0.01} onChange={(e, val) => _setSettings({ ...settings, cpu_cache_threshold: val.toFixed(2) })} />
-        </Grid>
-        <Grid item sm={1}>
-          <Typography varient="p" component="p" align="center">
-            {`${Number(cpu_cache_threshold).toFixed(2) * 100}%`}
-          </Typography>
-        </Grid>
-        <Grid item sm={12}>
-          <Typography paragraph variant="caption" component="p">
-            {advancedTrans.cpu_threshold_desc}
           </Typography>
         </Grid>
       </Grid>
@@ -163,13 +141,12 @@ const CacheForm = props => {
         <Grid item sm={3}>
           <Typography>{advancedTrans.insert_buffer_size}</Typography>
         </Grid>
-        {/* TODO:  where to get insert_buffer_size ?*/}
         <Grid item sm={4}>
-          <Slider value={insert_buffer_size} step={1} min={1} max={100} onChange={(e, val) => _setSettings({ ...settings, insert_buffer_size: val })} />
+          <Slider value={insert_buffer_size} step={1} min={1} max={Number(cpuMemory) - cpu_cache_capacity} onChange={(e, val) => _setSettings({ ...settings, insert_buffer_size: Math.min(val, cpuMemory - cpu_cache_capacity) })} />
         </Grid>
         <Grid item sm={1}>
           <Typography varient="p" component="p" align="center">
-            {Number(insert_buffer_size)}
+            {`${Number(insert_buffer_size)}G`}
           </Typography>
         </Grid>
         <Grid item sm={12}>

@@ -37,6 +37,7 @@ const LoginForm = (props) => {
 
   useEffect(() => {
     reset()
+    // eslint-disable-next-line
   }, [milvusAddress, currentAddress])
 
   const { t } = useTranslation();

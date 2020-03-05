@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import Switch from '@material-ui/core/Switch';
 import Typography from "@material-ui/core/Typography"
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { FaMicrochip, FaBolt } from 'react-icons/fa'
+import { FaBolt } from 'react-icons/fa'
+import MuiAlert from '@material-ui/lab/Alert';
 import Grid from '@material-ui/core/Grid';
 import { systemContext } from '../../context/system'
 import { httpContext } from '../../context/http'
@@ -17,7 +18,7 @@ const HardWareForm = props => {
     currentAddress = "",
     getHardwareConfig,
   } = useContext(httpContext);
-  const { hardwareType = "CPU", gpuList = [] } = systemInfos[currentAddress] || {}
+  const { hardwareType = "CPU", gpuList = [], gpuMemory } = systemInfos[currentAddress] || {}
   const [isFormChange, setIsformChange] = useState(false)
   const [search_resources, setSearchResources] = useState([]);
   const [build_index_resources, setBuildIndexResources] = useState([])
@@ -30,6 +31,9 @@ const HardWareForm = props => {
     wrapper: {
       marginBottom: theme.spacing(2)
     },
+    alert: {
+      maxWidth: '600px'
+    }
   }))()
   const theme = useTheme()
   const marginRight = { marginRight: theme.spacing(1) }
@@ -62,62 +66,44 @@ const HardWareForm = props => {
   }, [])
   return (
     <div>
-      <div className={classes.wrapper}>
-        <Typography variant='h6' component='p' paragraph>
-          {hardware.search}
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid classes={{ item: classes.gridItem }} item xs={4}>
-            <FaMicrochip style={{ ...marginRight }} />CPU
-          </Grid>
-          <Grid item xs={4}>
-            <Switch color='primary' checked={true} />
-          </Grid>
-        </Grid>
-        {!isCPU && (<>{
-          gpuList.map(gpu_name => {
-            return (
-              <Grid container spacing={3} key={gpu_name}>
-                <Grid classes={{ item: classes.gridItem }} item xs={4}>
-                  <FaBolt style={{ ...marginRight }} />{gpu_name}
+      {isCPU ? <MuiAlert severity="info" classes={{ root: classes.alert }}>No GPU Detected!</MuiAlert>
+        : (<>
+          <div className={classes.wrapper}>
+            <Typography variant='h6' component='p' paragraph>
+              {hardware.search}
+            </Typography>
+            {gpuList.map(gpu_name => {
+              return (
+                <Grid container spacing={3} key={gpu_name}>
+                  <Grid classes={{ item: classes.gridItem }} item xs={4}>
+                    <FaBolt style={{ ...marginRight }} />{gpu_name}
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Switch color='primary' checked={!!search_resources.find(s => s === gpu_name) || false} onChange={e => changeGPUSearch(e, gpu_name)} />
+                  </Grid>
                 </Grid>
-                <Grid item xs={4}>
-                  <Switch color='primary' checked={!!search_resources.find(s => s === gpu_name) || false} onChange={e => changeGPUSearch(e, gpu_name)} />
+              )
+            })}
+          </div>
+          <div className={classes.wrapper}>
+            <Typography variant='h6' component='p' paragraph>
+              {hardware.index}
+            </Typography>
+            {gpuList.map(gpu_name => {
+              return (
+                <Grid container spacing={3} key={gpu_name}>
+                  <Grid classes={{ item: classes.gridItem }} item xs={4} >
+                    <FaBolt style={{ ...marginRight }} />{gpu_name}
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Switch color='primary' checked={!!search_resources.find(s => s === gpu_name) || false} onChange={e => changeGPUIndex(e, gpu_name)} />
+                  </Grid>
                 </Grid>
-              </Grid>
-            )
-          })
-        }</>)}
-      </div>
-      <div className={classes.wrapper}>
-        <Typography variant='h6' component='p' paragraph>
-          {hardware.index}
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid classes={{ item: classes.gridItem }} item xs={4} >
-            <FaMicrochip style={{ ...marginRight }} />CPU
-        </Grid>
-          <Grid item xs={4}>
-            <Switch color='primary' checked={true} />
-          </Grid>
-        </Grid>
-        {!isCPU && (<>
-          {gpuList.map(gpu_name => {
-            return (
-              <Grid container spacing={3} key={gpu_name}>
-                <Grid classes={{ item: classes.gridItem }} item xs={4} >
-                  <FaBolt style={{ ...marginRight }} />{gpu_name}
-                </Grid>
-                <Grid item xs={4}>
-                  <Switch color='primary' checked={!!search_resources.find(s => s === gpu_name) || false} onChange={e => changeGPUIndex(e, gpu_name)} />
-                </Grid>
-              </Grid>
-            )
-          })}
-        </>)
-        }
-      </div>
-      <FormActions save={save} cancel={reset} disableCancel={!isFormChange} />
+              )
+            })}
+          </div>
+          <FormActions save={save} cancel={reset} disableCancel={!isFormChange} />
+        </>)}
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 // import { systemContext } from '../../context/system'
 // import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
@@ -19,16 +18,21 @@ const OthersForm = props => {
     intergration: "",
     address: ""
   })
+  const [isFormChange, setIsformChange] = useState(false)
 
   const { t } = useTranslation();
   // const others = t("others");
 
-  useEffect(() => {
+  const reset = () => {
+    setIsformChange(false)
     const { elk = {} } = milvusAddress[currentAddress] || {}
     setForm({
       enable: elk.enable || false,
       address: elk.address || ''
     })
+  }
+  useEffect(() => {
+    reset()
   }, [milvusAddress, currentAddress])
 
   const handleSubmit = () => {
@@ -49,9 +53,9 @@ const OthersForm = props => {
   //TODO: not sure relations between gui and address
   return (
     <>
-      <FormTextField label={"ELK"} value={form.intergration || ""} onChange={e => setForm({ ...form, intergration: e.target.value })} />
-      <FormTextField label={"Prometheus"} value={form.address || ""} onChange={e => setForm({ ...form, Prometheus: e.target.value })} />
-      <FormActions save={handleSubmit} />
+      <FormTextField label={"ELK"} value={form.intergration || ""} onChange={e => { setForm({ ...form, intergration: e.target.value }); setIsformChange(true) }} />
+      <FormTextField label={"Prometheus"} value={form.address || ""} onChange={e => { setForm({ ...form, address: e.target.value }); setIsformChange(true) }} />
+      <FormActions save={handleSubmit} cancel={reset} disableCancel={!isFormChange} />
     </>
   )
 };
