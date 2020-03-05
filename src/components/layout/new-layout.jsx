@@ -97,7 +97,7 @@ const Layout = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history.location.pathname]);
 
-  const { metrics = {}, elk = {} } = useMemo(() => {
+  const { prometheus = "", elk = "" } = useMemo(() => {
     return milvusAddress[currentAddress] || {};
   }, [currentAddress, milvusAddress]);
 
@@ -117,12 +117,12 @@ const Layout = props => {
       history.push("/data/search");
     }
     if (name === "intergration") {
-      if (elk.enable && elk.address) {
+      if (elk) {
         history.push("/intergration/elk");
         return;
       }
-      if (metrics.enable && metrics.address) {
-        history.push("/intergration/metrics");
+      if (prometheus) {
+        history.push("/intergration/prometheus");
         return;
       }
     }
@@ -189,15 +189,14 @@ const Layout = props => {
             classes.active}`}
           onClick={handleFirstMenuChange}
         />
-        {((elk.enable && elk.address) ||
-          (metrics.enable && metrics.address)) && (
-            <FaCubes
-              data-name="intergration"
-              className={`${classes.icon} ${firstMenu === "intergration" &&
-                classes.active}`}
-              onClick={handleFirstMenuChange}
-            ></FaCubes>
-          )}
+        {(elk || prometheus) && (
+          <FaCubes
+            data-name="intergration"
+            className={`${classes.icon} ${firstMenu === "intergration" &&
+              classes.active}`}
+            onClick={handleFirstMenuChange}
+          ></FaCubes>
+        )}
         <Settings
           data-name="config"
           className={`${classes.icon} ${firstMenu === "config" &&
@@ -231,7 +230,7 @@ const Layout = props => {
           )}
           {firstMenu === "config" && <ConfigMenu></ConfigMenu>}
           {firstMenu === "intergration" && (
-            <IframeMenu metrics={metrics} elk={elk}></IframeMenu>
+            <IframeMenu prometheus={prometheus} elk={elk}></IframeMenu>
           )}
         </div>
       </div>

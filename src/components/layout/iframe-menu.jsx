@@ -37,19 +37,19 @@ const useStyles = makeStyles(theme => ({
 const ConfigMenu = props => {
   const history = useHistory();
   const classes = useStyles();
-  const { elk = {}, metrics = {} } = props
+  const { elk = {}, prometheus = {} } = props
   const [configs, setConfigs] = useState([])
   useEffect(() => {
     const effectConfigs = []
-    if (elk.enable && elk.address) {
+    if (elk) {
       effectConfigs.push({ path: '/intergration/elk', label: "ELK GUI", icon: <GoNote /> })
     }
 
-    if (metrics.enable && metrics.address) {
-      effectConfigs.push({ path: '/intergration/metrics', label: "Metrics GUI", icon: <GiChart /> })
+    if (prometheus) {
+      effectConfigs.push({ path: '/intergration/prometheus', label: "Prometheus GUI", icon: <GiChart /> })
     }
     setConfigs(effectConfigs)
-  }, [elk, metrics])
+  }, [elk, prometheus])
 
   return (
     <div className={classes.root}>

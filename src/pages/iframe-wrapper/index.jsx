@@ -7,23 +7,23 @@ const IframeWrapper = props => {
   const { currentAddress } = useContext(httpContext)
   const [url, setUrl] = useState("")
   const { type } = props
-  const { metrics = {}, elk = {} } = useMemo(() => {
+  const { prometheus = {}, elk = {} } = useMemo(() => {
     return milvusAddress[currentAddress] || {}
   }, [currentAddress, milvusAddress])
 
   useEffect(() => {
     switch (type) {
       case 'elk':
-        setUrl(elk.address)
+        setUrl(elk)
         break
-      case 'metrics':
-        setUrl(metrics.address)
+      case 'prometheus':
+        setUrl(prometheus)
         break
       default:
         return
     }
 
-  }, [metrics, elk, type])
+  }, [prometheus, elk, type])
   return (
     <iframe
       title="Ifram for milvus "

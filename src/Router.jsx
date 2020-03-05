@@ -69,10 +69,10 @@ const HashRouterWrapper = () => {
                         <Route path="/configs/others">
                           <OtherConfigsPage></OtherConfigsPage>
                         </Route>
-                        <Route path="/integration/metrics">
-                          <IframeWrapper type="metrics"></IframeWrapper>
+                        <Route path="/intergration/prometheus">
+                          <IframeWrapper type="prometheus"></IframeWrapper>
                         </Route>
-                        <Route path="/integration/elk">
+                        <Route path="/intergration/elk">
                           <IframeWrapper type="elk"></IframeWrapper>
                         </Route>
                       </Switch>

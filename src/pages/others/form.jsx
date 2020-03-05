@@ -15,8 +15,8 @@ const OthersForm = props => {
   const { currentAddress } = useContext(httpContext)
   const { openSnackBar } = useContext(materialContext)
   const [form, setForm] = useState({
-    intergration: "",
-    address: ""
+    prometheus: "",
+    elk: ""
   })
   const [isFormChange, setIsformChange] = useState(false)
 
@@ -25,10 +25,10 @@ const OthersForm = props => {
 
   const reset = () => {
     setIsformChange(false)
-    const { elk = {} } = milvusAddress[currentAddress] || {}
+    const { elk = "", prometheus = "" } = milvusAddress[currentAddress] || {}
     setForm({
-      enable: elk.enable || false,
-      address: elk.address || ''
+      prometheus,
+      elk
     })
   }
   useEffect(() => {
@@ -42,20 +42,18 @@ const OthersForm = props => {
       payload: {
         id: currentAddress,
         values: {
-          elk: {
-            intergration: form.intergration,
-            address: form.address
-          }
+          elk: form.elk,
+          prometheus: form.prometheus
         }
       }
     })
     openSnackBar(t('submitSuccess'))
   }
-  //TODO: not sure relations between gui and address
+
   return (
     <>
-      <FormTextField label={"ELK"} value={form.intergration || ""} onChange={e => { setForm({ ...form, intergration: e.target.value }); setIsformChange(true) }} />
-      <FormTextField label={"Prometheus"} value={form.address || ""} onChange={e => { setForm({ ...form, address: e.target.value }); setIsformChange(true) }} />
+      <FormTextField label={"ELK"} value={form.elk || ""} onChange={e => { setForm({ ...form, elk: e.target.value }); setIsformChange(true) }} />
+      <FormTextField label={"Prometheus"} value={form.prometheus || ""} onChange={e => { setForm({ ...form, prometheus: e.target.value }); setIsformChange(true) }} />
       <FormActions save={handleSubmit} cancel={reset} disableCancel={!isFormChange} />
     </>
   )
