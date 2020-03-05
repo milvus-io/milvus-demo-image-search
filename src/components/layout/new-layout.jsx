@@ -1,34 +1,35 @@
-import React, { useContext, useState, useEffect, useMemo } from 'react'
+import React, { useContext, useState, useEffect, useMemo } from "react";
 import { Divider } from "@material-ui/core";
-import { Settings, ExitToApp, SearchOutlined } from '@material-ui/icons';
-import { AiOutlineHome } from 'react-icons/ai';
-import { MdStorage } from 'react-icons/md';
+import { Settings, ExitToApp, SearchOutlined } from "@material-ui/icons";
+import { AiOutlineHome } from "react-icons/ai";
+import { MdStorage } from "react-icons/md";
+import { FaCubes } from "react-icons/fa";
 
 import { useTranslation } from "react-i18next";
-import { useRouteMatch, useHistory } from 'react-router-dom'
-import Logo from '../../assets/imgs/logo.svg'
-import { KEYS } from '../../reducers/data-management'
-import { httpContext } from "../../context/http"
-import { dataManagementContext } from "../../context/data-management"
-import { systemContext } from "../../context/system"
-import { CLIENT_HISTORY, DELETE_MUTIPLE, DISCONNECT, INIT } from '../../consts';
-import PopConfirm from '../../components/pop-confirm'
-import DataMenu from './data-menu'
-import ConfigMenu from './config-menu'
-import LoginMenu from './login-menu';
-import IframeMenu from './iframe-menu'
-import useStyles from './style'
+import { useRouteMatch, useHistory } from "react-router-dom";
+import Logo from "../../assets/imgs/logo.svg";
+import { KEYS } from "../../reducers/data-management";
+import { httpContext } from "../../context/http";
+import { dataManagementContext } from "../../context/data-management";
+import { systemContext } from "../../context/system";
+import { CLIENT_HISTORY, DELETE_MUTIPLE, DISCONNECT, INIT } from "../../consts";
+import PopConfirm from "../../components/pop-confirm";
+import DataMenu from "./data-menu";
+import ConfigMenu from "./config-menu";
+import LoginMenu from "./login-menu";
+import IframeMenu from "./iframe-menu";
+import useStyles from "./style";
 
 const Layout = props => {
   const classes = useStyles();
-  const history = useHistory()
+  const history = useHistory();
   const { t } = useTranslation();
-  const { currentAddress, setCurrentAddress } = useContext(httpContext)
-  const { setMilvusAddress, milvusAddress } = useContext(systemContext)
-  const { setDataManagement } = useContext(dataManagementContext)
-  const [anchorEl, setAnchorEl] = useState(null)
-  const [firstMenu, setFisrstMenu] = useState('data')
-  const [currentRoute, setCurrentRoute] = useState({})
+  const { currentAddress, setCurrentAddress } = useContext(httpContext);
+  const { setMilvusAddress, milvusAddress } = useContext(systemContext);
+  const { setDataManagement } = useContext(dataManagementContext);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [firstMenu, setFisrstMenu] = useState("data");
+  const [currentRoute, setCurrentRoute] = useState({});
 
   const collectionMatch = useRouteMatch("/data/collections/:collectionName");
   const partitionMatch = useRouteMatch(
@@ -37,93 +38,94 @@ const Layout = props => {
   const collectionsMatch = useRouteMatch("/data/collections");
   const searchMatch = useRouteMatch("/data/search");
 
-
-  const effections = [JSON.stringify(collectionsMatch), JSON.stringify(collectionMatch), JSON.stringify(partitionMatch)]
+  const effections = [
+    JSON.stringify(collectionsMatch),
+    JSON.stringify(collectionMatch),
+    JSON.stringify(partitionMatch)
+  ];
   useEffect(() => {
     const { isExact, params } = collectionMatch || {};
     const { isExact: isPartition, params: partitionParams } =
       partitionMatch || {};
     const { isExact: isCollections } = collectionsMatch || {};
-    const { isExact: isSearch } = searchMatch || {}
+    const { isExact: isSearch } = searchMatch || {};
     if (isExact) {
       setCurrentRoute({
         page: "collection",
         collectionName: params.collectionName
-      })
+      });
     }
     if (isPartition) {
       setCurrentRoute({
         page: "partition",
         collectionName: partitionParams.collectionName,
         partitionTag: partitionParams.partitionTag
-      })
+      });
     }
     if (isCollections) {
       setCurrentRoute({
-        page: "collections",
-      })
+        page: "collections"
+      });
     }
     if (isSearch) {
       setCurrentRoute({
-        page: "search",
-      })
+        page: "search"
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(effections)]);
 
   // active first menu by url
   useEffect(() => {
+    const path = history.location.pathname;
 
-    const path = history.location.pathname
-
-    if (path.includes('/login')) {
-      setFisrstMenu('login')
+    if (path.includes("/login")) {
+      setFisrstMenu("login");
     }
-    if (path.includes('/data')) {
-      setFisrstMenu('data')
+    if (path.includes("/data")) {
+      setFisrstMenu("data");
     }
-    if (path.includes('/config')) {
-      setFisrstMenu('config')
+    if (path.includes("/config")) {
+      setFisrstMenu("config");
     }
-    if (path.includes('/data/search')) {
-      setFisrstMenu('search')
+    if (path.includes("/data/search")) {
+      setFisrstMenu("search");
     }
-    if (path.includes('/integration')) {
-      setFisrstMenu('integration')
+    if (path.includes("/integration")) {
+      setFisrstMenu("integration");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history.location.pathname])
+  }, [history.location.pathname]);
 
   const { metrics = {}, elk = {} } = useMemo(() => {
-    return milvusAddress[currentAddress] || {}
-  }, [currentAddress, milvusAddress])
+    return milvusAddress[currentAddress] || {};
+  }, [currentAddress, milvusAddress]);
 
   const handleFirstMenuChange = e => {
     const name = e.currentTarget.dataset.name;
     setFisrstMenu(name);
-    if (name === 'data') {
-      history.push('/data/collections')
+    if (name === "data") {
+      history.push("/data/collections");
     }
-    if (name === 'login') {
-      history.push('/login')
+    if (name === "login") {
+      history.push("/login");
     }
-    if (name === 'config') {
-      history.push('/configs/network')
+    if (name === "config") {
+      history.push("/configs/network");
     }
-    if (name === 'search') {
-      history.push('/data/search')
+    if (name === "search") {
+      history.push("/data/search");
     }
-    if (name === 'integration') {
+    if (name === "integration") {
       if (elk.enable && elk.address) {
-        history.push('/integration/elk')
-        return
+        history.push("/integration/elk");
+        return;
       }
       if (metrics.enable && metrics.address) {
-        history.push('/integration/metrics')
-        return
+        history.push("/integration/metrics");
+        return;
       }
     }
-
   };
 
   const handleExit = e => {
@@ -149,7 +151,7 @@ const Layout = props => {
           keys: [KEYS.table, KEYS.vectorSearch]
         }
       });
-      history.push('/login')
+      history.push("/login");
     }
     setAnchorEl(null);
   };
@@ -193,18 +195,15 @@ const Layout = props => {
             classes.active}`}
           onClick={handleFirstMenuChange}
         ></SearchOutlined>
-        {
-          ((elk.enable && elk.address) || (metrics.enable && metrics.address)) && <Settings
+        {((elk.enable && elk.address) ||
+          (metrics.enable && metrics.address)) && (
+          <FaCubes
             data-name="integration"
             className={`${classes.icon} ${firstMenu === "integration" &&
               classes.active}`}
             onClick={handleFirstMenuChange}
-          ></Settings>
-        }
-
-
-
-
+          ></FaCubes>
+        )}
       </div>
       <div className={classes.menuWrapper}>
         <div className="logo-wrapper">
@@ -213,37 +212,28 @@ const Layout = props => {
         <div className={classes.logoutWrapper}>
           <span className="circle"></span>
           <span>{currentAddress}</span>
-          {
-            anchorEl && <PopConfirm
+          {anchorEl && (
+            <PopConfirm
               open={open}
               anchorEl={anchorEl}
               handleClose={handleClose}
               handleConfirm={handleLogout}
               text={`${t("disconnect")}${currentAddress}?`}
             ></PopConfirm>
-          }
+          )}
           <ExitToApp className="icon" onClick={handleExit}></ExitToApp>
         </div>
         <Divider />
         <div className={classes.menuContent}>
-          {firstMenu === "login" && (
-            <LoginMenu></LoginMenu>
-          )}
-          {['data', 'search'].includes(firstMenu) && (
+          {firstMenu === "login" && <LoginMenu></LoginMenu>}
+          {["data", "search"].includes(firstMenu) && (
             <DataMenu currentRoute={currentRoute}></DataMenu>
           )}
-          {
-            firstMenu === "config" && (
-              <ConfigMenu></ConfigMenu>
-            )
-          }
-          {
-            firstMenu === "integration" && (
-              <IframeMenu metrics={metrics} elk={elk}></IframeMenu>
-            )
-          }
+          {firstMenu === "config" && <ConfigMenu></ConfigMenu>}
+          {firstMenu === "integration" && (
+            <IframeMenu metrics={metrics} elk={elk}></IframeMenu>
+          )}
         </div>
-
       </div>
       <div className={classes.content}>{props.children}</div>
     </div>
