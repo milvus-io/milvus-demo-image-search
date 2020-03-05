@@ -145,10 +145,10 @@ const Vectors = props => {
     setCurrent(0);
     setVectorOffset(null)
   };
-  const goToDivide = () => {
-    setCurrent(1998)
-    setVectorOffset(currentTotal - 1998 * PAGE_SIZE)
-  }
+  // const goToDivide = () => {
+  //   setCurrent(1998)
+  //   setVectorOffset(currentTotal - 1998 * PAGE_SIZE)
+  // }
   const colDefinitions = [
     {
       id: "id",
@@ -185,12 +185,12 @@ const Vectors = props => {
       disabled: selected => selected.length === 0,
       disabledTooltip: "You can not delete this"
     },
-    {
-      label: "Test",
-      icon: "refresh",
-      onClick: goToDivide,
-      disabled: false,
-    },
+    // {
+    //   label: "Test",
+    //   icon: "refresh",
+    //   onClick: goToDivide,
+    //   disabled: false,
+    // },
     {
       label: "",
       icon: "search",
