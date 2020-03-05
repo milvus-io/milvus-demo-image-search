@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     fill: "rgb(238, 238, 238)",
     cursor: "pointer",
     '&:hover': {
-      border: `solid 1px ${theme.palette.primary.main} `
+      fill: theme.palette.primary.main
     }
   },
   active: {
