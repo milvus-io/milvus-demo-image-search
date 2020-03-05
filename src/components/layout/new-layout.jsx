@@ -176,34 +176,36 @@ const Layout = props => {
           className={`${classes.icon} ${firstMenu === "login" &&
             classes.active}`}
           onClick={handleFirstMenuChange}
-        ></AiOutlineHome>
+        />
         <MdStorage
           data-name="data"
           className={`${classes.icon} ${firstMenu === "data" &&
             classes.active}`}
           onClick={handleFirstMenuChange}
-        ></MdStorage>
-        <Settings
-          data-name="config"
-          className={`${classes.icon} ${firstMenu === "config" &&
-            classes.active}`}
-          onClick={handleFirstMenuChange}
-        ></Settings>
+        />
         <SearchOutlined
           data-name="search"
           className={`${classes.icon} ${firstMenu === "search" &&
             classes.active}`}
           onClick={handleFirstMenuChange}
-        ></SearchOutlined>
+        />
         {((elk.enable && elk.address) ||
           (metrics.enable && metrics.address)) && (
-          <FaCubes
-            data-name="integration"
-            className={`${classes.icon} ${firstMenu === "integration" &&
-              classes.active}`}
-            onClick={handleFirstMenuChange}
-          ></FaCubes>
-        )}
+            <FaCubes
+              data-name="integration"
+              className={`${classes.icon} ${firstMenu === "integration" &&
+                classes.active}`}
+              onClick={handleFirstMenuChange}
+            ></FaCubes>
+          )}
+        <Settings
+          data-name="config"
+          className={`${classes.icon} ${firstMenu === "config" &&
+            classes.active}`}
+          onClick={handleFirstMenuChange}
+        />
+
+
       </div>
       <div className={classes.menuWrapper}>
         <div className="logo-wrapper">
