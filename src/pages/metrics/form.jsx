@@ -17,8 +17,7 @@ const MetricForm = props => {
   const { currentAddress } = useContext(httpContext)
   const { openSnackBar } = useContext(materialContext)
   const [isFormChange, setIsformChange] = useState(false)
-  const [metricsSetting, setMetricsSetting] = useState({})
-  const { handleChange } = useFormValidate(metricsSetting, setMetricsSetting)
+  const [metricSetting, setMetricSetting] = useState({})
 
   const classes = makeStyles(theme => ({
     gridItem: {
@@ -34,16 +33,16 @@ const MetricForm = props => {
 
   const handleSwitch = e => {
     setIsformChange(true)
-    setMetricsSetting({ ...metricsSetting, enable_monitor: e.target.checked });
+    setMetricSetting({ ...metricSetting, enable_monitor: e.target.checked });
   }
 
   const changePort = e => {
     setIsformChange(true)
-    setMetricsSetting({ ...metricsSetting, port: e.target.value })
+    setMetricSetting({ ...metricSetting, port: e.target.value })
   }
   const changeAddress = e => {
     setIsformChange(true)
-    setMetricsSetting({ ...metricsSetting, address: e.target.value })
+    setMetricSetting({ ...metricSetting, address: e.target.value })
   }
   const handleSubmit = () => {
     setMilvusAddress({
@@ -52,8 +51,8 @@ const MetricForm = props => {
         id: currentAddress,
         values: {
           metrics: {
-            enable: metricsSetting.enable_monitor,
-            address: metricsSetting.address
+            enable: metricSetting.enable_monitor,
+            address: metricSetting.address
           }
         }
       }
@@ -62,11 +61,12 @@ const MetricForm = props => {
   }
   const reset = () => {
     const { metric_config = {} } = milvusConfigs || {}
-    setMetricsSetting({
+    setMetricSetting({
       address: metric_config.address || "",
       port: metric_config.port || "",
-      enable_monitor: metric_config.enable_monitor || false,
+      enable_monitor: metric_config.enable_monitor === "true" || false,
     })
+    setIsformChange(false)
   }
   useEffect(() => {
     reset()
@@ -78,13 +78,12 @@ const MetricForm = props => {
       <FormControlLabel
         classes={{ root: classes.formControlLabel }}
         value="start"
-        control={<Switch name="enable" checked={metricsSetting.enable_monitor} onChange={handleSwitch} color="primary" />}
+        control={<Switch name="enable" checked={metricSetting.enable_monitor || false} onChange={handleSwitch} color="primary" />}
         label={metrics.enable}
         labelPlacement="start"
       />
-      <FormTextField label={metrics.address} value={metricsSetting.address} onChange={changeAddress} />
-      <FormTextField label={metrics.port} value={metricsSetting.port} onChange={changePort} />
-      <FormTextField label={metrics.gui} name="gui" value={metricsSetting.gui} onChange={handleChange} />
+      <FormTextField label={metrics.address} value={metricSetting.address || ""} onChange={changeAddress} />
+      <FormTextField label={metrics.port} value={metricSetting.port || ""} onChange={changePort} />
       <FormActions save={handleSubmit} cancel={reset} disableCancel={!isFormChange} />
     </>
   )

@@ -3,42 +3,25 @@ import { makeStyles } from "@material-ui/core/styles";
 // import { systemContext } from '../../context/system'
 // import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import Switch from '@material-ui/core/Switch'
 import { FormTextField } from '../../components/common/FormTextComponents'
 import FormActions from '../../components/common/FormActions'
 import { systemContext } from '../../context/system'
 import { httpContext } from '../../context/http'
-
 import { materialContext } from '../../context/material'
-
-import { useFormValidate } from '../../hooks/form'
+// import { useFormValidate } from '../../hooks/form'
 import { UPDATE } from '../../consts'
 // import { UPDATE } from "../../consts";
 const OthersForm = props => {
   const { setMilvusAddress, milvusAddress } = useContext(systemContext)
   const { currentAddress } = useContext(httpContext)
-
   const { openSnackBar } = useContext(materialContext)
-
   const [form, setForm] = useState({
-    enable: false,
+    Integration: "",
     address: ""
   })
-  const { handleChange } = useFormValidate(form, setForm)
-
-  const classes = makeStyles(theme => ({
-    gridItem: {
-      marginBottom: theme.spacing(2)
-    },
-    formControlLabel: {
-      marginBottom: theme.spacing(2),
-      marginLeft: `0 !important`
-    },
-  }))()
 
   const { t } = useTranslation();
-  const others = t("others");
+  // const others = t("others");
 
   useEffect(() => {
     const { elk = {} } = milvusAddress[currentAddress] || {}
@@ -48,12 +31,6 @@ const OthersForm = props => {
     })
   }, [milvusAddress, currentAddress])
 
-  const handleSwitch = () => {
-    setForm(v => ({
-      ...v,
-      enable: !v.enable
-    }))
-  }
   const handleSubmit = () => {
     setMilvusAddress({
       type: UPDATE,
@@ -69,16 +46,11 @@ const OthersForm = props => {
     })
     openSnackBar(t('submitSuccess'))
   }
+  //TODO: not sure relations between gui and address
   return (
     <>
-      <FormControlLabel
-        classes={{ root: classes.formControlLabel }}
-        value="start"
-        control={<Switch name="enable" checked={form.enable} onChange={handleSwitch} color="primary" />}
-        label={others.enable}
-        labelPlacement="start"
-      />
-      <FormTextField name="address" label={others.address} value={form.address} onChange={handleChange} />
+      <FormTextField label={"Integration"} value={form.Integration || ""} onChange={e => setForm({ ...form, Integration: e.target.value })} />
+      <FormTextField label={"Prometheus"} value={form.address || ""} onChange={e => setForm({ ...form, Prometheus: e.target.value })} />
       <FormActions save={handleSubmit} />
     </>
   )
