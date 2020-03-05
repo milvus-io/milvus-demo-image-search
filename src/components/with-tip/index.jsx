@@ -6,7 +6,7 @@ const WithTip = props => {
   const { title, placement = 'right' } = props;
   return (
     <Tooltip title={title} placement={placement} >
-      <IconButton size="small"><FaQuestionCircle /></IconButton>
+      <IconButton size="small" style={{ marginLeft: "4px" }}><FaQuestionCircle /></IconButton>
     </Tooltip>
   );
 };

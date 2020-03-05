@@ -32,7 +32,7 @@ const NetworkFrom = (props) => {
   const { t } = useTranslation();
   const vectorTrans = t("vector");
   const tipsTrans = vectorTrans.tips;
-  const { searchSuccess, collectionName, partitionTag, search } = props
+  const { searchSuccess, partitionTag, search } = props
 
   const handleSubmit = async e => {
     e && e.preventDefault();
@@ -52,11 +52,12 @@ const NetworkFrom = (props) => {
       vectors: JSON.stringify(newVectors)
     }))
     const data = {
-      ...form,
       vectors: [newVectors],
+      topk: Number(form.topk),
+      nprobe: Number(form.nprobe),
     }
-    partitionTag && (data['partition_tags'] = [partitionTag])
-    const res = await searchVectors(collectionName, { search: data })
+    // partitionTag && (data['partition_tags'] = [partitionTag])
+    const res = await searchVectors(form.collectionName, { search: data })
 
     searchSuccess(res.result[0] || []);
   };
@@ -137,7 +138,7 @@ const NetworkFrom = (props) => {
       />
       <FormTextField
         name="vectors"
-        sm={8}
+        sm={9}
         label={<div className={classes.labelContainer}>
           <span>{vectorTrans.tQuery}</span>
           <WithTip title={tipsTrans.tQuery} placement="bottom"></WithTip>
@@ -145,7 +146,7 @@ const NetworkFrom = (props) => {
         value={form.vectors}
         onBlur={() => { handleCheck(form.vectors, "vectors") }}
         onChange={handleChange}
-        placeholder={vectorTrans.tQuery}
+        placeholder={'[1,3,4,5]'}
         error={error.vectors}
         needMarginBottom={false}
         helperText={`${vectorTrans.tQuery}${t('required')}`}
