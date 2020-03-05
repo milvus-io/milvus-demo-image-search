@@ -15,7 +15,6 @@ const PerformanceTunning = props => {
   const {
     currentAddress = "",
     setMilvusConfig,
-    restartNotify
   } = useContext(httpContext);
   const [performanceSetting, setPerformanceSetting] = useState({
     use_blas_threshold: "",

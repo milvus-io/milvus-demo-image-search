@@ -1,10 +1,20 @@
 import React, { useRef, useContext } from 'react';
 import useStyles from './Style'
 import Grid from '@material-ui/core/Grid';
+import { DialogActions, DialogContent, DialogTitle, Button } from '@material-ui/core'
 import { FaUpload } from 'react-icons/fa';
-import { DialogActions, DialogContent, DialogTitle } from '@material-ui/core'
 import { materialContext } from '../../context/material'
 import { useTranslation } from 'react-i18next'
+import { exportCsv } from '../../utils/helpers'
+
+
+const example = [
+  { value: '[1,2,3,4]' },
+  { value: '[2,2,3,2]' },
+  { value: '[3,2,3,5]' },
+  { value: '[4,2,5,3]' },
+]
+
 const ImportVectorToCollection = props => {
   const classes = useStyles()
   const { t } = useTranslation()
@@ -23,14 +33,33 @@ const ImportVectorToCollection = props => {
       const regex = /"([^"]*)"/g;
       let currentResult;
       let results = [];
+      const errors = []
       while ((currentResult = regex.exec(csv)) !== null) {
         results.push(currentResult[1]);
       }
+
+      results.forEach((v, i) => {
+        try {
+          const val = JSON.parse(v)
+          return false
+        } catch (error) {
+          errors.push(i)
+        }
+      })
+
+      if (errors.length) {
+        openSnackBar(`Rows ${errors.join(', ')} is not right`)
+        return
+      }
+
       results = results.map(v => {
         try {
-          return JSON.parse(v)
+          const val = JSON.parse(v)
+          return val
         } catch (error) {
-          throw error
+          console.log(error)
+          openSnackBar(`${v} is not right`, 'error')
+          return v
         }
       })
       console.log(results)
@@ -52,9 +81,16 @@ const ImportVectorToCollection = props => {
     }
     form.click()
   }
+
+  const handleDownloadExample = () => {
+    exportCsv('import-vectors-example', example)
+  }
   return (
     <>
-      <DialogTitle >{`${vectorTrans.import} ${partitionTag}`}</DialogTitle>
+      <DialogTitle >
+        {`${vectorTrans.import} ${partitionTag}`}
+        <Button onClick={handleDownloadExample}>Example Download</Button>
+      </DialogTitle>
       <DialogContent classes={{ root: classes.dialogContent }}>
         <Grid classes={{ root: classes.gridRoot }} container spacing={3}>
           <Grid item sm={12} onClick={uploadFile}>

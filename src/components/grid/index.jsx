@@ -7,7 +7,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import Toolbar from "./Toolbar";
 import Table from "./Table";
-import CollectionIcon from "@material-ui/icons/GridOnSharp";
+// import CollectionIcon from "@material-ui/icons/GridOnSharp";
 
 const userStyle = makeStyles(theme => ({
   loading: {
@@ -50,7 +50,7 @@ const MilvusGrid = props => {
     colDefinitions = [],
     isLoading = false,
     title = "Table",
-    titleIcon = <CollectionIcon />,
+    // titleIcon = <CollectionIcon />,
     searchForm
   } = props;
 

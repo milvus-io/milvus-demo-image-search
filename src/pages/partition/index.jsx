@@ -14,7 +14,7 @@ import { useDataPageStyles } from "../../hooks/page";
 const PAGE_SIZE = 10;
 const Partitions = props => {
   const classes = useDataPageStyles()
-  const { getPartitions, getCollectionByName, deletePartition, currentAddress, createPartition } = useContext(httpContext)
+  const { deletePartition, createPartition } = useContext(httpContext)
   const { openSnackBar, setDialog } = useContext(materialContext)
   const { setRefresh, currentPartitions } = useContext(dataManagementContext)
 

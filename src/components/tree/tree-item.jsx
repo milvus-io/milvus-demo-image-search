@@ -70,11 +70,10 @@ const useTreeItemStyles = makeStyles(theme => ({
     height: "20px"
   }
 }));
-function StyledTreeItem(props) {
+const StyledTreeItem = (props) => {
   const classes = useTreeItemStyles();
   const { labelText, labelIcon: LabelIcon, url, searchUrl, labelInfo, propsClick = () => { }, propsIconBtnClick = () => { }, disabled, activeId, nodeId, iconBtn: IconBtn, needHover = false, ...other } = props;
   const itemRef = useRef(null)
-  const iconBtnRef = useRef(null)
   const [isHover, setIsHover] = useState(false)
   const handleClick = e => {
     const { id, url, name } = itemRef.current.dataset
@@ -110,7 +109,7 @@ function StyledTreeItem(props) {
           {
             showIconBtn && IconBtn &&
             <IconButton onClick={handleIconBtnClick} color="inherit" aria-label="refresh data" component="span" size="small" className={classes.iconBtn}>
-              <IconBtn ref={iconBtnRef}></IconBtn>
+              <IconBtn ></IconBtn>
             </IconButton>
           }
         </div>

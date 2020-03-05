@@ -17,7 +17,7 @@ const generateVector = (dimension) => {
   }
   return JSON.stringify(vectors)
 }
-while (records.length < 100000) {
+while (records.length < 20000) {
   let value = generateVector(4)
   records.push({ vector: value })
 }

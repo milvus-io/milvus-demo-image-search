@@ -79,7 +79,7 @@ const Layout = props => {
   useEffect(() => {
     const path = history.location.pathname;
 
-    if (path.includes("/login")) {
+    if (['/', '/login'].includes(path)) {
       setFisrstMenu("login");
     }
     if (path.includes("/data")) {
@@ -204,8 +204,6 @@ const Layout = props => {
             classes.active}`}
           onClick={handleFirstMenuChange}
         />
-
-
       </div>
       <div className={classes.menuWrapper}>
         <div className="logo-wrapper">

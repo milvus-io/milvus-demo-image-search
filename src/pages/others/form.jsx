@@ -33,6 +33,7 @@ const OthersForm = props => {
   }
   useEffect(() => {
     reset()
+    //eslint-disable-next-line
   }, [milvusAddress, currentAddress])
 
   const handleSubmit = () => {

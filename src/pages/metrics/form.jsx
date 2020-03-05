@@ -51,7 +51,8 @@ const MetricForm = props => {
         values: {
           metrics: {
             enable: metricSetting.enable_monitor,
-            address: metricSetting.address
+            address: metricSetting.address,
+            port: metricSetting.port
           }
         }
       }
@@ -81,8 +82,10 @@ const MetricForm = props => {
         label={metrics.enable}
         labelPlacement="start"
       />
-      <FormTextField label={metrics.address} value={metricSetting.address || ""} onChange={changeAddress} />
-      <FormTextField label={metrics.port} value={metricSetting.port || ""} onChange={changePort} />
+      {metricSetting.enable_monitor && (<>
+        <FormTextField label={metrics.address} value={metricSetting.address || ""} onChange={changeAddress} />
+        <FormTextField label={metrics.port} value={metricSetting.port || ""} onChange={changePort} />
+      </>)}
       <FormActions save={handleSubmit} cancel={reset} disableCancel={!isFormChange} />
     </>
   )
