@@ -128,10 +128,9 @@ const DataForm = function (props) {
       <Grid container alignItems="flex-end" className={classes.part}>
         <FormTextField
           name="primary"
-          marginBottom={false}
-          ref={primaryRef}
+          needMarginBottom={false}
           label={dataTrans.primary}
-          value={form.primary}
+          value={form.primary || ""}
           onBlur={() => {
             handleCheck(form.primary, "primary");
           }}
@@ -159,7 +158,7 @@ const DataForm = function (props) {
       {form.secondary.map((v, i) => (
         <Grid container alignItems="flex-end" key={i}>
           <FormTextField
-            marginBottom={false}
+            needMarginBottom={false}
             name="secondary"
             autoFocus={editIndex === i}
             label={dataTrans.second}
