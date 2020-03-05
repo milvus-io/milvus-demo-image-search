@@ -10,8 +10,7 @@ import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
 import FormActions from "../../components/common/FormActions";
 
-const Range_Threshold = { min: 0, max: 1 }
-const Insert_Buffer_Size = { min: 0, max: 1 }
+const Range_Threshold = { min: 0.01, max: 1 }
 
 const CacheForm = props => {
   const { systemInfos = {}, serverConfig, milvusConfigs = {} } = useContext(systemContext);
@@ -79,7 +78,7 @@ const CacheForm = props => {
           <Typography>{advancedTrans.cpu_capacity}</Typography>
         </Grid>
         <Grid item sm={4}>
-          <Slider value={cpu_cache_capacity} min={0} max={Number(cpuMemory)} onChange={(e, val) => _setSettings({ ...settings, cpu_cache_capacity: val })} />
+          <Slider value={cpu_cache_capacity} min={1} max={Number(cpuMemory)} onChange={(e, val) => _setSettings({ ...settings, cpu_cache_capacity: val })} />
         </Grid>
         <Grid item sm={1}>
           <Typography varient="p" component="p" align="center">
@@ -165,12 +164,12 @@ const CacheForm = props => {
           <Typography>{advancedTrans.insert_buffer_size}</Typography>
         </Grid>
         {/* TODO:  where to get insert_buffer_size ?*/}
-        <Grid item sm={6}>
-          <Slider value={insert_buffer_size} step={0.01} min={Insert_Buffer_Size.min} max={Insert_Buffer_Size.max} onChange={(e, val) => _setSettings({ ...settings, insert_buffer_size: val })} />
+        <Grid item sm={4}>
+          <Slider value={insert_buffer_size} step={1} min={1} max={100} onChange={(e, val) => _setSettings({ ...settings, insert_buffer_size: val })} />
         </Grid>
         <Grid item sm={1}>
           <Typography varient="p" component="p" align="center">
-            {`${Number(insert_buffer_size).toFixed(2) * 100}%`}
+            {Number(insert_buffer_size)}
           </Typography>
         </Grid>
         <Grid item sm={12}>
