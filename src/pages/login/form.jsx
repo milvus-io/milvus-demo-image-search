@@ -16,6 +16,7 @@ const defaultForm = { host: "", port: "19121" }
 const LoginForm = (props) => {
   const connectMilvus = useConnectMilvus()
   const [form, setForm] = useState({ ...defaultForm })
+  const [isFormChange, setIsformChange] = useState(false)
   const [error, setError] = useState({})
 
   const { validateForm, handleCheck, handleChange } = useFormValidate(form, setForm, setError)
@@ -25,12 +26,17 @@ const LoginForm = (props) => {
     currentAddress,
   } = useContext(httpContext)
 
-  useEffect(() => {
+  const reset = () => {
     const currentConfig = milvusAddress[currentAddress] || {}
     setForm({
       host: currentConfig.host || '',
       port: currentConfig.port || ""
     })
+    setIsformChange(false)
+  }
+
+  useEffect(() => {
+    reset()
   }, [milvusAddress, currentAddress])
 
   const { t } = useTranslation();
@@ -59,7 +65,7 @@ const LoginForm = (props) => {
         label={loginTrans.host}
         value={form.host}
         onBlur={() => { handleCheck(form.host, "host") }}
-        onChange={handleChange}
+        onChange={e => { handleChange(e); setIsformChange(true) }}
         placeholder='0.0.0.0'
         error={error.host}
         helperText={error.host && `${loginTrans.host}${t('required')}`}
@@ -69,12 +75,12 @@ const LoginForm = (props) => {
         label={loginTrans.port}
         value={form.port}
         onBlur={() => { handleCheck(form.port, "port") }}
-        onChange={handleChange}
+        onChange={e => { handleChange(e); setIsformChange(true) }}
         placeholder='19121'
         error={error.port}
         helperText={error.port && `${loginTrans.port}${t('required')}`}
       />
-      <FormActions save={handleSubmit} confirmLabel={buttonTrans.connect} />
+      <FormActions save={handleSubmit} cancel={reset} confirmLabel={buttonTrans.connect} disableCancel={!isFormChange} />
     </>
   );
 }
