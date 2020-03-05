@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from "react";
+import React, { useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from '../../hooks'
 import SearchForm from "./search-form";

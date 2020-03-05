@@ -9,7 +9,6 @@ import { materialContext } from "../../context/material"
 import { useTranslation } from "react-i18next";
 import { FormTextField } from '../../components/common/FormTextComponents'
 import FormActions from '../../components/common/FormActions'
-import { useFormValidate } from '../../hooks/form'
 import { UPDATE } from '../../consts'
 
 const MetricForm = props => {

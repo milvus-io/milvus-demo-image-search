@@ -79,7 +79,7 @@ const Layout = props => {
   useEffect(() => {
     const path = history.location.pathname;
 
-    if (path.includes("/login")) {
+    if (['/', '/login'].includes(path)) {
       setFisrstMenu("login");
     }
     if (path.includes("/data")) {
@@ -197,13 +197,13 @@ const Layout = props => {
         ></SearchOutlined>
         {((elk.enable && elk.address) ||
           (metrics.enable && metrics.address)) && (
-          <FaCubes
-            data-name="integration"
-            className={`${classes.icon} ${firstMenu === "integration" &&
-              classes.active}`}
-            onClick={handleFirstMenuChange}
-          ></FaCubes>
-        )}
+            <FaCubes
+              data-name="integration"
+              className={`${classes.icon} ${firstMenu === "integration" &&
+                classes.active}`}
+              onClick={handleFirstMenuChange}
+            ></FaCubes>
+          )}
       </div>
       <div className={classes.menuWrapper}>
         <div className="logo-wrapper">
