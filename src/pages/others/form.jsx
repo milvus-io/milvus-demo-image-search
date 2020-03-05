@@ -16,7 +16,7 @@ const OthersForm = props => {
   const { currentAddress } = useContext(httpContext)
   const { openSnackBar } = useContext(materialContext)
   const [form, setForm] = useState({
-    Integration: "",
+    intergration: "",
     address: ""
   })
 
@@ -49,7 +49,7 @@ const OthersForm = props => {
   //TODO: not sure relations between gui and address
   return (
     <>
-      <FormTextField label={"Integration"} value={form.Integration || ""} onChange={e => setForm({ ...form, Integration: e.target.value })} />
+      <FormTextField label={"ELK"} value={form.intergration || ""} onChange={e => setForm({ ...form, intergration: e.target.value })} />
       <FormTextField label={"Prometheus"} value={form.address || ""} onChange={e => setForm({ ...form, Prometheus: e.target.value })} />
       <FormActions save={handleSubmit} />
     </>
