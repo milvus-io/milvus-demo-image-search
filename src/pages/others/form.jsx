@@ -51,7 +51,6 @@ const OthersForm = props => {
     })
     openSnackBar(t('submitSuccess'))
   }
-  //TODO: not sure relations between gui and address
   return (
     <>
       <FormTextField label={"ELK"} value={form.intergration || ""} onChange={e => { setForm({ ...form, intergration: e.target.value }); setIsformChange(true) }} />
