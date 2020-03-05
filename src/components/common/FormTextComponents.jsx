@@ -24,14 +24,10 @@ const useStyles = makeStyles(theme => ({
 }))
 export const FormTextField = props => {
   const classes = useStyles()
-  const { needMarginBottom = true, sm = 4, className = '', } = props
-  const cloneProps = JSON.parse(JSON.stringify(props))
-  delete cloneProps.className;
-  delete cloneProps.needMarginBottom;
-  delete cloneProps.sm;
+  const { needMarginBottom = true, sm = 4, className = '', ...others } = props
   return (
     <Grid sm={sm} item>
-      <TextField fullWidth className={`${classes.textField} ${className}`} classes={{ root: needMarginBottom ? classes.root : "" }} {...cloneProps} />
+      <TextField fullWidth className={`${classes.textField} ${className}`} classes={{ root: needMarginBottom ? classes.root : "" }} {...others} />
     </Grid>
   )
 }
