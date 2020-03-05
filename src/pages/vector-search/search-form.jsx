@@ -10,10 +10,18 @@ import { FormTextField } from '../../components/common/FormTextComponents'
 import { Grid, IconButton, Select, MenuItem, InputLabel } from '@material-ui/core'
 import SearchIcon from "@material-ui/icons/Search";
 import WithTip from '../../components/with-tip'
+import { makeStyles } from '@material-ui/styles'
 
 const defaultForm = { topk: 2, nprobe: 16, vectors: '', collectionName: "" }
 
 const NetworkFrom = (props) => {
+  const classes = makeStyles(theme => ({
+    labelContainer: {
+      display: 'flex',
+      justifyContent: 'start',
+      alignItems: "center",
+    }
+  }))()
   const query = useQuery()
   const [form, setForm] = useState({ ...defaultForm })
   const [error, setError] = useState({})
@@ -96,10 +104,10 @@ const NetworkFrom = (props) => {
         name="topk"
         type="number"
         sm={3}
-        label={<>
+        label={<div className={classes.labelContainer}>
           <span>{vectorTrans.tTop}</span>
           <WithTip title={tipsTrans.tTop} placement="bottom"></WithTip>
-        </>}
+        </div>}
         value={form.topk}
         onBlur={() => { handleCheck(form.topk, "topk") }}
         onChange={handleChange}
@@ -112,10 +120,10 @@ const NetworkFrom = (props) => {
         name="nprobe"
         type="number"
         sm={3}
-        label={<>
+        label={<div className={classes.labelContainer}>
           <span>{vectorTrans.tNprobe}</span>
           <WithTip title={tipsTrans.tNprobe} placement="bottom"></WithTip>
-        </>}
+        </div>}
         value={form.nprobe}
         onBlur={() => { handleCheck(form.nprobe, "nprobe") }}
         onChange={handleChange}
@@ -127,10 +135,10 @@ const NetworkFrom = (props) => {
       <FormTextField
         name="vectors"
         sm={8}
-        label={<>
+        label={<div className={classes.labelContainer}>
           <span>{vectorTrans.tQuery}</span>
           <WithTip title={tipsTrans.tQuery} placement="bottom"></WithTip>
-        </>}
+        </div>}
         value={form.vectors}
         onBlur={() => { handleCheck(form.vectors, "vectors") }}
         onChange={handleChange}
