@@ -10,20 +10,19 @@ import MilvusGrid from "../../components/grid";
 import ImportVectors from '../../components/dialogs/ImportVectorToCollection'
 import { useDataPageStyles } from "../../hooks/page";
 import { useQuery } from '../../hooks'
-import { sliceWord } from '../../utils/helpers'
 
 const PAGE_SIZE = 10;
+
 const Vectors = props => {
   const classes = useDataPageStyles()
   const query = useQuery()
-  const { currentAddress, getSegments, addVectors, getVectors, deleteVectors } = useContext(httpContext)
+  const { currentAddress, getSegments, addVectors, getVectors, deleteVectors, getVectorById } = useContext(httpContext)
   const { openSnackBar, setDialog } = useContext(materialContext)
   const { setRefresh } = useContext(dataManagementContext)
 
   const { collectionName, partitionTag } = useParams()
   const { t } = useTranslation();
   const vectorTrans = t("vector");
-  const tableTrans = t("table");
 
   const [data, setData] = useState([])
   const [vectorOffset, setVectorOffset] = useState(0); // only for one segment
@@ -32,14 +31,12 @@ const Vectors = props => {
   const [count, setCount] = useState(0); // total count for pagination
   const [current, setCurrent] = useState(0); // current page for pagination
   const [direction, setDirection] = useState("next")
-  const [segementStartPage, setSegementStartPage] = useState([0])
-
+  const [segementStartPage, setSegementStartPage] = useState([0]) // store the start page, will minus when page change
   const fetchSegments = async () => {
     if (!currentAddress) return
     try {
-      const res = await getSegments(collectionName, { offset: 0, partition_tag: partitionTag, page_size: PAGE_SIZE })
+      const res = await getSegments(collectionName, { partition_tag: partitionTag, all_required: true })
       const firstSegment = res.segments[0]
-      console.log(res)
       setSegments(res.segments || [])
       setCount(res.segments.reduce((pre, cur) => pre + cur.count, 0)) // get all vectors count
       setCurrentSegmentIndex(0)
@@ -50,17 +47,6 @@ const Vectors = props => {
       setRefresh(false)
     }
   }
-
-  // const saveSuccess = () => {
-  //   setRefresh(true)
-  //   getFirstPage();
-  //   setCurrent(0);
-  // };
-
-  const getFirstPage = () => {
-    setCurrent(0)
-    setCurrentSegmentIndex(0)
-  };
 
   useEffect(() => {
     fetchSegments();
@@ -79,13 +65,17 @@ const Vectors = props => {
     setData(v => {
       const newVectors = vectors.map(v => ({
         ...v,
-        vector: sliceWord(JSON.stringify(v.vector))
+        vector: JSON.stringify(v.vector)
       }))
+      // if v.length < PAGE_SIZE means ,this time we fetch PAGESIZE - v.length count.
+      // so we need to concat results
       return v.length < PAGE_SIZE ? [...v, ...newVectors] : newVectors
     })
+
     const nextIndex = direction === 'next' ? currentSegmentIndex + 1 : currentSegmentIndex - 1
     const nextSegment = segments[nextIndex]
 
+    // if vectorOffset < 0 and nextSegment exist means we need more data.
     if (vectorOffset < 0 && nextSegment) {
       setCurrentSegmentIndex(nextIndex)
       setVectorOffset(v => nextSegment.count + vectorOffset)
@@ -97,15 +87,27 @@ const Vectors = props => {
     }
   }
 
-
+  // fecth vectot by vectorOffset
   useEffect(() => {
-    if (!segmentName) return
+    if (!segmentName || !vectorOffset) return
     fetchVectors()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vectorOffset])
 
   const handlePageChange = (e, page) => {
-    const offset = currentTotal - (page + 1 - segementStartPage[currentSegmentIndex]) * PAGE_SIZE
+    let offset = 0
+    // direction -> prev,current segment has no data ,so we need use prev segment
+    if (page + 1 === segementStartPage[currentSegmentIndex]) {
+      const curSegment = segments[currentSegmentIndex - 1]
+      offset = curSegment.count - (page + 1 - segementStartPage[currentSegmentIndex - 1]) * PAGE_SIZE
+      setCurrentSegmentIndex(v => v - 1)
+    } else {
+      // current page start from 0 because we need store segementStartPage
+      // that also make us need to page + 1
+      offset = currentTotal - (page + 1 - segementStartPage[currentSegmentIndex]) * PAGE_SIZE
+    }
+
+    console.log(page, offset)
     setVectorOffset(offset);
     setDirection(page > current ? 'next' : "prev")
     setCurrent(page);
@@ -117,7 +119,6 @@ const Vectors = props => {
     fetchSegments()
     setCurrent(0);
     openSnackBar(t('deleteSuccess'))
-
   };
 
   const handleAddVectors = async (vectors) => {
@@ -125,14 +126,29 @@ const Vectors = props => {
       partition_tag: partitionTag,
       vectors
     })
-    setTimeout(() => {
-      openSnackBar(vectorTrans.importSuccess)
-      fetchSegments()
-      setCurrent(0)
-    }, 1000)
+    openSnackBar(vectorTrans.importSuccess)
+    fetchSegments()
+    setCurrent(0)
 
   }
-
+  const handleSearch = async id => {
+    setCurrent(0);
+    if (!id) {
+      setData([])
+      fetchSegments()
+      setCurrent(0);
+      return;
+    }
+    const res = (await getVectorById(collectionName, { id })) || {};
+    setData(res.vectors || []);
+    setCount(1);
+    setCurrent(0);
+    setVectorOffset(null)
+  };
+  const goToDivide = () => {
+    setCurrent(1998)
+    setVectorOffset(currentTotal - 1998 * PAGE_SIZE)
+  }
   const colDefinitions = [
     {
       id: "id",
@@ -170,13 +186,17 @@ const Vectors = props => {
       disabledTooltip: "You can not delete this"
     },
     {
+      label: "Test",
+      icon: "refresh",
+      onClick: goToDivide,
+      disabled: false,
+    },
+    {
       label: "",
       icon: "search",
       searchText: "",
-      onSearch: text => console.log("search value is", text),
-      onClear: () => {
-        console.log("clear clear");
-      }
+      onSearch: handleSearch,
+      onClear: handleSearch
     }
   ];
 

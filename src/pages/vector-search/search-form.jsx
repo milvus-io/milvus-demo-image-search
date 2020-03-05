@@ -1,14 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { dataManagementContext } from '../../context/data-management'
 import { httpContext } from "../../context/http"
-import { materialContext } from '../../context/material'
 import { useTranslation } from "react-i18next";
 import { useFormValidate } from '../../hooks/form'
 import { useQuery } from '../../hooks'
 import { COLLECTION_NAME } from '../../consts'
 import { FormTextField } from '../../components/common/FormTextComponents'
-import { Grid, IconButton, Select, MenuItem, InputLabel } from '@material-ui/core'
-import SearchIcon from "@material-ui/icons/Search";
+import { Grid, Button, Select, MenuItem, InputLabel } from '@material-ui/core'
 import WithTip from '../../components/with-tip'
 
 const defaultForm = { topk: 2, nprobe: 16, vectors: '', collectionName: "" }
@@ -20,17 +18,16 @@ const NetworkFrom = (props) => {
 
   const { validateForm, handleCheck, handleChange } = useFormValidate(form, setForm, setError)
 
-  const { openSnackBar } = useContext(materialContext)
   const { searchVectors } = useContext(httpContext)
   const { allCollections } = useContext(dataManagementContext)
 
   const { t } = useTranslation();
   const vectorTrans = t("vector");
   const tipsTrans = vectorTrans.tips;
-  const { searchSuccess, collectionName, partitionTag } = props
+  const { searchSuccess, collectionName, partitionTag, search } = props
 
   const handleSubmit = async e => {
-    e.preventDefault();
+    e && e.preventDefault();
     const isValid = validateForm()
     if (!isValid) {
       return
@@ -70,6 +67,12 @@ const NetworkFrom = (props) => {
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allCollections, queryCollectionName])
+
+  useEffect(() => {
+    if (!search) return
+    handleSubmit()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search])
 
   return (
     <Grid container spacing={1} style={{ maxWidth: "1000px" }}>
@@ -140,13 +143,12 @@ const NetworkFrom = (props) => {
         helperText={`${vectorTrans.tQuery}${t('required')}`}
       />
       <Grid item sm={4}>
-        <IconButton
+        <Button
           onClick={handleSubmit}
           color="primary"
-          aria-label="search"
-          component="span" >
-          <SearchIcon ></SearchIcon>
-        </IconButton>
+        >
+          Search
+        </Button>
       </Grid>
     </Grid>
 
