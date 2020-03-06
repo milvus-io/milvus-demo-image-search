@@ -32,7 +32,7 @@ const NetworkFrom = (props) => {
   const { t } = useTranslation();
   const vectorTrans = t("vector");
   const tipsTrans = vectorTrans.tips;
-  const { searchSuccess, partitionTag, search } = props
+  const { searchSuccess, search } = props
 
   const handleSubmit = async e => {
     e && e.preventDefault();

@@ -40,7 +40,7 @@ const ImportVectorToCollection = props => {
 
       results.forEach((v, i) => {
         try {
-          const val = JSON.parse(v)
+          JSON.parse(v)
           return false
         } catch (error) {
           errors.push(i)
@@ -48,7 +48,7 @@ const ImportVectorToCollection = props => {
       })
 
       if (errors.length) {
-        openSnackBar(`Rows ${errors.join(', ')} is not right`)
+        openSnackBar(`Rows ${errors.join(', ')} wrong format`, 'error')
         return
       }
 
@@ -58,7 +58,7 @@ const ImportVectorToCollection = props => {
           return val
         } catch (error) {
           console.log(error)
-          openSnackBar(`${v} is not right`, 'error')
+          openSnackBar(`${v}  wrong format`, 'error')
           return v
         }
       })
