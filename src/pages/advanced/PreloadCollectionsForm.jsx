@@ -25,8 +25,8 @@ const PreloadCollectionsForm = props => {
   const savePreload = async () => {
     const newMilvusConfigs = {
       db_config: {
-        auto_flush_interval: milvusConfigs.db_config.auto_flush_interval,
-        backend_url: milvusConfigs.db_config.backend_url,
+        // auto_flush_interval: milvusConfigs.db_config.auto_flush_interval,
+        // backend_url: milvusConfigs.db_config.backend_url,
         preload_table: preload
       }
     }
