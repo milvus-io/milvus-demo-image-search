@@ -173,13 +173,13 @@ const Layout = props => {
       <div className={classes.left}>
         <AiOutlineHome
           data-name="login"
-          className={`${classes.icon} ${firstMenu === "login" &&
+          className={`MuiSvgIcon-root ${classes.icon} ${firstMenu === "login" &&
             classes.active}`}
           onClick={handleFirstMenuChange}
         />
         <MdStorage
           data-name="data"
-          className={`${classes.icon} ${firstMenu === "data" &&
+          className={`MuiSvgIcon-root ${classes.icon} ${firstMenu === "data" &&
             classes.active}`}
           onClick={handleFirstMenuChange}
         />
@@ -192,7 +192,7 @@ const Layout = props => {
         {(elk || prometheus) && (
           <FaCubes
             data-name="intergration"
-            className={`${classes.icon} ${firstMenu === "intergration" &&
+            className={`MuiSvgIcon-root ${classes.icon} ${firstMenu === "intergration" &&
               classes.active}`}
             onClick={handleFirstMenuChange}
           ></FaCubes>
