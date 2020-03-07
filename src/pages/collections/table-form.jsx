@@ -22,7 +22,7 @@ const METRIC_TYPES = [
 const TableForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   function (props) {
-    const { createTable } = useContext(httpContext)
+    const { createCollection } = useContext(httpContext)
     const [dimension, setDimension] = useState(4096);
     const [size, setSize] = useState(1024);
     const [loading, setLoading] = useState(false);
@@ -48,7 +48,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
           index_file_size: size
         };
         try {
-          const res = await createTable(data);
+          const res = await createCollection(data);
           if (res.code === 0) {
             props.saveSuccess(tableTrans.saveSuccess);
             resetFields();
@@ -71,7 +71,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
             <WithTip text={tipsTrans.name} label={tableTrans.tName}></WithTip>
           }
         >
-          {getFieldDecorator("table_name", {
+          {getFieldDecorator("collection_name", {
             rules: [
               {
                 required: true,

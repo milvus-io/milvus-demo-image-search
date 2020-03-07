@@ -30,7 +30,7 @@ const CreateIndex = props => {
     if (!isValid) {
       return
     }
-    const res = await createIndex(collectionInfo.table_name, { ...form })
+    const res = await createIndex(collectionInfo.collection_name, { ...form })
 
     if (res && res.code === 0) {
       openSnackBar(t('index').saveSuccess)
@@ -40,7 +40,7 @@ const CreateIndex = props => {
   }
   return (
     <>
-      <DialogTitle >{tableTrans.index} {collectionInfo.table_name}</DialogTitle>
+      <DialogTitle >{tableTrans.index} {collectionInfo.collection_name}</DialogTitle>
       <DialogContent classes={{ root: classes.dialogContent }}>
         <Grid container spacing={3}>
           {/* <Grid item sm={4}>

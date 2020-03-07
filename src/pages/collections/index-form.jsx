@@ -16,7 +16,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
     const [nlist, setNlist] = useState(16384);
     const [loading, setLoading] = useState(false);
 
-    const { table_name: tableName, index: type, nlist: defaultNlist } =
+    const { collection_name: tableName, index: type, nlist: defaultNlist } =
       props.record || {};
     const { getFieldDecorator, resetFields } = props.form;
     const handleSubmit = e => {

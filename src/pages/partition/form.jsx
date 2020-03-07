@@ -34,7 +34,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         try {
           const res = await createPartition(tableName, data);
           if (res.code === 0) {
-            props.saveSuccess(partitionTrans.saveSuccess, data.table_name);
+            props.saveSuccess(partitionTrans.saveSuccess, data.collection_name);
             resetFields();
           }
         } finally {
@@ -53,7 +53,7 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         {/* <Form.Item
           label={partitionTrans.tableName}
         >
-          {getFieldDecorator("table_name", {
+          {getFieldDecorator("collection_name", {
             rules: [
               {
                 required: true,

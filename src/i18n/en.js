@@ -86,7 +86,7 @@ export default {
     saveSuccess: "Create Collection Success",
     delete: "Delete Collection Success",
     confirmDel: "Are you sure to delete collection",
-    deleteTable: "Delete Collection",
+    deleteCollection: "Delete Collection",
     searchTxt: "Collection Name",
     updateIndex: "Update Index",
     partitions: "Patitions",

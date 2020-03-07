@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import { useTranslation } from "react-i18next";
 
 const defaultForm = {
-  table_name: '',
+  collection_name: '',
   metric_type: 'L2',
   dimension: 4,
   index_file_size: 1024
@@ -24,14 +24,14 @@ const CreateCollection = props => {
   const { t } = useTranslation();
   const tableTrans = t("table");
   const buttonTrans = t("button");
-  const { createTable, saveSuccess } = props
+  const { createCollection, saveSuccess } = props
 
   const update = async () => {
     const isValid = validateForm()
     if (!isValid) {
       return
     }
-    const res = await createTable({ ...form })
+    const res = await createCollection({ ...form })
     console.log(res)
     if (res && res.code === 0) {
       saveSuccess()
@@ -53,13 +53,13 @@ const CreateCollection = props => {
           </Grid>
           <Grid item sm={12} >
             <TextField
-              name="table_name"
+              name="collection_name"
               className={classes.textField}
-              value={form.table_name}
-              onBlur={() => { handleCheck(form.table_name, "table_name") }}
+              value={form.collection_name}
+              onBlur={() => { handleCheck(form.collection_name, "collection_name") }}
               onChange={handleChange}
               placeholder={'Collection Name'}
-              error={error.table_name}
+              error={error.collection_name}
               variant="outlined"
               helperText={`${tableTrans.tName}${t('required')}`}
             />

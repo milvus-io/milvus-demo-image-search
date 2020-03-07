@@ -14,7 +14,7 @@ import CreateIndex from "../../components/dialogs/CreateIndex";
 
 const PAGE_SIZE = 10;
 const Collections = props => {
-  const { deleteTable, searchTable, createTable, createIndex } = useContext(
+  const { deleteCollection, searchCollection, createCollection, createIndex } = useContext(
     httpContext
   );
 
@@ -35,7 +35,7 @@ const Collections = props => {
     const res = await Promise.all(
       selected.map(async (v, i) => {
         try {
-          return await deleteTable(v.table_name);
+          return await deleteCollection(v.collection_name);
         } catch (error) {
           return error.response;
         }
@@ -72,8 +72,8 @@ const Collections = props => {
       setIsSearch(false);
       return;
     }
-    const res = (await searchTable(name)) || {};
-    setData([{ ...res, key: res.table_name }]);
+    const res = (await searchCollection(name)) || {};
+    setData([{ ...res, key: res.collection_name }]);
     setCount(1);
     setIsSearch(true);
   };
@@ -97,7 +97,7 @@ const Collections = props => {
 
   const colDefinitions = [
     {
-      id: "table_name",
+      id: "collection_name",
       numeric: false,
       disablePadding: true,
       label: tableTrans.tName
@@ -147,7 +147,7 @@ const Collections = props => {
           params: {
             component: (
               <CreateCollection
-                createTable={createTable}
+                createCollection={createCollection}
                 saveSuccess={saveSuccess}
               ></CreateCollection>
             )
@@ -166,7 +166,7 @@ const Collections = props => {
             params: {
               title: `Do you want to delete ${
                 selected.length === 1 ? `this item` : `these items`
-              }?`,
+                }?`,
               confirm: async () => {
                 await handleDelete(e, selected);
                 resolve(true);
@@ -207,9 +207,9 @@ const Collections = props => {
           open: true,
           type: "notice",
           params: {
-            title: `Do you want to delete index in ${selected[0].table_name}?`,
+            title: `Do you want to delete index in ${selected[0].collection_name}?`,
             confirm: () => {
-              deleteIndex(selected[0].table_name);
+              deleteIndex(selected[0].collection_name);
             }
           }
         });
@@ -244,7 +244,7 @@ const Collections = props => {
             rowCount={count}
             page={current}
             onChangePage={handlePageChange}
-            primaryKey="table_name"
+            primaryKey="collection_name"
             isLoading={false}
           ></MilvusGrid>
         </Box>

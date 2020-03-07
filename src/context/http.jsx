@@ -15,12 +15,12 @@ export const httpContext = React.createContext({
   // data management api
   getCollections: () => { },
   getCollectionByName: (collectionName) => { },
-  createTable: () => { },
-  deleteTable: () => { },
+  createCollection: () => { },
+  deleteCollection: () => { },
   createIndex: () => { },
-  searchTable: () => { },
+  searchCollection: () => { },
   searchVectors: (collectionName, data) => { },
-  getPartitions: (tableName, params) => { },
+  getPartitions: (Name, params) => { },
   createPartition: () => { },
   deletePartition: () => { },
   getSegments: (collectionName, params) => { },
@@ -121,74 +121,74 @@ export const HttpProvider = ({ children }) => {
   // ------- Data Management Start ----------
 
   async function searchVectors(collectionName, data = {}) {
-    const res = await axiosInstance.put(`/tables/${collectionName}/vectors`, data);
+    const res = await axiosInstance.put(`/collections/${collectionName}/vectors`, data);
     return res.data;
   }
 
   async function getCollections(params = {}) {
-    const res = await axiosInstance.get("/tables", { params });
+    const res = await axiosInstance.get("/collections", { params });
     return res.data;
   }
   async function getCollectionByName(collectionName) {
-    const res = await axiosInstance.get(`/tables/${collectionName}`);
+    const res = await axiosInstance.get(`/collections/${collectionName}`);
     return res.data;
   }
 
-  async function createTable(data) {
-    const res = await axiosInstance.post("/tables", data);
+  async function createCollection(data) {
+    const res = await axiosInstance.post("/collections", data);
     return res.data;
   }
 
-  async function deleteTable(name) {
-    const res = await axiosInstance.delete(`/tables/${name}`);
+  async function deleteCollection(name) {
+    const res = await axiosInstance.delete(`/collections/${name}`);
     return res.data;
   }
 
-  async function createIndex(tableName, data = {}) {
-    const res = await axiosInstance.post(`/tables/${tableName}/indexes`, data);
+  async function createIndex(collectionName, data = {}) {
+    const res = await axiosInstance.post(`/collections/${collectionName}/indexes`, data);
     return res.data;
   }
 
-  async function searchTable(tableName) {
-    const res = await axiosInstance.get(`/tables/${tableName}`);
+  async function searchCollection(collectionName) {
+    const res = await axiosInstance.get(`/collections/${collectionName}`);
     return res.data;
   }
 
-  async function createPartition(tableName, data) {
-    const res = await axiosInstance.post(`/tables/${tableName}/partitions`, data);
+  async function createPartition(collectionName, data) {
+    const res = await axiosInstance.post(`/collections/${collectionName}/partitions`, data);
     return res.data;
   }
 
-  async function getPartitions(tableName, params) {
-    const res = await axiosInstance.get(`/tables/${tableName}/partitions`, { params })
+  async function getPartitions(collectionName, params) {
+    const res = await axiosInstance.get(`/collections/${collectionName}/partitions`, { params })
     return res.data
   }
 
-  async function deletePartition(tableName, data) {
-    const res = await axiosInstance.delete(`/tables/${tableName}/partitions`, { data })
+  async function deletePartition(collectionName, data) {
+    const res = await axiosInstance.delete(`/collections/${collectionName}/partitions`, { data })
     return res.data
   }
 
   async function getSegments(collectionName, params) {
-    const res = await axiosInstance.get(`/tables/${collectionName}/segments`, { params })
+    const res = await axiosInstance.get(`/collections/${collectionName}/segments`, { params })
     return res.data
   }
   async function addVectors(collectionName, data) {
-    const res = await axiosInstance.post(`/tables/${collectionName}/vectors`, data)
+    const res = await axiosInstance.post(`/collections/${collectionName}/vectors`, data)
     return res.data
   }
   async function getVectors(collectionName, segementName, params) {
-    const res = await axiosInstance.get(`/tables/${collectionName}/segments/${segementName}/vectors`, { params })
+    const res = await axiosInstance.get(`/collections/${collectionName}/segments/${segementName}/vectors`, { params })
     return res.data
   }
 
   async function deleteVectors(collectionName, data) {
-    const res = await axiosInstance.put(`/tables/${collectionName}/vectors`, data);
+    const res = await axiosInstance.put(`/collections/${collectionName}/vectors`, data);
     return res.data;
   }
 
   async function getVectorById(collectionName, params) {
-    const res = await axiosInstance.get(`/tables/${collectionName}/vectors`, { params })
+    const res = await axiosInstance.get(`/collections/${collectionName}/vectors`, { params })
     return res.data
   }
 
@@ -290,10 +290,10 @@ export const HttpProvider = ({ children }) => {
     // data management api
     searchVectors: httpWrapper(searchVectors),
     getCollections: httpWrapper(getCollections),
-    createTable: httpWrapper(createTable),
-    deleteTable: httpWrapper(deleteTable),
+    createCollection: httpWrapper(createCollection),
+    deleteCollection: httpWrapper(deleteCollection),
     createIndex: httpWrapper(createIndex),
-    searchTable: httpWrapper(searchTable),
+    searchCollection: httpWrapper(searchCollection),
     createPartition: httpWrapper(createPartition),
     getPartitions: httpWrapper(getPartitions),
     getCollectionByName: httpWrapper(getCollectionByName),

@@ -79,7 +79,7 @@ export default {
     saveSuccess: "表创建成功",
     delete: "删除表成功",
     confirmDel: "是否确认删除表",
-    deleteTable: "删除表",
+    deleteCollection: "删除表",
     searchTxt: "请输入表名",
     updateIndex: "更新索引",
     partitions: "查看分区",

@@ -63,9 +63,9 @@ const DataMenu = props => {
   const fetchCollections = async () => {
 
     const res = await getCollections({ all_required: true });
-    const { tables: collections = [], count = 0 } = res || {};
+    const { collections = [], count = 0 } = res || {};
     const data = collections.map((col, i) => {
-      const { table_name, ...others } = col;
+      const { collection_name, ...others } = col;
       const children = parseObjectToAssignKey(others, "label", "value").map(
         v => ({
           ...v,
@@ -75,7 +75,7 @@ const DataMenu = props => {
         })
       );
       return {
-        label: sliceWord(table_name),
+        label: sliceWord(collection_name),
         value: "",
         children,
         id: generateId(),
@@ -83,8 +83,8 @@ const DataMenu = props => {
         dimension: col.dimension || 0,
         iconBtn: SearchIcon,
         needHover: true,
-        url: `/data/collections/${table_name}`,
-        searchUrl: `/data/search?collectionName=${table_name}`
+        url: `/data/collections/${collection_name}`,
+        searchUrl: `/data/search?collectionName=${collection_name}`
       };
     });
     setAllCollections(collections);
@@ -202,7 +202,7 @@ const DataMenu = props => {
       });
     });
     const parent =
-      allCollections.find(v => v.table_name === collectionName) || [];
+      allCollections.find(v => v.collection_name === collectionName) || [];
     console.log(allCollections)
     // partitions page will use it.
     setCurrentPartitions(

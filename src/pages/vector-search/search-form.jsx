@@ -69,7 +69,7 @@ const NetworkFrom = (props) => {
     const collectionName =
       queryCollectionName
         ? queryCollectionName
-        : (allCollections[0] ? allCollections[0].table_name : "")
+        : (allCollections[0] ? allCollections[0].collection_name : "")
     setForm(v => ({
       ...v,
       collectionName
@@ -99,7 +99,7 @@ const NetworkFrom = (props) => {
         >
           {
             allCollections.map(v => (
-              <MenuItem key={v.table_name} value={v.table_name}>{v.table_name}({v.dimension})</MenuItem>
+              <MenuItem key={v.collection_name} value={v.collection_name}>{v.collection_name}({v.dimension})</MenuItem>
             ))
           }
         </Select>
