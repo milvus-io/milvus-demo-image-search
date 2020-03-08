@@ -124,13 +124,11 @@ const DataMenu = props => {
   useEffect(() => {
     const { page, collectionName, partitionTag } = currentRoute;
     const target = collections.find(col => col.label === collectionName);
-    console.log(page);
     switch (page) {
       case 'search':
         const searchCollectionName = query.get(COLLECTION_NAME)
         const searchPartitionTag = query.get(PARTITION_TAG)
         const searchTarget = collections.find(col => col.label === searchCollectionName);
-        console.log(searchCollectionName)
         const searchPartitionTarget =
           searchTarget &&
           searchTarget.children &&
@@ -203,7 +201,6 @@ const DataMenu = props => {
     });
     const parent =
       allCollections.find(v => v.collection_name === collectionName) || [];
-    console.log(allCollections)
     // partitions page will use it.
     setCurrentPartitions(
       partitions.map(v => ({

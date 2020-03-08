@@ -26,6 +26,9 @@ const LoginMenu = props => {
     wrapper: {
       marginBottom: theme.spacing(1),
       cursor: 'pointer'
+    },
+    title: {
+      marginBottom: theme.spacing(1)
     }
   }))()
   const { t } = useTranslation();
@@ -38,7 +41,7 @@ const LoginMenu = props => {
 
   return (
     <div className={classes.root}>
-      <h3>{t("recentConnect")}</h3>
+      <h3 className={classes.title}>{t("recentConnect")}</h3>
       {Object.keys(milvusAddress).map(key => {
         const { url } = milvusAddress[key];
         return (
