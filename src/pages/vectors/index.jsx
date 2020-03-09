@@ -138,9 +138,11 @@ const Vectors = props => {
   const handleDelete = async (e, selected) => {
     const ids = selected.map(v => v.id);
     await deleteVectors(collectionName, { delete: { ids } });
-    fetchSegments();
-    setCurrent(0);
-    openSnackBar(t("deleteSuccess"));
+    setTimeout(() => {
+      fetchSegments();
+      setCurrent(0);
+      openSnackBar(t("deleteSuccess"));
+    }, 1000);
   };
 
   const handleAddVectors = async vectors => {
