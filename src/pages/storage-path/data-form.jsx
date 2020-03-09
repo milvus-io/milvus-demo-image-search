@@ -2,12 +2,11 @@ import React, {
   useState,
   useContext,
   useEffect,
-  useRef,
 } from "react";
+import { materialContext } from '../../context/material'
 import { systemContext } from "../../context/system";
 import { httpContext } from "../../context/http";
 import { useTranslation } from "react-i18next";
-import { clipboard } from "../../utils/helpers";
 import { useFormStyles, useFormValidate } from "../../hooks/form";
 import {
   FileCopyOutlined,
@@ -16,7 +15,6 @@ import {
 } from "@material-ui/icons";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import { materialContext } from "../../context/material";
 import { FormTextField } from "../../components/common/FormTextComponents";
 import FormActions from "../../components/common/FormActions";
 
@@ -43,7 +41,6 @@ const DataForm = function (props) {
   );
 
   const [editIndex, setEditIndex] = useState(null); // change secondaryValues array will cause input lose focus status. this will help to focus
-  const primaryRef = useRef(null);
   const { t } = useTranslation();
   const dataTrans = t("storage").data;
 
@@ -115,7 +112,15 @@ const DataForm = function (props) {
     setEditIndex(index);
   };
   const handleCopy = value => {
-    clipboard(value, t("copySuccess"));
+    const input = document.createElement('input');
+    document.body.appendChild(input);
+    input.setAttribute('value', value);
+    input.select();
+    if (document.execCommand('copy')) {
+      document.execCommand('copy');
+      openSnackBar('copySuccess')
+    }
+    document.body.removeChild(input);
   };
 
   useEffect(() => {
@@ -143,8 +148,8 @@ const DataForm = function (props) {
           <FileCopyOutlined
             type="copy"
             className={classes.icon}
-            onClick={() => {
-              handleCopy(primaryRef.current.state.value);
+            onClick={(e) => {
+              handleCopy(form.primary);
             }}
           />
         </Grid>
