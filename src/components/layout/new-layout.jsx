@@ -214,8 +214,8 @@ const Layout = props => {
           <img src={Logo} alt="Milvus Logo"></img>
         </div>
         <div className={classes.logoutWrapper}>
-          <span className="circle"></span>
-          <span>{currentAddress}</span>
+          <span className={`circle ${!currentAddress && "red"}`}></span>
+          <span>{currentAddress || t("disconnected")}</span>
           {anchorEl && (
             <PopConfirm
               open={open}
@@ -225,7 +225,9 @@ const Layout = props => {
               text={`${t("disconnect")}${currentAddress}?`}
             ></PopConfirm>
           )}
-          <ExitToApp className="icon" onClick={handleExit}></ExitToApp>
+          {currentAddress && (
+            <ExitToApp className="icon" onClick={handleExit}></ExitToApp>
+          )}
         </div>
         <Divider />
         <div className={classes.menuContent}>

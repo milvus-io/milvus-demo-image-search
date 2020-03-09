@@ -4,6 +4,7 @@ export default {
   submitSuccess: "提交成功",
   copySuccess: "复制成功",
   disconnect: "是否断开 ",
+  disconnected: "未连接",
   connectTitle: "连接Milvus",
   recentConnect: "最近连接",
   monitor: {
@@ -43,8 +44,8 @@ export default {
       primary: "主要目录",
       second: "第二目录",
       primaryTip: "请填写存储向量数据文件的目录路径，确保留有足够的空。",
-      secondTip: "所有文件都会被平分得写到这些目录中，每个目录数据大小 = 总数据量 / 目录数量。 请确保这些目录有足够的空间。"
-
+      secondTip:
+        "所有文件都会被平分得写到这些目录中，每个目录数据大小 = 总数据量 / 目录数量。 请确保这些目录有足够的空间。"
     },
     metadata: {
       title: "元数据文件目录",
@@ -110,7 +111,7 @@ export default {
     tableName: "表名",
     tag: "分区标签",
     name: "分区名",
-    action: "操作",
+    action: "操作"
   },
   hardware: {
     saveSuccess: "GPU配置更新成功",
@@ -171,12 +172,10 @@ export default {
     search: "搜索",
     confirm: "确认",
     import: "导入"
-
   },
   required: " 是必填项",
   index: {
     saveSuccess: "索引创建成功",
     deleteSuccess: "Delete Index Success"
-
   }
 };

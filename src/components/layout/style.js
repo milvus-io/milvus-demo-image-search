@@ -1,29 +1,27 @@
-import {
-  makeStyles
-} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 
 const scrollStyle = {
-  '&::-webkit-scrollbar': {
-    width: '6px',
-    height: '6px',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+  "&::-webkit-scrollbar": {
+    width: "6px",
+    height: "6px",
+    backgroundColor: "rgba(255, 255, 255, 0.05)"
   },
 
   /*滑块*/
-  '&::-webkit-scrollbar-thumb': {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: '10px'
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    borderRadius: "10px"
   },
 
-  '&::-webkit-scrollbar-thumb:hover': {
-    backgroundColor: 'rgba(255, 255, 255, 0.3)'
+  "&::-webkit-scrollbar-thumb:hover": {
+    backgroundColor: "rgba(255, 255, 255, 0.3)"
   },
 
   /*滑道*/
-  '&::-webkit-scrollbar-track': {
-    borderRadius: '10px'
+  "&::-webkit-scrollbar-track": {
+    borderRadius: "10px"
   }
-}
+};
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -41,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: "30px",
     fill: "rgb(238, 238, 238)",
     cursor: "pointer",
-    '&:hover': {
+    "&:hover": {
       fill: theme.palette.primary.main
     }
   },
@@ -68,6 +66,9 @@ const useStyles = makeStyles(theme => ({
       borderRadius: "50%",
       background: theme.palette.success.main
     },
+    "& .red": {
+      background: theme.palette.error.main
+    },
     "& > span": {
       marginRight: theme.spacing(2),
       fontWeight: "bold"
@@ -85,8 +86,8 @@ const useStyles = makeStyles(theme => ({
     position: "relative",
     flex: 1,
     height: "100vh",
-    overflowY: "scroll",
+    overflowY: "scroll"
   }
 }));
 
-export default useStyles
+export default useStyles;
