@@ -28,7 +28,7 @@ const Layout = props => {
   const { setMilvusAddress, milvusAddress } = useContext(systemContext);
   const { setDataManagement } = useContext(dataManagementContext);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [firstMenu, setFisrstMenu] = useState("data");
+  const [firstMenu, setFirstMenu] = useState("data");
   const [currentRoute, setCurrentRoute] = useState({});
 
   const collectionMatch = useRouteMatch("/data/collections/:collectionName");
@@ -79,20 +79,20 @@ const Layout = props => {
   useEffect(() => {
     const path = history.location.pathname;
 
-    if (['/', '/login'].includes(path)) {
-      setFisrstMenu("login");
+    if (["/", "/login"].includes(path)) {
+      setFirstMenu("login");
     }
     if (path.includes("/data")) {
-      setFisrstMenu("data");
+      setFirstMenu("data");
     }
     if (path.includes("/config")) {
-      setFisrstMenu("config");
+      setFirstMenu("config");
     }
     if (path.includes("/data/search")) {
-      setFisrstMenu("search");
+      setFirstMenu("search");
     }
     if (path.includes("/intergration")) {
-      setFisrstMenu("intergration");
+      setFirstMenu("intergration");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history.location.pathname]);
@@ -102,8 +102,13 @@ const Layout = props => {
   }, [currentAddress, milvusAddress]);
 
   const handleFirstMenuChange = e => {
+    if (!currentAddress) {
+      setFirstMenu("login");
+      history.push("/login");
+      return;
+    }
     const name = e.currentTarget.dataset.name;
-    setFisrstMenu(name);
+    setFirstMenu(name);
     if (name === "data") {
       history.push("/data/collections");
     }
@@ -179,8 +184,8 @@ const Layout = props => {
         />
         <MdStorage
           data-name="data"
-          className={`MuiSvgIcon-root ${classes.icon} ${firstMenu === "data" &&
-            classes.active}`}
+          className={`MuiSvgIcon-root ${classes.icon} 
+          ${firstMenu === "data" && classes.active}`}
           onClick={handleFirstMenuChange}
         />
         <SearchOutlined
@@ -192,8 +197,8 @@ const Layout = props => {
         {(elk || prometheus) && (
           <FaCubes
             data-name="intergration"
-            className={`MuiSvgIcon-root ${classes.icon} ${firstMenu === "intergration" &&
-              classes.active}`}
+            className={`MuiSvgIcon-root ${classes.icon} ${firstMenu ===
+              "intergration" && classes.active}`}
             onClick={handleFirstMenuChange}
           ></FaCubes>
         )}
