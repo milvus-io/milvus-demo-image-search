@@ -44,7 +44,7 @@ const Vectors = props => {
     try {
       const res = await getSegments(collectionName, {
         partition_tag: partitionTag,
-        all_required: true
+        pageSize: 10
       });
       const firstSegment = res.segments[0];
       setSegments(res.segments || []);
