@@ -15,7 +15,6 @@ import { AiOutlineNumber } from "react-icons/ai";
 import {
   parseObjectToAssignKey,
   generateId,
-  sliceWord
 } from "../../utils/helpers";
 import { useHistory } from "react-router-dom";
 import SearchIcon from "@material-ui/icons/Search";
@@ -29,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PAGE_SIZE = 2;
+const PAGE_SIZE = 10;
 
 const DataMenu = props => {
   const classes = useStyles();
@@ -90,6 +89,7 @@ const DataMenu = props => {
 
   const formatCollection = collection => {
     const { collection_name, ...others } = collection;
+    const attributeCount = Object.keys(others).length
     const children = parseObjectToAssignKey(others, "label", "value").map(
       v => ({
         ...v,
@@ -109,7 +109,8 @@ const DataMenu = props => {
       iconBtn: SearchIcon,
       needHover: true,
       url: `/data/collections/${collection_name}`,
-      searchUrl: `/data/search?collectionName=${collection_name}`
+      searchUrl: `/data/search?collectionName=${collection_name}`,
+      attributeCount // collection count of attributes for compute the total partitions
     };
   };
 
@@ -224,13 +225,18 @@ const DataMenu = props => {
     // const res = await getPartitions(collectionName, { all_required: true });
     const res = await getPartitions(collectionName, {
       page_size: PAGE_SIZE,
-      offset
+      offset,
+      from: "data-menu"
     });
 
     let { partitions, count } = res;
     partitions = partitions.filter(
       v => !target.children.find(child => child.label === v.partition_tag)
     );
+    // when refresh page push the route tag to data
+    if (partitionTag && !partitions.find(child => child.partition_tag === partitionTag) && !target.children.find(child => child.label === partitionTag)) {
+      partitions.push({ partition_tag: partitionTag })
+    }
 
     const data = partitions.map(v => {
       const label = v.partition_tag;
@@ -262,8 +268,8 @@ const DataMenu = props => {
           );
           const loadedAll =
             data.length +
-              col.children.length -
-              Object.keys(propertiesIconMap).length ===
+            col.children.length -
+            col.attributeCount ===
             count;
 
           col.children = [...col.children, ...data];

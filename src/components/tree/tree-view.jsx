@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  makeStyles,
-  CircularProgress,
-  Button,
-  Typography
-} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import { TreeView } from "@material-ui/lab";
 import { ArrowDropDown, ArrowRight } from "@material-ui/icons";
 import { FiPlus } from "react-icons/fi";
@@ -44,8 +39,8 @@ const StyledTreeView = props => {
     data,
     total,
     handleMenuClick,
-    handleRefresh = () => {},
-    handleSearchVectors = () => {},
+    handleRefresh = () => { },
+    handleSearchVectors = () => { },
     expanded,
     setExpanded,
     activeId,
@@ -121,14 +116,14 @@ const StyledTreeView = props => {
         {loadedAllCollection ? (
           <div></div>
         ) : (
-          <StyledTreeItem
-            nodeId="more collections"
-            labelText="More Collections"
-            labelIcon={FiPlus}
-            propsClick={handleClick}
-            moreType="collections"
-          ></StyledTreeItem>
-        )}
+            <StyledTreeItem
+              nodeId="more collections"
+              labelText="More Collections"
+              labelIcon={FiPlus}
+              propsClick={handleClick}
+              moreType="collections"
+            ></StyledTreeItem>
+          )}
       </StyledTreeItem>
     </TreeView>
   );

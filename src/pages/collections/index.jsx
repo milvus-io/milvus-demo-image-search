@@ -14,12 +14,12 @@ import CreateIndex from "../../components/dialogs/CreateIndex";
 
 const PAGE_SIZE = 10;
 const Collections = props => {
-  const { deleteCollection, searchCollection, createCollection, createIndex } = useContext(
+  const { deleteCollection, searchCollection, createCollection, createIndex, getCollections, currentAddress } = useContext(
     httpContext
   );
 
   const { setDialog, openSnackBar } = useContext(materialContext);
-  const { setRefresh, allCollections } = useContext(dataManagementContext);
+  const { setRefresh, refresh } = useContext(dataManagementContext);
   const classes = useDataPageStyles();
   const { t } = useTranslation();
   const tableTrans = t("table");
@@ -30,6 +30,16 @@ const Collections = props => {
   const [count, setCount] = useState(0);
   const [current, setCurrent] = useState(0);
   const [isSearch, setIsSearch] = useState(false);
+
+  const fetchCollection = async () => {
+    const res = await getCollections({
+      page_size: PAGE_SIZE,
+      offset
+    })
+    const { collections = [], count = 0 } = res || {};
+    setCount(count)
+    setData(collections)
+  }
 
   const handleDelete = async (e, selected) => {
     const res = await Promise.all(
@@ -58,12 +68,20 @@ const Collections = props => {
   };
 
   useEffect(() => {
-    if (isSearch) {
+    if (isSearch || !currentAddress) {
       return;
     }
-    setData(allCollections.slice(offset, PAGE_SIZE + offset));
-    setCount(allCollections.length);
-  }, [allCollections, offset, isSearch]);
+    fetchCollection()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentAddress, offset, isSearch]);
+
+  useEffect(() => {
+    if (isSearch || !currentAddress || !refresh) {
+      return;
+    }
+    fetchCollection()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refresh]);
 
   const handleSearch = async name => {
     setCurrent(0);
