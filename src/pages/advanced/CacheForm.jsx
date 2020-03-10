@@ -71,12 +71,17 @@ const CacheForm = props => {
         <Grid item sm={3}>
           <Typography>{advancedTrans.cpu_capacity}</Typography>
         </Grid>
+        <Grid item sm={1}>
+          <Typography varient="p" component="p" align="center">
+            {`1G`}
+          </Typography>
+        </Grid>
         <Grid item sm={4}>
-          <Slider value={cpu_cache_capacity} min={1} max={Number(cpuMemory)} onChange={(e, val) => _setSettings({ ...settings, cpu_cache_capacity: Math.min(val, cpuMemory - insert_buffer_size) })} />
+          <Slider marks valueLabelDisplay="auto" value={cpu_cache_capacity} min={1} max={Number(cpuMemory)} onChange={(e, val) => _setSettings({ ...settings, cpu_cache_capacity: Math.min(val, cpuMemory - insert_buffer_size) })} />
         </Grid>
         <Grid item sm={1}>
           <Typography varient="p" component="p" align="center">
-            {`${cpu_cache_capacity}G`}
+            {`${cpuMemory}G`}
           </Typography>
         </Grid>
         <Grid item sm={12}>
@@ -141,12 +146,17 @@ const CacheForm = props => {
         <Grid item sm={3}>
           <Typography>{advancedTrans.insert_buffer_size}</Typography>
         </Grid>
+        <Grid item sm={1}>
+          <Typography varient="p" component="p" align="center">
+            {`1G`}
+          </Typography>
+        </Grid>
         <Grid item sm={4}>
-          <Slider value={insert_buffer_size} step={1} min={1} max={Number(cpuMemory) - cpu_cache_capacity} onChange={(e, val) => _setSettings({ ...settings, insert_buffer_size: Math.min(val, cpuMemory - cpu_cache_capacity) })} />
+          <Slider marks valueLabelDisplay="auto" value={insert_buffer_size} step={1} min={1} max={Number(cpuMemory) - cpu_cache_capacity} onChange={(e, val) => _setSettings({ ...settings, insert_buffer_size: Math.min(val, cpuMemory - cpu_cache_capacity) })} />
         </Grid>
         <Grid item sm={1}>
           <Typography varient="p" component="p" align="center">
-            {`${Number(insert_buffer_size)}G`}
+            {`${Number(cpuMemory) - cpu_cache_capacity}G`}
           </Typography>
         </Grid>
         <Grid item sm={12}>
