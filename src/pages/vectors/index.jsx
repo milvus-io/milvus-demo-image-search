@@ -129,7 +129,6 @@ const Vectors = props => {
         (page + 1 - segementStartPage[currentSegmentIndex]) * PAGE_SIZE;
     }
 
-    console.log(page, offset);
     setVectorOffset(offset);
     setDirection(page > current ? "next" : "prev");
     setCurrent(page);

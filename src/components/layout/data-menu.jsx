@@ -19,7 +19,7 @@ import {
 import { useHistory } from "react-router-dom";
 import SearchIcon from "@material-ui/icons/Search";
 import { useQuery } from "../../hooks";
-import { PARTITION_TAG, COLLECTION_NAME } from "../../consts";
+import { PARTITION_TAG, COLLECTION_NAME, INDEX_CREATES } from "../../consts";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -58,12 +58,11 @@ const DataMenu = props => {
     metric_type: MdCallMade,
     count: AiOutlineNumber,
     index: IoMdFlash,
-    nlist: IoLogoBuffer,
     index_file_size: FiHardDrive
   };
+  INDEX_CREATES.forEach(v => propertiesIconMap[v] = IoLogoBuffer)
 
   const fetchCollections = async isRefresh => {
-    // const res = await getCollections({ all_required: true });
     const res = await getCollections({
       page_size: PAGE_SIZE,
       offset: collectionOffset
@@ -88,16 +87,19 @@ const DataMenu = props => {
   };
 
   const formatCollection = collection => {
-    const { collection_name, ...others } = collection;
-    const attributeCount = Object.keys(others).length
-    const children = parseObjectToAssignKey(others, "label", "value").map(
-      v => ({
-        ...v,
-        id: generateId(),
-        icon: propertiesIconMap[v.label] || IoIosSettings,
-        disabled: true
-      })
-    );
+    const { collection_name, index_params, ...others } = collection;
+    const indexParams = parseObjectToAssignKey(JSON.parse(index_params), "label", "value")
+    const attributeCount = Object.keys(others).length + indexParams.length
+    const children = parseObjectToAssignKey(others, "label", "value")
+      .concat(indexParams)
+      .map(
+        v => ({
+          ...v,
+          id: generateId(),
+          icon: propertiesIconMap[v.label] || IoIosSettings,
+          disabled: true
+        })
+      );
     return {
       label: collection_name,
       value: "",

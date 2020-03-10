@@ -32,7 +32,6 @@ const CreateCollection = props => {
       return
     }
     const res = await createCollection({ ...form })
-    console.log(res)
     if (res && res.code === 0) {
       saveSuccess()
       openSnackBar(tableTrans.saveSuccess)

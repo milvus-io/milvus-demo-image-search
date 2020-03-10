@@ -1,5 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { dataManagementContext } from '../../context/data-management'
+import React, { useContext, useState, useEffect, useMemo } from 'react'
 import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 import { useFormValidate } from '../../hooks/form'
@@ -9,8 +8,8 @@ import { FormTextField } from '../../components/common/FormTextComponents'
 import { Grid, Button, Select, MenuItem, InputLabel } from '@material-ui/core'
 import WithTip from '../../components/with-tip'
 import { makeStyles } from '@material-ui/styles'
-
-const defaultForm = { topk: 2, nprobe: 16, vectors: '', collectionName: "" }
+import { INDEX_CONFIG } from '../../consts'
+const defaultForm = { topk: 2, nprobe: 16, ef: 100, vectors: '', collectionName: "" }
 
 const NetworkFrom = (props) => {
   const classes = makeStyles(theme => ({
@@ -23,16 +22,30 @@ const NetworkFrom = (props) => {
   const query = useQuery()
   const [form, setForm] = useState({ ...defaultForm })
   const [error, setError] = useState({})
-
+  const [collections, setCollections] = useState([])
   const { validateForm, handleCheck, handleChange } = useFormValidate(form, setForm, setError)
 
-  const { searchVectors } = useContext(httpContext)
-  const { allCollections } = useContext(dataManagementContext)
+  const { searchVectors, getCollections, currentAddress } = useContext(httpContext)
 
   const { t } = useTranslation();
   const vectorTrans = t("vector");
   const tipsTrans = vectorTrans.tips;
   const { searchSuccess, search } = props
+
+  const fetchCollections = async () => {
+    const res = await getCollections({
+      all_required: true
+    });
+    const { collections = [] } = res || {};
+    setCollections(collections)
+  }
+  useEffect(() => {
+    if (!currentAddress) {
+      return
+    }
+    fetchCollections()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentAddress])
 
   const handleSubmit = async e => {
     e && e.preventDefault();
@@ -51,10 +64,14 @@ const NetworkFrom = (props) => {
       ...v,
       vectors: JSON.stringify(newVectors)
     }))
+    const params = indexSearchParams.reduce((pre, cur) => {
+      pre[cur] = form[cur]
+      return pre
+    }, {})
     const data = {
       vectors: [newVectors],
       topk: Number(form.topk),
-      nprobe: Number(form.nprobe),
+      params
     }
     // partitionTag && (data['partition_tags'] = [partitionTag])
     const res = await searchVectors(form.collectionName, { search: data })
@@ -69,19 +86,25 @@ const NetworkFrom = (props) => {
     const collectionName =
       queryCollectionName
         ? queryCollectionName
-        : (allCollections[0] ? allCollections[0].collection_name : "")
+        : (collections[0] ? collections[0].collection_name : "")
     setForm(v => ({
       ...v,
       collectionName
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allCollections, queryCollectionName])
+  }, [collections, queryCollectionName])
 
   useEffect(() => {
     if (!search) return
     handleSubmit()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
+
+  const indexSearchParams = useMemo(() => {
+    if (!form.collectionName) return []
+    const target = collections.find(v => v.collection_name === form.collectionName) || {}
+    return INDEX_CONFIG[target.index] ? INDEX_CONFIG[target.index].search : []
+  }, [form.collectionName, collections])
 
   return (
     <Grid container spacing={1} style={{ maxWidth: "1000px" }}>
@@ -98,7 +121,7 @@ const NetworkFrom = (props) => {
           style={{ width: "100%" }}
         >
           {
-            allCollections.map(v => (
+            collections.map(v => (
               <MenuItem key={v.collection_name} value={v.collection_name}>{v.collection_name}({v.dimension})</MenuItem>
             ))
           }
@@ -120,22 +143,42 @@ const NetworkFrom = (props) => {
         needMarginBottom={false}
         helperText={`${vectorTrans.tTop}${t('required')}`}
       />
-      <FormTextField
-        name="nprobe"
-        type="number"
-        sm={3}
-        label={<div className={classes.labelContainer}>
-          <span>{vectorTrans.tNprobe}</span>
-          <WithTip title={tipsTrans.tNprobe} placement="bottom"></WithTip>
-        </div>}
-        value={form.nprobe}
-        onBlur={() => { handleCheck(form.nprobe, "nprobe") }}
-        onChange={handleChange}
-        placeholder={vectorTrans.tNprobe}
-        error={error.nprobe}
-        needMarginBottom={false}
-        helperText={`${vectorTrans.tNprobe}${t('required')}`}
-      />
+      {
+        indexSearchParams.includes('nprobe') && <FormTextField
+          name="nprobe"
+          type="number"
+          sm={3}
+          label={<div className={classes.labelContainer}>
+            <span>{vectorTrans.tNprobe}</span>
+            <WithTip title={tipsTrans.tNprobe} placement="bottom"></WithTip>
+          </div>}
+          value={form.nprobe}
+          onBlur={() => { handleCheck(form.nprobe, "nprobe") }}
+          onChange={handleChange}
+          placeholder={vectorTrans.tNprobe}
+          error={error.nprobe}
+          needMarginBottom={false}
+          helperText={`${vectorTrans.tNprobe}${t('required')}`}
+        />
+      }
+      {
+        indexSearchParams.includes('ef') && <FormTextField
+          name="ef"
+          type="number"
+          sm={3}
+          label={<div className={classes.labelContainer}>
+            <span>Ef</span>
+          </div>}
+          value={form.ef}
+          onBlur={() => { handleCheck(form.ef, "ef") }}
+          onChange={handleChange}
+          placeholder={""}
+          error={error.ef}
+          needMarginBottom={false}
+          helperText={`ef is ${t('required')}`}
+        />
+      }
+
       <FormTextField
         name="vectors"
         sm={9}

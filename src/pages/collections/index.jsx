@@ -104,9 +104,8 @@ const Collections = props => {
   const deleteIndex = async collectionName => {
     const res = await createIndex(collectionName, {
       index_type: "FLAT",
-      nlist: 16384
+      params: { nlist: 16384 }
     });
-    console.log(res);
     if (res && res.code === 0) {
       saveSuccess();
       openSnackBar(t("index").deleteSuccess);
@@ -147,14 +146,7 @@ const Collections = props => {
   ];
 
   const toolbarConfig = [
-    // {
-    //   label: "",
-    //   icon: "refresh",
-    //   onClick: () => {
-    //     console.log();
-    //   },
-    //   disabled: false
-    // },
+
     {
       label: "Create Collection",
       icon: "create",
@@ -214,7 +206,7 @@ const Collections = props => {
           }
         });
       },
-      disabled: selected => selected.length !== 1,
+      disabled: selected => selected.length !== 1 || selected.some(v => v.index !== 'FLAT'),
       disabledTooltip: "You can not create index on multiple collections"
     },
     {
@@ -247,7 +239,6 @@ const Collections = props => {
   ];
 
   const rows = data || [];
-  console.log(rows);
   return (
     <div className={`${classes.root}`}>
       <PaperWrapper className={classes.paper}>

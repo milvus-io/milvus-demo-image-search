@@ -22,7 +22,6 @@ const VectorSearch = props => {
   const [search, setSearch] = useState(false)
 
   const searchSuccess = data => {
-    console.log(data)
     setData(v => data)
     setSearch(false)
 
@@ -42,17 +41,14 @@ const VectorSearch = props => {
       disablePadding: true,
       label: 'ID'
     },
-
     {
       id: "distance",
       numeric: false,
       disablePadding: true,
       label: vectorTrans.distance
     },
-
   ];
   const toolbarConfig = [
-
     {
       label: "Delete",
       icon: "delete",
@@ -60,7 +56,6 @@ const VectorSearch = props => {
       disabled: selected => selected.length === 0,
       disabledTooltip: "You can not delete this"
     },
-
   ];
   const rows = data || [];
 

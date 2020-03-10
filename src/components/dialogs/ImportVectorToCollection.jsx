@@ -62,7 +62,6 @@ const ImportVectorToCollection = props => {
           return v
         }
       })
-      console.log(results)
       await importVectors(results)
       hideDialog()
     }

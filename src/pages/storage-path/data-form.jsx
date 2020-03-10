@@ -98,7 +98,6 @@ const DataForm = function (props) {
   };
 
   const handleSecondaryChange = (e, index) => {
-    console.log(e.currentTarget.value, index);
     const value = e.currentTarget.value;
     setIsformChange(true)
     setForm(v => {

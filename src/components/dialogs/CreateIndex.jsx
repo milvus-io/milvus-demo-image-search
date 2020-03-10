@@ -1,12 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useMemo } from 'react';
 import useStyles from './Style'
 import Grid from '@material-ui/core/Grid';
 import { DialogActions, DialogContent, DialogTitle, Select, MenuItem, Button, FormControl, Slider, Typography } from '@material-ui/core'
 import { useFormValidate } from '../../hooks/form'
 import { useTranslation } from "react-i18next";
 import { materialContext } from '../../context/material'
+import { INDEX_CONFIG } from '../../consts'
 
-const INDEX_TYPES = ["IVFFLAT", "IVFSQ8", "IVFSQ8H", "IVFPQ"];
+const INDEX_TYPES = Object.keys(INDEX_CONFIG).filter(v => v !== "FLAT")
 
 const CreateIndex = props => {
   const classes = useStyles()
@@ -17,20 +18,39 @@ const CreateIndex = props => {
   const { t } = useTranslation();
   const tableTrans = t("table");
   const buttonTrans = t("button");
-
+  const indexParams = JSON.parse(collectionInfo.index_params)
   useEffect(() => {
     setForm({
-      index_type: collectionInfo.index,
-      nlist: collectionInfo.nlist
+      index_type: collectionInfo.index === 'FLAT' ? INDEX_TYPES[0] : collectionInfo.index,
+      nlist: indexParams.nlist || 1,
+      m: indexParams.m || 1,
+      M: indexParams.m || 10,
+      efConstruction: indexParams.efConstruction || 200
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collectionInfo])
 
-  const update = async () => {
-    const isValid = validateForm()
-    if (!isValid) {
-      return
+  const indexCreateParams = useMemo(() => {
+    if (!INDEX_CONFIG[form.index_type]) {
+      return []
     }
-    const res = await createIndex(collectionInfo.collection_name, { ...form })
+    return INDEX_CONFIG[form.index_type].create
+  }, [form.index_type])
+
+  const update = async () => {
+    // const isValid = validateForm()
+    // if (!isValid) {
+    //   return
+    // }
+    const params = indexCreateParams.reduce((pre, cur) => {
+      pre[cur] = form[cur]
+      return pre
+    }, {})
+    const data = {
+      index_type: form.index_type,
+      params
+    }
+    const res = await createIndex(collectionInfo.collection_name, { ...data })
 
     if (res && res.code === 0) {
       openSnackBar(t('index').saveSuccess)
@@ -56,13 +76,12 @@ const CreateIndex = props => {
                 name="index_type"
                 labelId="index-type"
                 id="index-type-select"
-                defaultValue={INDEX_TYPES[0]}
-                value={form.index_type === 'FLAT' ? INDEX_TYPES[0] : form.index_type}
+                value={form.index_type}
                 onChange={handleChange}
               >
                 {
                   INDEX_TYPES.map(v => (
-                    <MenuItem value={v}>{v}</MenuItem>
+                    <MenuItem key={v} value={v}>{v}</MenuItem>
                   ))
                 }
               </Select>
@@ -71,18 +90,82 @@ const CreateIndex = props => {
           {/* <Grid item sm={4}>
             <div className={classes.wrapper}><span className={classes.column}>{tableTrans.nlist}</span> </div>
           </Grid> */}
-          <Grid item sm={12}>
-            <Typography className={classes.label}>{tableTrans.nlist}</Typography>
-          </Grid>
-          <Grid item sm={12}>
-            <Slider
-              name="nlist"
-              value={form.nlist}
-              min={1}
-              max={20000}
-              valueLabelDisplay="auto"
-              onChange={(e, val) => setForm({ ...form, nlist: val })} />
-          </Grid>
+          {
+            indexCreateParams.includes('nlist') && (
+              <>
+                <Grid item sm={12}>
+                  <Typography className={classes.label}>{tableTrans.nlist}</Typography>
+                </Grid>
+                <Grid item sm={12}>
+                  <Slider
+                    name="nlist"
+                    value={form.nlist}
+                    min={1}
+                    max={20000}
+                    valueLabelDisplay="auto"
+                    onChange={(e, val) => setForm({ ...form, nlist: val })} />
+                </Grid>
+              </>
+
+            )
+          }
+          {
+            indexCreateParams.includes('m') && (
+              <>
+                <Grid item sm={12}>
+                  <Typography className={classes.label}>m</Typography>
+                </Grid>
+                <Grid item sm={12}>
+                  <Slider
+                    name="m"
+                    value={form.m}
+                    min={1}
+                    max={20000}
+                    valueLabelDisplay="auto"
+                    onChange={(e, val) => setForm({ ...form, m: val })} />
+                </Grid>
+              </>
+
+            )
+          }
+          {
+            indexCreateParams.includes('M') && (
+              <>
+                <Grid item sm={12}>
+                  <Typography className={classes.label}>M</Typography>
+                </Grid>
+                <Grid item sm={12}>
+                  <Slider
+                    name="M"
+                    value={form.M}
+                    min={5}
+                    max={48}
+                    valueLabelDisplay="auto"
+                    onChange={(e, val) => setForm({ ...form, M: val })} />
+                </Grid>
+              </>
+            )
+          }
+          {
+            indexCreateParams.includes('efConstruction') && (
+              <>
+                <Grid item sm={12}>
+                  <Typography className={classes.label}>efConstruction</Typography>
+                </Grid>
+                <Grid item sm={12}>
+                  <Slider
+                    name="efConstruction"
+                    value={form.efConstruction}
+                    min={100}
+                    max={500}
+                    valueLabelDisplay="auto"
+                    onChange={(e, val) => setForm({ ...form, efConstruction: val })} />
+                </Grid>
+              </>
+            )
+          }
+
+
         </Grid>
       </DialogContent>
       <DialogActions classes={{ root: classes.action }}>

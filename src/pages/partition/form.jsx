@@ -25,7 +25,6 @@ const TableForm = Form.create({ name: "form_in_modal" })(
         if (err) {
           return;
         }
-        console.log(values)
         setLoading(true);
 
         const data = {
