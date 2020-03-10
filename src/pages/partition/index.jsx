@@ -14,9 +14,9 @@ import { useDataPageStyles } from "../../hooks/page";
 const PAGE_SIZE = 10;
 const Partitions = props => {
   const classes = useDataPageStyles()
-  const { deletePartition, createPartition } = useContext(httpContext)
+  const { deletePartition, createPartition, getPartitions, currentAddress } = useContext(httpContext)
   const { openSnackBar, setDialog } = useContext(materialContext)
-  const { setRefresh, currentPartitions } = useContext(dataManagementContext)
+  const { setRefresh, refresh } = useContext(dataManagementContext)
 
   const { collectionName } = useParams()
   const { t } = useTranslation();
@@ -28,11 +28,31 @@ const Partitions = props => {
   const [count, setCount] = useState(0); // total count for pagination
   const [current, setCurrent] = useState(0); // current page for pagination
 
+  const fetchPartitions = async () => {
+    const res = await getPartitions(collectionName, {
+      page_size: PAGE_SIZE,
+      offset
+    });
+    const { partitions, count } = res;
+    setData(partitions)
+    setCount(count)
+  }
 
   useEffect(() => {
-    setData(currentPartitions.slice(offset, PAGE_SIZE + offset))
-    setCount(currentPartitions.length)
-  }, [currentPartitions, offset])
+    if (!currentAddress) {
+      return
+    }
+    fetchPartitions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentAddress, offset])
+
+  useEffect(() => {
+    if (!refresh || offset) {
+      return
+    }
+    fetchPartitions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refresh])
 
   const saveSuccess = () => {
     setRefresh(true)
