@@ -24,11 +24,11 @@ const LoginMenu = props => {
       marginRight: theme.spacing(1)
     },
     wrapper: {
-      marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(2),
       cursor: 'pointer'
     },
     title: {
-      marginBottom: theme.spacing(1)
+      marginBottom: theme.spacing(2)
     }
   }))()
   const { t } = useTranslation();

@@ -29,7 +29,7 @@ export default {
     network: "Network Access",
     storage: "Storage Path",
     advanced: "Advanced Settings",
-    hardware: "Hardware Resources",
+    hardware: "Hardware Acceleration",
     metrics: "Metrics",
     others: "Intergration"
   },
