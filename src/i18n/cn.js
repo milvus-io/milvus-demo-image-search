@@ -154,7 +154,12 @@ export default {
     distance: "距离",
     search: "搜索栏显示",
     tips: {
+      nlist: "建立索引时对向量数据文件进行聚类运算的分簇数。索引文件会记录聚类运算后的结果，包括索引的类型，每个簇的中心向量，以及每个簇分别有哪些向量，以便于后期搜索。",
+      m: "建立索引时数据的压缩率。m 越小压缩率越高。	",
+      M: "影响 build 的时间以及索引的质量。 M 越大，构建索引耗时越长，索引质量越高，内存占用也越大。",
+      efConstruction: "影响 build 的时间以及索引的质量。 efConstruction 越大，构建索引耗时越长，索引质量越高，内存占用也越大。",
       tTop: "搜索结果中与要搜索的目标向量相似度最高的 k 条向量。 ",
+      tEf: "The higher the value, the more data is searched in the index and the higher the recall rate, but the lower the search speed.",
       tNprobe:
         "查询所涉及的向量类的个数。Nprobe 影响查询精度。数值越大，精度越高，但查询速度更慢。",
       tQuery:

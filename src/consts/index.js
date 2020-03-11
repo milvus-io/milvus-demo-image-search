@@ -49,3 +49,5 @@ export const INDEX_CONFIG = {
 }
 
 export const INDEX_CREATES = ["nlist", "m", "M", "efConstruction"]
+
+export const m_OPTIONS = [96, 64, 56, 48, 40, 32, 28, 24, 20, 16, 12, 8, 4, 3, 2, 1]

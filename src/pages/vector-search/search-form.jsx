@@ -100,10 +100,32 @@ const NetworkFrom = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
 
-  const indexSearchParams = useMemo(() => {
-    if (!form.collectionName) return []
+  const handleParamChange = (e, range) => {
+    let val = e.target.value;
+    const name = e.target.name;
+    val = val < range[0] ? val = range[0] : val > range[1] ? range[1] : val
+    setForm(v => {
+      return {
+        ...v,
+        [name]: val
+      };
+    });
+  }
+
+  const { indexSearchParams, nlist } = useMemo(() => {
+    if (!form.collectionName) return {
+      nlist: 1,
+      indexSearchParams: []
+    }
     const target = collections.find(v => v.collection_name === form.collectionName) || {}
-    return INDEX_CONFIG[target.index] ? INDEX_CONFIG[target.index].search : []
+    const indexSearchParams = INDEX_CONFIG[target.index] ? INDEX_CONFIG[target.index].search : []
+    try {
+      const nlist = JSON.parse(target.index_params).nlist || 1
+      return { nlist, indexSearchParams }
+    } catch (error) {
+      return { nlist: 1, indexSearchParams }
+    }
+
   }, [form.collectionName, collections])
 
   return (
@@ -137,7 +159,7 @@ const NetworkFrom = (props) => {
         </div>}
         value={form.topk}
         onBlur={() => { handleCheck(form.topk, "topk") }}
-        onChange={handleChange}
+        onChange={(handleChange)}
         placeholder={vectorTrans.tTop}
         error={error.topk}
         needMarginBottom={false}
@@ -150,12 +172,12 @@ const NetworkFrom = (props) => {
           sm={3}
           label={<div className={classes.labelContainer}>
             <span>{vectorTrans.tNprobe}</span>
-            <WithTip title={tipsTrans.tNprobe} placement="bottom"></WithTip>
+            <WithTip title={`${tipsTrans.tNprobe}. value need between [1,nlist]`} placement="bottom"></WithTip>
           </div>}
           value={form.nprobe}
           onBlur={() => { handleCheck(form.nprobe, "nprobe") }}
-          onChange={handleChange}
-          placeholder={vectorTrans.tNprobe}
+          onChange={e => handleParamChange(e, [1, nlist])}
+          placeholder={`[1,${nlist}]`}
           error={error.nprobe}
           needMarginBottom={false}
           helperText={`${vectorTrans.tNprobe}${t('required')}`}
@@ -168,10 +190,11 @@ const NetworkFrom = (props) => {
           sm={3}
           label={<div className={classes.labelContainer}>
             <span>Ef</span>
+            <WithTip title={`${tipsTrans.tEf}. value need between [topk,4096]`} placement="bottom"></WithTip>
           </div>}
           value={form.ef}
           onBlur={() => { handleCheck(form.ef, "ef") }}
-          onChange={handleChange}
+          onChange={e => handleParamChange(e, [form.topk, 4096])}
           placeholder={""}
           error={error.ef}
           needMarginBottom={false}

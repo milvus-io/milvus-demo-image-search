@@ -208,7 +208,12 @@ export default {
     distance: "Distance",
     search: "Search Vector",
     tips: {
+      nlist: "Number of clusters from the vector data file when Milvus performs clustering operation for index creation. The index file records the results of the clustering operation, including index type, central vector of each cluster, and the vectors in each cluster, for later search operations.",
+      m: "Compression ratio during index creation. The smaller m is, the higher the compression ratio.",
+      M: "Affects index build time and index quality. The higher the value, the longer it costs to build an index, the higher the index quality, and the higher the memory usage.",
+      efConstruction: "Affects index build time and index quality. The higher the value, the longer it costs to build and index, the higher the index quality, and the higher the memory usage.",
       tTop: "The top k most similar results of each query vector. ",
+      tEf: "The higher the value, the more data is searched in the index and the higher the recall rate, but the lower the search speed.",
       tNprobe:
         "Number of queried vector buckets. Nprobe affects search precision. The greater the value, the more precise the result, yet the slower the search speed.",
       tQuery:

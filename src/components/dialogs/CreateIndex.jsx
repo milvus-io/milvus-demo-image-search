@@ -5,7 +5,8 @@ import { DialogActions, DialogContent, DialogTitle, Select, MenuItem, Button, Fo
 import { useFormValidate } from '../../hooks/form'
 import { useTranslation } from "react-i18next";
 import { materialContext } from '../../context/material'
-import { INDEX_CONFIG } from '../../consts'
+import { INDEX_CONFIG, m_OPTIONS } from '../../consts'
+import WithTip from '../../components/with-tip'
 
 const INDEX_TYPES = Object.keys(INDEX_CONFIG).filter(v => v !== "FLAT")
 
@@ -18,13 +19,14 @@ const CreateIndex = props => {
   const { t } = useTranslation();
   const tableTrans = t("table");
   const buttonTrans = t("button");
+  const tipTrans = t("vector").tips
   const indexParams = JSON.parse(collectionInfo.index_params)
   useEffect(() => {
     setForm({
       index_type: collectionInfo.index === 'FLAT' ? INDEX_TYPES[0] : collectionInfo.index,
       nlist: indexParams.nlist || 1,
-      m: indexParams.m || 1,
-      M: indexParams.m || 10,
+      m: indexParams.m || 12,
+      M: indexParams.M || 10,
       efConstruction: indexParams.efConstruction || 200
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,7 +96,10 @@ const CreateIndex = props => {
             indexCreateParams.includes('nlist') && (
               <>
                 <Grid item sm={12}>
-                  <Typography className={classes.label}>{tableTrans.nlist}</Typography>
+                  <Typography className={classes.label}>{tableTrans.nlist}
+                    <WithTip title={tipTrans.nlist} placement="bottom"></WithTip>
+                  </Typography>
+
                 </Grid>
                 <Grid item sm={12}>
                   <Slider
@@ -113,16 +118,26 @@ const CreateIndex = props => {
             indexCreateParams.includes('m') && (
               <>
                 <Grid item sm={12}>
-                  <Typography className={classes.label}>m</Typography>
+                  <Typography className={classes.label}>m
+                  <WithTip title={tipTrans.m} placement="bottom"></WithTip>
+                  </Typography>
+
                 </Grid>
                 <Grid item sm={12}>
-                  <Slider
-                    name="m"
-                    value={form.m}
-                    min={1}
-                    max={20000}
-                    valueLabelDisplay="auto"
-                    onChange={(e, val) => setForm({ ...form, m: val })} />
+                  <FormControl variant="outlined" className={classes.formControl} style={{ width: "100%" }}>
+
+                    <Select
+                      name="m"
+                      value={form.m}
+                      onChange={handleChange}
+                    >
+                      {
+                        m_OPTIONS.map(v => (
+                          <MenuItem key={v} value={v}>{v}</MenuItem>
+                        ))
+                      }
+                    </Select>
+                  </FormControl>
                 </Grid>
               </>
 
@@ -132,7 +147,10 @@ const CreateIndex = props => {
             indexCreateParams.includes('M') && (
               <>
                 <Grid item sm={12}>
-                  <Typography className={classes.label}>M</Typography>
+                  <Typography className={classes.label}>M
+                  <WithTip title={tipTrans.M} placement="bottom"></WithTip>
+                  </Typography>
+
                 </Grid>
                 <Grid item sm={12}>
                   <Slider
@@ -150,7 +168,10 @@ const CreateIndex = props => {
             indexCreateParams.includes('efConstruction') && (
               <>
                 <Grid item sm={12}>
-                  <Typography className={classes.label}>efConstruction</Typography>
+                  <Typography className={classes.label}>Ef Construction
+                  <WithTip title={tipTrans.efConstruction} placement="bottom"></WithTip>
+                  </Typography>
+
                 </Grid>
                 <Grid item sm={12}>
                   <Slider
