@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useReducer, useContext } from 'react'
 import { httpContext } from './http'
-import MilvusReducer from "../reducers/milvus-servers"
 
+import MilvusReducer from "../reducers/milvus-servers"
+import axios from 'axios'
 export const systemContext = React.createContext({
 
   milvusAddress: {}, // all milvus server ip
@@ -54,7 +55,20 @@ export const SystemProvider = ({ children }) => {
   useEffect(() => {
     const key = Object.keys(milvusAddress).find(key => milvusAddress[key] && milvusAddress[key].connected)
     const connectedMilvus = key && milvusAddress[key]
-    setCurrentAddress(connectedMilvus ? connectedMilvus.url : "")
+    const checkConnect = async (url) => {
+      try {
+        const res = await axios.get(`http://${url}/state`)
+        if (res.data.code === 0) {
+          setCurrentAddress(url)
+        }
+      } catch (error) {
+        throw error
+      }
+    }
+    if (connectedMilvus) {
+      checkConnect(connectedMilvus.url)
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(milvusAddress)])
 
