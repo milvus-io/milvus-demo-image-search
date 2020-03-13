@@ -71,6 +71,7 @@ const MetaDataForm = function (props) {
     {
       type: "select",
       name: "type",
+      label: "Type",
       value: form.type,
       onChange: handleChange,
       selectOptions: [{ value: "mysql", label: "Mysql" }, { value: "sqlite", label: "Sqlite" }]

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from "prop-types";
-import { TextField, Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
+import { TextField, Grid, FormControl, FormControlLabel, InputLabel, Switch, Select, Slider, MenuItem, Typography, FormLabel } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import FormActions from './FormActions'
 const useStyles = makeStyles(theme => ({
@@ -41,13 +41,18 @@ const Form = props => {
             inline = false,
             inlineWidth,
             selectOptions,
+            range = [],
+            unit = "G",
+            sliderLabelSm,
+            marks = true,
+            step = 1,
             ...others
           } = v
           return (
-            <div style={{ width: inline ? inlineWidth : "100%" }}>
+            <div style={{ width: inline ? inlineWidth : "100%" }} key={name}>
               {
                 type === 'textField' && (
-                  <Grid sm={sm} key={name} item>
+                  <Grid sm={sm} item>
                     <TextField
                       classes={{ root: `${classes.textField}` }}
                       onBlur={onBlur}
@@ -60,11 +65,12 @@ const Form = props => {
               }
               {
                 type === 'select' && (
-                  <Grid item sm={sm} key={name}>
+                  <Grid item sm={sm}>
                     <FormControl classes={{ root: classes.selector }}>
-                      <InputLabel id={`selector-${name}`}>{v.label}</InputLabel>
+                      <InputLabel id={`selector-label-${name}`}>{v.label}</InputLabel>
                       <Select
-                        labelId={`selector-${name}`}
+                        labelId={`selector-label-${name}`}
+                        id={`selector-${name}`}
                         onChange={onChange}
                         {...others}
                       >
@@ -79,8 +85,62 @@ const Form = props => {
                 )
               }
               {
+                type === "switch" && (
+                  <Grid container alignItems="center">
+                    <Grid item sm={sm}>{v.label}</Grid>
+                    <Grid item sm={sm}>
+                      <Switch
+                        checked={v.value}
+                        onChange={onChange}
+                        color="primary"
+                      />
+                    </Grid>
+                  </Grid>
+
+                )
+              }
+
+              {
+                type === 'slider' && (
+                  <Grid container>
+                    <Grid item sm={sliderLabelSm}>
+                      <Typography>{v.label}</Typography>
+                    </Grid>
+                    {
+                      range[0] && (<Grid item sm={1}>
+                        <Typography varient="p" component="p" align="center">
+                          {range[0]}{unit}
+                        </Typography>
+                      </Grid>)
+                    }
+
+                    <Grid item sm={sm}>
+                      <Slider
+                        step={step}
+                        marks={marks}
+                        valueLabelDisplay="auto"
+                        min={Number(range[0])} max={Number(range[1])}
+                        onChange={onChange}
+                        {...others}
+                      />
+                    </Grid>
+                    {
+                      range[1] && (
+                        <Grid item sm={1}>
+                          <Typography varient="p" component="p" align="center">
+                            {range[1]}{unit}
+                          </Typography>
+                        </Grid>
+                      )
+                    }
+
+                  </Grid>
+
+                )
+              }
+              {
                 type === "other" && (
-                  <Grid item sm={sm} key={name}>
+                  <Grid item sm={sm}>
                     <Component ></Component>
                   </Grid>
                 )

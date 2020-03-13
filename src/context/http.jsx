@@ -250,7 +250,7 @@ export const HttpProvider = ({ children }) => {
     const { gpus, cpu = {} } = res.data || {};
     let gpuList = [];
     let cpuMemory = cpu.memory || 1000;
-    let gpuMemory = 1000000;
+    let gpuMemory = 10;
     if (gpus) {
       gpuList = [...gpuList, ...Object.keys(gpus)];
       gpuMemory = gpuList.reduce((pre, cur) => {
