@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'left'
   },
   part: {
-    marginBottom: theme.spacing(4)
+    marginBottom: theme.spacing(1)
   }
 }));
 

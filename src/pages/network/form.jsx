@@ -4,8 +4,7 @@ import { httpContext } from "../../context/http"
 import { materialContext } from '../../context/material'
 import { useTranslation } from "react-i18next";
 import { useFormValidate } from '../../hooks/form'
-import { FormTextField } from '../../components/common/FormTextComponents'
-import FormActions from '../../components/common/FormActions'
+import Form from '../../components/form/Form'
 const defaultForm = { address: "", port: "" }
 
 const NetworkFrom = (props) => {
@@ -54,30 +53,41 @@ const NetworkFrom = (props) => {
     // eslint-disable-next-line
   }, [currentAddress, serverConfig])
 
+  const formConfig = [
+    {
+      type: "textField",
+      name: "address",
+      fullWidth: true,
+      value: form.address,
+      placeholder: networkTrans.address,
+      label: networkTrans.address,
+      error: error.address,
+      helperText: `${networkTrans.address}${t('required')}`,
+      onBlur: () => { handleCheck(form.address, "address") },
+      onChange: e => { handleChange(e); setIsformChange(true) },
+    },
+    {
+      type: "textField",
+      name: "port",
+      fullWidth: true,
+      label: networkTrans.port,
+      value: form.port,
+      placeholder: networkTrans.port,
+      error: error.port,
+      helperText: `${networkTrans.port}${t('required')}`,
+      onBlur: () => { handleCheck(form.port, "port") },
+      onChange: e => { handleChange(e); setIsformChange(true) },
+    }
+  ]
 
   return (
     <>
-      <FormTextField
-        name="address"
-        label={networkTrans.address}
-        value={form.address}
-        onBlur={() => { handleCheck(form.address, "address") }}
-        onChange={e => { handleChange(e); setIsformChange(true) }}
-        placeholder={networkTrans.address}
-        error={error.address}
-        helperText={error.address && `${networkTrans.address}${t('required')}`}
-      />
-      <FormTextField
-        name="port"
-        label={networkTrans.port}
-        value={form.port}
-        onBlur={() => { handleCheck(form.port, "port") }}
-        onChange={e => { handleChange(e); setIsformChange(true) }}
-        placeholder={networkTrans.port}
-        error={error.port}
-        helperText={error.port && `${networkTrans.port}${t('required')}`}
-      />
-      <FormActions save={handleSubmit} cancel={handleCancel} disableCancel={!isFormChange} />
+      <Form
+        config={formConfig}
+        handleSubmit={handleSubmit}
+        handleCancel={handleCancel}
+        isFormChange={isFormChange}
+      ></Form>
     </>
 
   );
