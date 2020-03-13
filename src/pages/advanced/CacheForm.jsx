@@ -16,13 +16,17 @@ const CacheForm = props => {
     setMilvusConfig,
   } = useContext(httpContext);
   const { hardwareType = "CPU", cpuMemory = 5, gpuMemory = 2 } = systemInfos[currentAddress] || {}
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState(hardwareType === "CPU" ? {
     cpu_cache_capacity: 1,
-    gpu_capacity: 1,
-    gpu_threshold: 0.5,
     cache_insert_data: false,
     insert_buffer_size: .5
-  })
+  } : {
+      cpu_cache_capacity: 1,
+      gpu_capacity: 1,
+      gpu_threshold: 0.5,
+      cache_insert_data: false,
+      insert_buffer_size: .5
+    })
   const [isFormChange, setIsformChange] = useState(false)
 
   const { t } = useTranslation();

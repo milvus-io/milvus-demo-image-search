@@ -5,9 +5,8 @@ import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 import { useFormStyles } from "../../hooks/form";
 import Typography from '@material-ui/core/Typography'
-import { FormTextField } from '../../components/common/FormTextComponents'
-import FormActions from '../../components/common/FormActions'
-import Grid from '@material-ui/core/Grid'
+import Form from '../../components/form/Form'
+
 const PerformanceTunning = props => {
   const classes = useFormStyles()
   const { openSnackBar } = useContext(materialContext)
@@ -53,24 +52,47 @@ const PerformanceTunning = props => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress, serverConfig])
 
+  const cpuConfigs = [{
+    type: "textField",
+    name: "use_blas_threshold",
+    fullWidth: true,
+    label: p_t.use_blas_threshold,
+    value: performanceSetting.use_blas_threshold,
+    placeholder: p_t.use_blas_threshold,
+    onChange: e => { setIsformChange(true); setPerformanceSetting({ ...performanceSetting, use_blas_threshold: e.target.value }) }
+  }, {
+    type: "other",
+    name: "use_blas_threshold_desc",
+    sm: 12,
+    component: () => (
+      <>
+        <Typography variant="caption" component="p" align="left" paragraph>
+          {p_t.use_blas_threshold_desc_1}
+        </Typography>
+        <Typography variant="caption" component="p" align="left" paragraph>
+          {p_t.use_blas_threshold_desc_2}
+        </Typography>
+        <Typography variant="caption" component="p" align="left" paragraph>
+          {p_t.use_blas_threshold_desc_3}
+        </Typography>
+      </>
+    )
+  }]
 
-  return (
-    <div className={classes.root}>
-      <Grid container>
-        <FormTextField fullWidth={true} label={p_t.use_blas_threshold} value={performanceSetting.use_blas_threshold} onChange={e => { setIsformChange(true); setPerformanceSetting({ ...performanceSetting, use_blas_threshold: e.target.value }) }} />
-      </Grid>
-      <Typography variant="caption" component="p" align="left" paragraph>
-        {p_t.use_blas_threshold_desc_1}
-      </Typography>
-      <Typography variant="caption" component="p" align="left" paragraph>
-        {p_t.use_blas_threshold_desc_2}
-      </Typography>
-      <Typography variant="caption" component="p" align="left" paragraph>
-        {p_t.use_blas_threshold_desc_3}
-      </Typography>
-      {!isCPU && (<>
-
-        <FormTextField label={p_t.gpu_search_threshold} value={performanceSetting.gpu_search_threshold} onChange={e => { setIsformChange(true); setPerformanceSetting({ ...performanceSetting, gpu_search_threshold: e.target.value }) }} />
+  const gpuConfigs = isCPU ? [] : [{
+    type: "textField",
+    name: "gpu_search_threshold",
+    fullWidth: true,
+    label: p_t.gpu_search_threshold,
+    value: performanceSetting.gpu_search_threshold,
+    placeholder: p_t.gpu_search_threshold,
+    onChange: e => { setIsformChange(true); setPerformanceSetting({ ...performanceSetting, gpu_search_threshold: e.target.value }) }
+  }, {
+    type: "other",
+    name: "use_blas_threshold_desc",
+    sm: 12,
+    component: () => (
+      <>
         <Typography variant="caption" component="p" align="left" paragraph>
           {p_t.gpu_search_threshold_desc1}
         </Typography>
@@ -80,9 +102,18 @@ const PerformanceTunning = props => {
         <Typography variant="caption" component="p" align="left" paragraph>
           {p_t.gpu_search_threshold_desc3}
         </Typography>
-      </>)}
+      </>
+    )
+  }]
 
-      <FormActions save={savePerformance} cancel={resetPerformance} disableCancel={!isFormChange} />
+  return (
+    <div className={classes.root}>
+      <Form
+        config={[...cpuConfigs, ...gpuConfigs]}
+        handleSubmit={savePerformance}
+        handleCancel={resetPerformance}
+        isFormChange={isFormChange}
+      ></Form>
     </div >
   )
 }
