@@ -13,7 +13,7 @@ const INDEX_TYPES = Object.keys(INDEX_CONFIG).filter(v => v !== "FLAT")
 const CreateIndex = props => {
   const classes = useStyles()
   const [form, setForm] = useState({ index_type: "", nlist: 1024 })
-  const { validateForm, handleChange } = useFormValidate(form, setForm)
+  const { handleChange } = useFormValidate(form, setForm)
   const { hideDialog, openSnackBar } = useContext(materialContext)
   const { createIndex, collectionInfo, saveSuccess } = props;
   const { t } = useTranslation();

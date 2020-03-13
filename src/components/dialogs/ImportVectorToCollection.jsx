@@ -70,7 +70,13 @@ const ImportVectorToCollection = props => {
     }
     form.onchange = e => {
       const file = e.target.files[0];
-      if (!file || file.type !== "text/csv") {
+      const types = ["application/csv",
+        "application/x-csv",
+        "text/csv",
+        "text/comma-separated-values",
+        "text/x-comma-separated-values",
+        "text/tab-separated-values"]
+      if (!file || !types.includes(file.type)) {
         openSnackBar(vectorTrans.error.fileType, 'warning')
         return
       }
@@ -88,7 +94,7 @@ const ImportVectorToCollection = props => {
     <>
       <DialogTitle >
         {`${vectorTrans.import} ${partitionTag}`}
-        <Button onClick={handleDownloadExample}>Example Download</Button>
+        <Button onClick={handleDownloadExample} color="primary" size="small" style={{ marginLeft: "16px" }}>Example</Button>
       </DialogTitle>
       <DialogContent classes={{ root: classes.dialogContent }}>
         <Grid classes={{ root: classes.gridRoot }} container spacing={3}>

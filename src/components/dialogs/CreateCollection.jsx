@@ -3,7 +3,7 @@ import { materialContext } from '../../context/material'
 import { useFormValidate } from '../../hooks/form'
 import useStyles from './Style'
 import Grid from '@material-ui/core/Grid';
-import { Slider, Select, MenuItem, DialogActions, DialogContent, DialogTitle, Button, Typography, FormControl } from '@material-ui/core'
+import { Select, MenuItem, DialogActions, DialogContent, DialogTitle, Button, Typography, FormControl } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField';
 import { useTranslation } from "react-i18next";
 
@@ -37,6 +37,16 @@ const CreateCollection = props => {
       openSnackBar(tableTrans.saveSuccess)
       hideDialog()
     }
+  }
+
+  const handleDimensionChange = (e) => {
+    const val = Number(e.target.value)
+    setForm({ ...form, dimension: val < 1 ? 1 : val > 16384 ? 16384 : val })
+  }
+
+  const handleFileSizeChange = (e) => {
+    const val = Number(e.target.value)
+    setForm({ ...form, index_file_size: val < 1 ? 1 : val > 4096 ? 4096 : val })
   }
 
   return (
@@ -92,13 +102,18 @@ const CreateCollection = props => {
             <Typography className={classes.label}>{tableTrans.tDimension}</Typography>
           </Grid>
           <Grid item sm={12}>
-            <Slider
+            <TextField
               name="dimension"
+              type="number"
+              className={classes.textField}
               value={form.dimension}
-              min={1}
-              valueLabelDisplay="auto"
-              max={16384}
-              onChange={(e, val) => setForm({ ...form, dimension: val })} />
+              onBlur={() => { handleCheck(form.dimension, "dimension") }}
+              onChange={handleDimensionChange}
+              placeholder={tableTrans.tDimension}
+              error={error.dimension}
+              variant="outlined"
+              helperText={`${tableTrans.tDimension}${t('required')}`}
+            />
           </Grid>
           {/* <Grid item sm={4}>
             <div className={classes.wrapper}><span className={classes.column}>{tableTrans.fileSize}</span> <FaQuestionCircle /></div>
@@ -107,13 +122,19 @@ const CreateCollection = props => {
             <Typography className={classes.label}>{tableTrans.fileSize}</Typography>
           </Grid>
           <Grid item sm={12}>
-
-            <Slider
+            <TextField
+              name="index_file_size"
+              type="number"
+              className={classes.textField}
               value={form.index_file_size}
-              valueLabelDisplay="auto"
-              min={1}
-              max={4096}
-              onChange={(e, val) => setForm({ ...form, index_file_size: val })} />
+              onBlur={() => { handleCheck(form.index_file_size, "index_file_size") }}
+              onChange={handleFileSizeChange}
+              placeholder={tableTrans.fileSize}
+              error={error.index_file_size}
+              variant="outlined"
+              helperText={`${tableTrans.fileSize}${t('required')}`}
+            />
+
           </Grid>
         </Grid>
       </DialogContent>
