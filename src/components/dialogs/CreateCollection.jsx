@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { materialContext } from '../../context/material'
 import { useFormValidate } from '../../hooks/form'
 import useStyles from './Style'
-import { DialogActions, DialogContent, DialogTitle, Button, Typography, FormControl } from '@material-ui/core'
+import { DialogActions, DialogContent, DialogTitle, Button, Typography } from '@material-ui/core'
 import { useTranslation } from "react-i18next";
 import WithTip from '../with-tip'
 import Form from '../form/Form'

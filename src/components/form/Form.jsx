@@ -56,7 +56,7 @@ const Form = props => {
                 type === 'textField' && (
                   <Grid sm={sm} item>
                     <TextField
-                      classes={{ root: `${classes.textField}` }}
+                      classes={{ root: `${classes.textField} ` }}
                       onBlur={onBlur}
                       onChange={onChange}
                       name={name}

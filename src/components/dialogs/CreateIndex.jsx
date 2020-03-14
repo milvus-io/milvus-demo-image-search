@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import useStyles from './Style'
-import Grid from '@material-ui/core/Grid';
-import { DialogActions, DialogContent, DialogTitle, Select, MenuItem, Button, FormControl, Slider, Typography } from '@material-ui/core'
+import { DialogActions, DialogContent, DialogTitle, Button, Typography } from '@material-ui/core'
 import { useFormValidate } from '../../hooks/form'
 import { useTranslation } from "react-i18next";
 import { materialContext } from '../../context/material'
