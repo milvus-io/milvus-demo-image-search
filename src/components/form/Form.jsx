@@ -42,10 +42,13 @@ const Form = props => {
             inlineWidth,
             selectOptions,
             range = [],
-            unit = "G",
+            needRangeLabel = true,
+            unit = "",
             sliderLabelSm,
             marks = true,
             step = 1,
+            variant = "standard",
+            inputType = "text",
             ...others
           } = v
           return (
@@ -58,6 +61,8 @@ const Form = props => {
                       onBlur={onBlur}
                       onChange={onChange}
                       name={name}
+                      type={inputType}
+                      variant={variant}
                       {...others}
                     />
                   </Grid>
@@ -66,17 +71,18 @@ const Form = props => {
               {
                 type === 'select' && (
                   <Grid item sm={sm}>
-                    <FormControl classes={{ root: classes.selector }}>
+                    <FormControl classes={{ root: classes.selector }} variant={variant} >
                       <InputLabel id={`selector-label-${name}`}>{v.label}</InputLabel>
                       <Select
                         labelId={`selector-label-${name}`}
                         id={`selector-${name}`}
                         onChange={onChange}
+                        name={name}
                         {...others}
                       >
                         {
                           selectOptions.map(option => (
-                            <MenuItem value={option.value}>{option.label}</MenuItem>
+                            <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
                           ))
                         }
                       </Select>
@@ -103,11 +109,13 @@ const Form = props => {
               {
                 type === 'slider' && (
                   <Grid container>
-                    <Grid item sm={sliderLabelSm}>
-                      <Typography>{v.label}</Typography>
-                    </Grid>
                     {
-                      range[0] && (<Grid item sm={1}>
+                      v.label && <Grid item sm={sliderLabelSm}>
+                        <Typography>{v.label}</Typography>
+                      </Grid>
+                    }
+                    {
+                      needRangeLabel && (<Grid item sm={1}>
                         <Typography varient="p" component="p" align="center">
                           {range[0]}{unit}
                         </Typography>
@@ -125,7 +133,7 @@ const Form = props => {
                       />
                     </Grid>
                     {
-                      range[1] && (
+                      needRangeLabel && (
                         <Grid item sm={1}>
                           <Typography varient="p" component="p" align="center">
                             {range[1]}{unit}
