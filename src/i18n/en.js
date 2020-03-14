@@ -103,6 +103,7 @@ export default {
       name: "Collection Name is required"
     },
     tips: {
+      dimension: "If metric type is Hamming / Jaccard / Tanimoto, dimension need to be multiples of 8",
       name:
         "The name of the collection to create, which must be unique within its database. Begin a collection name with a letter or an underscore (_) . Subsequent characters can be letters, underscores, numbers (0-9). The entire length can not exceed 255 characters.",
       fileSize:

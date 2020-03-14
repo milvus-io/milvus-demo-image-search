@@ -14,7 +14,7 @@ import { useDataPageStyles } from "../../hooks/page";
 const PAGE_SIZE = 10;
 const Partitions = props => {
   const classes = useDataPageStyles()
-  const { deletePartition, createPartition, getPartitions, currentAddress } = useContext(httpContext)
+  const { deletePartition, createPartition, getPartitions, currentAddress, searchCollection } = useContext(httpContext)
   const { openSnackBar, setDialog } = useContext(materialContext)
   const { setRefresh, refresh } = useContext(dataManagementContext)
 
@@ -36,13 +36,23 @@ const Partitions = props => {
     const { partitions, count } = res;
     setData(partitions)
     setCount(count)
+    return partitions
+  }
+  const getSingleCollection = async () => {
+    const res = (await searchCollection(collectionName)) || {};
+    return res
+  };
+
+  const fetchData = async () => {
+    const res = await Promise.all([fetchPartitions(), getSingleCollection()])
+    setData(res[0].map(v => ({ ...v, ...res[1] })))
   }
 
   useEffect(() => {
     if (!currentAddress) {
       return
     }
-    fetchPartitions()
+    fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress, offset])
 
@@ -50,7 +60,7 @@ const Partitions = props => {
     if (!refresh || offset) {
       return
     }
-    fetchPartitions()
+    fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh])
 
@@ -94,13 +104,13 @@ const Partitions = props => {
 
     {
       id: "index_file_size",
-      numeric: true,
+      numeric: false,
       disablePadding: true,
       label: tableTrans.fileSize
     },
     {
       id: "dimension",
-      numeric: true,
+      numeric: false,
       disablePadding: false,
       label: tableTrans.tDimension
     },

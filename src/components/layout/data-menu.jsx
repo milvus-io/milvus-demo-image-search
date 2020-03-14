@@ -108,6 +108,7 @@ const DataMenu = props => {
       id: generateId(),
       icon: FiDatabase,
       dimension: collection.dimension || 0,
+      metricType: collection.metric_type || "L2",
       iconBtn: SearchIcon,
       needHover: true,
       url: `/data/collections/${collection_name}`,
@@ -249,7 +250,7 @@ const DataMenu = props => {
         icon: FiGrid,
         // iconBtn: SearchIcon,
         // needHover: true,
-        url: `/data/collections/${collectionName}/partitions/${label}?dimension=${target.dimension}`
+        url: `/data/collections/${collectionName}/partitions/${label}?dimension=${target.dimension}&metric=${target.metricType}`
         // searchUrl: `/data/search?collectionName=${collectionName}&partitionTag=${label}`
       };
     });

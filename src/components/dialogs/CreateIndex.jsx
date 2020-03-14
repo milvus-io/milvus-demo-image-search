@@ -13,7 +13,7 @@ const INDEX_TYPES = Object.keys(INDEX_CONFIG).filter(v => v !== "FLAT")
 const CreateIndex = props => {
   const classes = useStyles()
   const [form, setForm] = useState({ index_type: "", nlist: 1024 })
-  const { validateForm, handleChange } = useFormValidate(form, setForm)
+  const { handleChange } = useFormValidate(form, setForm)
   const { hideDialog, openSnackBar } = useContext(materialContext)
   const { createIndex, collectionInfo, saveSuccess } = props;
   const { t } = useTranslation();
@@ -38,6 +38,14 @@ const CreateIndex = props => {
     }
     return INDEX_CONFIG[form.index_type].create
   }, [form.index_type])
+
+  const indexOptions = useMemo(() => {
+    const types = ['HAMMING', 'JACCARD', 'TANIMOTO']
+    if (types.includes(collectionInfo.metric_type)) {
+      return ['IVFFLAT']
+    }
+    return INDEX_TYPES
+  }, [collectionInfo.metric_type])
 
   const update = async () => {
     // const isValid = validateForm()
@@ -82,7 +90,7 @@ const CreateIndex = props => {
                 onChange={handleChange}
               >
                 {
-                  INDEX_TYPES.map(v => (
+                  indexOptions.map(v => (
                     <MenuItem key={v} value={v}>{v}</MenuItem>
                   ))
                 }

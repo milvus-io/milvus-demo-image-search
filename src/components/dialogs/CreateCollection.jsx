@@ -3,9 +3,10 @@ import { materialContext } from '../../context/material'
 import { useFormValidate } from '../../hooks/form'
 import useStyles from './Style'
 import Grid from '@material-ui/core/Grid';
-import { Slider, Select, MenuItem, DialogActions, DialogContent, DialogTitle, Button, Typography, FormControl } from '@material-ui/core'
+import { Select, MenuItem, DialogActions, DialogContent, DialogTitle, Button, Typography, FormControl } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField';
 import { useTranslation } from "react-i18next";
+import WithTip from '../../components/with-tip'
 
 const defaultForm = {
   collection_name: '',
@@ -31,12 +32,28 @@ const CreateCollection = props => {
     if (!isValid) {
       return
     }
+    const types = ['HAMMING', 'JACCARD', 'TANIMOTO']
+    if (types.includes(form.metric_type) && form.dimension % 8 !== 0) {
+      openSnackBar(tableTrans.tips.dimension, 'warning')
+      return
+    }
     const res = await createCollection({ ...form })
     if (res && res.code === 0) {
       saveSuccess()
       openSnackBar(tableTrans.saveSuccess)
       hideDialog()
     }
+  }
+
+  const handleDimensionChange = (e) => {
+    const val = Number(e.target.value)
+
+    setForm({ ...form, dimension: val < 1 ? 1 : val > 16384 ? 16384 : val })
+  }
+
+  const handleFileSizeChange = (e) => {
+    const val = Number(e.target.value)
+    setForm({ ...form, index_file_size: val < 1 ? 1 : val > 4096 ? 4096 : val })
   }
 
   return (
@@ -82,6 +99,10 @@ const CreateCollection = props => {
               >
                 <MenuItem value="L2">L2</MenuItem>
                 <MenuItem value="IP">IP</MenuItem>
+                <MenuItem value="HAMMING">Hamming</MenuItem>
+                <MenuItem value="JACCARD">Jaccard</MenuItem>
+                <MenuItem value="TANIMOTO">Tanimoto</MenuItem>
+
               </Select>
             </FormControl>
           </Grid>
@@ -89,16 +110,23 @@ const CreateCollection = props => {
             <div className={classes.wrapper}><span className={classes.column}>{tableTrans.tDimension}</span> <FaQuestionCircle /></div>
           </Grid> */}
           <Grid item sm={12}>
-            <Typography className={classes.label}>{tableTrans.tDimension}</Typography>
+            <Typography className={classes.label}>{tableTrans.tDimension}
+              <WithTip title={tableTrans.tips.dimension}></WithTip>
+            </Typography>
           </Grid>
           <Grid item sm={12}>
-            <Slider
+            <TextField
               name="dimension"
+              type="number"
+              className={classes.textField}
               value={form.dimension}
-              min={1}
-              valueLabelDisplay="auto"
-              max={16384}
-              onChange={(e, val) => setForm({ ...form, dimension: val })} />
+              onBlur={() => { handleCheck(form.dimension, "dimension") }}
+              onChange={handleDimensionChange}
+              placeholder={tableTrans.tDimension}
+              error={error.dimension}
+              variant="outlined"
+              helperText={`${tableTrans.tDimension}${t('required')}`}
+            />
           </Grid>
           {/* <Grid item sm={4}>
             <div className={classes.wrapper}><span className={classes.column}>{tableTrans.fileSize}</span> <FaQuestionCircle /></div>
@@ -107,13 +135,19 @@ const CreateCollection = props => {
             <Typography className={classes.label}>{tableTrans.fileSize}</Typography>
           </Grid>
           <Grid item sm={12}>
-
-            <Slider
+            <TextField
+              name="index_file_size"
+              type="number"
+              className={classes.textField}
               value={form.index_file_size}
-              valueLabelDisplay="auto"
-              min={1}
-              max={4096}
-              onChange={(e, val) => setForm({ ...form, index_file_size: val })} />
+              onBlur={() => { handleCheck(form.index_file_size, "index_file_size") }}
+              onChange={handleFileSizeChange}
+              placeholder={tableTrans.fileSize}
+              error={error.index_file_size}
+              variant="outlined"
+              helperText={`${tableTrans.fileSize}${t('required')}`}
+            />
+
           </Grid>
         </Grid>
       </DialogContent>
