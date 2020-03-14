@@ -188,6 +188,8 @@ const Vectors = props => {
     }
   ];
   const dimension = query.get("dimension");
+  const metricType = query.get("metric");
+
   const toolbarConfig = [
     {
       label: "Import vectors",
@@ -201,6 +203,7 @@ const Vectors = props => {
             component: (
               <ImportVectors
                 dimension={dimension}
+                metricType={metricType}
                 importVectors={handleAddVectors}
                 partitionTag={partitionTag}
               ></ImportVectors>

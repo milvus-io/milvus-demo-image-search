@@ -19,7 +19,7 @@ const ImportVectorToCollection = props => {
   const classes = useStyles()
   const { t } = useTranslation()
   const vectorTrans = t('vector')
-  const { importVectors = () => { }, partitionTag, dimension } = props;
+  const { importVectors = () => { }, partitionTag, dimension, metricType } = props;
   const Input = useRef(null)
   const { openSnackBar, hideDialog } = useContext(materialContext)
 
@@ -104,7 +104,7 @@ const ImportVectorToCollection = props => {
             </div>
           </Grid>
           <Grid item xs={12}>
-            <p className={classes.upload}>{`Please make sure the csv you upload contains ${dimension} dimensions vectors`}</p>
+            <p className={classes.upload}>{`Please ensure the metric type( ${metricType} ) and dimensions( ${dimension} ) in your csv.`}</p>
           </Grid>
         </Grid>
       </DialogContent>

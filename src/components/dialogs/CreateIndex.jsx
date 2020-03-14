@@ -39,6 +39,14 @@ const CreateIndex = props => {
     return INDEX_CONFIG[form.index_type].create
   }, [form.index_type])
 
+  const indexOptions = useMemo(() => {
+    const types = ['HAMMING', 'JACCARD', 'TANIMOTO']
+    if (types.includes(collectionInfo.metric_type)) {
+      return ['IVFFLAT']
+    }
+    return INDEX_TYPES
+  }, [collectionInfo.metric_type])
+
   const update = async () => {
     // const isValid = validateForm()
     // if (!isValid) {
@@ -82,7 +90,7 @@ const CreateIndex = props => {
                 onChange={handleChange}
               >
                 {
-                  INDEX_TYPES.map(v => (
+                  indexOptions.map(v => (
                     <MenuItem key={v} value={v}>{v}</MenuItem>
                   ))
                 }

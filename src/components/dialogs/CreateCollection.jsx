@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import { Select, MenuItem, DialogActions, DialogContent, DialogTitle, Button, Typography, FormControl } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField';
 import { useTranslation } from "react-i18next";
+import WithTip from '../../components/with-tip'
 
 const defaultForm = {
   collection_name: '',
@@ -31,6 +32,11 @@ const CreateCollection = props => {
     if (!isValid) {
       return
     }
+    const types = ['HAMMING', 'JACCARD', 'TANIMOTO']
+    if (types.includes(form.metric_type) && form.dimension % 8 !== 0) {
+      openSnackBar(tableTrans.tips.dimension, 'warning')
+      return
+    }
     const res = await createCollection({ ...form })
     if (res && res.code === 0) {
       saveSuccess()
@@ -41,6 +47,7 @@ const CreateCollection = props => {
 
   const handleDimensionChange = (e) => {
     const val = Number(e.target.value)
+
     setForm({ ...form, dimension: val < 1 ? 1 : val > 16384 ? 16384 : val })
   }
 
@@ -92,6 +99,10 @@ const CreateCollection = props => {
               >
                 <MenuItem value="L2">L2</MenuItem>
                 <MenuItem value="IP">IP</MenuItem>
+                <MenuItem value="HAMMING">Hamming</MenuItem>
+                <MenuItem value="JACCARD">Jaccard</MenuItem>
+                <MenuItem value="TANIMOTO">Tanimoto</MenuItem>
+
               </Select>
             </FormControl>
           </Grid>
@@ -99,7 +110,9 @@ const CreateCollection = props => {
             <div className={classes.wrapper}><span className={classes.column}>{tableTrans.tDimension}</span> <FaQuestionCircle /></div>
           </Grid> */}
           <Grid item sm={12}>
-            <Typography className={classes.label}>{tableTrans.tDimension}</Typography>
+            <Typography className={classes.label}>{tableTrans.tDimension}
+              <WithTip title={tableTrans.tips.dimension}></WithTip>
+            </Typography>
           </Grid>
           <Grid item sm={12}>
             <TextField

@@ -94,6 +94,7 @@ export default {
       name: "表名是必填项"
     },
     tips: {
+      dimension: "If metric type is Hamming / Jaccard / Tanimoto, dimension need to be multiples of 8",
       name:
         "要创建的表的名字，由于是表的唯一标识符。表名由字母、下划线、和数字组成。首个字符必须是字母或下划线。总长度必须小于255个字符。",
       fileSize:
