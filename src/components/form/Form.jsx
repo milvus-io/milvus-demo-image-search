@@ -6,7 +6,6 @@ import FormActions from './FormActions'
 const useStyles = makeStyles(theme => ({
 
   selector: {
-    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
     width: '100%'
   },

@@ -73,7 +73,7 @@ const CreateIndex = props => {
     label: tableTrans.indexType,
     value: form.index_type,
     onChange: handleChange,
-    variant: "outlined",
+    // variant: "outlined",
     sm: 12,
     selectOptions: indexOptions.map(v => ({ value: v, label: v }))
   }]
@@ -88,7 +88,7 @@ const CreateIndex = props => {
         label: 'm',
         value: form.m,
         onChange: handleChange,
-        variant: "outlined",
+        // variant: "outlined",
         sm: 12,
         selectOptions: m_OPTIONS.map(v => ({ value: v, label: v }))
       })
@@ -101,7 +101,7 @@ const CreateIndex = props => {
         sm: 12,
         fullWidth: true,
         inputType: "number",
-        variant: "outlined",
+        // variant: "outlined",
         onChange: (e) => handleChange(e, [1, 20000]),
         value: form.nlist
       })

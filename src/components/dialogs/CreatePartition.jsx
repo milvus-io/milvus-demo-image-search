@@ -1,14 +1,14 @@
 import React, { useState, useContext } from 'react';
 import useStyles from './Style'
-import Grid from '@material-ui/core/Grid';
-import { DialogActions, DialogContent, DialogTitle, Button, Typography } from '@material-ui/core'
-import TextField from '@material-ui/core/TextField';
+import { DialogActions, DialogContent, DialogTitle, Button } from '@material-ui/core'
 import { useFormValidate } from '../../hooks/form'
 import { useTranslation } from "react-i18next";
 import { materialContext } from '../../context/material'
+import Form from '../form/Form'
+
 const CreatePartition = props => {
   const classes = useStyles()
-  const [form, setForm] = useState({ partition_tag: "" })
+  const [form, setForm] = useState({ partition_tag: " " })
   const [error, setError] = useState({})
   const { validateForm, handleCheck, handleChange } = useFormValidate(form, setForm, setError)
   const { hideDialog, openSnackBar } = useContext(materialContext)
@@ -22,38 +22,32 @@ const CreatePartition = props => {
     if (!isValid) {
       return
     }
-    const res = await createPartition(collectionName, { ...form })
+    const res = await createPartition(collectionName, { partition_tag: form.partition_tag.trim() })
     if (res && res.code === 0) {
       openSnackBar(partitionTrans.saveSuccess)
       saveSuccess()
       hideDialog()
     }
   }
+  const formConfigs = [{
+    type: "textField",
+    name: "partition_tag",
+    label: partitionTrans.tag,
+    value: form.partition_tag,
+    fullWidth: true,
+    sm: 12,
+    onBlur: () => { handleCheck(form.partition_tag, "partition_tag") },
+    onChange: handleChange,
+    placeholder: partitionTrans.tag,
+    error: error.partition_tag,
+    helperText: `${partitionTrans.tag}${t('required')}`
+  }]
   return (
     <>
       <DialogTitle >{partitionTrans.create}</DialogTitle>
       <DialogContent classes={{ root: classes.dialogContent }}>
-        <Grid container spacing={3}>
-          {/* <Grid item sm={4}>
-            <div className={classes.wrapper}><span className={classes.column}>{partitionTrans.tag}</span> <FaQuestionCircle /></div>
-          </Grid> */}
-          <Grid item sm={12}>
-            <Typography className={classes.label}>{partitionTrans.tag}</Typography>
-          </Grid>
-          <Grid item sm={12}>
-            <TextField
-              name="partition_tag"
-              className={classes.textField}
-              value={form.address}
-              onBlur={() => { handleCheck(form.partition_tag, "partition_tag") }}
-              onChange={handleChange}
-              placeholder={partitionTrans.tag}
-              error={error.partition_tag}
-              variant="outlined"
-              helperText={error.partition_tag && `${partitionTrans.tag}${t('required')}`}
-            />
-          </Grid>
-        </Grid>
+        <Form config={formConfigs}></Form>
+
       </DialogContent>
       <DialogActions classes={{ root: classes.action }}>
         <Button variant="outlined" onClick={() => update()} color="primary">
