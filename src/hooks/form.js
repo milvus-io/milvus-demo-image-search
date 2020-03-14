@@ -30,7 +30,8 @@ const useStyles = makeStyles(theme => ({
   },
   item: {
     marginBottom: theme.spacing(1)
-  }
+  },
+
 }));
 
 export function useFormStyles() {

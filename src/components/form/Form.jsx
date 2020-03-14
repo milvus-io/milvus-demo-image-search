@@ -4,7 +4,9 @@ import { TextField, Grid, FormControl, InputLabel, Switch, Select, Slider, MenuI
 import { makeStyles } from '@material-ui/styles'
 import FormActions from './FormActions'
 const useStyles = makeStyles(theme => ({
-
+  marginTop: {
+    marginTop: theme.spacing(2)
+  },
   selector: {
     marginBottom: theme.spacing(2),
     width: '100%'
@@ -27,7 +29,7 @@ const Form = props => {
   } = props
   const classes = useStyles()
   return (
-    <Grid container alignItems="flex-end" spacing={1}>
+    <Grid container alignItems="flex-end" >
       {
         config.map(v => {
           const {
@@ -48,6 +50,7 @@ const Form = props => {
             step = 1,
             variant = "standard",
             inputType = "text",
+            marginTop = false,
             ...others
           } = v
           return (
@@ -70,7 +73,7 @@ const Form = props => {
               {
                 type === 'select' && (
                   <Grid item sm={sm}>
-                    <FormControl classes={{ root: classes.selector }} variant={variant} >
+                    <FormControl classes={{ root: `${classes.selector} ${marginTop && classes.marginTop}` }} variant={variant} >
                       <InputLabel id={`selector-label-${name}`}>{v.label}</InputLabel>
                       <Select
                         labelId={`selector-label-${name}`}

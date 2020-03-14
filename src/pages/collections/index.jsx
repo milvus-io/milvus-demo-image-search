@@ -241,22 +241,20 @@ const Collections = props => {
   const rows = data || [];
   return (
     <div className={`${classes.root}`}>
-      <PaperWrapper className={classes.paper}>
-        <Box p={2}>
-          <MilvusGrid
-            title={[dataManageTrans.collections]}
-            titleIcon={<CollectionIcon />}
-            toolbarConfig={toolbarConfig}
-            colDefinitions={colDefinitions}
-            rows={rows}
-            rowsPerPage={PAGE_SIZE}
-            rowCount={count}
-            page={current}
-            onChangePage={handlePageChange}
-            primaryKey="collection_name"
-            isLoading={false}
-          ></MilvusGrid>
-        </Box>
+      <PaperWrapper >
+        <MilvusGrid
+          title={[dataManageTrans.collections]}
+          titleIcon={<CollectionIcon />}
+          toolbarConfig={toolbarConfig}
+          colDefinitions={colDefinitions}
+          rows={rows}
+          rowsPerPage={PAGE_SIZE}
+          rowCount={count}
+          page={current}
+          onChangePage={handlePageChange}
+          primaryKey="collection_name"
+          isLoading={false}
+        ></MilvusGrid>
       </PaperWrapper>
     </div>
   );

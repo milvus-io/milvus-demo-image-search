@@ -169,7 +169,7 @@ const DataForm = function (props) {
         inlineWidth: "30%",
         fullWidth: true,
         className: classes.item,
-        name: "secondary",
+        name: `secondary_${i}`,
         autoFocus: editIndex === i,
         label: dataTrans.second,
         value: v || "",
