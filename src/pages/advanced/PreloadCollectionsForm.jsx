@@ -5,8 +5,7 @@ import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 import { useFormStyles } from "../../hooks/form";
 import Typography from '@material-ui/core/Typography'
-import { FormTextField } from '../../components/common/FormTextComponents'
-import FormActions from '../../components/common/FormActions'
+import Form from '../../components/form/Form'
 
 const PreloadCollectionsForm = props => {
   const classes = useFormStyles()
@@ -48,16 +47,32 @@ const PreloadCollectionsForm = props => {
     resetPreload()
     // eslint-disable-next-line
   }, [currentAddress, serverConfig])
-
-  return (
-    <div className={classes.root}>
-      <FormTextField label={preload_table.title} value={preload} onChange={e => {
-        setPreload(e.target.value); setIsformChange(true)
-      }} />
+  const formConfigs = [{
+    type: "textField",
+    name: "preload_table",
+    fullWidth: true,
+    label: preload_table.title,
+    value: preload,
+    placeholder: preload_table.title,
+    onChange: e => { setPreload(e.target.value); setIsformChange(true) }
+  }, {
+    type: "other",
+    name: "preload_table_desc",
+    sm: 12,
+    component: () => (
       <Typography variant="caption" component="p" align="left" paragraph>
         {preload_table.desc}
       </Typography>
-      <FormActions save={savePreload} cancel={resetPreload} disableCancel={!isFormChange} />
+    )
+  }]
+  return (
+    <div className={classes.root}>
+      <Form
+        config={formConfigs}
+        handleSubmit={savePreload}
+        handleCancel={resetPreload}
+        isFormChange={isFormChange}
+      ></Form>
     </div>
   )
 }

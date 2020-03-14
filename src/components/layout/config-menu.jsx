@@ -43,7 +43,7 @@ const Configs = [
   { path: 'advanced', label: 'Advanced Settings', icon: <GoSettings /> },
   { path: 'hardware', label: "Hardware Acceleration", icon: <FiCpu /> },
   { path: 'metrics', label: "Metrics", icon: <GiChart /> },
-  { path: 'others', label: "intergration", icon: <FaCubes /> }
+  { path: 'others', label: "Intergration", icon: <FaCubes /> }
 ]
 const ConfigMenu = props => {
   const history = useHistory();

@@ -27,6 +27,9 @@ const useStyles = makeStyles(theme => ({
   },
   part: {
     marginBottom: theme.spacing(4)
+  },
+  item: {
+    marginBottom: theme.spacing(1)
   }
 }));
 
@@ -60,13 +63,20 @@ export function useFormValidate(form, setForm, setError) {
   };
 
   // if value is string we can use it
-  const handleChange = e => {
+  const handleChange = (e, range) => {
     const val = e.target.value;
     const name = e.target.name;
+
     setForm(v => {
       return {
         ...v,
-        [name]: val
+        [name]: range
+          ? val < range[0]
+            ? range[0]
+            : val > range[1]
+              ? range[1]
+              : val
+          : val
       };
     });
   };

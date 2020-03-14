@@ -2,6 +2,7 @@ import React, {
   useState,
   useContext,
   useEffect,
+  useMemo
 } from "react";
 import { materialContext } from '../../context/material'
 import { systemContext } from "../../context/system";
@@ -14,9 +15,7 @@ import {
   RemoveCircleOutlineOutlined
 } from "@material-ui/icons";
 import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import { FormTextField } from "../../components/common/FormTextComponents";
-import FormActions from "../../components/common/FormActions";
+import Form from '../../components/form/Form'
 
 const defaultForm = {
   primary: "",
@@ -31,13 +30,11 @@ const DataForm = function (props) {
   const { openSnackBar } = useContext(materialContext);
   const [isFormChange, setIsformChange] = useState(false)
   const [form, setForm] = useState({ ...defaultForm });
-  const [error, setError] = useState({});
 
   const classes = useFormStyles();
-  const { validateForm, handleCheck, handleChange } = useFormValidate(
+  const { handleChange } = useFormValidate(
     form,
-    setForm,
-    setError
+    setForm
   );
 
   const [editIndex, setEditIndex] = useState(null); // change secondaryValues array will cause input lose focus status. this will help to focus
@@ -47,14 +44,11 @@ const DataForm = function (props) {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const isValid = validateForm();
     if (form.secondary.includes("")) {
       openSnackBar(t("storage").error.second, "warning");
       return;
     }
-    if (!isValid) {
-      return;
-    }
+
     const res = await setMilvusConfig({
       storage_config: {
         primary_path: form.primary,
@@ -120,100 +114,125 @@ const DataForm = function (props) {
       openSnackBar('copySuccess')
     }
     document.body.removeChild(input);
-  };
+  }
 
   useEffect(() => {
     handleCancel()
     //eslint-disable-next-line
   }, [storageConfig, currentAddress]);
-
-  return (
-    <div className={classes.root}>
-      <Grid container alignItems="flex-end" className={classes.part}>
-        <FormTextField
-          name="primary"
-          needMarginBottom={false}
-          label={dataTrans.primary}
-          value={form.primary || ""}
-          onBlur={() => {
-            handleCheck(form.primary, "primary");
-          }}
-          onChange={handleChange}
-          placeholder={dataTrans.primary}
-          error={error.primary}
-          helperText={error.primary && `${dataTrans.primary}${t("required")}`}
+  const primaryConfig = [
+    {
+      type: "textField",
+      name: "primary",
+      label: dataTrans.primary,
+      value: form.primary || "",
+      className: classes.item,
+      sm: 12,
+      inline: true,
+      inlineWidth: "30%",
+      fullWidth: true,
+      onChange: handleChange,
+      placeholder: dataTrans.primary,
+    },
+    {
+      type: "other",
+      name: "primary-copy",
+      inlineWidth: "50%",
+      inline: true,
+      component: () => (
+        <FileCopyOutlined
+          type="copy"
+          className={classes.icon}
+          onClick={(e) => handleCopy(form.primary)}
         />
-        <Grid item sm={3}>
-          <FileCopyOutlined
-            type="copy"
-            className={classes.icon}
-            onClick={(e) => {
-              handleCopy(form.primary);
-            }}
-          />
-        </Grid>
-        <Grid item sm={12}>
-          <Typography variant="caption" component="p">
-            {dataTrans.primaryTip}
-          </Typography>
-        </Grid>
-      </Grid>
+      )
+    },
+    {
+      type: "other",
+      name: "primary-desc",
+      sm: 12,
+      component: () => (
+        <Typography variant="caption" component="p" style={{ marginBottom: "32px" }}>
+          {dataTrans.primaryTip}
+        </Typography>
+      )
+    }
 
-      {form.secondary.map((v, i) => (
-        <Grid container alignItems="flex-end" key={i}>
-          <FormTextField
-            needMarginBottom={false}
-            name="secondary"
-            autoFocus={editIndex === i}
-            label={dataTrans.second}
-            value={v || ""}
-            onChange={val => {
-              handleSecondaryChange(val, i);
-            }}
-            placeholder={dataTrans.second}
-            error={error.secondary}
-            helperText={
-              error.secondary && `${dataTrans.second}${t("required")}`
-            }
-          />
-          {i === 0 ? (
-            <Grid item sm={3}>
-              <FileCopyOutlined
-                className={classes.icon}
-                onClick={() => {
-                  handleCopy(v);
-                }}
-              />
-              <AddCircleOutlineOutlined
-                className={classes.icon}
-                onClick={handleAddPath}
-              ></AddCircleOutlineOutlined>
-            </Grid>
-          ) : (
-              <Grid item sm={3}>
-                <FileCopyOutlined
+  ]
+  const secondaryConfig = useMemo(() => {
+    let config = []
+    form.secondary.forEach((v, i) => {
+      const inputConfig = {
+        type: "textField",
+        sm: 12,
+        inline: true,
+        inlineWidth: "30%",
+        fullWidth: true,
+        className: classes.item,
+        name: "secondary",
+        autoFocus: editIndex === i,
+        label: dataTrans.second,
+        value: v || "",
+        onChange: val => {
+          handleSecondaryChange(val, i);
+        },
+        placeholder: dataTrans.second
+      }
+      config.push(inputConfig)
+      config.push({
+        type: "other",
+        inlineWidth: "50%",
+        inline: true,
+        name: `secondary-copy-${i}`,
+        component: () => (
+          <>
+            <FileCopyOutlined
+              className={classes.icon}
+              onClick={() => {
+                handleCopy(v);
+              }}
+            />
+            {
+              i === 0
+                ? <AddCircleOutlineOutlined
                   className={classes.icon}
-                  onClick={() => {
-                    handleCopy(v);
-                  }}
-                />
-                <RemoveCircleOutlineOutlined
+                  onClick={handleAddPath}
+                ></AddCircleOutlineOutlined>
+                : <RemoveCircleOutlineOutlined
                   className={classes.icon}
                   onClick={() => {
                     handleDeletePath(i);
                   }}
                 ></RemoveCircleOutlineOutlined>
-              </Grid>
-            )}
-          <Grid item sm={12}>
-            <Typography variant="caption" component="p">
-              {dataTrans.secondTip}
-            </Typography>
-          </Grid>
-        </Grid>
-      ))}
+            }
+          </>
+        )
+      })
+    })
+    return config
 
-      <FormActions save={handleSubmit} cancel={handleCancel} disableCancel={!isFormChange} />
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.secondary, editIndex])
+  const secondaryDesc = {
+    type: 'other',
+    name: "secondary-desc",
+    sm: 12,
+    component: () => (
+      <Typography variant="caption" component="p" style={{ marginBottom: "32px" }}>
+        {dataTrans.secondTip}
+      </Typography>
+    )
+  }
+
+  return (
+    <div className={classes.root}>
+      <Form
+        config={[...primaryConfig, ...secondaryConfig, secondaryDesc]}
+        handleSubmit={handleSubmit}
+        handleCancel={handleCancel}
+        isFormChange={isFormChange}
+      ></Form>
+
     </div>
   );
 };

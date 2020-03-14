@@ -1,15 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
-import { MenuItem, FormControl, InputLabel } from "@material-ui/core"
 import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { materialContext } from '../../context/material'
 import { useTranslation } from "react-i18next";
-import { useFormStyles, useFormValidate } from '../../hooks/form'
+import { useFormValidate } from '../../hooks/form'
 import { safetyGet } from '../../utils/helpers'
-import Select from '@material-ui/core/Select'
-import { FormTextField } from '../../components/common/FormTextComponents'
-import FormActions from '../../components/common/FormActions'
-import Grid from '@material-ui/core/Grid'
+import Form from '../../components/form/Form'
 
 const defaultForm = {
   type: "mysql",
@@ -32,7 +28,6 @@ const MetaDataForm = function (props) {
   const [form, setForm] = useState({ ...defaultForm })
   const [error, setError] = useState({})
 
-  const classes = useFormStyles();
   const { validateForm, handleCheck, handleChange } = useFormValidate(form, setForm, setError)
 
   useEffect(() => {
@@ -71,69 +66,71 @@ const MetaDataForm = function (props) {
     setError({})
   };
 
-
+  const formConfigs = [
+    {
+      type: "select",
+      name: "type",
+      label: "Type",
+      value: form.type,
+      onChange: handleChange,
+      selectOptions: [{ value: "mysql", label: "Mysql" }, { value: "sqlite", label: "Sqlite" }]
+    },
+    {
+      type: "textField",
+      name: "host",
+      label: metaDataTrans.host,
+      value: form.host,
+      fullWidth: true,
+      onBlur: () => { handleCheck(form.host, "host") },
+      onChange: handleChange,
+      placeholder: "0.0.0.0",
+      error: error.host,
+      helperText: `${metaDataTrans.host}${t('required')}`
+    },
+    {
+      type: "textField",
+      name: "port",
+      label: metaDataTrans.port,
+      value: form.port,
+      fullWidth: true,
+      onBlur: () => { handleCheck(form.port, "port") },
+      onChange: handleChange,
+      placeholder: "19121",
+      error: error.port,
+      helperText: `${metaDataTrans.port}${t('required')}`
+    },
+    {
+      type: "textField",
+      name: "username",
+      label: metaDataTrans.username,
+      value: form.username,
+      fullWidth: true,
+      onBlur: () => { handleCheck(form.username, "username") },
+      onChange: handleChange,
+      placeholder: metaDataTrans.username,
+      error: error.username,
+      helperText: `${metaDataTrans.username}${t('required')}`
+    },
+    {
+      type: "textField",
+      name: "password",
+      label: metaDataTrans.password,
+      value: form.password,
+      fullWidth: true,
+      onBlur: () => { handleCheck(form.password, "password") },
+      onChange: handleChange,
+      placeholder: metaDataTrans.password,
+      error: error.password,
+      helperText: `${metaDataTrans.password}${t('required')}`
+    }
+  ]
   return (
-    <>
-      <Grid container>
-        <Grid item sm={4}>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="meta-data-type">{metaDataTrans.type}</InputLabel>
-            <Select
-              name="type"
-              labelId="meta-data-type"
-              id="meta-data-type-select"
-              value={form.type}
-              onChange={handleChange}
-            >
-              <MenuItem value="mysql">Mysql</MenuItem>
-              <MenuItem value="sqlite">SQlite</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
+    <Form
+      config={formConfigs}
+      handleCancel={handleCancel}
+      handleSubmit={handleSubmit}
+    ></Form>
 
-      <FormTextField
-        name="host"
-        label={metaDataTrans.host}
-        value={form.host}
-        onBlur={() => { handleCheck(form.host, "host") }}
-        onChange={handleChange}
-        placeholder="0.0.0.0"
-        error={error.host}
-        helperText={error.host && `${metaDataTrans.host}${t('required')}`}
-      />
-      <FormTextField
-        name="port"
-        label={metaDataTrans.port}
-        value={form.port}
-        onBlur={() => { handleCheck(form.port, "port") }}
-        onChange={handleChange}
-        placeholder="19121"
-        error={error.port}
-        helperText={error.port && `${metaDataTrans.port}${t('required')}`}
-      />
-      <FormTextField
-        name="username"
-        label={metaDataTrans.username}
-        value={form.username}
-        onBlur={() => { handleCheck(form.username, "username") }}
-        onChange={handleChange}
-        placeholder={metaDataTrans.username}
-        error={error.username}
-        helperText={error.username && `${metaDataTrans.username}${t('required')}`}
-      />
-      <FormTextField
-        name="password"
-        label={metaDataTrans.password}
-        value={form.password}
-        onBlur={() => { handleCheck(form.password, "password") }}
-        onChange={handleChange}
-        placeholder={metaDataTrans.password}
-        error={error.password}
-        helperText={error.password && `${metaDataTrans.password}${t('required')}`}
-      />
-      <FormActions save={handleSubmit} cancel={handleCancel} />
-    </>
   );
 }
 
