@@ -17,7 +17,7 @@ const LoginMenu = props => {
       padding: theme.spacing(2),
       '& > h3': {
         color: "#fff",
-        fontSize: "20px"
+        fontSize: "18px"
       }
     },
     icon: {

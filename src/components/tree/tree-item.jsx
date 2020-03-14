@@ -63,7 +63,12 @@ const useTreeItemStyles = makeStyles(theme => ({
   },
   labelText: {
     fontWeight: "inherit",
-    flexGrow: 1
+    flexGrow: 1,
+    maxWidth: "120px",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+
   },
   iconBtn: {
     width: "20px",
@@ -78,8 +83,8 @@ const StyledTreeItem = props => {
     url,
     searchUrl,
     labelInfo,
-    propsClick = () => {},
-    propsIconBtnClick = () => {},
+    propsClick = () => { },
+    propsIconBtnClick = () => { },
     disabled,
     activeId,
     nodeId,
@@ -160,7 +165,7 @@ const StyledTreeItem = props => {
         label: classes.label
       }}
       {...other}
-      onClick={disabled ? () => {} : handleClick}
+      onClick={disabled ? () => { } : handleClick}
     />
   );
 };

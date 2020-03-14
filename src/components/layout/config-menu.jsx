@@ -41,7 +41,7 @@ const Configs = [
   { path: 'network', label: 'Network Access', icon: <FaNetworkWired /> },
   { path: 'storage', label: "Storage Path", icon: <FaRegFolder /> },
   { path: 'advanced', label: 'Advanced Settings', icon: <GoSettings /> },
-  { path: 'hardware', label: "Hardware Acceleration", icon: <FiCpu /> },
+  // { path: 'hardware', label: "Hardware Acceleration", icon: <FiCpu /> },
   { path: 'metrics', label: "Metrics", icon: <GiChart /> },
   { path: 'others', label: "Intergration", icon: <FaCubes /> }
 ]

@@ -59,6 +59,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     alignItems: "center",
     padding: theme.spacing(2),
+    paddingBottom: 0,
     "& .circle": {
       display: "inline-block",
       width: "10px",
