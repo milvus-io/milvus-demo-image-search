@@ -5,8 +5,6 @@ import { httpContext } from "../../context/http"
 import { useTranslation } from "react-i18next";
 import { useFormStyles } from "../../hooks/form";
 import Typography from '@material-ui/core/Typography'
-import { FormTextField } from '../../components/common/FormTextComponents'
-import FormActions from '../../components/common/FormActions'
 import Form from '../../components/form/Form'
 
 const PreloadCollectionsForm = props => {

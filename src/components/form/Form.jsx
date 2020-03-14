@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from "prop-types";
-import { TextField, Grid, FormControl, FormControlLabel, InputLabel, Switch, Select, Slider, MenuItem, Typography, FormLabel } from '@material-ui/core'
+import { TextField, Grid, FormControl, InputLabel, Switch, Select, Slider, MenuItem, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import FormActions from './FormActions'
 const useStyles = makeStyles(theme => ({
@@ -150,7 +150,10 @@ const Form = props => {
           )
         })
       }
-      <FormActions save={handleSubmit} cancel={handleCancel} disableCancel={!isFormChange} />
+      {
+        handleSubmit && handleCancel && <FormActions save={handleSubmit} cancel={handleCancel} disableCancel={!isFormChange} />
+      }
+
 
     </Grid>
 

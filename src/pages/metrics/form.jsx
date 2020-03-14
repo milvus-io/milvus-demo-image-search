@@ -7,16 +7,19 @@ import { httpContext } from "../../context/http"
 import { materialContext } from "../../context/material"
 
 import { useTranslation } from "react-i18next";
-import { FormTextField } from '../../components/common/FormTextComponents'
 import FormActions from '../../components/common/FormActions'
-import { UPDATE } from '../../consts'
+import Form from '../../components/form/Form'
+import { useFormValidate } from '../../hooks/form'
+
 
 const MetricForm = props => {
-  const { setMilvusAddress, milvusAddress, milvusConfigs } = useContext(systemContext)
-  const { currentAddress } = useContext(httpContext)
+  const { milvusConfigs } = useContext(systemContext)
+  const { currentAddress, setMilvusConfig, restartNotify } = useContext(httpContext)
   const { openSnackBar } = useContext(materialContext)
   const [isFormChange, setIsformChange] = useState(false)
   const [metricSetting, setMetricSetting] = useState({})
+  const [error, setError] = useState({})
+  const { validateForm, handleCheck, handleChange } = useFormValidate(metricSetting, setMetricSetting, setError)
 
   const classes = makeStyles(theme => ({
     gridItem: {
@@ -35,29 +38,22 @@ const MetricForm = props => {
     setMetricSetting({ ...metricSetting, enable_monitor: e.target.checked });
   }
 
-  const changePort = e => {
-    setIsformChange(true)
-    setMetricSetting({ ...metricSetting, port: e.target.value })
-  }
-  const changeAddress = e => {
-    setIsformChange(true)
-    setMetricSetting({ ...metricSetting, address: e.target.value })
-  }
-  const handleSubmit = () => {
-    setMilvusAddress({
-      type: UPDATE,
-      payload: {
-        id: currentAddress,
-        values: {
-          metrics: {
-            enable: metricSetting.enable_monitor,
-            address: metricSetting.address,
-            port: metricSetting.port
-          }
-        }
+  const handleSubmit = async () => {
+    if (metricSetting.enable_monitor) {
+      const isValid = validateForm()
+      if (!isValid) {
+        return
+      }
+    }
+    const res = await setMilvusConfig({
+      metric_config: {
+        ...metricSetting
       }
     })
-    openSnackBar(t('submitSuccess'))
+    if (res.code === 0) {
+      openSnackBar(t('submitSuccess'))
+      restartNotify()
+    }
   }
   const reset = () => {
     const { metric_config = {} } = milvusConfigs || {}
@@ -71,8 +67,31 @@ const MetricForm = props => {
   useEffect(() => {
     reset()
     //eslint-disable-next-line
-  }, [milvusAddress, currentAddress])
-
+  }, [currentAddress, milvusConfigs.metric_config])
+  const formConfigs = [{
+    type: "textField",
+    name: "address",
+    fullWidth: true,
+    value: metricSetting.address,
+    placeholder: metrics.address,
+    label: metrics.address,
+    error: error.address,
+    helperText: `${metrics.address}${t('required')}`,
+    onBlur: () => { handleCheck(metricSetting.address, "address") },
+    onChange: e => { handleChange(e); setIsformChange(true) },
+  },
+  {
+    type: "textField",
+    name: "port",
+    fullWidth: true,
+    value: metricSetting.port,
+    placeholder: metrics.port,
+    label: metrics.port,
+    error: error.port,
+    helperText: `${metrics.port}${t('required')}`,
+    onBlur: () => { handleCheck(metricSetting.port, "port") },
+    onChange: e => { handleChange(e); setIsformChange(true) },
+  }]
   return (
     <>
       <FormControlLabel
@@ -82,10 +101,7 @@ const MetricForm = props => {
         label={metrics.enable}
         labelPlacement="start"
       />
-      {metricSetting.enable_monitor && (<>
-        <FormTextField label={metrics.address} value={metricSetting.address || ""} onChange={changeAddress} />
-        <FormTextField label={metrics.port} value={metricSetting.port || ""} onChange={changePort} />
-      </>)}
+      {metricSetting.enable_monitor && <Form config={formConfigs}></Form>}
       <FormActions save={handleSubmit} cancel={reset} disableCancel={!isFormChange} />
     </>
   )

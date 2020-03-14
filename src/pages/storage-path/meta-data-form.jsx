@@ -3,7 +3,7 @@ import { systemContext } from '../../context/system'
 import { httpContext } from "../../context/http"
 import { materialContext } from '../../context/material'
 import { useTranslation } from "react-i18next";
-import { useFormStyles, useFormValidate } from '../../hooks/form'
+import { useFormValidate } from '../../hooks/form'
 import { safetyGet } from '../../utils/helpers'
 import Form from '../../components/form/Form'
 
@@ -28,7 +28,6 @@ const MetaDataForm = function (props) {
   const [form, setForm] = useState({ ...defaultForm })
   const [error, setError] = useState({})
 
-  const classes = useFormStyles();
   const { validateForm, handleCheck, handleChange } = useFormValidate(form, setForm, setError)
 
   useEffect(() => {
