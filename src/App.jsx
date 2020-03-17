@@ -1,7 +1,7 @@
 import React from "react";
 import HashRouter from './Router';
-import { HttpProvider } from './context/http'
-import { MaterialProvider } from './context/material'
+import { HttpProvider } from './context/Http'
+import { MaterialProvider } from './context/Root'
 import "./app.less";
 import "./assets/scss/reset.less"
 

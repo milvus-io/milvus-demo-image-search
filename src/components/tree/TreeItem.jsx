@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "./node_modules/react";
-import { makeStyles, Typography, IconButton } from "./node_modules/@material-ui/core";
-import { TreeItem } from "./node_modules/@material-ui/lab";
+import React, { useRef, useState } from "react";
+import { makeStyles, Typography, IconButton } from "@material-ui/core";
+import { TreeItem } from "@material-ui/lab";
 const useTreeItemStyles = makeStyles(theme => ({
   root: {
     color: "#fff",
