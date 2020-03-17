@@ -2,7 +2,6 @@ import React from "react";
 import Logo from "../../assets/imgs/logo.svg";
 import ConfigMenu from "./ConfigMenu";
 import useStyles from "./Style";
-
 const Layout = props => {
   const classes = useStyles();
 
@@ -17,7 +16,9 @@ const Layout = props => {
           <ConfigMenu></ConfigMenu>
         </div>
       </div>
-      <div className={classes.content}>{props.children}</div>
+      <div className={classes.content}>
+        {props.children}
+      </div>
     </div>
   );
 };

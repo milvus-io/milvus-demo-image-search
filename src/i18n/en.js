@@ -10,5 +10,7 @@ export default {
     connect: "Connect",
     import: "Import"
   },
-
+  app: {
+    title: "Applications"
+  }
 };

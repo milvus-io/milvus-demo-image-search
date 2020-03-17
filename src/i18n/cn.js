@@ -7,5 +7,8 @@ export default {
     search: "搜索",
     confirm: "确认",
     import: "导入"
+  },
+  app: {
+    title: "Applications"
   }
 };

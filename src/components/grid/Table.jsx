@@ -1,14 +1,14 @@
-import React from "./node_modules/react";
-import PropTypes from "./node_modules/prop-types";
-import { makeStyles } from "./node_modules/@material-ui/core/styles";
-import Table from "./node_modules/@material-ui/core/Table";
-import TableBody from "./node_modules/@material-ui/core/TableBody";
-import TableCell from "./node_modules/@material-ui/core/TableCell";
-import TableSortLabel from "./node_modules/@material-ui/core/TableSortLabel";
-import TableContainer from "./node_modules/@material-ui/core/TableContainer";
-import TableHead from "./node_modules/@material-ui/core/TableHead";
-import TableRow from "./node_modules/@material-ui/core/TableRow";
-import Checkbox from "./node_modules/@material-ui/core/Checkbox";
+import React from "react";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Checkbox from "@material-ui/core/Checkbox";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
