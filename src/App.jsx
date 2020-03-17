@@ -1,7 +1,5 @@
 import React from "react";
 import HashRouter from './Router';
-import { DataManagementProvider } from './context/data-management'
-import { SystemProvider } from './context/system'
 import { HttpProvider } from './context/http'
 import { MaterialProvider } from './context/material'
 import "./app.less";
@@ -22,11 +20,7 @@ export default function App() {
   return (
     <MaterialProvider>
       <HttpProvider>
-        <SystemProvider>
-          <DataManagementProvider>
-            <HashRouter></HashRouter>
-          </DataManagementProvider>
-        </SystemProvider>
+        <HashRouter></HashRouter>
       </HttpProvider>
     </MaterialProvider>
   );

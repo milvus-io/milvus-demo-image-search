@@ -6,7 +6,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { FaNetworkWired, FaRegFolder } from "react-icons/fa";
-import { FiCpu } from "react-icons/fi";
 import { GiChart } from "react-icons/gi";
 import { GoSettings } from "react-icons/go";
 import { FaCubes } from "react-icons/fa";

@@ -1,5 +1,5 @@
-import React from 'react'
-import { Paper, Box } from '@material-ui/core'
+import React from './node_modules/react'
+import { Paper, Box } from './node_modules/@material-ui/core'
 
 const PageWrapper = props => {
   return (
@@ -8,7 +8,6 @@ const PageWrapper = props => {
         {
           props.children
         }
-
       </Box>
     </Paper>
   )

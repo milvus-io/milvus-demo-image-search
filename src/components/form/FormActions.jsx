@@ -1,8 +1,8 @@
-import React from 'react';
-import { useTranslation } from "react-i18next";
-import { makeStyles } from '@material-ui/styles';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
+import React from './node_modules/react';
+import { useTranslation } from "./node_modules/react-i18next";
+import { makeStyles } from './node_modules/@material-ui/styles';
+import Button from './node_modules/@material-ui/core/Button';
+import Grid from './node_modules/@material-ui/core/Grid';
 
 const FormActions = props => {
   const { t } = useTranslation();

@@ -1,6 +1,6 @@
 import {
   makeStyles
-} from '@material-ui/styles';
+} from './node_modules/@material-ui/styles';
 
 const useStyles = makeStyles(theme => ({
   dialogContent: {
