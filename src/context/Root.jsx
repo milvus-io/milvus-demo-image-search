@@ -11,7 +11,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export const materialContext = React.createContext({
+export const rootContext = React.createContext({
   openSnackBar: (message, type = "success", duration, position = { vertical: "top", horizontal: "center" }) => { },
   dialog: {},
   setDialog: (params) => { },
@@ -50,11 +50,11 @@ const DefaultDialogConfigs = {
   },
 }
 
-const { Provider } = materialContext
+const { Provider } = rootContext
 // Dialog has two type : notice | custom;
 // notice type mean it's a notice dialog you need to set props like title, content, actions 
 // custom type could have own state, you could set a complete component in dialog.
-export const MaterialProvider = ({ children }) => {
+export const RootProvider = ({ children }) => {
   const classes = makeStyles({
     paper: {
       minWidth: '300px'

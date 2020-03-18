@@ -11,6 +11,8 @@ export default {
     import: "Import"
   },
   app: {
-    title: "Applications"
+    title: "Applications",
+    createApp: "Create Application",
+    name: "Application Name"
   }
 };

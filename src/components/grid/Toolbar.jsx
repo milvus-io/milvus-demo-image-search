@@ -120,6 +120,16 @@ const useToolbarStyles = makeStyles(theme => ({
       },
   title: {
     flex: "1 1 100%"
+  },
+  disabled: {
+    color: "rgba(0, 0, 0, 0.26)",
+    boxShadow: "none",
+    backgroundColor: "rgba(0, 0, 0, 0.12)",
+    cursor: "default",
+    "&:hover": {
+      backgroundColor: "rgba(0, 0, 0, 0.12)",
+      boxShadow: "none"
+    }
   }
 }));
 
@@ -164,12 +174,15 @@ const Toolbar = props => {
                   key={c.icon}
                   variant="contained"
                   size="small"
-                  className={classes.button}
-                  disabled={c._disabled}
-                  onClick={async e => {
-                    await c.onClick(e, selected);
-                    setSelected([]);
-                  }}
+                  className={` ${c._disabled && classes.disabled}`}
+                  onClick={
+                    c._disabled
+                      ? () => { }
+                      : async e => {
+                        await c.onClick(e, selected);
+                        setSelected([]);
+                      }
+                  }
                   startIcon={iconGetter(c.icon, c)}
                 >
                   <Typography variant="button">{c.label}</Typography>
@@ -184,7 +197,7 @@ const Toolbar = props => {
                   title={c._disabled ? c.disabledTooltip : c.tooltip}
                   key={c.icon + "tooltip"}
                 >
-                  <div disablefocusripple="true">{btn}</div>
+                  {btn}
                 </Tooltip>
               ) : (
                   btn

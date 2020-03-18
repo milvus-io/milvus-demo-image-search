@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Configs = [
-  { path: 'network', label: 'Network Access', icon: <FaNetworkWired /> },
+  { path: 'apps', label: 'Applications', icon: <FaNetworkWired /> },
   { path: 'storage', label: "Storage Path", icon: <FaRegFolder /> },
   { path: 'advanced', label: 'Advanced Settings', icon: <GoSettings /> },
   // { path: 'hardware', label: "Hardware Acceleration", icon: <FiCpu /> },
@@ -59,7 +59,7 @@ const ConfigMenu = props => {
       <List component="nav" aria-label="main mailbox folders">
         {Configs.map(config => {
           const { path, label, icon } = config
-          const route = `/configs/${path}`
+          const route = `/${path}`
           const isSelected = history.location.pathname === route;
           return (
             <ListItem key={path} button className={classes.item} classes={{ root: isSelected ? classes.selected : "" }} onClick={() => history.push(route)}>

@@ -1,7 +1,7 @@
-import React from './node_modules/react'
-import PropTypes from './node_modules/prop-types'
-import { makeStyles, Popover, Typography, Box, Button } from "./node_modules/@material-ui/core";
-import { useTranslation } from "./node_modules/react-i18next";
+import React from 'react'
+import PropTypes from 'prop-types'
+import { makeStyles, Popover, Typography, Box, Button } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles(theme => ({
   btn: {

@@ -1,5 +1,5 @@
-import { Tabs } from './node_modules/@material-ui/core'
-import { withStyles } from './node_modules/@material-ui/core/styles';
+import { Tabs } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles';
 
 const MyTabs = withStyles({
   root: {
