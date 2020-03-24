@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import axios from "axios";
 import { rootContext } from './Root'
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 
 let hasError = false; // make sure only one error message
 const axiosInstance = axios.create({
@@ -16,7 +16,7 @@ export const httpContext = React.createContext({
 const { Provider } = httpContext
 
 export const HttpProvider = ({ children }) => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const { openSnackBar } = useContext(rootContext)
 
   axiosInstance.interceptors.response.use(

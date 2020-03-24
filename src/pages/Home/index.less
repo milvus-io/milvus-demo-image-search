@@ -1,9 +1,57 @@
 .home-wrapper {
+  position: relative;
+  display: flex;
   color: #fff;
-  padding: 32px 0;
+  padding: 10px 0;
+  background: #28292E;
+  height: calc(100vh - 60px);
+  overflow: auto;
 
-  .content {
-    width: 80%;
-    margin: 0 auto;
+  .imgs-wrapper {
+    flex: 1;
+    transition: width ease 0.3s;
+  }
+
+  .file-drop {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    background: rgba(40, 41, 46, 0.9);
+    transition: width ease 0.3s;
+
+    &.open {
+
+      width: 560px;
+
+      .tip {
+        display: block;
+        text-align: center;
+      }
+    }
+
+    .target {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tip {
+      width: 560px;
+      font-size: 32px;
+      font-weight: bold;
+      color: rgba(176, 176, 185, 1);
+      line-height: 47px;
+    }
+  }
+
+  .loading-wrapper {
+    text-align: center;
   }
 }
