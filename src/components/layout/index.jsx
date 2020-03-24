@@ -1,24 +1,14 @@
 import React from "react";
-import Logo from "../../assets/imgs/logo.svg";
-import Menu from "./Menu";
-import useStyles from "./Style";
+import "./index.less"
 const Layout = props => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.root}>
-      <div className={classes.menuWrapper}>
-        <div className="logo-wrapper">
-          <img src={Logo} alt="Milvus Logo"></img>
-        </div>
-
-        <div className={classes.menuContent}>
-          <Menu></Menu>
-        </div>
-      </div>
-      <div className={classes.content}>
+    <div className="layout-wrapper">
+      <header className="header-wrapper">
+        <h3>IMAGE SEARCH <span>powered by Milvus</span> </h3>
+      </header>
+      <section className="content-wrapper">
         {props.children}
-      </div>
+      </section>
     </div>
   );
 };

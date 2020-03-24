@@ -1,6 +1,7 @@
 import React from 'react'
 import Layout from "components/Layout";
-import Applications from 'pages/Applications'
+import Home from './pages/Home'
+import Search from './pages/Search'
 
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { HashRouter, Switch, Route } from "react-router-dom";
@@ -21,10 +22,10 @@ const HashRouterWrapper = () => {
                   <section className="route-section">
                     <Switch location={location}>
                       <Route path="/" exact>
-                        <Applications></Applications>
+                        <Home></Home>
                       </Route>
-                      <Route path="/apps" exact>
-                        <Applications></Applications>
+                      <Route path="/search" exact>
+                        <Search></Search>
                       </Route>
                     </Switch>
                   </section>
