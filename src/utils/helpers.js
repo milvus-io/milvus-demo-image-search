@@ -59,3 +59,15 @@ export const exportCsv = (title, data) => {
     filename
   };
 };
+
+export function getImgUrl(file) {
+  let url = null;
+  if (window.createObjectURL) { // basic
+    url = window.createObjectURL(file);
+  } else if (window.URL) { // mozilla(firefox)
+    url = window.URL.createObjectURL(file);
+  } else if (window.webkitURL) { // webkit or chrome
+    url = window.webkitURL.createObjectURL(file);
+  }
+  return url;
+}

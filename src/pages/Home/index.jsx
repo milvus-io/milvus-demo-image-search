@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
 import FileDrop from 'react-file-drop'
 import Gallery from '../../components/Gallery'
+import Cropper from '../../components/Cropper'
+import { getImgUrl } from '../../utils/helpers'
 import { CircularProgress } from '@material-ui/core'
+import { CloudUpload } from '@material-ui/icons'
 import "./index.less"
 
 const imgSrcs = [
@@ -19,7 +22,6 @@ const generateImgs = (count) => {
       src: imgSrcs[(Math.round(Math.random() * 10) + 5) % 5]
     })
   }
-  console.log(arr)
   return arr
 }
 
@@ -27,9 +29,15 @@ const Home = props => {
   const [show, setShow] = useState(false)
   const [imgs, setImgs] = useState(generateImgs(50))
   const [loading, setLoading] = useState(false)
+  const [selectedImg, setSelectedImg] = useState("")
   const dropRef = useRef(null)
+  const inputRef = useRef(null)
+
   const handleDrop = (files, event) => {
-    console.log('handleDrop!', files, event);
+    const src = getImgUrl(files[0])
+    console.log(files[0])
+    setSelectedImg(files[0] ? src : "")
+    setShow(false)
   }
   useEffect(() => {
     window.addEventListener("dragover", (e) => {
@@ -59,14 +67,28 @@ const Home = props => {
       }, 1000)
     }
   }
+  const handleInput = () => {
+    inputRef.current.click()
+  }
+  const handleInputChange = (e) => {
+    const file = inputRef.current.files[0] || ""
+    const src = getImgUrl(file)
+    setSelectedImg(file ? src : "")
+  }
+  const handleSearch = src => {
+    setSelectedImg(src)
+  }
   return <div className="home-wrapper" onScroll={handleScroll}>
     <div className={`file-drop ${show && 'open'}`} ref={dropRef}>
       <FileDrop onDrop={handleDrop} className="target" >
         <div className="tip" >Drop Image here!</div>
       </FileDrop>
     </div>
+    <div className={`cropper-wrapper ${selectedImg && 'show'}`}>
+      <Cropper src={selectedImg} className="crop-img-wrapper" imgClassName="crop-img"></Cropper>
+    </div>
     <div className="imgs-wrapper">
-      <Gallery imgs={imgs} ></Gallery>
+      <Gallery handleSearch={handleSearch} imgs={imgs} ></Gallery>
       {
         loading && (<div className="loading-wrapper">
           <CircularProgress></CircularProgress>
@@ -74,6 +96,11 @@ const Home = props => {
       }
 
     </div>
+    <span className="upload" onClick={handleInput}>
+      <CloudUpload></CloudUpload>
+    </span>
+    <input type="file" ref={inputRef} className="input" onChange={handleInputChange}></input>
+
   </div>
 }
 

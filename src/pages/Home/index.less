@@ -2,14 +2,55 @@
   position: relative;
   display: flex;
   color: #fff;
-  padding: 10px 0;
   background: #28292E;
-  height: calc(100vh - 60px);
-  overflow: auto;
+
+
+  .cropper-wrapper {
+    flex: 0 0 100px;
+    transition: all ease 0.3s;
+    overflow: hidden;
+    margin-top: 30px;
+
+    &.show {
+      flex: 0 0 600px;
+    }
+
+    .crop-img-wrapper {
+      width: 400px;
+      margin: 0 100px 0 80px;
+
+      .crop-img {
+        width: 400px;
+      }
+    }
+  }
 
   .imgs-wrapper {
     flex: 1;
-    transition: width ease 0.3s;
+    transition: all ease 0.3s;
+    height: calc(100vh - 80px);
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+      background-color: rgba(255, 255, 255, 0.05)
+    }
+
+    /*滑块*/
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(255, 255, 255, 0.3)
+    }
+
+    /*滑道*/
+    &::-webkit-scrollbar-track {
+      border-radius: 10px
+    }
   }
 
   .file-drop {
@@ -20,6 +61,7 @@
     width: 0;
     background: rgba(40, 41, 46, 0.9);
     transition: width ease 0.3s;
+    z-index: 1000;
 
     &.open {
 
@@ -53,5 +95,24 @@
 
   .loading-wrapper {
     text-align: center;
+  }
+
+  .upload {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #4FC4F9;
+    color: #fff;
+    cursor: pointer;
+
+  }
+
+  .input {
+    display: none;
   }
 }

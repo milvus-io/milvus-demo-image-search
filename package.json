@@ -32,7 +32,8 @@
     "react-masonry-component": "^6.2.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
-    "react-transition-group": "^4.3.0"
+    "react-transition-group": "^4.3.0",
+    "react-zmage": "^0.8.5-beta.31"
   },
   "devDependencies": {
     "csv-writer": "^1.6.0",
