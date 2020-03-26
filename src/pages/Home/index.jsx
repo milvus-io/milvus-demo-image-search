@@ -9,11 +9,11 @@ import "./index.less"
 
 const imgSrcs = [
   "https://i.pinimg.com/236x/b0/22/04/b02204649aa8c87e66e503a5497ad6be.jpg",
-  "https://i.pinimg.com/236x/81/df/9c/81df9cd806fb9a6d728f3d30e51805c7.jpg",
+  "https://thumbs.dreamstime.com/b/autumn-oak-leaf-fantastic-beautiful-spray-bubbles-blue-background-magic-autumn-blue-background-yellow-oak-leaf-158238643.jpg",
   "https://i.pinimg.com/236x/5b/4d/f3/5b4df30773e19538f75f4c75d215bb31.jpg",
   "https://i.pinimg.com/236x/9d/2c/2d/9d2c2d0a7d917e254cdbc515cd8f41c2.jpg",
   "https://i.pinimg.com/236x/55/6f/dc/556fdc059220a96534fbb8af3baadfc1.jpg",
-  "https://i.pinimg.com/236x/d0/ad/be/d0adbea0e6507657897bcecb34ae99ac.jpg"
+  "https://i.pinimg.com/236x/d0/ad/be/d0adbea0e6507657897bcecb34ae99ac.jpg",
 ]
 const generateImgs = (count) => {
   let arr = []

@@ -4,6 +4,18 @@
   color: #fff;
   background: #28292E;
 
+  @media only screen and (max-width: 1024px) {
+    flex-direction: column;
+
+    .cropper-wrapper {
+      flex: 1;
+
+      &.show {
+        flex: 1;
+      }
+    }
+
+  }
 
   .cropper-wrapper {
     flex: 0 0 100px;
@@ -11,18 +23,44 @@
     overflow: hidden;
     margin-top: 30px;
 
+
+
     &.show {
       flex: 0 0 600px;
+    }
+
+    @media only screen and (max-width: 1024px) {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+
+      &.show {
+        flex: 1;
+      }
     }
 
     .crop-img-wrapper {
       width: 400px;
       margin: 0 100px 0 80px;
 
-      .crop-img {
-        width: 400px;
+      .crop-img,
+      img {
+        max-width: 400px;
+      }
+
+      @media only screen and (max-width: 400px) {
+        width: 90%;
+        margin: 30px auto 0 auto;
+
+        .crop-img,
+        img {
+          max-width: 300px;
+
+        }
       }
     }
+
+
   }
 
   .imgs-wrapper {
