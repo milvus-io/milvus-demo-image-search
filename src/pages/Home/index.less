@@ -35,7 +35,7 @@
       margin-bottom: 20px;
 
       &.show {
-        flex: 1;
+        flex: 0 0 300px;
       }
     }
 
@@ -46,6 +46,7 @@
       .crop-img,
       img {
         max-width: 400px;
+        max-height: 80vh;
       }
 
       @media only screen and (max-width: 400px) {
@@ -55,7 +56,7 @@
         .crop-img,
         img {
           max-width: 300px;
-
+          max-height: 300px;
         }
       }
     }
@@ -64,9 +65,10 @@
   }
 
   .imgs-wrapper {
+    position: relative;
     flex: 1;
     transition: all ease 0.3s;
-    height: calc(100vh - 80px);
+    max-height: calc(100vh - 80px);
     overflow: auto;
 
     &::-webkit-scrollbar {
@@ -133,6 +135,17 @@
 
   .loading-wrapper {
     text-align: center;
+  }
+
+  .global-loading-wrapper {
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 0%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .upload {

@@ -5,11 +5,11 @@ import { rootContext } from './Root'
 
 let hasError = false; // make sure only one error message
 const axiosInstance = axios.create({
-  timeout: 5000,
-  baseURL: "http://123123"
+  baseURL: "http://40.73.38.81:5000/api/v1/"
 });
 
 export const httpContext = React.createContext({
+  search: (formData) => { }
 })
 
 
@@ -54,15 +54,13 @@ export const HttpProvider = ({ children }) => {
 
   // ------- Data Management Start ----------
 
-  async function searchVectors(collectionName, data = {}) {
-    const res = await axiosInstance.put(`/collections/${collectionName}/vectors`, data);
+  async function search(formData) {
+    const res = await axiosInstance.post(`/search`, formData);
     return res.data;
   }
 
 
   return <Provider value={{
-    // config api
-    searchVectors,
-
+    search
   }}>{children}</Provider>
 }

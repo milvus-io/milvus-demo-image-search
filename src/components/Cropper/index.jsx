@@ -7,7 +7,7 @@ let timer = null
 const CroppeDemo = props => {
   const imgRef = useRef(null)
   const myCropper = useRef(null)
-  const { src, className, imgClassName } = props
+  const { propSend, src, className, imgClassName } = props
 
   const handleImgLoaded = e => {
     const cropper = new Cropper(imgRef.current, {
@@ -60,13 +60,14 @@ const CroppeDemo = props => {
     const cropperInstance = myCropper.current
 
     cropperInstance.getCroppedCanvas().toBlob((blob) => {
-      const formData = new FormData();
+      propSend(blob)
+      // const formData = new FormData();
 
-      // Pass the image file name as the third parameter if necessary.
-      formData.append('croppedImage', blob/*, 'example.png' */);
+      // // Pass the image file name as the third parameter if necessary.
+      // formData.append('croppedImage', blob/*, 'example.png' */);
 
-      // Use `jQuery.ajax` method for example
-      console.log(blob)
+      // // Use `jQuery.ajax` method for example
+      // console.log(blob)
     }/*, 'image/png' */);
 
   }
