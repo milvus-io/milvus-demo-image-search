@@ -11,20 +11,31 @@ const masonryOptions = {
 };
 
 const Gallery = props => {
-  const [show, setShow] = useState(false)
+  const [imgsStatus, setImgsStatus] = useState([])
   const [paddingLeft, setPaddingLeft] = useState(0)
   const { imgs, setGlobalLoading, handleSearch, setLoading } = props
 
   const handleImagesLoaded = (e) => {
-    setGlobalLoading(false)
-    setLoading(false)
-    setShow(true)
+    if (e.images.length === imgs.length && imgsStatus.some(v => !v)) {
+      setGlobalLoading(false)
+      setLoading(false)
+      setImgsStatus(v => v.map(item => true))
+    }
   }
   const handleLayoutComplete = (e) => {
     console.log("layout")
-
     // setShow(true)
   }
+  useEffect(() => {
+    if (imgs.length > imgsStatus.length) {
+      const copyImgsStatus = [...imgsStatus]
+      while (copyImgsStatus.length < imgs.length) {
+        copyImgsStatus.push(false)
+      }
+      setImgsStatus(copyImgsStatus)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imgs])
   useEffect(() => {
     const cb = () => {
       if (window.innerWidth <= 1024) {
@@ -53,7 +64,7 @@ const Gallery = props => {
       {
         imgs.map((v, i) => {
           return (
-            <li className="image-element-class" style={{ visibility: show ? "inherit" : "hidden" }} key={`${v.src}${i}`}>
+            <li className="image-element-class" style={{ visibility: imgsStatus[i] ? "inherit" : "hidden" }} key={`${v.src}${i}`}>
               <Zmage backdrop="rgba(0,0,0,.8)" src={v.src} draggable={false} alt="result" />
               <div className="desc">
                 <p>{v.distance}</p>

@@ -8,6 +8,7 @@ import { Search } from '@material-ui/icons'
 import { httpContext } from '../../context/Http'
 import "./index.less"
 
+let timer = null
 const Home = props => {
   const [show, setShow] = useState(false)
   const [imgs, setImgs] = useState([])
@@ -15,6 +16,8 @@ const Home = props => {
   const [globalLoading, setGlobalLoading] = useState(false)
   const [selectedImg, setSelectedImg] = useState("")
   const [blob, setBlob] = useState("")
+  const [page, setPage] = useState(0)
+  const [noData, setNoData] = useState(false)
   const dropRef = useRef(null)
   const inputRef = useRef(null)
   const { search } = useContext(httpContext)
@@ -49,9 +52,15 @@ const Home = props => {
 
   const handleScroll = async e => {
     const { scrollTop, offsetHeight, scrollHeight } = e.currentTarget
-    if (scrollHeight - scrollTop - offsetHeight < 30 && !loading && imgs.length) {
-      setLoading(true)
-      await handleImgSearch(blob, false)
+    console.log(scrollHeight - scrollTop - offsetHeight, timer)
+    if (scrollHeight - scrollTop - offsetHeight < 30 && !loading && !timer && imgs.length) {
+      timer = setTimeout(async () => {
+        setLoading(true)
+        setPage(v => v + 1)
+        await handleImgSearch(blob, false)
+        timer = null
+      }, 200)
+
     }
   }
 
@@ -66,20 +75,28 @@ const Home = props => {
     }
     const src = getImgUrl(file)
     setSelectedImg(file ? src : "")
-    // handleImgSearch(file)
   }
 
 
   const handleImgSearch = async (file, reset = true) => {
     if (reset) {
       setImgs([])
+      setPage(0)
       setGlobalLoading(true)
+      setNoData(false)
+
     }
     const fd = new FormData()
     fd.append("file", file)
     fd.append("Num", 30)
+    fd.append("Page", page)
+
     setBlob(file)
     const res = await search(fd)
+    if (!res.length) {
+      setNoData(true)
+      return
+    }
     setImgs(v => ([
       ...v,
       ...res.map(v => ({
@@ -116,11 +133,13 @@ const Home = props => {
         </div>)
       }
       {
-        loading && (<div className="loading-wrapper">
+        loading && !noData && (<div className="loading-wrapper">
           <CircularProgress></CircularProgress>
         </div>)
       }
-
+      {
+        noData && (<p style={{ textAlign: "center" }}>No More Data.</p>)
+      }
     </div>
     <span className="upload" onClick={handleInput}>
       <Search></Search>
