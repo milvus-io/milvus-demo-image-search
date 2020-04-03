@@ -19,7 +19,7 @@ const Home = props => {
   const [globalLoading, setGlobalLoading] = useState(false)
   const [selectedImg, setSelectedImg] = useState("")
   const [blob, setBlob] = useState("")
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(0)
   const [noData, setNoData] = useState(false)
   const dropRef = useRef(null)
   const inputRef = useRef(null)
@@ -106,7 +106,7 @@ const Home = props => {
   const handleImgSearch = async (file, reset = true) => {
     if (reset) {
       setImgs([])
-      setPage(1)
+      setPage(0)
       setGlobalLoading(true)
       setNoData(false)
 

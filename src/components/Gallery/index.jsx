@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Masonry from 'react-masonry-component';
 import { Search } from '@material-ui/icons'
 import "./index.less"
@@ -10,31 +10,38 @@ const masonryOptions = {
   columnWidth,
 };
 
+const NUM = 10
 const Gallery = props => {
   const [imgsStatus, setImgsStatus] = useState([])
   const [paddingLeft, setPaddingLeft] = useState(0)
+  const [loadedCount, setLoadedCount] = useState(0)
   const { imgs, setGlobalLoading, handleSearch, setLoading } = props
-
+  const loadingImgs = useMemo(() => {
+    const copyImgs = JSON.parse(JSON.stringify(imgs))
+    return copyImgs.splice(0, loadedCount + NUM)
+  }, [loadedCount, imgs])
   const handleImagesLoaded = (e) => {
-    if (e.images.length === imgs.length && imgsStatus.some(v => !v)) {
-      setGlobalLoading(false)
-      setLoading(false)
-      setImgsStatus(v => v.map(item => true))
-    }
+    setImgsStatus(v => v.map(item => true))
+    setLoadedCount(v => v += NUM)
+    setGlobalLoading(false)
+    setLoading(false)
   }
   // const handleLayoutComplete = (e) => {
   //   console.log("layout")
   // }
   useEffect(() => {
+    if (imgs.length === 0) {
+      setLoadedCount(0)
+    }
     if (imgs.length > imgsStatus.length) {
       const copyImgsStatus = [...imgsStatus]
-      while (copyImgsStatus.length < imgs.length) {
+      while (copyImgsStatus.length < imgs.length && copyImgsStatus.length <= loadedCount + NUM) {
         copyImgsStatus.push(false)
       }
       setImgsStatus(copyImgsStatus)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imgs])
+  }, [imgs, loadedCount])
   useEffect(() => {
     const cb = () => {
       if (window.innerWidth <= 1024) {
@@ -61,7 +68,7 @@ const Gallery = props => {
       style={{ paddingLeft: paddingLeft }}
     >
       {
-        imgs.map((v, i) => {
+        loadingImgs.map((v, i) => {
           return (
             <li className="image-element-class" style={{ visibility: imgsStatus[i] ? "inherit" : "hidden" }} key={`${v.src}${i}`}>
               <Zmage backdrop="rgba(0,0,0,.8)" src={v.src} draggable={false} alt="result" />
