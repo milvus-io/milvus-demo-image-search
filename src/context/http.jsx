@@ -4,8 +4,12 @@ import { rootContext } from './Root'
 // import { useTranslation } from "react-i18next";
 
 let hasError = false; // make sure only one error message
+let endpoint = "http://40.117.75.127:5004"
+if (window._env_ && window._env_.API_URL) {
+  endpoint = window._env_.API_URL;
+}
 const axiosInstance = axios.create({
-  baseURL: "http://40.117.75.127:5004/api/v1/"
+  baseURL: `${endpoint}/api/v1`
 });
 
 export const httpContext = React.createContext({

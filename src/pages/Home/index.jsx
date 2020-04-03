@@ -52,14 +52,13 @@ const Home = props => {
 
   const handleScroll = async e => {
     const { scrollTop, offsetHeight, scrollHeight } = e.currentTarget
-    console.log(scrollHeight - scrollTop - offsetHeight, timer)
     if (scrollHeight - scrollTop - offsetHeight < 30 && !loading && !timer && imgs.length) {
       timer = setTimeout(async () => {
         setLoading(true)
         setPage(v => v + 1)
         await handleImgSearch(blob, false)
         timer = null
-      }, 200)
+      }, 100)
 
     }
   }
