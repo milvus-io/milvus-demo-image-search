@@ -3,23 +3,27 @@ import FileDrop from 'react-file-drop'
 import Gallery from '../../components/Gallery'
 import Cropper from '../../components/Cropper'
 import { getImgUrl } from '../../utils/helpers'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress, useMediaQuery, IconButton } from '@material-ui/core'
+import { VerticalAlignTop } from '@material-ui/icons'
 import { Search } from '@material-ui/icons'
 import { httpContext } from '../../context/Http'
 import "./index.less"
-
+import DemoImg from '../../assets/demo.jpg'
+import { getBase64Image, convertBase64UrlToBlob } from '../../utils/helpers'
 let timer = null
 const Home = props => {
+  const isMobile = !useMediaQuery("(min-width:1000px)");
   const [show, setShow] = useState(false)
   const [imgs, setImgs] = useState([])
   const [loading, setLoading] = useState(false)
   const [globalLoading, setGlobalLoading] = useState(false)
   const [selectedImg, setSelectedImg] = useState("")
   const [blob, setBlob] = useState("")
-  const [page, setPage] = useState(0)
+  const [page, setPage] = useState(1)
   const [noData, setNoData] = useState(false)
   const dropRef = useRef(null)
   const inputRef = useRef(null)
+  const imgsWrapperRef = useRef(null)
   const { search } = useContext(httpContext)
 
   const handleDrop = (files, event) => {
@@ -48,6 +52,28 @@ const Home = props => {
       }
     })
 
+  }, [])
+  useEffect(() => {
+    const image = new Image();
+    image.crossOrigin = '';
+    image.src = DemoImg;
+    image.onload = function () {
+      const base64 = getBase64Image(image);
+      /*
+       打印信息如下：
+       {
+        dataURL: "data:image/png;base64,xxx"
+        type: "image/jpg"
+       }
+       */
+      const imgBlob = convertBase64UrlToBlob(base64);
+      handleImgSearch(imgBlob)
+      /*
+       打印信息如下：
+       Blob {size: 9585, type: "image/jpg"}
+       */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleScroll = async e => {
@@ -80,7 +106,7 @@ const Home = props => {
   const handleImgSearch = async (file, reset = true) => {
     if (reset) {
       setImgs([])
-      setPage(0)
+      setPage(1)
       setGlobalLoading(true)
       setNoData(false)
 
@@ -108,7 +134,12 @@ const Home = props => {
     setSelectedImg(src)
   }
 
-  return <div className="home-wrapper">
+  const handleBackToTop = () => {
+    document.querySelector(".route-section").scrollTop = 0
+    imgsWrapperRef.current.scrollTop = 0
+  }
+
+  return <div className="home-wrapper" >
     <div className={`file-drop ${show && 'open'}`} ref={dropRef}>
       <FileDrop onDrop={handleDrop} className="target" >
         <div className="tip" >Drop Image here!</div>
@@ -117,7 +148,7 @@ const Home = props => {
     <div className={`cropper-wrapper ${selectedImg && 'show'}`}>
       <Cropper src={selectedImg} propSend={handleImgSearch} className="crop-img-wrapper" imgClassName="crop-img"></Cropper>
     </div>
-    <div className="imgs-wrapper" onScroll={handleScroll}>
+    <div className="imgs-wrapper" ref={imgsWrapperRef} onScroll={handleScroll}>
       {
         imgs.length ? <Gallery
           handleSearch={handleSearch}
@@ -144,7 +175,16 @@ const Home = props => {
       <Search></Search>
     </span>
     <input type="file" ref={inputRef} className="input" onChange={handleInputChange}></input>
-
+    {
+      isMobile && (
+        <IconButton
+          onClick={handleBackToTop}
+          color="primary"
+          style={{ position: "fixed", bottom: "20px", right: "20px", borderRadius: "50%", background: "#2196f3", color: "#fff" }}>
+          <VerticalAlignTop></VerticalAlignTop>
+        </IconButton>
+      )
+    }
   </div>
 }
 

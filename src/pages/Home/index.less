@@ -33,6 +33,7 @@
       display: flex;
       justify-content: center;
       margin-bottom: 20px;
+      margin-top: 0;
 
       &.show {
         flex: 0 0 300px;
@@ -68,6 +69,7 @@
     position: relative;
     flex: 1;
     transition: all ease 0.3s;
+    height: 100vh;
     max-height: calc(100vh - 63px);
     overflow: auto;
     padding-bottom: 10px;
@@ -135,18 +137,34 @@
   }
 
   .loading-wrapper {
-    text-align: center;
+    position: fixed;
+    bottom: 0;
+    right: 40%;
   }
 
   .global-loading-wrapper {
     position: absolute;
     right: 0;
     top: 0;
-    left: 0%;
-    height: 50%;
+    left: 0;
+    bottom: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
+
+    @media only screen and (max-width: 1024px) {
+      position: fixed;
+      right: 0;
+      top: 60px;
+      left: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.8);
+    }
   }
 
   .upload {

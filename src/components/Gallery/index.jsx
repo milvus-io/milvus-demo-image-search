@@ -22,10 +22,9 @@ const Gallery = props => {
       setImgsStatus(v => v.map(item => true))
     }
   }
-  const handleLayoutComplete = (e) => {
-    console.log("layout")
-    // setShow(true)
-  }
+  // const handleLayoutComplete = (e) => {
+  //   console.log("layout")
+  // }
   useEffect(() => {
     if (imgs.length > imgsStatus.length) {
       const copyImgsStatus = [...imgsStatus]
@@ -58,7 +57,7 @@ const Gallery = props => {
       updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
       // imagesLoadedOptions={imagesLoadedOptions} // default {}
       onImagesLoaded={handleImagesLoaded}
-      onLayoutComplete={handleLayoutComplete}
+      // onLayoutComplete={handleLayoutComplete}
       style={{ paddingLeft: paddingLeft }}
     >
       {

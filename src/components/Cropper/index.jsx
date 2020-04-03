@@ -61,13 +61,7 @@ const CroppeDemo = props => {
 
     cropperInstance.getCroppedCanvas().toBlob((blob) => {
       propSend(blob)
-      // const formData = new FormData();
 
-      // // Pass the image file name as the third parameter if necessary.
-      // formData.append('croppedImage', blob/*, 'example.png' */);
-
-      // // Use `jQuery.ajax` method for example
-      // console.log(blob)
     }/*, 'image/png' */);
 
   }
