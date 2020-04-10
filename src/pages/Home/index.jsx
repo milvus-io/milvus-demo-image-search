@@ -113,7 +113,7 @@ const Home = props => {
     }
     const fd = new FormData()
     fd.append("file", file)
-    fd.append("Num", 30)
+    fd.append("Num", 50)
     fd.append("Page", page)
 
     setBlob(file)

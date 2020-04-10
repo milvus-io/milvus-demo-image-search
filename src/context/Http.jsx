@@ -13,7 +13,8 @@ const axiosInstance = axios.create({
 });
 
 export const httpContext = React.createContext({
-  search: (formData) => { }
+  search: (formData) => { },
+  getCount: () => { }
 })
 
 
@@ -63,8 +64,14 @@ export const HttpProvider = ({ children }) => {
     return res.data;
   }
 
+  async function getCount() {
+    const res = await axiosInstance.post(`/count`);
+    return res.data;
+  }
+
 
   return <Provider value={{
-    search
+    search,
+    getCount
   }}>{children}</Provider>
 }
