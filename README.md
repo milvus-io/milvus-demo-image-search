@@ -1,10 +1,3 @@
-# electron
-the name in package.json must equal electron-packager rename value
+# Image Search
 
-package.json must has description
-
-# build 
-docker build -t milvusdb/milvus-admin .
-
-# tag
-docker tag milvusdb/milvus-admin:latest milvusdb/milvus-admin:0.1.0-7b9fe4f6
+Live Demo: http://116.228.99.250:8004/
