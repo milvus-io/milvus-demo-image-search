@@ -1,15 +1,15 @@
-import React, { useEffect, useRef } from 'react'
-import Cropper from 'cropperjs';
-import 'cropperjs/dist/cropper.css';
-import './index.less';
+import React, { useEffect, useRef } from "react";
+import Cropper from "cropperjs";
+import "cropperjs/dist/cropper.css";
+import "./index.less";
 
-let timer = null
-const CroppeDemo = props => {
-  const imgRef = useRef(null)
-  const myCropper = useRef(null)
-  const { propSend, src, className, imgClassName } = props
+let timer = null;
+const CroppeDemo = (props) => {
+  const imgRef = useRef(null);
+  const myCropper = useRef(null);
+  const { propSend, src, className, imgClassName } = props;
 
-  const handleImgLoaded = e => {
+  const handleImgLoaded = (e) => {
     const cropper = new Cropper(imgRef.current, {
       viewMode: 3,
       autoCropArea: 0.98,
@@ -22,23 +22,23 @@ const CroppeDemo = props => {
         console.log(event.detail.scaleX);
         console.log(event.detail.scaleY);
         if (timer) {
-          clearTimeout(timer)
+          clearTimeout(timer);
         }
         timer = setTimeout(() => {
-          handleSend()
-        }, 1000)
+          handleSend();
+        }, 1000);
       },
     });
-    myCropper.current = cropper
-  }
+    myCropper.current = cropper;
+  };
 
   // update cropper img
   useEffect(() => {
     if (src && myCropper.current) {
-      myCropper.current.destroy()
-      myCropper.current.crop()
+      myCropper.current.destroy();
+      myCropper.current.crop();
     }
-  }, [src])
+  }, [src]);
   // const handleDownload = () => {
   //   const cropperInstance = myCropper.current
   //   const url = cropperInstance.getCroppedCanvas().toDataURL('image/png')
@@ -57,31 +57,36 @@ const CroppeDemo = props => {
   //   console.log(url)
   // }
   const handleSend = () => {
-    const cropperInstance = myCropper.current
+    const cropperInstance = myCropper.current;
 
-    cropperInstance.getCroppedCanvas().toBlob((blob) => {
-      propSend(blob)
+    cropperInstance.getCroppedCanvas().toBlob(
+      (blob) => {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          propSend(e.target.result);
+        };
+        reader.readAsDataURL(blob);
+      } /*, 'image/png' */
+    );
+  };
+  return (
+    <div>
+      <div className={className}>
+        {src && (
+          <img
+            ref={imgRef}
+            src={src}
+            alt="test"
+            className={imgClassName}
+            draggable={false}
+            onLoad={handleImgLoaded}
+          ></img>
+        )}
 
-    }/*, 'image/png' */);
-
-  }
-  return (<div>
-    <div className={className}>
-      {
-        src && <img
-          ref={imgRef}
-          src={src}
-          alt="test"
-          className={imgClassName}
-          draggable={false}
-          onLoad={handleImgLoaded}
-        ></img>
-      }
-
-      {/* <button onClick={handleDownload}>download</button>
+        {/* <button onClick={handleDownload}>download</button>
       <button onClick={handleSend}>send</button> */}
-
+      </div>
     </div>
-  </div>)
-}
-export default CroppeDemo
+  );
+};
+export default CroppeDemo;

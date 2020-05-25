@@ -1,34 +1,33 @@
-import React, { useContext } from 'react'
+import React, { useContext } from "react";
 import axios from "axios";
-import { rootContext } from './Root'
+import { rootContext } from "./Root";
 // import { useTranslation } from "react-i18next";
 
 let hasError = false; // make sure only one error message
-let endpoint = "http://40.117.75.127:5004"
+let endpoint = "http://192.168.1.10:5000";
 if (window._env_ && window._env_.API_URL) {
   endpoint = window._env_.API_URL;
 }
 const axiosInstance = axios.create({
-  baseURL: `${endpoint}/api/v1`
+  baseURL: `${endpoint}/v1`,
 });
 
 export const httpContext = React.createContext({
-  search: (formData) => { },
-  getCount: () => { }
-})
+  search: (formData) => {},
+  getCount: () => {},
+});
 
-
-const { Provider } = httpContext
+const { Provider } = httpContext;
 
 export const HttpProvider = ({ children }) => {
   // const { t } = useTranslation();
-  const { openSnackBar } = useContext(rootContext)
+  const { openSnackBar } = useContext(rootContext);
 
   axiosInstance.interceptors.response.use(
     function (res) {
       // Do something with res data
       if (res.data && res.data.code === 400) {
-        openSnackBar(res.data.data.msg, 'error')
+        openSnackBar(res.data.data.msg, "error");
         return res;
       }
       return res;
@@ -39,7 +38,7 @@ export const HttpProvider = ({ children }) => {
       }
       if (error.response && error.response.data) {
         const { message: errMsg } = error.response.data;
-        errMsg && openSnackBar(errMsg, 'error')
+        errMsg && openSnackBar(errMsg, "error");
         hasError = true;
         setTimeout(() => {
           hasError = false;
@@ -51,7 +50,7 @@ export const HttpProvider = ({ children }) => {
         setTimeout(() => {
           hasError = false;
         }, 2000);
-        openSnackBar(error.message, 'error')
+        openSnackBar(error.message, "error");
       }
       return Promise.reject(error);
     }
@@ -59,8 +58,11 @@ export const HttpProvider = ({ children }) => {
 
   // ------- Data Management Start ----------
 
-  async function search(formData) {
-    const res = await axiosInstance.post(`/search`, formData);
+  async function search(formData, app) {
+    const res = await axiosInstance.post(
+      `/application/${app}/search`,
+      formData
+    );
     return res.data;
   }
 
@@ -69,9 +71,14 @@ export const HttpProvider = ({ children }) => {
     return res.data;
   }
 
-
-  return <Provider value={{
-    search,
-    getCount
-  }}>{children}</Provider>
-}
+  return (
+    <Provider
+      value={{
+        search,
+        getCount,
+      }}
+    >
+      {children}
+    </Provider>
+  );
+};

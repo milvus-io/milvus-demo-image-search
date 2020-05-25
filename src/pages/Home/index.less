@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   color: #fff;
-  background: #28292E;
+  background: #28292e;
 
   @media only screen and (max-width: 1024px) {
     flex-direction: column;
@@ -14,7 +14,6 @@
         flex: 1;
       }
     }
-
   }
 
   .cropper-wrapper {
@@ -23,7 +22,11 @@
     overflow: hidden;
     margin-top: 30px;
 
-
+    .select {
+      margin: 0 auto;
+      margin-top: 40px;
+      max-width: 400px;
+    }
 
     &.show {
       flex: 0 0 600px;
@@ -42,7 +45,7 @@
 
     .crop-img-wrapper {
       width: 400px;
-      margin: 0 100px 0 80px;
+      margin: 0 auto;
 
       .crop-img,
       img {
@@ -61,8 +64,6 @@
         }
       }
     }
-
-
   }
 
   .imgs-wrapper {
@@ -77,22 +78,22 @@
     &::-webkit-scrollbar {
       width: 6px;
       height: 6px;
-      background-color: rgba(255, 255, 255, 0.05)
+      background-color: rgba(255, 255, 255, 0.05);
     }
 
     /*滑块*/
     &::-webkit-scrollbar-thumb {
       background-color: rgba(255, 255, 255, 0.1);
-      border-radius: 10px
+      border-radius: 10px;
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background-color: rgba(255, 255, 255, 0.3)
+      background-color: rgba(255, 255, 255, 0.3);
     }
 
     /*滑道*/
     &::-webkit-scrollbar-track {
-      border-radius: 10px
+      border-radius: 10px;
     }
   }
 
@@ -107,7 +108,6 @@
     z-index: 1000;
 
     &.open {
-
       width: 560px;
 
       .tip {
@@ -176,10 +176,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #4FC4F9;
+    background: #4fc4f9;
     color: #fff;
     cursor: pointer;
-
   }
 
   .input {

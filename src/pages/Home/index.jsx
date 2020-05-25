@@ -10,7 +10,10 @@ import { httpContext } from "../../context/Http";
 import "./index.less";
 import DemoImg from "../../assets/demo.jpg";
 import { getBase64Image, convertBase64UrlToBlob } from "../../utils/helpers";
+import MySelect from "react-select";
+
 let timer = null;
+
 const Home = (props) => {
   const isMobile = !useMediaQuery("(min-width:1000px)");
   const [show, setShow] = useState(false);
@@ -20,11 +23,17 @@ const Home = (props) => {
   const [selectedImg, setSelectedImg] = useState("");
   const [blob, setBlob] = useState("");
   const [page, setPage] = useState(0);
+  const [app, setApp] = useState({ value: "example1", label: "Full" });
   const [noData, setNoData] = useState(false);
   const dropRef = useRef(null);
   const inputRef = useRef(null);
   const imgsWrapperRef = useRef(null);
   const { search } = useContext(httpContext);
+
+  const options = [
+    { value: "example1", label: "Default" },
+    { value: "example2", label: "Face" },
+  ];
 
   const handleDrop = (files, event) => {
     if (!files[0]) {
@@ -66,8 +75,8 @@ const Home = (props) => {
         type: "image/jpg"
        }
        */
-      const imgBlob = convertBase64UrlToBlob(base64);
-      handleImgSearch(imgBlob);
+      // const imgBlob = convertBase64UrlToBlob(base64);
+      handleImgSearch(base64.dataURL);
       /*
        打印信息如下：
        Blob {size: 9585, type: "image/jpg"}
@@ -106,20 +115,29 @@ const Home = (props) => {
     setSelectedImg(file ? src : "");
   };
 
-  const handleImgSearch = async (file, reset = true) => {
+  const handleImgSearch = async (file, reset = true, selectedApp) => {
     if (reset) {
       setImgs([]);
       setPage(0);
       setGlobalLoading(true);
       setNoData(false);
     }
-    const fd = new FormData();
-    fd.append("file", file);
-    fd.append("Num", 50);
-    fd.append("Page", page);
+    const data = {
+      topk: 50,
+      nprobe: 10,
+      fields: {
+        full: {
+          data: file,
+        },
+      },
+    };
+    // const fd = new FormData();
+    // fd.append("file", file);
+    // fd.append("Num", 50);
+    // fd.append("Page", page);
 
     setBlob(file);
-    const res = await search(fd);
+    const res = await search(data, selectedApp || app.value);
     if (!res.length) {
       setNoData(true);
       return;
@@ -127,8 +145,8 @@ const Home = (props) => {
     setImgs((v) => [
       ...v,
       ...res.map((v) => ({
-        src: v[0],
-        distance: v[1],
+        src: v._image_url,
+        distance: 1,
       })),
     ]);
   };
@@ -139,6 +157,18 @@ const Home = (props) => {
   const handleBackToTop = () => {
     document.querySelector(".route-section").scrollTop = 0;
     imgsWrapperRef.current.scrollTop = 0;
+  };
+
+  const handleSelectChange = (selectedOption) => {
+    setApp(selectedOption);
+    handleImgSearch(blob, true, selectedOption.value);
+  };
+
+  const customStyles = {
+    menu: (provided, state) => ({
+      ...provided,
+      color: "#333",
+    }),
   };
 
   return (
@@ -155,6 +185,13 @@ const Home = (props) => {
           className="crop-img-wrapper"
           imgClassName="crop-img"
         ></Cropper>
+        <MySelect
+          value={app}
+          options={options}
+          className="select"
+          onChange={handleSelectChange}
+          styles={customStyles}
+        ></MySelect>
       </div>
       <div
         className="imgs-wrapper"
