@@ -15,6 +15,7 @@ const axiosInstance = axios.create({
 export const httpContext = React.createContext({
   search: (formData) => {},
   getCount: () => {},
+  getApps: () => {},
 });
 
 const { Provider } = httpContext;
@@ -71,11 +72,17 @@ export const HttpProvider = ({ children }) => {
     return res.data;
   }
 
+  async function getApps() {
+    const res = await axiosInstance.get("/application");
+    return res.data;
+  }
+
   return (
     <Provider
       value={{
         search,
         getCount,
+        getApps,
       }}
     >
       {children}

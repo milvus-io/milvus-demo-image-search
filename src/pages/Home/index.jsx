@@ -23,17 +23,17 @@ const Home = (props) => {
   const [selectedImg, setSelectedImg] = useState("");
   const [blob, setBlob] = useState("");
   const [page, setPage] = useState(0);
-  const [app, setApp] = useState({ value: "example1", label: "Full" });
+  const [app, setApp] = useState();
   const [noData, setNoData] = useState(false);
+  const [options, setOptions] = useState([]);
   const dropRef = useRef(null);
   const inputRef = useRef(null);
   const imgsWrapperRef = useRef(null);
-  const { search } = useContext(httpContext);
-
-  const options = [
-    { value: "example1", label: "Default" },
-    { value: "example2", label: "Face" },
-  ];
+  const { search, getApps } = useContext(httpContext);
+  // const options = [
+  //   { value: "example", label: "Default" },
+  //   { value: "example2", label: "Face" },
+  // ];
 
   const handleDrop = (files, event) => {
     if (!files[0]) {
@@ -44,7 +44,34 @@ const Home = (props) => {
     setShow(false);
   };
   useEffect(() => {
-    console.log("test action");
+    const generateOptions = async () => {
+      const res = await getApps();
+      setOptions(
+        res.map((v) => {
+          try {
+            const { _application_name, _fields } = v;
+            const key = Object.keys(_fields).find(
+              (k) => _fields[k].type === "object"
+            );
+            return {
+              label: _application_name,
+              value: _application_name,
+              key,
+            };
+          } catch (e) {
+            throw e;
+          }
+        })
+      );
+    };
+    generateOptions();
+  }, [getApps]);
+
+  useEffect(() => {
+    setApp(options[0]);
+  }, [options]);
+
+  useEffect(() => {
     window.addEventListener("dragover", (e) => {
       // This prevents the browser from trying to load whatever file the user dropped on the window
       e.preventDefault();
@@ -62,12 +89,15 @@ const Home = (props) => {
       }
     });
   }, []);
+
   useEffect(() => {
+    if (!app || selectedImg) return;
     const image = new Image();
     image.crossOrigin = "";
     image.src = DemoImg;
     image.onload = function () {
       const base64 = getBase64Image(image);
+      setSelectedImg(base64.dataURL);
       /*
        打印信息如下：
        {
@@ -76,14 +106,14 @@ const Home = (props) => {
        }
        */
       // const imgBlob = convertBase64UrlToBlob(base64);
-      handleImgSearch(base64.dataURL);
+      // handleImgSearch(base64.dataURL);
       /*
        打印信息如下：
        Blob {size: 9585, type: "image/jpg"}
        */
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [app, selectedImg]);
 
   const handleScroll = async (e) => {
     const { scrollTop, offsetHeight, scrollHeight } = e.currentTarget;
@@ -115,7 +145,7 @@ const Home = (props) => {
     setSelectedImg(file ? src : "");
   };
 
-  const handleImgSearch = async (file, reset = true, selectedApp) => {
+  const handleImgSearch = async (file, reset = true, selectedApp = {}) => {
     if (reset) {
       setImgs([]);
       setPage(0);
@@ -126,7 +156,7 @@ const Home = (props) => {
       topk: 50,
       nprobe: 10,
       fields: {
-        full: {
+        [selectedApp.key || app.key]: {
           data: file,
         },
       },
@@ -137,7 +167,7 @@ const Home = (props) => {
     // fd.append("Page", page);
 
     setBlob(file);
-    const res = await search(data, selectedApp || app.value);
+    const res = await search(data, selectedApp.value || app.value);
     if (!res.length) {
       setNoData(true);
       return;
@@ -160,8 +190,9 @@ const Home = (props) => {
   };
 
   const handleSelectChange = (selectedOption) => {
+    console.log(selectedOption);
     setApp(selectedOption);
-    handleImgSearch(blob, true, selectedOption.value);
+    handleImgSearch(blob, true, selectedOption);
   };
 
   const customStyles = {
@@ -196,7 +227,7 @@ const Home = (props) => {
       <div
         className="imgs-wrapper"
         ref={imgsWrapperRef}
-        onScroll={handleScroll}
+        // onScroll={handleScroll}
       >
         {imgs.length ? (
           <Gallery
