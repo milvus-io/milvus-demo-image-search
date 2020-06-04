@@ -12,9 +12,7 @@ const Layout = (props) => {
   return (
     <div className="layout-wrapper">
       <header className="header-wrapper">
-        <h3>
-          IMAGE SEARCH <span>powered by Milvus</span>{" "}
-        </h3>
+        <h3>Phantoscope Preview</h3>
         {/* <p>Total images: {count}</p> */}
       </header>
       <section className="content-wrapper">{props.children}</section>
