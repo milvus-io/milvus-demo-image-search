@@ -9,10 +9,10 @@ import { Search } from "@material-ui/icons";
 import { httpContext } from "../../context/Http";
 import "./index.less";
 import DemoImg from "../../assets/demo.jpg";
-import { getBase64Image, convertBase64UrlToBlob } from "../../utils/helpers";
+import { getBase64Image } from "../../utils/helpers";
 import MySelect from "react-select";
 
-let timer = null;
+// let timer = null;
 
 const Home = (props) => {
   const isMobile = !useMediaQuery("(min-width:1000px)");
@@ -22,7 +22,7 @@ const Home = (props) => {
   const [globalLoading, setGlobalLoading] = useState(false);
   const [selectedImg, setSelectedImg] = useState("");
   const [blob, setBlob] = useState("");
-  const [page, setPage] = useState(0);
+  // const [page, setPage] = useState(0);
   const [app, setApp] = useState();
   const [noData, setNoData] = useState(false);
   const [options, setOptions] = useState([]);
@@ -65,9 +65,11 @@ const Home = (props) => {
       );
     };
     generateOptions();
-  }, [getApps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
+    console.log("---reset app---");
     setApp(options[0]);
   }, [options]);
 
@@ -115,22 +117,22 @@ const Home = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [app, selectedImg]);
 
-  const handleScroll = async (e) => {
-    const { scrollTop, offsetHeight, scrollHeight } = e.currentTarget;
-    if (
-      scrollHeight - scrollTop - offsetHeight < 30 &&
-      !loading &&
-      !timer &&
-      imgs.length
-    ) {
-      timer = setTimeout(async () => {
-        setLoading(true);
-        setPage((v) => v + 1);
-        await handleImgSearch(blob, false);
-        timer = null;
-      }, 100);
-    }
-  };
+  // const handleScroll = async (e) => {
+  //   const { scrollTop, offsetHeight, scrollHeight } = e.currentTarget;
+  //   if (
+  //     scrollHeight - scrollTop - offsetHeight < 30 &&
+  //     !loading &&
+  //     !timer &&
+  //     imgs.length
+  //   ) {
+  //     timer = setTimeout(async () => {
+  //       setLoading(true);
+  //       setPage((v) => v + 1);
+  //       await handleImgSearch(blob, false);
+  //       timer = null;
+  //     }, 100);
+  //   }
+  // };
 
   const handleInput = () => {
     inputRef.current.click();
@@ -148,7 +150,7 @@ const Home = (props) => {
   const handleImgSearch = async (file, reset = true, selectedApp = {}) => {
     if (reset) {
       setImgs([]);
-      setPage(0);
+      // setPage(0);
       setGlobalLoading(true);
       setNoData(false);
     }
@@ -167,18 +169,24 @@ const Home = (props) => {
     // fd.append("Page", page);
 
     setBlob(file);
-    const res = await search(data, selectedApp.value || app.value);
-    if (!res.length) {
-      setNoData(true);
-      return;
+    try {
+      const res = await search(data, selectedApp.value || app.value);
+      if (!res.length) {
+        setNoData(true);
+        return;
+      }
+      setImgs((v) => [
+        ...v,
+        ...res.map((v) => ({
+          src: v._image_url,
+          distance: 1,
+        })),
+      ]);
+    } catch (e) {
+      throw e;
+    } finally {
+      setGlobalLoading(false);
     }
-    setImgs((v) => [
-      ...v,
-      ...res.map((v) => ({
-        src: v._image_url,
-        distance: 1,
-      })),
-    ]);
   };
   const handleSearch = (src) => {
     setSelectedImg(src);
