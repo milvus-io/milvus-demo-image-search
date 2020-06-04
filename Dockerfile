@@ -2,8 +2,7 @@
 FROM node:alpine as builder
 WORKDIR /app
 COPY package.json .
-RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
-RUN cnpm install
+RUN yarn install
 COPY . .
 RUN yarn build
 
