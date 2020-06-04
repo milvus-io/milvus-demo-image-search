@@ -93,7 +93,7 @@ export const RootProvider = ({ children }) => {
   const openSnackBar = (
     message,
     type = "success",
-    autoHideDuration = null,
+    autoHideDuration = 3000,
     position = { vertical: "top", horizontal: "center" }
   ) => {
     setSnackBar({
