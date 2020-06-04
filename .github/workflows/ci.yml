@@ -3,14 +3,16 @@ name: phantoscope
 on:
   push:
     # file paths to consider in the event. Optional; defaults to all.
-    branches: -omnisearch
+    branches:
+      - omnisearch
     paths:
       - "src/**"
       - ".github/workflows/**"
       - "!**.md"
   pull_request:
     # file paths to consider in the event. Optional; defaults to all.
-    branches: -omnisearch
+    branches:
+      - omnisearch
     paths:
       - "src/**"
       - ".github/workflows/**"
