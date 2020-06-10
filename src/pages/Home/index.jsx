@@ -8,7 +8,7 @@ import { VerticalAlignTop } from "@material-ui/icons";
 import { Search } from "@material-ui/icons";
 import { httpContext } from "../../context/Http";
 import "./index.less";
-import DemoImg from "../../assets/demo.jpg";
+import DemoImg from "../../assets/demo.png";
 import { getBase64Image } from "../../utils/helpers";
 import MySelect from "react-select";
 
