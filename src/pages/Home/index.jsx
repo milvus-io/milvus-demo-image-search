@@ -8,7 +8,7 @@ import { VerticalAlignTop } from "@material-ui/icons";
 import { Search } from "@material-ui/icons";
 import { httpContext } from "../../context/Http";
 import "./index.less";
-import DemoImg from "../../assets/demo.png";
+import DemoImg from "../../assets/demo2.jpg";
 import { getBase64Image } from "../../utils/helpers";
 import MySelect from "react-select";
 
@@ -93,13 +93,13 @@ const Home = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!app || selectedImg) return;
+    if (!app) return;
     const image = new Image();
     image.crossOrigin = "";
     image.src = DemoImg;
     image.onload = function () {
       const base64 = getBase64Image(image);
-      setSelectedImg(base64.dataURL);
+      // setSelectedImg(base64.dataURL);
       /*
        打印信息如下：
        {
@@ -108,14 +108,14 @@ const Home = (props) => {
        }
        */
       // const imgBlob = convertBase64UrlToBlob(base64);
-      // handleImgSearch(base64.dataURL);
+      handleImgSearch(base64.dataURL);
       /*
        打印信息如下：
        Blob {size: 9585, type: "image/jpg"}
        */
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [app, selectedImg]);
+  }, [app]);
 
   // const handleScroll = async (e) => {
   //   const { scrollTop, offsetHeight, scrollHeight } = e.currentTarget;

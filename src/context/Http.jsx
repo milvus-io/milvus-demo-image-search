@@ -4,7 +4,7 @@ import { rootContext } from "./Root";
 // import { useTranslation } from "react-i18next";
 
 let hasError = false; // make sure only one error message
-let endpoint = "http://192.168.1.10:5000";
+let endpoint = "http://192.168.1.192:5000";
 if (window._env_ && window._env_.API_URL) {
   endpoint = window._env_.API_URL;
 }
