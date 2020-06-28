@@ -93,7 +93,7 @@ const Home = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!app) return;
+    if (!app || blob) return;
     const image = new Image();
     image.crossOrigin = "";
     image.src = DemoImg;
