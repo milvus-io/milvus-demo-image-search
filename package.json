@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "csv-writer": "^1.6.0",
-    "electron": "^7.1.7",
+    "electron": "^7.2.4",
     "electron-builder": "^22.2.0"
   },
   "homepage": "./",
