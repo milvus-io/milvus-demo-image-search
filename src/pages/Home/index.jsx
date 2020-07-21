@@ -49,13 +49,13 @@ const Home = (props) => {
       setOptions(
         res.map((v) => {
           try {
-            const { _application_name, _fields } = v;
-            const key = Object.keys(_fields).find(
-              (k) => _fields[k].type === "object"
+            const { name, fields } = v;
+            const key = Object.keys(fields).find(
+              (k) => fields[k].type === "pipeline"
             );
             return {
-              label: _application_name,
-              value: _application_name,
+              label: name,
+              value: name,
               key,
             };
           } catch (e) {
@@ -170,15 +170,17 @@ const Home = (props) => {
 
     setBlob(file);
     try {
-      const res = await search(data, selectedApp.value || app.value);
+      const name = selectedApp.value || app.value;
+      const res = await search(data, name);
       if (!res.length) {
         setNoData(true);
         return;
       }
+      console.log(name, res);
       setImgs((v) => [
         ...v,
         ...res.map((v) => ({
-          src: v._image_url,
+          src: v._docs[selectedApp.key || app.key].url,
           distance: 1,
         })),
       ]);

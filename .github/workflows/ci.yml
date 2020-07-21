@@ -32,6 +32,6 @@ jobs:
       - name: Docker login
         run: echo '${{ secrets.DOCKER_PHANTOSCOPE_PWD }}' | docker login --username ${{ secrets.DOCKER_PHANTOSCOPE_USERNAME }} --password-stdin
       - name: Docker Build
-        run: docker build -t phantoscope/preview:latest --build-arg VERSION=latest .
+        run: docker build -t phantoscope/preview:0.2.0 --build-arg VERSION=0.2.0 .
       - name: Docker Push lastest
-        run: docker push phantoscope/preview:latest
+        run: docker push phantoscope/preview:0.2.0
