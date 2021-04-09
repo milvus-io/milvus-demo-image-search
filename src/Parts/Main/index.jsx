@@ -31,7 +31,8 @@ const pins = [
 ];
 
 function loadItems() {
-  return pins;
+  console.log('load')
+  return [];
 }
 
 function Main() {
