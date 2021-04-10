@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Masonry } from "gestalt";
-import Item from "../Item";
+import Item from "../../Components/Item";
 import "./index.scss";
 
 let offset = 0;
