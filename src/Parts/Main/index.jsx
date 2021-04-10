@@ -26,6 +26,7 @@ function Main() {
     offset = 0;
     setShowSpinner(true);
     setPins([]);
+    document.title = `${p.id || ""} resource download `;
   }, [p.id]);
 
   const loadItems = useCallback(() => {
