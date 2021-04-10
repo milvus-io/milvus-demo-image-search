@@ -12,16 +12,17 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Nav />
-
         <Switch>
           <Route path="/s/:id">
+            <Nav />
             <Main />
           </Route>
           <Route path="/i/:id">
+            <Nav />
             <Resource />
           </Route>
           <Route path="/">
+            <Nav />
             <Main />
           </Route>
         </Switch>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { Masonry } from "gestalt";
+import { Masonry, Spinner } from "gestalt";
 import { useParams } from "react-router-dom";
 
 import Item from "../../Components/Item";
@@ -9,16 +9,22 @@ let offset = 0;
 let count = 30;
 
 function Main() {
+  const [showSpinner, setShowSpinner] = useState(true);
   const [pins, setPins] = useState([]);
   const scrollContainer = useRef();
 
   let p = useParams();
-  console.log("params", p);
   // first time
   useEffect(() => {
     loadItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    console.log("changed");
+    offset = 0;
+    setPins([]);
+  }, [p.id]);
 
   const loadItems = useCallback(() => {
     let res = new Array(count).fill(true).map((d, index) => {
@@ -26,18 +32,20 @@ function Main() {
       height = Math.random() * 10 > 0.3 ? 130 : 340;
       return {
         id: offset + index,
-        title: `Title` + Math.floor(Math.random() * 1000),
+        title: `Title` + (offset + index),
         height,
       };
     });
     offset += count;
     setTimeout(() => {
       setPins([...pins, ...res]);
-    }, Math.random() * 1000);
+      setShowSpinner(false);
+    }, Math.random() * 500);
   }, [pins]);
 
   return (
     <div className="scroll-container" ref={scrollContainer}>
+      <Spinner show={showSpinner} accessibilityLabel="spinner" />
       <Masonry
         flexible={true}
         virtualize={true}

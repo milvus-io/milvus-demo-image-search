@@ -1,8 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import { Box, IconButton, Icon, SearchField } from "gestalt";
 
 function Nav() {
-  const [value, setValue] = React.useState("");
+  const p = useParams();
+  const [value, setValue] = useState(p.id);
+  const history = useHistory();
+
+  const onChange = ({ value }) => {
+    if (value === "") {
+      history.push(`/`);
+    }
+    setValue(value);
+  };
+
+  const onKeyDown = ({ event, value }) => {
+    if (event.code === "Enter") {
+      if (value === "") {
+        history.push(`/`);
+      } else {
+        history.push(`/s/${value}`);
+      }
+    }
+  };
 
   return (
     <Box
@@ -13,13 +33,19 @@ function Nav() {
       alignItems="center"
     >
       <Box padding={3}>
-        <Icon icon="download" color="red" size={20} accessibilityLabel="logo" />
+        <Icon
+          icon="download"
+          color="darkGray"
+          size={20}
+          accessibilityLabel="logo"
+        />
       </Box>
       <Box flex="grow" paddingX={2}>
         <SearchField
           accessibilityLabel="Demo Search Field"
           id="searchField"
-          onChange={({ value }) => setValue(value)}
+          onChange={onChange}
+          onKeyDown={onKeyDown}
           placeholder="Search and explore"
           value={value}
         />

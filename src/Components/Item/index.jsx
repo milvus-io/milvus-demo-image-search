@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { Box, Text, Mask, Button } from "gestalt";
 import "./index.scss";
 
@@ -7,12 +7,12 @@ function Item(props) {
   // console.log(props);
   const link = `https://via.placeholder.com/168x${props.data.height}`;
 
-  const mouseEnter = useCallback(() => {
+  const mouseEnter = () => {
     setHover(true);
-  }, [setHover]);
-  const mouseLeave = useCallback(() => {
+  };
+  const mouseLeave = () => {
     setHover(false);
-  }, [setHover]);
+  };
 
   return (
     <Box
