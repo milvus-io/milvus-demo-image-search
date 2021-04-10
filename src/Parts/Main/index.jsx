@@ -20,9 +20,11 @@ function Main() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // reset
   useEffect(() => {
     console.log("changed");
     offset = 0;
+    setShowSpinner(true);
     setPins([]);
   }, [p.id]);
 
@@ -32,7 +34,7 @@ function Main() {
       height = Math.random() * 10 > 0.3 ? 130 : 340;
       return {
         id: offset + index,
-        title: `Title` + (offset + index),
+        title: `Title_${p.id || "index"}_${offset + index}`,
         height,
       };
     });
@@ -40,8 +42,8 @@ function Main() {
     setTimeout(() => {
       setPins([...pins, ...res]);
       setShowSpinner(false);
-    }, Math.random() * 500);
-  }, [pins]);
+    }, Math.random() * 1500);
+  }, [pins, p.id]);
 
   return (
     <div className="scroll-container" ref={scrollContainer}>

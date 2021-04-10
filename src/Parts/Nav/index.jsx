@@ -8,9 +8,6 @@ function Nav() {
   const history = useHistory();
 
   const onChange = ({ value }) => {
-    if (value === "") {
-      history.push(`/`);
-    }
     setValue(value);
   };
 
@@ -47,7 +44,7 @@ function Nav() {
           onChange={onChange}
           onKeyDown={onKeyDown}
           placeholder="Search and explore"
-          value={value}
+          value={value || ''}
         />
       </Box>
       <Box paddingX={2}>
