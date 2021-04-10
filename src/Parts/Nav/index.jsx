@@ -13,12 +13,7 @@ function Nav() {
       alignItems="center"
     >
       <Box padding={3}>
-        <Icon
-          icon="pinterest"
-          color="red"
-          size={20}
-          accessibilityLabel="Pinterest"
-        />
+        <Icon icon="download" color="red" size={20} accessibilityLabel="logo" />
       </Box>
       <Box flex="grow" paddingX={2}>
         <SearchField
