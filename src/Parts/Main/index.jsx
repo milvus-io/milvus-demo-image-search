@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Masonry } from "gestalt";
+import { useParams } from "react-router-dom";
+
 import Item from "../../Components/Item";
 import "./index.scss";
 
@@ -10,6 +12,8 @@ function Main() {
   const [pins, setPins] = useState([]);
   const scrollContainer = useRef();
 
+  let p = useParams();
+  console.log("params", p);
   // first time
   useEffect(() => {
     loadItems();
@@ -17,7 +21,6 @@ function Main() {
   }, []);
 
   const loadItems = useCallback(() => {
-    console.log("xxx");
     let res = new Array(count).fill(true).map((d, index) => {
       let height = Math.random() * 10 > 0.3 ? 110 : 280;
       height = Math.random() * 10 > 0.3 ? 130 : 340;
@@ -28,7 +31,9 @@ function Main() {
       };
     });
     offset += count;
-    setPins([...pins, ...res]);
+    setTimeout(() => {
+      setPins([...pins, ...res]);
+    }, Math.random() * 1000);
   }, [pins]);
 
   return (
