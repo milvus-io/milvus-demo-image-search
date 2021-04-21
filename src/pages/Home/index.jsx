@@ -62,7 +62,7 @@ const Home = props => {
             component: <RegisterForm id={id} isMobile={isMobile} />
           }
         })
-      }, 5000)
+      }, 30000)
     }
     return () => {
       if (timer) clearInterval(timer);
