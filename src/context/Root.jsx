@@ -104,7 +104,16 @@ export const RootProvider = ({ children }) => {
     hideDialog()
   }
   const hideDialog = () => {
-    setDialog(DefaultDialogConfigs)
+    setDialog({
+      open: false,
+      type: 'custom',
+      params: {
+        title: "",
+        component: <></>,
+        confirm: () => { },
+        cancel: () => { }
+      },
+    })
   }
 
   return <Provider value={{

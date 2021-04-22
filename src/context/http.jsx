@@ -69,7 +69,6 @@ export const HttpProvider = ({ children }) => {
     return res.data;
   }
 
-
   return <Provider value={{
     search,
     getCount

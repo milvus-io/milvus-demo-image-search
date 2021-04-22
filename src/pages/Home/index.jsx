@@ -9,7 +9,11 @@ import { Search } from '@material-ui/icons'
 import { httpContext } from '../../context/Http'
 import "./index.less"
 import DemoImg from '../../assets/demo.jpg'
-import { getBase64Image, convertBase64UrlToBlob } from '../../utils/helpers'
+import { getBase64Image, convertBase64UrlToBlob } from '../../utils/helpers';
+import { useLocation } from 'react-router-dom';
+import { rootContext } from '../../context/Root';
+import RegisterForm from '../../components/Form/RegisterForm'
+
 let timer = null
 const Home = props => {
   const isMobile = !useMediaQuery("(min-width:1000px)");
@@ -24,7 +28,9 @@ const Home = props => {
   const dropRef = useRef(null)
   const inputRef = useRef(null)
   const imgsWrapperRef = useRef(null)
-  const { search } = useContext(httpContext)
+  const { search } = useContext(httpContext);
+  const { setDialog, dialog } = useContext(rootContext);
+  const { open } = dialog;
 
   const handleDrop = (files, event) => {
     if (!files[0]) {
@@ -34,6 +40,31 @@ const Home = props => {
     setSelectedImg(files[0] ? src : "")
     setShow(false)
   }
+
+  // remind users to register every 30s
+  useEffect(() => {
+    let timer = null;
+    if (!timer) {
+      timer = setInterval(() => {
+        const isRegistered = window.localStorage.getItem('registered') || false;
+        if (isRegistered || open) {
+          clearInterval(timer);
+          return
+        }
+        setDialog({
+          open: true,
+          type: 'custom',
+          params: {
+            component: <RegisterForm />
+          }
+        })
+      }, 30000)
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    }
+  }, [open, setDialog])
+
   useEffect(() => {
     window.addEventListener("dragover", (e) => {
       // This prevents the browser from trying to load whatever file the user dropped on the window
