@@ -1,10 +1,8 @@
 # => Build container
 FROM node:alpine as builder
 WORKDIR /app
-COPY package.json .
-RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
-RUN cnpm install
 COPY . .
+RUN yarn
 RUN yarn build
 
 # => Run container
