@@ -3,7 +3,8 @@ name: dev
 on:
   push:
     # file paths to consider in the event. Optional; defaults to all.
-    branches: -master
+    branches: 
+      - master
     paths:
       - "src/**"
       - ".github/workflows/**"
