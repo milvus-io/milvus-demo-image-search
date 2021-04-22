@@ -4159,10 +4159,10 @@ electron-to-chromium@^1.3.247, electron-to-chromium@^1.3.349:
   resolved "https://registry.npm.taobao.org/electron-to-chromium/download/electron-to-chromium-1.3.360.tgz#1db9cb8d43f4c772546d94ea9be8b677a8ecb483"
   integrity sha1-HbnLjUP0x3JUbZTqm+i2d6jstIM=
 
-electron@^7.1.7:
-  version "7.1.13"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-7.1.13.tgz#f98838de70d74890cf639bbbbbe1f3b4b341ae78"
-  integrity sha1-+Yg43nDXSJDPY5u7u+HztLNBrng=
+electron@^9.4.0:
+  version "9.4.0"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-9.4.0.tgz#c3c607e3598226ddbaaff8babcdffa8bb2210936"
+  integrity sha512-hOC4q0jkb+UDYZRy8vrZ1IANnq+jznZnbkD62OEo06nU+hIbp2IrwDRBNuSLmQ3cwZMVir0WSIA1qEVK0PkzGA==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
