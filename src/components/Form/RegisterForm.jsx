@@ -2,43 +2,52 @@ import React, { useContext, useState } from 'react';
 import { Typography, makeStyles, Button } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { rootContext } from '../../context/Root';
-import CustomInput from '../CustomInput/CustomInput';
-import { uploadUserInfo } from '../../context/Api'
+import github from '../../assets/imgs/github.svg'
+import slack from '../../assets/imgs/slack.svg'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    background: '#fff',
-    maxWidth: '600px',
-    borderRadius: '15px 0',
+    width: '500px',
+    background: "#fff",
+    maxWidth: "600px",
+    borderRadius: "15px 0",
     padding: theme.spacing(5, 3),
-    margin: '0 auto',
+    margin: "0 auto",
     [theme.breakpoints.down(theme.breakpoints.values.md)]: {
       padding: theme.spacing(3, 2),
-      marginBottom: theme.spacing(2),
-      width: '100%',
+      width: "100%",
+      boxSizing: "border-box",
     },
-    boxShadow: '10px 20px 50px rgba(0, 0, 0, 0.15)',
-    '& .title-bar': {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      color: '#010e29',
+    boxShadow: "10px 20px 50px rgba(0, 0, 0, 0.15)",
+    '& .MuiPaper-root':{
+      backgroundColor: 'transparent'
+    },
+    "& .title-bar": {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      color: "#010e29",
       marginBottom: theme.spacing(5),
       [theme.breakpoints.down(theme.breakpoints.values.md)]: {
         marginBottom: theme.spacing(2),
       },
-      '& .icon-wrapper': {
-        width: '24px',
-        height: '24px',
-        cursor: 'pointer',
-        '& svg': {
-          fontSize: '24px',
-          color: '#06aff2',
-          pointerEvents: 'none',
+      '& .title':{
+        fontSize: '20px',
+        lineHeight: '28px',
+        fontWeight: 'bold'
+      },
+      "& .icon-wrapper": {
+        width: "24px",
+        height: "24px",
+        cursor: "pointer",
+        "& svg": {
+          fontSize: "24px",
+          color: "#06aff2",
+          pointerEvents: "none",
         },
       },
     },
-    '& .desc': {
+    "& .desc": {
       marginBottom: theme.spacing(5),
       [theme.breakpoints.down(theme.breakpoints.values.md)]: {
         marginBottom: theme.spacing(2),
@@ -46,194 +55,85 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   form: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    marginBottom: theme.spacing(3),
-    [theme.breakpoints.down(theme.breakpoints.values.md)]: {
-      marginBottom: theme.spacing(1),
-    },
-    '& div': {
-      margin: theme.spacing(1, 0),
-      background: '#fff',
-    },
-    '& .flex-box': {
-      display: 'flex',
-      justifyContent: 'space-between',
-      '& div': {
-        flexGrow: 1,
+    '& .icon-button':{
+      '&:first-child': {
+        marginBottom: theme.spacing(2)
       },
-      '& div:first-child': {
-        marginRight: theme.spacing(2),
+      '& .desc':{
+        fontSize: '16px',
+        lineHeight: '22px',
+        fontWeight: 400,
+        margin: 0,
+        letterSpacing: '0.01em',
+        color: '#010E29'
       },
-    },
+      '&>a':{
+        textDecoration: 'none',
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        alignItems: 'center'
+      },
+      '& span':{
+        color: '#06AFF2',
+        fontSize: '16px',
+        lineHeight: '24px',
+        fontWeight: 600,
+        letterSpacing: '0.01em'
+      },
+      '& img':{
+        width: '20px',
+        height: '20px',
+        marginRight: theme.spacing(1)
+      }
+    }
   },
   btnWrapper: {
     [theme.breakpoints.down(theme.breakpoints.values.md)]: {
-      width: '100%',
-      textAlign: 'center',
-      '& .sub-btn': {
-        width: '100%',
+      width: "100%",
+      textAlign: "center",
+      "& .sub-btn": {
+        width: "100%",
       },
     },
-    textAlign: 'right',
+    textAlign: "right",
   },
 }));
 
-
-const RegisterForm = ({ isMobile, id }) => {
+const RegisterForm = () => {
   const classes = useStyles();
-  const { openSnackBar, hideDialog } = useContext(rootContext);
+  const { hideDialog } = useContext(rootContext);
 
-  const [firstName, setFirstName] = useState({
-    value: '',
-    showError: false,
-  });
-  const [lastName, setLastName] = useState({
-    value: '',
-    showError: false,
-  });
-  const [company, setCompany] = useState({
-    value: '',
-    showError: false,
-  });
-  const [position, setPosition] = useState({
-    value: '',
-    showError: false,
-  });
-  const [workPhone, setWorkPhone] = useState({
-    value: '',
-    showError: false,
-  });
-
-  const handleFirstNameChange = (value) => {
-    const showError = !value;
-    setFirstName({ value, showError });
-  };
-  const handleLastNameChange = (value) => {
-    const showError = !value;
-    setLastName({ value, showError });
-  };
-  const handleCompanyChange = (value) => {
-    const showError = !value;
-    setCompany({ value, showError });
-  };
-  const handlePositionChange = (value) => {
-    setPosition({ value, showError: false });
-  };
-  const handlePhoneChange = (value) => {
-    const showError = !Number.isNaN(Number(value));
-    setWorkPhone({
-      value,
-      showError,
-    });
-  };
-  const validateInput = () => {
-    return (
-      !firstName.value || !lastName.value || !company.value
-    );
+  const handleHideDialog = () => {
+    hideDialog();
   };
 
-  const handleSubmit = async () => {
-    const params = {
-      name: `${firstName.value}.${lastName.value}`,
-      company: company.value,
-      postion: position.value,
-      phone: workPhone.value,
-      demo_name: 'imageSearch',
-    };
-    try {
-      const res = await uploadUserInfo(id, params);
-      console.log(res)
-      if (id) {
-        window.localStorage.setItem('registered', 'true');
-        openSnackBar('You are successfully submit!');
-      }
-    } catch (error) {
-      console.log(error)
-    } finally {
-      hideDialog()
-    }
-  };
 
   return (
     <div className={classes.root}>
       <div className="title-bar">
-        <Typography variant="h5">Get started for free</Typography>
-        <div className="icon-wrapper" onClick={hideDialog}>
+        <Typography variant="h5" className='title'>Can’t wait to try Milvus out? </Typography>
+        <div className="icon-wrapper" onClick={handleHideDialog}>
           <CloseIcon />
         </div>
       </div>
 
-      <Typography variant="body1" className="desc">
-        Get started by completing the form below.
-      </Typography>
-      <form className={classes.form}>
-        {isMobile ? (
-          <>
-            <CustomInput
-              placeholder="First name*"
-              value={firstName.value}
-              showError={firstName.showError}
-              onChange={handleFirstNameChange}
-              errType="required"
-            />
-            <CustomInput
-              placeholder="Last name*"
-              value={lastName.value}
-              showError={lastName.showError}
-              onChange={handleLastNameChange}
-              errType="required"
-            />
-          </>
-        ) : (
-          <>
-            <div className="flex-box">
-              <CustomInput
-                placeholder="First name*"
-                value={firstName.value}
-                showError={firstName.showError}
-                onChange={handleFirstNameChange}
-                errType="required"
-              />
-              <CustomInput
-                placeholder="Last name*"
-                value={lastName.value}
-                showError={lastName.showError}
-                onChange={handleLastNameChange}
-                errType="required"
-              />
-            </div>
-          </>
-        )}
-        <CustomInput
-          placeholder="Your phone number"
-          value={workPhone.value}
-          onChange={handlePhoneChange}
-        />
-        <CustomInput
-          placeholder="Your company name*"
-          value={company.value}
-          showError={company.showError}
-          onChange={handleCompanyChange}
-          errType="required"
-        />
-        <CustomInput
-          placeholder="Your job title"
-          value={position.value}
-          onChange={handlePositionChange}
-        />
-      </form>
-      <div className={classes.btnWrapper}>
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={validateInput()}
-          onClick={handleSubmit}
-          className="sub-btn"
-        >
-          Submit
-        </Button>
+      <Typography variant="body1" className="desc"></Typography>
+      <div className={classes.form}>
+        <div className="icon-button">
+          <p className='desc'>Get started with Milvus source code:</p>
+          <a href='https://github.com/milvus-io/bootcamp' target='_blank'>
+            <img src={github} alt="github-icon" />
+            <span>Milvus Github</span>
+          </a>
+        </div>
+
+        <div className="icon-button">
+          <p className='desc'>or join our community</p>
+          <a href='https://milvusio.slack.com/archives/C01U7SWQD0C' target='_blank'>
+            <img src={slack} alt="slcak-icon" />
+            <span>Join Channel</span>
+          </a>
+        </div>
       </div>
     </div>
   );

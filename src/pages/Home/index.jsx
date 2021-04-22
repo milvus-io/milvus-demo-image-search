@@ -29,10 +29,8 @@ const Home = props => {
   const inputRef = useRef(null)
   const imgsWrapperRef = useRef(null)
   const { search } = useContext(httpContext);
-  const location = useLocation();
-  const [id, setId] = useState(null);
   const { setDialog, dialog } = useContext(rootContext);
-  const { open } = dialog
+  const { open } = dialog;
 
   const handleDrop = (files, event) => {
     if (!files[0]) {
@@ -43,23 +41,21 @@ const Home = props => {
     setShow(false)
   }
 
-  useEffect(() => {
-    if (!!location.search) {
-      setId(location.search.split('=')[1]);
-    }
-  }, [location.search])
   // remind users to register every 30s
   useEffect(() => {
-    const isRegistted = window.localStorage.getItem('registered') || false;
     let timer = null;
-    if (!isRegistted && !timer && id) {
+    if (!timer) {
       timer = setInterval(() => {
-        if (open) return;
+        const isRegistered = window.localStorage.getItem('registered') || false;
+        if (isRegistered || open) {
+          clearInterval(timer);
+          return
+        }
         setDialog({
           open: true,
           type: 'custom',
           params: {
-            component: <RegisterForm id={id} isMobile={isMobile} />
+            component: <RegisterForm />
           }
         })
       }, 30000)
@@ -67,7 +63,7 @@ const Home = props => {
     return () => {
       if (timer) clearInterval(timer);
     }
-  }, [open, isMobile, id, setDialog])
+  }, [open, setDialog])
 
   useEffect(() => {
     window.addEventListener("dragover", (e) => {

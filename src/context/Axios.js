@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const env = process.env.NODE_ENV;
-const baseURL = env==='development'?'http://172.16.20.181:1337':'http://172.16.20.181:1337';
+const baseURL = env==='development'?'http://172.16.20.181:1337':'https://zilliz-cms.azurewebsites.net';
 
 const httpRequest = axios.create({
   baseURL,
