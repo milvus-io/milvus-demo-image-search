@@ -82,10 +82,11 @@ const Home = (props) => {
       }
     });
   }, []);
-  useEffect(() => {
+
+  const handleImgToBlob = (src) => {
     const image = new Image();
     image.crossOrigin = "";
-    image.src = DemoImg;
+    image.src = src;
     image.onload = function () {
       const base64 = getBase64Image(image);
       /*
@@ -102,6 +103,10 @@ const Home = (props) => {
        Blob {size: 9585, type: "image/jpg"}
        */
     };
+  };
+
+  useEffect(() => {
+    handleImgToBlob(DemoImg);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -132,7 +137,9 @@ const Home = (props) => {
       return;
     }
     const src = getImgUrl(file);
-    setSelectedImg(file ? src : "");
+    setSelectedImg(src);
+    handleImgToBlob(src);
+    e.target.value = "";
   };
 
   const handleImgSearch = async (file, reset = true) => {
@@ -161,27 +168,10 @@ const Home = (props) => {
       })),
     ]);
   };
+
   const handleSearch = (src) => {
     setSelectedImg(src);
-    const image = new Image();
-    image.crossOrigin = "";
-    image.src = src;
-    image.onload = function () {
-      const base64 = getBase64Image(image);
-      /*
-       打印信息如下：
-       {
-        dataURL: "data:image/png;base64,xxx"
-        type: "image/jpg"
-       }
-       */
-      const imgBlob = convertBase64UrlToBlob(base64);
-      handleImgSearch(imgBlob);
-      /*
-       打印信息如下：
-       Blob {size: 9585, type: "image/jpg"}
-       */
-    };
+    handleImgToBlob(src);
   };
 
   const handleBackToTop = () => {
