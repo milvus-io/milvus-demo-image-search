@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react';
-import { Typography, makeStyles, Button } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import { rootContext } from '../../context/Root';
-import github from '../../assets/imgs/github.svg'
-import slack from '../../assets/imgs/slack.svg'
+import React, { useContext } from "react";
+import { Typography, makeStyles } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import { rootContext } from "../../context/Root";
+import github from "../../assets/imgs/github.svg";
+import slack from "../../assets/imgs/slack.svg";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '500px',
+    width: "500px",
     background: "#fff",
     maxWidth: "600px",
     borderRadius: "15px 0",
@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
       boxSizing: "border-box",
     },
     boxShadow: "10px 20px 50px rgba(0, 0, 0, 0.15)",
-    '& .MuiPaper-root':{
-      backgroundColor: 'transparent'
+    "& .MuiPaper-root": {
+      backgroundColor: "transparent",
     },
     "& .title-bar": {
       display: "flex",
@@ -31,10 +31,10 @@ const useStyles = makeStyles((theme) => ({
       [theme.breakpoints.down(theme.breakpoints.values.md)]: {
         marginBottom: theme.spacing(2),
       },
-      '& .title':{
-        fontSize: '20px',
-        lineHeight: '28px',
-        fontWeight: 'bold'
+      "& .title": {
+        fontSize: "20px",
+        lineHeight: "28px",
+        fontWeight: "bold",
       },
       "& .icon-wrapper": {
         width: "24px",
@@ -55,37 +55,37 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   form: {
-    '& .icon-button':{
-      '&:first-child': {
-        marginBottom: theme.spacing(2)
+    "& .icon-button": {
+      "&:first-child": {
+        marginBottom: theme.spacing(2),
       },
-      '& .desc':{
-        fontSize: '16px',
-        lineHeight: '22px',
+      "& .desc": {
+        fontSize: "16px",
+        lineHeight: "22px",
         fontWeight: 400,
         margin: 0,
-        letterSpacing: '0.01em',
-        color: '#010E29'
+        letterSpacing: "0.01em",
+        color: "#010E29",
       },
-      '&>a':{
-        textDecoration: 'none',
+      "&>a": {
+        textDecoration: "none",
         marginTop: theme.spacing(2),
-        display: 'flex',
-        alignItems: 'center'
+        display: "flex",
+        alignItems: "center",
       },
-      '& span':{
-        color: '#06AFF2',
-        fontSize: '16px',
-        lineHeight: '24px',
+      "& span": {
+        color: "#06AFF2",
+        fontSize: "16px",
+        lineHeight: "24px",
         fontWeight: 600,
-        letterSpacing: '0.01em'
+        letterSpacing: "0.01em",
       },
-      '& img':{
-        width: '20px',
-        height: '20px',
-        marginRight: theme.spacing(1)
-      }
-    }
+      "& img": {
+        width: "20px",
+        height: "20px",
+        marginRight: theme.spacing(1),
+      },
+    },
   },
   btnWrapper: {
     [theme.breakpoints.down(theme.breakpoints.values.md)]: {
@@ -107,11 +107,12 @@ const RegisterForm = () => {
     hideDialog();
   };
 
-
   return (
     <div className={classes.root}>
       <div className="title-bar">
-        <Typography variant="h5" className='title'>Can’t wait to try Milvus out? </Typography>
+        <Typography variant="h5" className="title">
+          Can’t wait to try Milvus out?{" "}
+        </Typography>
         <div className="icon-wrapper" onClick={handleHideDialog}>
           <CloseIcon />
         </div>
@@ -120,16 +121,24 @@ const RegisterForm = () => {
       <Typography variant="body1" className="desc"></Typography>
       <div className={classes.form}>
         <div className="icon-button">
-          <p className='desc'>Get started with Milvus source code:</p>
-          <a href='https://github.com/milvus-io/bootcamp' target='_blank'>
+          <p className="desc">Get started with Milvus source code:</p>
+          <a
+            href="https://github.com/milvus-io/bootcamp"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img src={github} alt="github-icon" />
             <span>Milvus Github</span>
           </a>
         </div>
 
         <div className="icon-button">
-          <p className='desc'>or join our community</p>
-          <a href='https://milvusio.slack.com/archives/C01U7SWQD0C' target='_blank'>
+          <p className="desc">or join our community</p>
+          <a
+            href="https://milvusio.slack.com/archives/C01U7SWQD0C"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img src={slack} alt="slcak-icon" />
             <span>Join Channel</span>
           </a>
