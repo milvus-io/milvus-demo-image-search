@@ -138,7 +138,8 @@ const Home = (props) => {
     }
     const src = getImgUrl(file);
     setSelectedImg(src);
-    handleImgToBlob(src);
+    handleImgSearch(file);
+    // handleImgToBlob(src);
     e.target.value = "";
   };
 
