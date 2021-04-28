@@ -15,7 +15,7 @@ import RegisterForm from "../../components/Form/RegisterForm";
 
 let timer = null;
 const Home = (props) => {
-  const isMobile = !useMediaQuery("(min-width:1000px)");
+  const isMobile = !useMediaQuery("(min-width:800px)");
   const [show, setShow] = useState(false);
   const [imgs, setImgs] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,6 @@ const Home = (props) => {
   const { search } = useContext(httpContext);
   const { setDialog, dialog } = useContext(rootContext);
   const { open } = dialog;
-
   const handleDrop = (files, event) => {
     if (!files[0]) {
       return;
@@ -121,7 +120,7 @@ const Home = (props) => {
       timer = setTimeout(async () => {
         setLoading(true);
         setPage((v) => v + 1);
-        await handleImgSearch(blob, false);
+        await handleImgSearch(blob, false, page + 1);
         timer = null;
       }, 100);
     }
@@ -143,7 +142,7 @@ const Home = (props) => {
     e.target.value = "";
   };
 
-  const handleImgSearch = async (file, reset = true) => {
+  const handleImgSearch = async (file, reset = true, scrollPage) => {
     if (reset) {
       setImgs([]);
       setPage(0);
@@ -152,8 +151,8 @@ const Home = (props) => {
     }
     const fd = new FormData();
     fd.append("file", file);
-    fd.append("Num", 50);
-    fd.append("Page", page);
+    fd.append("Num", window.innerWidth < 800 ? 16 : 50);
+    fd.append("Page", scrollPage || page);
 
     setBlob(file);
     const res = await search(fd);
