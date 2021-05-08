@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Masonry, Spinner } from "gestalt";
 import { useParams } from "react-router-dom";
 
-import Item from "../../Components/Item";
+import Item from "../../components/Item";
 import "./index.scss";
 
 let offset = 0;
