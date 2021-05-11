@@ -1,37 +1,90 @@
 import React from 'react';
-import { Dialog } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles(theme => ({
-  contentContainer: {
-    position: 'relative',
+  customDialog: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    background: 'rgba(0, 0, 0, 0.7)',
+    display: 'none',
 
-    '& .icon-wrapper': {
-      display: 'block'
+
+    '&.open': {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+  },
+
+  contentContainer: {
+    width: '60%',
+    height: '60%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+
+    '& .close-btn': {
+      textAlign: 'right',
+      color: '#fff',
+      width: '100%',
+
+      '& .icon-wrapper': {
+        width: '24px',
+        height: '24px',
+        fontSize: '20px',
+        textAlign: 'center',
+        lineHeight: '24px',
+        cursor: 'pointer'
+      }
+    },
+
+    '& .content': {
+      borderRadius: '16px',
+      width: '100%',
+      height: 'calc(100% - 24px)',
+
+      '& > *': {
+        width: '100%',
+        height: '100%',
+      }
+
     }
   }
 }));
 
-const CustomDialog = props => {
-  const { open, hideDialog } = props;
+const CustomDialog = ({ classname, open, onClose, component: Component }) => {
   const classes = useStyles();
 
+  const handleClickOut = e => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+
   return (
-    <Dialog onClose={hideDialog} open={open}>
+    <div
+      className={`${classes.customDialog} ${classname ? classname : ''} ${open ? 'open' : ''}`}
+      onClick={handleClickOut}
+    >
       <div className={classes.contentContainer}>
-        <span className="icon-wrapper">
-          <CloseIcon />
-        </span>
-        <div className="content-wrapper">
+        <p className="close-btn">
+          <span className="icon-wrapper" onClick={onClose}>
+            <CloseIcon />
+          </span>
+        </p>
+        <div className="content">
           {
-            props.children
+            Component
           }
         </div>
-
       </div>
-
-    </Dialog>
+    </div>
   );
 };
 

@@ -9,7 +9,6 @@ import IconButton from '../IconButton';
 import { getImgUrl } from '../../utils/helper';
 
 
-
 const useStyles = makeStyles(theme => ({
   uploadSection: {
     width: "100%",
@@ -17,6 +16,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(9, 9),
     borderRadius: "4px",
     boxSizing: "border-box",
+    textAlign: 'center',
 
     "& .desc": {
       fontWeight: 400,
@@ -28,7 +28,8 @@ const useStyles = makeStyles(theme => ({
     },
   },
   uploadWrapper: {
-    textAlign: "center",
+    textAlign: "left",
+    display: 'inline-block',
     marginBottom: theme.spacing(1),
     "& .input": {
       display: "none",
@@ -56,6 +57,10 @@ const useStyles = makeStyles(theme => ({
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-end',
+
+      "& .button": {
+        color: '#fff'
+      }
     },
     '& .result-desc': {
       marginBottom: theme.spacing(2),
@@ -64,19 +69,23 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 400,
         fontSize: '12px',
         lineHeight: '14px',
-        color: '#82838E'
+        color: '#82838E',
+
       }
     },
     '& .icons-wrapper': {
-      marginBottom: theme.spacing(1)
+      marginBottom: theme.spacing(1),
+      '& a:not(:last-child)': {
+        marginRight: theme.spacing(2)
+      }
     }
 
   }
 }));
-const UploaderHeader = ({ handleImgSearch, count, duration }) => {
+const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, selectedImg, count, duration }) => {
 
   const classes = useStyles();
-  const [selectedImg, setSelectedImg] = useState(null);
+
   const inputRef = useRef(null);
 
   const handleInputChange = async e => {
@@ -84,15 +93,15 @@ const UploaderHeader = ({ handleImgSearch, count, duration }) => {
     if (!file) {
       return;
     }
+
     const src = getImgUrl(file);
-    setSelectedImg(src);
-    handleImgSearch(file);
+    handleSelectedImg(file, src);
+    handleImgSearch(file, true);
     e.target.value = "";
   };
 
   return (
     <div className={classes.uploaderHeader}>
-
       {
         !selectedImg ?
           (
@@ -133,14 +142,14 @@ const UploaderHeader = ({ handleImgSearch, count, duration }) => {
                     onChange={handleInputChange}
                   />
                   <label htmlFor="contained-button-file">
-                    <Button variant="contained" color="primary" component="span">
+                    <Button variant="contained" color="primary" component="span" className='button'>
                       Upload Image
                     </Button>
                   </label>
                 </div>
                 <div className="result-desc">
-                  <Typography variant="body2" className='text'>{count}</Typography>
-                  <Typography variant="body2" className='text'>{duration}</Typography>
+                  <Typography variant="body2" className='text'>Search Result: {count}</Typography>
+                  <Typography variant="body2" className='text'>Duration: {duration / 1000} s</Typography>
                 </div>
                 <div className="icons-wrapper">
                   <IconButton type="link" href="#">
@@ -152,7 +161,7 @@ const UploaderHeader = ({ handleImgSearch, count, duration }) => {
                   <IconButton type="link" href="#">
                     <img src={email} alt="email" />
                   </IconButton>
-                  <IconButton type="link" href="#">
+                  <IconButton type="button" onClick={toggleIsShowCode}>
                     <img src={subtract} alt="subtract" />
                   </IconButton>
                 </div>
@@ -163,7 +172,6 @@ const UploaderHeader = ({ handleImgSearch, count, duration }) => {
             </div>
           )
       }
-
     </div>
 
 

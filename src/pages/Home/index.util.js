@@ -6,10 +6,28 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 12.5, 0),
     margin: "0 auto",
     boxSizing: "border-box",
-    "& > *": {
-      margin: theme.spacing(1, 0),
-    },
   },
+
+  container: {
+    display: "flex",
+  },
+
+  contentContainer: {
+    flex: 1,
+    marginRight: "20px",
+    overflow: "auto",
+
+    // "&.shrink": {
+    //   width: "50%",
+    // },
+  },
+
+  codeContainer: {
+    flex: 1,
+    background: "#303030",
+    borderRadius: "16px",
+  },
+
   button: {
     fontWeight: 500,
     fontSize: "16px",

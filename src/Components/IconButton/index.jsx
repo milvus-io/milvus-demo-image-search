@@ -11,9 +11,6 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '24px',
     boxSizing: 'border-box',
     padding: '3px',
-    '&:not(:last-child)': {
-      marginRight: '18px'
-    },
 
     '& img': {
       width: '18px',
@@ -23,7 +20,17 @@ const useStyles = makeStyles((theme) => ({
   btnWrapper: {
     display: 'inline-block',
     height: '24px',
-    width: '24px'
+    width: '24px',
+    padding: '3px',
+    border: 'none',
+    outline: 'none',
+    background: 'transparent',
+    cursor: 'pointer',
+
+    '& img': {
+      width: '18px',
+      height: '18px'
+    }
   }
 }));
 
