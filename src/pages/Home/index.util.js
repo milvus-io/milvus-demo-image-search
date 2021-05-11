@@ -6,6 +6,12 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 12.5, 0),
     margin: "0 auto",
     boxSizing: "border-box",
+    margin: "0 auto",
+    height: "100%",
+
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(3, 3, 0),
+    },
   },
 
   container: {
@@ -14,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
 
   contentContainer: {
     flex: 1,
-    marginRight: "20px",
     overflow: "auto",
 
     // "&.shrink": {
@@ -26,12 +31,18 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     background: "#303030",
     borderRadius: "16px",
+    marginLeft: "20px",
   },
 
   button: {
     fontWeight: 500,
     fontSize: "16px",
     lineHeight: "18px",
+    marginBottom: "27px",
+
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: theme.spacing(1),
+    },
   },
   uploadSection: {
     width: "100%",
@@ -57,8 +68,12 @@ const useStyles = makeStyles((theme) => ({
   },
   layoutSection: {
     width: "100%",
-    "& .scroll-container": {
-      overflow: "auto",
+    height: "calc(100vh - 373px)",
+    marginTop: theme.spacing(4),
+
+    [theme.breakpoints.down("sm")]: {
+      height: "calc(100vh - 230px)",
+      marginTop: theme.spacing(3),
     },
   },
   loadingWrapper: {

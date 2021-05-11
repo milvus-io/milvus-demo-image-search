@@ -1,7 +1,4 @@
-import React, { useContext, createContext } from "react";
 import axios from "axios";
-
-console.log(process.env);
 
 const api = "";
 

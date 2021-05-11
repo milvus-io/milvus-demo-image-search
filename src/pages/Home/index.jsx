@@ -9,6 +9,7 @@ import { search, getCount } from '../../utils/http';
 import DemoImg from "../../assets/demo.jpg";
 import UploaderHeader from '../../components/Uploader';
 import { CircularProgress } from '@material-ui/core';
+import { useMobileScreen } from '../../hooks';
 
 const Home = () => {
   const classes = useStyles();
@@ -26,6 +27,8 @@ const Home = () => {
   const [file, setFile] = useState(null);
   const [isShowCode, setIsShowCode] = useState(false);
 
+  const { isMobile } = useMobileScreen();
+
   const getImage = (url) => {
     return new Promise(function (resolve, reject) {
       var img = document.createElement('img');
@@ -42,7 +45,7 @@ const Home = () => {
 
   const handleImgSearch = async (
     file,
-    reset,
+    reset = false,
     scrollPage
   ) => {
     setLoading(true);
@@ -54,7 +57,7 @@ const Home = () => {
     }
     const fd = new FormData();
     fd.append("file", file);
-    fd.append("Num", `${window.innerWidth < 800 ? 8 : 20}`);
+    fd.append("Num", `${isMobile ? 8 : 20}`);
     fd.append("Page", `${scrollPage || page}`);
 
     // setBlob(file);
@@ -72,7 +75,7 @@ const Home = () => {
         results.push({
           width, height,
           src: res[i][0],
-          distance: res[i][1]
+          distance: (res[i][1]).toFixed(6)
         });
       }
       setImgs((v) => [
@@ -143,21 +146,24 @@ const Home = () => {
     <section className={classes.root}>
       <div className={classes.container}>
         <div className={`${classes.contentContainer} ${isShowCode ? 'shrink' : ''}`}>
-          <Button
-            variant="text"
-            startIcon={<ChevronLeftIcon />}
-            className={classes.button}
-          >
-            Back to Demo
+          <div className="top-part">
+            <Button
+              variant="text"
+              startIcon={<ChevronLeftIcon />}
+              className={classes.button}
+            >
+              Back to Demo
           </Button>
-          <UploaderHeader
-            handleImgSearch={handleImgSearch}
-            handleSelectedImg={handleSelectedImg}
-            toggleIsShowCode={toggleIsShowCode}
-            selectedImg={selected.src}
-            count={count}
-            duration={duration}
-          />
+            <UploaderHeader
+              handleImgSearch={handleImgSearch}
+              handleSelectedImg={handleSelectedImg}
+              toggleIsShowCode={toggleIsShowCode}
+              selectedImg={selected.src}
+              count={count}
+              duration={duration}
+            />
+          </div>
+
           <div className={classes.layoutSection}>
             <Main
               pins={imgs}

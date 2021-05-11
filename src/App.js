@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import RootProvider from "./context/Root";
 import Home from "./pages/Home";
+import "./App.css";
 
 import "gestalt/dist/gestalt.css";
 

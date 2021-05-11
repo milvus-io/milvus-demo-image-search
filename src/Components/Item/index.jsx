@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Box, Text, Mask, Button, Image } from "gestalt";
 import { makeStyles } from '@material-ui/styles';
+import { Typography } from '@material-ui/core';
 import { rootContext } from '../../context/Root';
 import PreviewItem from './PreviewItem';
 
@@ -38,10 +39,14 @@ const useStyles = makeStyles(theme => ({
     color: '#010E29',
     textAlign: 'center',
     marginTop: '16px',
+    display: 'flex',
+
+    [theme.breakpoints.down('sm')]: {
+      display: 'block'
+    },
 
     '& .title': {
       color: '#82838E',
-      fontWeight: 400,
       wordBreak: 'no-break'
     },
 
@@ -68,7 +73,7 @@ const Item = (props) => {
   const handlePreview = (src, distance) => {
     setCustomDialog({
       open: true,
-      component: <PreviewItem src={src} distance={distance} closeCustomDialog={closeCustomDialog} />,
+      component: <PreviewItem src={src} distance={distance} closeCustomDialog={closeCustomDialog} handleSearch={props.handleSearch} />,
       onClose: closeCustomDialog
     });
   };
@@ -81,20 +86,22 @@ const Item = (props) => {
   return (
     <Box
       position="relative"
-      padding={2}
       className="ui-item"
       alignItems="center"
       // key={data.id}
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
+      fit={true}
+      padding={0}
     >
-      <div className={classes.imgWrapper} onClick={() => handlePreview(props.data.src, props.data.distance)}>
+      <div className={classes.imgWrapper} onClick={() => handlePreview(props.data.src, props.data.distance)} draggable="true">
         <Image
           alt="Test"
           color='#fff'
           naturalHeight={props.data.height}
           naturalWidth={props.data.width}
           src={props.data.src}
+
         />
         <span className={classes.iconWrapper} onClick={(e) => searchThisPic(e, props.data.src)}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -107,10 +114,10 @@ const Item = (props) => {
       {
         props.isSelected ?
           (
-            <p className={classes.textWrapper}>
-              <span className='title'>Similarity:</span>
-              {props.data.distance}
-            </p>
+            <div className={classes.textWrapper}>
+              <Typography variant="body1" className='title'>Similarity Metirc:&nbsp;&nbsp;</Typography>
+              <Typography variant="h5" className='title'>{props.data.distance}</Typography>
+            </div>
           ) : null
       }
 

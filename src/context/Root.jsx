@@ -14,7 +14,6 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import MuiAlert from "@material-ui/lab/Alert";
 import CustomDialog from '../components/CustomDialog';
 
-console.log(CustomDialog);
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -152,10 +151,17 @@ const RootProvider = (props) => {
     spacing: (factor) => `${8 * factor}px`,
   };
 
+  const isMobile = useMediaQuery('(max-width:1024px)');
   const theme = createMuiTheme({
     ...commonThemes,
     overrides: {
       MuiTypography: {
+        h4: {
+          fontSize: '24px',
+          lineHeight: '28px',
+          fontFamily: 'Roboto',
+          fontWeight: 400
+        },
         h5: {
           fontSize: '16px',
           lineHeight: '18px',
@@ -198,9 +204,61 @@ const RootProvider = (props) => {
     }
   });
 
+  const mobileTheme = createMuiTheme({
+    ...commonThemes,
+    overrides: {
+      MuiTypography: {
+        h4: {
+          fontSize: '16px',
+          lineHeight: '18px',
+          fontFamily: 'Roboto',
+          fontWeight: 400
+        },
+        h5: {
+          fontSize: '16px',
+          lineHeight: '18px',
+          fontFamily: 'Roboto',
+          fontWeight: 500
+        },
+        body1: {
+          fontSize: '14px',
+          lineHeight: '16px',
+          fontFamily: 'Roboto',
+          fontWeight: 400
+        },
+        body2: {
+          fontSize: '12px',
+          lineHeight: '14px',
+          fontFamily: 'Roboto',
+          fontWeight: 400
+        },
+      },
+      MuiButton: {
+        contained: {
+          color: '#fff',
+          backgroundColor: '#12c3f4',
+          boxShadow: 'initial',
+
+          '&:hover': {
+            backgroundColor: '#65daf8',
+            boxShadow: 'initial',
+          },
+        },
+        containedPrimary: {
+          color: '#fff',
+          backgroundColor: '#12c3f4',
+
+          '&:hover': {
+            backgroundColor: '#65daf8',
+          },
+        },
+      }
+    }
+  });
+
   return (
     <Provider value={{ openSnackBar, dialog, setDialog, hideDialog, setCustomDialog, closeCustomDialog }}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={isMobile ? mobileTheme : theme}>
         <Snackbar
           anchorOrigin={{
             vertical: snackBar.vertical,

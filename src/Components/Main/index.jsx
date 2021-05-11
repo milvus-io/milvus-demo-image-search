@@ -3,14 +3,14 @@ import { Masonry, Spinner } from "gestalt";
 import { CircularProgress, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import { useMobileScreen } from '../../hooks';
 
 import Item from "../Item";
 
 const useStyles = makeStyles(theme => ({
   scrollContainer: {
     overflow: 'auto',
-    height: 'calc(100vh - 435px)',
-    marginTop: '32px',
+    height: '100%',
     position: 'relative',
 
     '&.open': {
@@ -88,9 +88,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Main({ pins, loadItems, loading, isSelected, minCols, isShowCode, handleSearch }) {
+function Main({ pins, loadItems, loading, isSelected, isShowCode, handleSearch }) {
   const classes = useStyles();
-
+  const { isMobile } = useMobileScreen();
   const scrollContainer = useRef(null);
 
 
@@ -109,7 +109,7 @@ function Main({ pins, loadItems, loading, isSelected, minCols, isShowCode, handl
       <div className={`${classes.imgContainer} ${isShowCode ? '' : ''}`}>
         {
           pins.length ? <Masonry
-            columnWidth={295}
+            columnWidth={isMobile ? 154 : 290}
             virtualize={true}
             comp={({ data }) => (
               <Item
@@ -119,10 +119,10 @@ function Main({ pins, loadItems, loading, isSelected, minCols, isShowCode, handl
               />
             )}
             items={pins}
-            gutterWidth={0}
+            gutterWidth={16}
             loadItems={loadItems}
             scrollContainer={() => scrollContainer.current}
-            minCols={minCols}
+            minCols={2}
           ></Masonry> : null
         }
       </div>
