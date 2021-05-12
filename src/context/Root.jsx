@@ -134,6 +134,9 @@ const RootProvider = (props) => {
   const { Provider } = rootContext;
 
   const commonThemes = {
+    typography: {
+      fontFamily: 'Roboto'
+    },
     palette: {
       primary: {
         main: '#06aff2'
@@ -162,6 +165,12 @@ const RootProvider = (props) => {
           fontFamily: 'Roboto',
           fontWeight: 400
         },
+        h3: {
+          fontSize: '18px',
+          lineHeight: '22px',
+          fontFamily: 'Roboto',
+          fontWeight: 400
+        },
         h5: {
           fontSize: '16px',
           lineHeight: '18px',
@@ -182,9 +191,12 @@ const RootProvider = (props) => {
         },
       },
       MuiButton: {
+        root: {
+          textTransform: 'initial'
+        },
         contained: {
           color: '#fff',
-          backgroundColor: '#12c3f4',
+          backgroundColor: '#06aff2',
           boxShadow: 'initial',
 
           '&:hover': {
@@ -194,7 +206,7 @@ const RootProvider = (props) => {
         },
         containedPrimary: {
           color: '#fff',
-          backgroundColor: '#12c3f4',
+          backgroundColor: '#06aff2',
 
           '&:hover': {
             backgroundColor: '#65daf8',
@@ -214,9 +226,15 @@ const RootProvider = (props) => {
           fontFamily: 'Roboto',
           fontWeight: 400
         },
-        h5: {
+        h3: {
           fontSize: '16px',
-          lineHeight: '18px',
+          lineHeight: '22px',
+          fontFamily: 'Roboto',
+          fontWeight: 400
+        },
+        h5: {
+          fontSize: '14px',
+          lineHeight: '16px',
           fontFamily: 'Roboto',
           fontWeight: 500
         },
@@ -234,9 +252,12 @@ const RootProvider = (props) => {
         },
       },
       MuiButton: {
+        root: {
+          textTransform: 'initial'
+        },
         contained: {
           color: '#fff',
-          backgroundColor: '#12c3f4',
+          backgroundColor: '#06aff2',
           boxShadow: 'initial',
 
           '&:hover': {
@@ -246,7 +267,7 @@ const RootProvider = (props) => {
         },
         containedPrimary: {
           color: '#fff',
-          backgroundColor: '#12c3f4',
+          backgroundColor: '#06aff2',
 
           '&:hover': {
             backgroundColor: '#65daf8',

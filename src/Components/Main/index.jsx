@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { Masonry, Spinner } from "gestalt";
+import React, { useRef } from "react";
+import { Masonry } from "gestalt";
 import { CircularProgress, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
@@ -92,8 +92,6 @@ function Main({ pins, loadItems, loading, isSelected, isShowCode, handleSearch }
   const classes = useStyles();
   const { isMobile } = useMobileScreen();
   const scrollContainer = useRef(null);
-
-
 
   return (
     <div className={`${classes.scrollContainer} ${isShowCode ? 'open' : ''}`} ref={scrollContainer}>

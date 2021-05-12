@@ -4,7 +4,7 @@ import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles(theme => ({
   customDialog: {
-    position: 'absolute',
+    position: 'fixed',
     top: 0,
     left: 0,
     bottom: 0,
@@ -45,8 +45,8 @@ const useStyles = makeStyles(theme => ({
 
     '& .content': {
       borderRadius: '16px',
-      width: '100%',
-      height: 'calc(100% - 24px)',
+      // width: '100%',
+      // height: 'calc(100% - 24px)',
 
       '& > *': {
         width: '100%',

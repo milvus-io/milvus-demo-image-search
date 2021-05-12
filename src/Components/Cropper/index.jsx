@@ -5,8 +5,16 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   cropper: {
-    width: '100%',
-    height: '100%',
+    width: '295px',
+    height: '264px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    [theme.breakpoints.down('sm')]: {
+      width: '295px',
+      height: '306px',
+    },
 
     '& .cropper-line': {
       backgroundColor: ' #fff'

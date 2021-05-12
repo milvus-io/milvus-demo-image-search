@@ -48,9 +48,12 @@ const useStyles = makeStyles(theme => ({
     },
   },
   uploadedWrapper: {
-    display: 'flex',
     padding: theme.spacing(1),
     boxSizing: 'border-box',
+    display: 'flex',
+    [theme.breakpoints.down('sm')]: {
+      display: 'block',
+    },
 
     '& .background': {
       background: '#555',
@@ -58,14 +61,10 @@ const useStyles = makeStyles(theme => ({
       boxSizing: 'border-box',
       padding: theme.spacing(2),
       maxWidth: '50%',
-      width: '295px',
-      height: '264px',
-
 
       [theme.breakpoints.down('sm')]: {
-        width: '145px',
-        height: '150px',
         padding: theme.spacing(1),
+        maxWidth: '100%',
       }
     },
     '& .btns-wrppaer': {
@@ -75,7 +74,13 @@ const useStyles = makeStyles(theme => ({
       marginLeft: theme.spacing(4),
 
       [theme.breakpoints.down('sm')]: {
-        marginLeft: theme.spacing(1),
+        marginLeft: theme.spacing(0),
+        marginTop: theme.spacing(2),
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        width: '311px',
+        justifyContent: 'space-between',
+
       },
       // [theme.breakpoints.down('sm')]: {
       //   flex: 3
@@ -89,16 +94,27 @@ const useStyles = makeStyles(theme => ({
     '& .result-desc': {
       marginBottom: theme.spacing(2),
 
+      [theme.breakpoints.down('sm')]: {
+        marginBottom: theme.spacing(0),
+      },
+
       '& .text': {
         fontWeight: 400,
         fontSize: '12px',
         lineHeight: '14px',
         color: '#82838E',
 
+        [theme.breakpoints.down('sm')]: {
+          maxWidth: '150px',
+          overflow: 'hidden',
+          whiteSpace: 'no-wrap',
+          textOverflow: 'ellipsis'
+        },
       }
     },
     '& .icons-wrapper': {
       marginBottom: theme.spacing(1),
+
       [theme.breakpoints.down('sm')]: {
         marginBottom: theme.spacing(0),
       },
@@ -119,23 +135,24 @@ const useStyles = makeStyles(theme => ({
     },
 
     [theme.breakpoints.down('sm')]: {
-      width: '129px',
-      height: '134px',
+      width: '295px',
+      height: '306px',
 
       '& img': {
-        maxWidth: '129px',
-        maxHeigth: '134px',
+        maxWidth: '295px',
+        maxHeight: '306px',
       },
     },
   },
   cropImg: {
-    maxWidth: '263px',
-    maxHeigth: '232px',
+    // maxWidth: '263px',
+    // maxHeigth: '232px',
 
-    [theme.breakpoints.down('sm')]: {
-      maxWidth: '129px',
-      maxHeight: '134px',
-    },
+    // [theme.breakpoints.down('sm')]: {
+    //   maxWidth: '295px',
+    //   maxHeigth: '306px',
+    // },
+    display: 'none'
   },
 }));
 const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, selectedImg, count, duration }) => {
@@ -255,52 +272,86 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
               </div>
 
               <div className="btns-wrppaer">
-                <div className={classes.uploadWrapper}>
-                  <input
-                    accept="image/*"
-                    className="input"
-                    id="contained-button-file"
-                    type="file"
-                    ref={inputRef}
-                    onChange={handleInputChange}
-                  />
-                  <label htmlFor="contained-button-file">
-                    <Button variant="contained" color="primary" component="span" className='button'>
-                      Upload Image
-                    </Button>
-                  </label>
-                </div>
-                <div className="result-desc">
-                  <Typography variant="body2" className='text'>Search Result: {count}</Typography>
-                  <Typography variant="body2" className='text'>Duration: {duration / 1000} s</Typography>
-                </div>
-                <div className="icons-wrapper">
-                  <IconButton type="link" href="#">
-                    <img src={star} alt="star" />
-                  </IconButton>
-                  <IconButton type="link" href="#">
-                    <img src={github} alt="github" />
-                  </IconButton>
-                  {
-                    !isMobile ? (
-                      <>
+
+                {
+                  !isMobile ? (
+                    <>
+                      <div className={classes.uploadWrapper}>
+                        <input
+                          accept="image/*"
+                          className="input"
+                          id="contained-button-file"
+                          type="file"
+                          ref={inputRef}
+                          onChange={handleInputChange}
+                        />
+                        <label htmlFor="contained-button-file">
+                          <Button variant="contained" color="primary" component="span" className='button'>
+                            Upload Image
+                          </Button>
+                        </label>
+                      </div>
+                      <div className="result-desc">
+                        <Typography variant="body2" className='text'>Search Result: {count}</Typography>
+                        <Typography variant="body2" className='text'>Duration: {duration / 1000} s</Typography>
+                      </div>
+                      <div className="icons-wrapper">
+                        <IconButton type="link" href="#">
+                          <img src={star} alt="star" />
+                        </IconButton>
+                        <IconButton type="link" href="#">
+                          <img src={github} alt="github" />
+                        </IconButton>
                         <IconButton type="link" href="#">
                           <img src={email} alt="email" />
                         </IconButton>
+
                         <IconButton type="button" onClick={toggleIsShowCode}>
                           <img src={subtract} alt="subtract" />
                         </IconButton>
-                      </>
-                    ) : null
-                  }
-                </div>
-                {
-                  !isMobile ? (
-                    <Link href="#" color="inherit" className='text'>
-                      Download Milvus SDK
-                    </Link>
-                  ) : null
+                      </div>
+                      <Link href="#" color="inherit" className='text'>
+                        Download Milvus SDK
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <div className="left">
+                        <div className="icons-wrapper">
+                          <IconButton type="link" href="#">
+                            <img src={star} alt="star" />
+                          </IconButton>
+                          <IconButton type="link" href="#">
+                            <img src={github} alt="github" />
+                          </IconButton>
+                          <IconButton type="link" href="#">
+                            <img src={email} alt="email" />
+                          </IconButton>
+                        </div>
+                        <div className="result-desc">
+                          <Typography variant="body2" className='text'>Search Result: {count}</Typography>
+                          <Typography variant="body2" className='text'>Duration: {duration / 1000} s</Typography>
+                        </div>
+                      </div>
+                      <div className={classes.uploadWrapper}>
+                        <input
+                          accept="image/*"
+                          className="input"
+                          id="contained-button-file"
+                          type="file"
+                          ref={inputRef}
+                          onChange={handleInputChange}
+                        />
+                        <label htmlFor="contained-button-file">
+                          <Button variant="contained" color="primary" component="span" className='button'>
+                            Upload Image
+                          </Button>
+                        </label>
+                      </div>
+                    </>
+                  )
                 }
+
               </div>
             </div>
           )
