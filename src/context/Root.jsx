@@ -184,8 +184,8 @@ const RootProvider = (props) => {
           fontWeight: 400
         },
         body2: {
-          fontSize: '12px',
-          lineHeight: '14px',
+          fontSize: '14px',
+          lineHeight: '16px',
           fontFamily: 'Roboto',
           fontWeight: 400
         },

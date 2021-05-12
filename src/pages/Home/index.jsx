@@ -145,6 +145,7 @@ const Home = () => {
   };
 
   const toggleIsShowCode = () => {
+    return;
     setIsShowCode((v) => !v);
     window.dispatchEvent(new Event("resize"));
   };
@@ -155,6 +156,10 @@ const Home = () => {
       src: src,
       isSelected: true,
     });
+  };
+
+  const handleGoBack = () => {
+    window.window.location.href = 'https://zilliz.com/milvus-demos';
   };
 
   useEffect(() => {
@@ -195,6 +200,7 @@ const Home = () => {
               variant="text"
               startIcon={<ChevronLeftIcon />}
               className={classes.button}
+              onClick={handleGoBack}
             >
               Back to Demo
             </Button>

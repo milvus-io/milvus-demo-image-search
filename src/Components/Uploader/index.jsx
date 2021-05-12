@@ -46,6 +46,17 @@ const useStyles = makeStyles(theme => ({
     "& .input": {
       display: "none",
     },
+
+    '& .upload-btn .MuiButton-label': {
+      fontSize: (props) => props.selectedImg ? '16px' : '24px',
+      LineHeight: (props) => props.selectedImg ? '18px' : '28px',
+      fontFamily: 'Roboto',
+
+      [theme.breakpoints.down('sm')]: {
+        fontSize: '16px',
+        LineHeight: '18px',
+      },
+    }
   },
   uploadedWrapper: {
     padding: theme.spacing(1),
@@ -100,8 +111,6 @@ const useStyles = makeStyles(theme => ({
 
       '& .text': {
         fontWeight: 400,
-        fontSize: '12px',
-        lineHeight: '14px',
         color: '#82838E',
 
         [theme.breakpoints.down('sm')]: {
@@ -157,7 +166,7 @@ const useStyles = makeStyles(theme => ({
 }));
 const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, selectedImg, count, duration }) => {
 
-  const classes = useStyles();
+  const classes = useStyles({ selectedImg });
   const { isMobile } = useMobileScreen();
   const inputRef = useRef(null);
   const uploadSection = useRef(null);
@@ -252,9 +261,9 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
                     onChange={handleInputChange}
                   />
                   <label htmlFor="contained-button-file">
-                    <Button variant="contained" color="primary" component="span">
+                    <Button variant="contained" color="primary" component="span" className="upload-btn">
                       Upload Image
-                  </Button>
+                    </Button>
                   </label>
                 </div>
               </div >
@@ -286,7 +295,7 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
                           onChange={handleInputChange}
                         />
                         <label htmlFor="contained-button-file">
-                          <Button variant="contained" color="primary" component="span" className='button'>
+                          <Button variant="contained" color="primary" component="span" className='button' className="upload-btn">
                             Upload Image
                           </Button>
                         </label>
@@ -343,7 +352,7 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
                           onChange={handleInputChange}
                         />
                         <label htmlFor="contained-button-file">
-                          <Button variant="contained" color="primary" component="span" className='button'>
+                          <Button variant="contained" color="primary" component="span" className='button' className="upload-btn">
                             Upload Image
                           </Button>
                         </label>

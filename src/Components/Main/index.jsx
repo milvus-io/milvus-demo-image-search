@@ -97,7 +97,7 @@ function Main({ pins, loadItems, loading, isSelected, isShowCode, handleSearch }
     <div className={`${classes.scrollContainer} ${isShowCode ? 'open' : ''}`} ref={scrollContainer}>
 
       <div className={`${classes.toopTip} ${isSelected ? 'open' : ''}`}>
-        <Typography variant='body2' className="text">Sorted by Similarity metric</Typography>
+        <Typography variant='body1' className="text">Sorted by Similarity metric</Typography>
         <span className="icon-wrapper">
           <ErrorOutlineIcon />
         </span>
