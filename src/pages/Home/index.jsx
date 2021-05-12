@@ -7,12 +7,12 @@ import {
   convertBase64UrlToBlob,
   getBase64Image,
 } from "../../utils/helper";
-import Main from "../../components/Main";
+import Masonry from "../../components/Masonry";
 import { search, getCount } from "../../utils/http";
 import DemoImg from "../../assets/demo.jpg";
 import UploaderHeader from "../../components/Uploader";
 import { CircularProgress } from "@material-ui/core";
-import RegisterForm from "../../components/RegisterForm";
+import MilvusDialog from "../../components/MilvusDialog";
 
 const Home = () => {
   const classes = useStyles();
@@ -178,7 +178,7 @@ const Home = () => {
           open: true,
           type: "custom",
           params: {
-            component: <RegisterForm />,
+            component: <MilvusDialog />,
           },
         });
       }, 30000);
@@ -220,7 +220,7 @@ const Home = () => {
                 <p style={{ textAlign: "center" }}>No More Data.</p>
               </div>
             ) : (
-              <Main
+              <Masonry
                 pins={imgs}
                 loadItems={loadItems}
                 loading={partialLoading}
