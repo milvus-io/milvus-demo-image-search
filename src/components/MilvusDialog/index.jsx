@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Typography, makeStyles, Button } from "@material-ui/core";
+import { Typography, makeStyles } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { rootContext } from "../../context/Root";
 import github from "../../assets/images/github.svg";
@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
       boxSizing: "border-box",
     },
     boxShadow: "10px 20px 50px rgba(0, 0, 0, 0.15)",
-    position: 'relative',
 
     "& .MuiPaper-root": {
       backgroundColor: "transparent",

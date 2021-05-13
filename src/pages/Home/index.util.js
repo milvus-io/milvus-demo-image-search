@@ -6,7 +6,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 12.5, 0),
     margin: "0 auto",
     boxSizing: "border-box",
-    margin: "0 auto",
     height: "100%",
 
     [theme.breakpoints.down("sm")]: {

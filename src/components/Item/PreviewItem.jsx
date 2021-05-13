@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/styles';
 import { Typography } from '@material-ui/core';
 import { rootContext } from '../../context/Root';

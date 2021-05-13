@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Link, Typography } from '@material-ui/core';
 import email from '../../assets/images/email.svg';
@@ -88,7 +88,6 @@ const useStyles = makeStyles(theme => ({
         marginLeft: theme.spacing(0),
         marginTop: theme.spacing(2),
         flexDirection: 'row',
-        justifyContent: 'flex-start',
         width: '311px',
         justifyContent: 'space-between',
 
@@ -197,34 +196,35 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
   };
 
   useEffect(() => {
-    if (uploadSection.current) {
-      uploadSection.current.addEventListener('dragenter', (e) => {
+    const currentNode = uploadSection.current;
+    if (currentNode) {
+      currentNode.addEventListener('dragenter', (e) => {
         e.preventDefault();
-        uploadSection.current.classList.add('drag-enter');
+        currentNode.classList.add('drag-enter');
       }, false);
-      uploadSection.current.addEventListener('dragover', (e) => {
+      currentNode.addEventListener('dragover', (e) => {
         e.preventDefault();
-        uploadSection.current.classList.add('drag-enter');
+        currentNode.classList.add('drag-enter');
       }, false);
-      uploadSection.current.addEventListener('dragleave', (e) => {
+      currentNode.addEventListener('dragleave', (e) => {
         e.preventDefault();
-        uploadSection.current.classList.remove('drag-enter');
+        currentNode.classList.remove('drag-enter');
       }, false);
     }
 
     return () => {
-      if (uploadSection.current) {
-        uploadSection.current.removeEventListener('dragenter', (e) => {
+      if (currentNode) {
+        currentNode.removeEventListener('dragenter', (e) => {
           e.preventDefault();
-          uploadSection.current.classList.add('drag-enter');
+          currentNode.classList.add('drag-enter');
         }, false);
-        uploadSection.current.removeEventListener('dragover', (e) => {
+        currentNode.removeEventListener('dragover', (e) => {
           e.preventDefault();
-          uploadSection.current.classList.add('drag-enter');
+          currentNode.classList.add('drag-enter');
         }, false);
-        uploadSection.current.removeEventListener('dragleave', (e) => {
+        currentNode.removeEventListener('dragleave', (e) => {
           e.preventDefault();
-          uploadSection.current.classList.remove('drag-enter');
+          currentNode.classList.remove('drag-enter');
         }, false);
       }
 
@@ -295,7 +295,7 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
                           onChange={handleInputChange}
                         />
                         <label htmlFor="contained-button-file">
-                          <Button variant="contained" color="primary" component="span" className='button' className="upload-btn">
+                          <Button variant="contained" color="primary" component="span" className='button upload-btn'>
                             Upload Image
                           </Button>
                         </label>
@@ -352,7 +352,7 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
                           onChange={handleInputChange}
                         />
                         <label htmlFor="contained-button-file">
-                          <Button variant="contained" color="primary" component="span" className='button' className="upload-btn">
+                          <Button variant="contained" color="primary" component="span" className="button upload-btn">
                             Upload Image
                           </Button>
                         </label>

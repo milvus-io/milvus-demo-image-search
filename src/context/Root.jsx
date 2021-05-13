@@ -5,9 +5,7 @@ import {
   DialogTitle,
   Button,
   Dialog,
-  duration,
   Snackbar,
-  SnackbarCloseReason,
   useMediaQuery
 } from "@material-ui/core";
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';

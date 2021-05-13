@@ -28,11 +28,12 @@ const Home = () => {
   const [count, setCount] = useState(0);
   const [duration, setDuration] = useState(0);
   const [file, setFile] = useState(null);
+  // eslint-disable-next-line
   const [isShowCode, setIsShowCode] = useState(false);
   const [noData, setNoData] = useState(false);
   const [isNeedLoadMore, setIsNeedLoadMore] = useState(false);
   const { open } = dialog;
-  let timer = null;
+  const timer = useRef(null);
 
   const getImage = (url) => {
     return new Promise(function (resolve, reject) {
@@ -145,9 +146,9 @@ const Home = () => {
   };
 
   const toggleIsShowCode = () => {
-    return;
-    setIsShowCode((v) => !v);
-    window.dispatchEvent(new Event("resize"));
+    // setIsShowCode((v) => !v);
+    // window.dispatchEvent(new Event("resize"));
+    return false;
   };
 
   const handleSearch = (src) => {
@@ -164,16 +165,18 @@ const Home = () => {
 
   useEffect(() => {
     handleImgToBlob(DemoImg);
+    // eslint-disable-next-line
   }, []);
 
   // remind users to register every 30s
   useEffect(() => {
-    if (timer) {
-      clearInterval(timer);
+    let { current } = timer;
+    if (current) {
+      clearInterval(current);
     }
 
-    if (!timer) {
-      timer = setInterval(() => {
+    if (!current) {
+      current = setInterval(() => {
         setDialog({
           open: true,
           type: "custom",
@@ -184,7 +187,7 @@ const Home = () => {
       }, 30000);
     }
     return () => {
-      if (timer) clearInterval(timer);
+      if (current) clearInterval(current);
     };
   }, [open, setDialog]);
 

@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Box, Text, Mask, Button, Image } from "gestalt";
+import React, { useContext } from "react";
+import { Box, Image } from "gestalt";
 import { makeStyles } from '@material-ui/styles';
 import { Typography } from '@material-ui/core';
 import { rootContext } from '../../context/Root';
@@ -89,16 +89,6 @@ const Item = (props) => {
   const { setCustomDialog, closeCustomDialog } = useContext(rootContext);
   const classes = useStyles();
 
-  const [hover, setHover] = useState(false);
-
-  const mouseEnter = () => {
-    setHover(true);
-  };
-  const mouseLeave = () => {
-    setHover(false);
-  };
-
-
   const handlePreview = (src, distance) => {
     setCustomDialog({
       open: true,
@@ -118,8 +108,6 @@ const Item = (props) => {
       className="ui-item"
       alignItems="center"
       // key={data.id}
-      onMouseEnter={mouseEnter}
-      onMouseLeave={mouseLeave}
       fit={true}
       padding={0}
     >

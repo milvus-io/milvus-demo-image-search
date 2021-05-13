@@ -1,7 +1,5 @@
 import axios from "axios";
 
-const api = "";
-
 let hasError = false;
 
 const instance = axios.create({
@@ -39,7 +37,7 @@ instance.interceptors.response.use(
       setTimeout(() => {
         hasError = false;
       }, 2000);
-      return Promise.reject(error);
+      return Promise.reject(errMsg);
     }
     if (error.message) {
       hasError = true;
