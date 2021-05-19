@@ -152,7 +152,7 @@ const Home = () => {
             component: <MilvusDialog />,
           },
         });
-      }, 3000000);
+      }, 30000);
     }
   }, [open, setDialog]);
 
