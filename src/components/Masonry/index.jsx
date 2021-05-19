@@ -12,8 +12,13 @@ const useStyles = makeStyles(theme => ({
     overflow: 'auto',
     height: '100%',
     position: 'relative',
+    marginTop: '34px',
 
-    '&.open': {
+    [theme.breakpoints.down('sm')]: {
+      marginTop: '16px'
+    },
+
+    '&.openCode': {
       width: '100%'
     },
 
@@ -26,10 +31,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   imgContainer: {
-    marginTop: '34px',
-    '&.open': {
-      width: '50%'
-    }
+    marginTop: '32px'
   },
 
   toopTip: {
@@ -78,6 +80,9 @@ const useStyles = makeStyles(theme => ({
         left: 0,
         top: '42px',
         whiteSpace: 'nowrap',
+        [theme.breakpoints.down('sm')]: {
+          top: '34px',
+        },
       },
 
       '& svg': {
@@ -94,16 +99,13 @@ function Main({ pins, loadItems, loading, isSelected, isShowCode, handleSearch }
   const scrollContainer = useRef(null);
 
   return (
-    <div className={`${classes.scrollContainer} ${isShowCode ? 'open' : ''}`} ref={scrollContainer}>
-
+    <div className={`${classes.scrollContainer} ${isShowCode ? 'openCode' : ''}`} ref={scrollContainer}>
       <div className={`${classes.toopTip} ${isSelected ? 'open' : ''}`}>
-        <Typography variant='body1' className="text">Sorted by Similarity metric</Typography>
+        <Typography variant='body1' component="p" className="text">Sorted by Similarity metric</Typography>
         <span className="icon-wrapper">
           <ErrorOutlineIcon />
         </span>
-
       </div>
-
       <div className={`${classes.imgContainer} ${isShowCode ? '' : ''}`}>
         {
           pins.length ? <Masonry
@@ -131,7 +133,6 @@ function Main({ pins, loadItems, loading, isSelected, isShowCode, handleSearch }
           </div>
         ) : null
       }
-
     </div>
   );
 }

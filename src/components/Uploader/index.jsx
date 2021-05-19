@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Button, Link, Typography } from '@material-ui/core';
 import email from '../../assets/images/email.svg';
 import github from '../../assets/images/github.svg';
-import star from '../../assets/images/star.svg';
 import subtract from '../../assets/images/subtract.svg';
 import IconButton from '../IconButton';
 import { getImgUrl } from '../../utils/helper';
@@ -46,20 +45,8 @@ const useStyles = makeStyles(theme => ({
     "& .input": {
       display: "none",
     },
-
-    '& .upload-btn .MuiButton-label': {
-      fontSize: (props) => props.selectedImg ? '16px' : '24px',
-      LineHeight: (props) => props.selectedImg ? '18px' : '28px',
-      fontFamily: 'Roboto',
-
-      [theme.breakpoints.down('sm')]: {
-        fontSize: '16px',
-        LineHeight: '18px',
-      },
-    }
   },
   uploadedWrapper: {
-    padding: theme.spacing(1),
     boxSizing: 'border-box',
     display: 'flex',
     [theme.breakpoints.down('sm')]: {
@@ -71,11 +58,13 @@ const useStyles = makeStyles(theme => ({
       borderRadius: '8px',
       boxSizing: 'border-box',
       padding: theme.spacing(2),
+      width: '279px',
       maxWidth: '50%',
 
       [theme.breakpoints.down('sm')]: {
         padding: theme.spacing(1),
-        maxWidth: '100%',
+        width: '100%',
+        maxWidth: '327px'
       }
     },
     '& .btns-wrppaer': {
@@ -88,7 +77,7 @@ const useStyles = makeStyles(theme => ({
         marginLeft: theme.spacing(0),
         marginTop: theme.spacing(2),
         flexDirection: 'row',
-        width: '311px',
+        maxWidth: '327px',
         justifyContent: 'space-between',
 
       },
@@ -121,10 +110,10 @@ const useStyles = makeStyles(theme => ({
       }
     },
     '& .icons-wrapper': {
-      marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(0),
 
       [theme.breakpoints.down('sm')]: {
-        marginBottom: theme.spacing(0),
+        marginBottom: theme.spacing(1),
       },
 
       '& a:not(:last-child)': {
@@ -134,20 +123,20 @@ const useStyles = makeStyles(theme => ({
 
   },
   cropImgWrapper: {
-    width: '263px',
-    height: '232px',
+    width: '247px',
+    height: '264px',
 
     '& img': {
-      maxWidth: '263px',
-      maxHeigth: '232px',
+      maxWidth: '247px',
+      maxHeigth: '264px',
     },
 
     [theme.breakpoints.down('sm')]: {
-      width: '295px',
+      width: '311px',
       height: '306px',
 
       '& img': {
-        maxWidth: '295px',
+        maxWidth: '311px',
         maxHeight: '306px',
       },
     },
@@ -161,6 +150,22 @@ const useStyles = makeStyles(theme => ({
     //   maxHeigth: '306px',
     // },
     display: 'none'
+  },
+  button: {
+    color: '#fff',
+    padding: '10px 20px',
+    borderRadius: '4px',
+    fontSize: (props) =>
+      props.selectedImg ? '16px' : '24px',
+    lineHeight: props => (props.selectedImg ? '18px' : '28px'),
+    fontFamily: 'Roboto',
+    background: '#06aff2',
+
+    [theme.breakpoints.down('sm')]: {
+      fontSize: props => (props.selectedImg ? '16px' : '16px'),
+      lineHeight: props => (props.selectedImg ? '18px' : '18px'),
+      padding: theme.spacing(1),
+    },
   },
 }));
 const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, selectedImg, count, duration }) => {
@@ -195,48 +200,26 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
     handleImgSearch(files[0], true);
   };
 
-  useEffect(() => {
-    const currentNode = uploadSection.current;
-    if (currentNode) {
-      currentNode.addEventListener('dragenter', (e) => {
-        e.preventDefault();
-        currentNode.classList.add('drag-enter');
-      }, false);
-      currentNode.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        currentNode.classList.add('drag-enter');
-      }, false);
-      currentNode.addEventListener('dragleave', (e) => {
-        e.preventDefault();
-        currentNode.classList.remove('drag-enter');
-      }, false);
-    }
-
-    return () => {
-      if (currentNode) {
-        currentNode.removeEventListener('dragenter', (e) => {
-          e.preventDefault();
-          currentNode.classList.add('drag-enter');
-        }, false);
-        currentNode.removeEventListener('dragover', (e) => {
-          e.preventDefault();
-          currentNode.classList.add('drag-enter');
-        }, false);
-        currentNode.removeEventListener('dragleave', (e) => {
-          e.preventDefault();
-          currentNode.classList.remove('drag-enter');
-        }, false);
-      }
-
-    };
-  }, []);
+  const handlerDragEnter = e => {
+    e.preventDefault();
+    uploadSection.current.classList.add('drag-enter');
+  };
+  const handleDragLeave = e => {
+    e.preventDefault();
+    uploadSection.current.classList.remove('drag-enter');
+  };
 
   return (
-    <div className={classes.uploaderHeader}>
+    <>
       {
         !selectedImg ?
           (
-            <FileDrop onDrop={handleDrop} className="target" >
+            <FileDrop
+              onDragOver={handlerDragEnter}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className="target"
+            >
               <div className={classes.uploadSection} ref={uploadSection}>
                 {
                   isMobile ?
@@ -261,7 +244,7 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
                     onChange={handleInputChange}
                   />
                   <label htmlFor="contained-button-file">
-                    <Button variant="contained" color="primary" component="span" className="upload-btn">
+                    <Button variant="contained" color="primary" component="span" classes={{ root: classes.button }}>
                       Upload Image
                     </Button>
                   </label>
@@ -295,7 +278,7 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
                           onChange={handleInputChange}
                         />
                         <label htmlFor="contained-button-file">
-                          <Button variant="contained" color="primary" component="span" className='button upload-btn'>
+                          <Button variant="contained" color="primary" component="span" classes={{ root: classes.button }}>
                             Upload Image
                           </Button>
                         </label>
@@ -305,36 +288,24 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
                         <Typography variant="body2" className='text'>Duration: {duration / 1000} s</Typography>
                       </div>
                       <div className="icons-wrapper">
-                        <IconButton type="link" href="#">
-                          <img src={star} alt="star" />
-                        </IconButton>
-                        <IconButton type="link" href="#">
+                        <IconButton type="link" href="https://github.com/milvus-io/milvus">
                           <img src={github} alt="github" />
                         </IconButton>
-                        <IconButton type="link" href="#">
+                        <IconButton type="link" href="mailto:info@milvus.com">
                           <img src={email} alt="email" />
                         </IconButton>
 
-                        <IconButton type="button" onClick={toggleIsShowCode}>
+                        {/* <IconButton type="button" onClick={toggleIsShowCode}>
                           <img src={subtract} alt="subtract" />
-                        </IconButton>
+                        </IconButton> */}
                       </div>
-                      <Link href="#" color="inherit" className='text'>
-                        Download Milvus SDK
-                      </Link>
                     </>
                   ) : (
                     <>
                       <div className="left">
                         <div className="icons-wrapper">
-                          <IconButton type="link" href="#">
-                            <img src={star} alt="star" />
-                          </IconButton>
-                          <IconButton type="link" href="#">
+                          <IconButton type="link" href="https://github.com/milvus-io/milvus">
                             <img src={github} alt="github" />
-                          </IconButton>
-                          <IconButton type="link" href="#">
-                            <img src={email} alt="email" />
                           </IconButton>
                         </div>
                         <div className="result-desc">
@@ -352,7 +323,7 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
                           onChange={handleInputChange}
                         />
                         <label htmlFor="contained-button-file">
-                          <Button variant="contained" color="primary" component="span" className="button upload-btn">
+                          <Button variant="contained" color="primary" component="span" classes={{ root: classes.button }}>
                             Upload Image
                           </Button>
                         </label>
@@ -365,7 +336,7 @@ const UploaderHeader = ({ handleImgSearch, handleSelectedImg, toggleIsShowCode, 
             </div>
           )
       }
-    </div>
+    </>
 
 
   );

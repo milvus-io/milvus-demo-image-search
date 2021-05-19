@@ -88,11 +88,14 @@ const useStyles = makeStyles(theme => ({
 const Item = (props) => {
   const { setCustomDialog, closeCustomDialog } = useContext(rootContext);
   const classes = useStyles();
+  const {
+    data: { height, width, src, distance, origin_src },
+  } = props;
 
-  const handlePreview = (src, distance) => {
+  const handlePreview = () => {
     setCustomDialog({
       open: true,
-      component: <PreviewItem src={src} distance={distance} closeCustomDialog={closeCustomDialog} handleSearch={props.handleSearch} />,
+      component: <PreviewItem src={origin_src} distance={distance} closeCustomDialog={closeCustomDialog} handleSearch={props.handleSearch} />,
       onClose: closeCustomDialog
     });
   };
@@ -111,18 +114,17 @@ const Item = (props) => {
       fit={true}
       padding={0}
     >
-      <div className={classes.imgWrapper} onClick={() => handlePreview(props.data.src, props.data.distance)} draggable="true">
+      <div className={classes.imgWrapper} onClick={handlePreview} draggable="true">
         <Image
           alt="Test"
           color='#fff'
-          naturalHeight={props.data.height}
-          naturalWidth={props.data.width}
-          src={props.data.src}
-
+          naturalHeight={height}
+          naturalWidth={width}
+          src={src}
         />
 
         {/* <div className="icon-mask"> */}
-        <span className={classes.iconWrapper} onClick={(e) => searchThisPic(e, props.data.src)}>
+        <span className={classes.iconWrapper} onClick={(e) => searchThisPic(e, src)}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11.25 15.75C13.7353 15.75 15.75 13.7353 15.75 11.25C15.75 8.76472 13.7353 6.75 11.25 6.75C8.76472 6.75 6.75 8.76472 6.75 11.25C6.75 13.7353 8.76472 15.75 11.25 15.75Z" stroke="#010E29" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M17.25 17.25L15 15" stroke="#010E29" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -137,7 +139,7 @@ const Item = (props) => {
           (
             <div className={classes.textWrapper}>
               <Typography variant="body1" className='title'>Similarity Metirc:&nbsp;&nbsp;</Typography>
-              <Typography variant="h5" className='title'>{props.data.distance}</Typography>
+              <Typography variant="h5" className='title'>{distance}</Typography>
             </div>
           ) : null
       }

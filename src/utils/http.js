@@ -2,7 +2,13 @@ import axios from "axios";
 
 let hasError = false;
 
+const baseURL =
+  process.env.NODE_ENV === "development"
+    ? "http://192.168.1.38:5008"
+    : "http://40.117.75.127:5004";
+
 const instance = axios.create({
+  baseURL,
   timeout: 20000,
   headers: {
     "Content-Type": "applycation/json",
@@ -51,24 +57,18 @@ instance.interceptors.response.use(
 );
 
 export const search = async (formData) => {
-  const res = await instance.post(
-    `http://40.117.75.127:5004/api/v1/search`,
-    formData
-  );
+  const res = await instance.post("api/v1/search", formData);
   return res.data;
 };
 
 export async function getCount() {
-  const res = await instance.post(`http://40.117.75.127:5004/api/v1/count`);
+  const res = await instance.post("api/v1/count");
   return res.data;
 }
 
 export const uploadUserInfo = async (param) => {
   try {
-    const res = await instance.put(
-      `http://40.117.75.127:5005/demos/${param.id}`,
-      param.params
-    );
+    const res = await instance.put(`demos/${param.id}`, param.params);
     return res.data;
   } catch (error) {
     throw error;

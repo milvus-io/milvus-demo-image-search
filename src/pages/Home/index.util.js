@@ -2,19 +2,20 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: "1440px",
-    padding: theme.spacing(3, 12.5, 0),
-    margin: "0 auto",
-    boxSizing: "border-box",
-    height: "100%",
-
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(3, 3, 0),
-    },
+    maxWidth: "100%",
+    height: "100vh",
   },
 
   container: {
     display: "flex",
+    maxWidth: "1440px",
+    padding: theme.spacing(3, 12.5, 0),
+    margin: "0 auto",
+    boxSizing: "border-box",
+
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(3, 3, 0),
+    },
   },
 
   contentContainer: {
@@ -67,12 +68,12 @@ const useStyles = makeStyles((theme) => ({
   },
   layoutSection: {
     width: "100%",
-    height: "calc(100vh - 373px)",
+    height: "calc(100vh - 427px)",
     marginTop: theme.spacing(4),
 
     [theme.breakpoints.down("sm")]: {
       height: "calc(100vh - 230px)",
-      marginTop: theme.spacing(3),
+      marginTop: theme.spacing(0),
     },
   },
   loadingWrapper: {

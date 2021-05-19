@@ -5,14 +5,14 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   cropper: {
-    width: '295px',
+    width: '247px',
     height: '264px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
 
     [theme.breakpoints.down('sm')]: {
-      width: '295px',
+      width: '311px',
       height: '306px',
     },
 

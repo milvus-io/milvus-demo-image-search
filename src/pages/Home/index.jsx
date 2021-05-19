@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import useStyles from "./index.util";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { Button } from "@material-ui/core";
@@ -13,6 +13,7 @@ import DemoImg from "../../assets/demo.jpg";
 import UploaderHeader from "../../components/Uploader";
 import { CircularProgress } from "@material-ui/core";
 import MilvusDialog from "../../components/MilvusDialog";
+import { useMobileScreen } from '../../hooks';
 
 const Home = () => {
   const classes = useStyles();
@@ -28,57 +29,33 @@ const Home = () => {
   const [count, setCount] = useState(0);
   const [duration, setDuration] = useState(0);
   const [file, setFile] = useState(null);
-  // eslint-disable-next-line
   const [isShowCode, setIsShowCode] = useState(false);
   const [noData, setNoData] = useState(false);
-  const [isNeedLoadMore, setIsNeedLoadMore] = useState(false);
   const { open } = dialog;
-  const timer = useRef(null);
+  const { isMobile } = useMobileScreen();
 
-  const getImage = (url) => {
-    return new Promise(function (resolve, reject) {
-      var img = document.createElement("img");
-      img.onload = function () {
-        resolve({ width: this.width, height: this.height });
+  const formatImgData = async (
+    list,
+    setFunc
+  ) => {
+    const results = list.map(item => {
+      const distance = item[1].toFixed(6);
+      const src = item[0][0];
+      const origin_src = src.replace(/pc_suo_|mobile_suo_/g, '');
+      const [width, height] = item[0][1].split('X');
+      return {
+        distance,
+        src,
+        width: Number(width),
+        height: Number(height),
+        origin_src,
       };
-      img.onerror = function (e) {
-        console.log(e);
-        reject(url);
-      };
-      img.src = url;
     });
-  };
-
-  const sliceAndSet = (list, setFunc) => {
-    const sliceNum = window.innerWidth < 800 ? 2 : 4;
-
-    const setData = async (tempArr) => {
-      const tempResults = [];
-      for (let i = 0; i < tempArr.length; i++) {
-        const { width, height } = await getImage(tempArr[i][0]);
-        tempResults.push({
-          width,
-          height,
-          src: tempArr[i][0],
-          distance: tempArr[i][1].toFixed(6),
-        });
-      }
-      setFunc((v) => {
-        return [...v, ...tempResults];
-      });
-    };
-
-    while (list.length > sliceNum) {
-      const tempArr = list.splice(0, sliceNum);
-      setData(tempArr);
-    }
-    setData(list);
-    setIsNeedLoadMore(true);
+    setFunc(v => [...v, ...results]);
   };
 
   const handleImgSearch = async (file, reset = false, scrollPage) => {
     setLoading(true);
-    setIsNeedLoadMore(false);
     if (reset) {
       setImgs([]);
       setPage(0);
@@ -88,6 +65,7 @@ const Home = () => {
     fd.append("file", file);
     fd.append("Num", `${window.innerWidth < 800 ? 16 : 50}`);
     fd.append("Page", `${scrollPage || page}`);
+    fd.append("Device", `${isMobile ? 1 : 0}`);
 
     // setBlob(file);
     const start = new Date().getTime();
@@ -99,9 +77,7 @@ const Home = () => {
         setNoData(true);
         return;
       }
-
-      sliceAndSet(res, setImgs);
-
+      formatImgData(res, setImgs);
       setCount(count);
       setDuration(end - start);
     } catch (error) {
@@ -109,7 +85,6 @@ const Home = () => {
     } finally {
       setPage((v) => v + 1);
       setLoading(false);
-
     }
   };
 
@@ -126,7 +101,6 @@ const Home = () => {
   };
 
   const loadItems = async () => {
-    if (!isNeedLoadMore) return;
     try {
       setPartialLoading(true);
       await handleImgSearch(file, false, page);
@@ -146,9 +120,8 @@ const Home = () => {
   };
 
   const toggleIsShowCode = () => {
-    // setIsShowCode((v) => !v);
-    // window.dispatchEvent(new Event("resize"));
-    return false;
+    setIsShowCode((v) => !v);
+    window.dispatchEvent(new Event("resize"));
   };
 
   const handleSearch = (src) => {
@@ -170,13 +143,8 @@ const Home = () => {
 
   // remind users to register every 30s
   useEffect(() => {
-    let { current } = timer;
-    if (current) {
-      clearInterval(current);
-    }
-
-    if (!current) {
-      current = setInterval(() => {
+    if (!open) {
+      setTimeout(() => {
         setDialog({
           open: true,
           type: "custom",
@@ -184,11 +152,8 @@ const Home = () => {
             component: <MilvusDialog />,
           },
         });
-      }, 30000);
+      }, 3000000);
     }
-    return () => {
-      if (current) clearInterval(current);
-    };
   }, [open, setDialog]);
 
   return (

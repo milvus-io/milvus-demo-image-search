@@ -21,12 +21,17 @@ const useStyles = makeStyles(theme => ({
   },
 
   contentContainer: {
-    width: '60%',
-    height: '60%',
+    maxWidth: '80%',
+    maxHeight: '80%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: '90%',
+      maxHeight: '90%',
+    },
 
     '& .close-btn': {
       textAlign: 'right',
