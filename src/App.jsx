@@ -6,7 +6,7 @@ import "./app.less";
 import "./assets/scss/reset.less";
 
 /**
-image search
+image search by milvus
  */
 export default function App() {
   return (
